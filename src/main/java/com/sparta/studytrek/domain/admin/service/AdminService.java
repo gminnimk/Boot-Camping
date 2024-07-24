@@ -1,14 +1,11 @@
 package com.sparta.studytrek.domain.admin.service;
 
-import com.sparta.studytrek.domain.admin.repository.AdminRepository;
 import com.sparta.studytrek.domain.auth.entity.User;
 import com.sparta.studytrek.domain.auth.entity.UserRoleEnum;
 import com.sparta.studytrek.domain.auth.entity.UserStatusEnum;
 import com.sparta.studytrek.domain.auth.entity.match.UserStatus;
-import com.sparta.studytrek.domain.auth.service.RefreshTokenService;
 import com.sparta.studytrek.domain.auth.service.UserService;
 import com.sparta.studytrek.domain.auth.service.UserStatusService;
-import com.sparta.studytrek.domain.camp.service.CampService;
 import com.sparta.studytrek.security.UserDetailsImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +17,6 @@ public class AdminService {
 
     private final UserService userService;
     private final UserStatusService userStatusService;
-    private final CampService campService;
-    private final RefreshTokenService refreshTokenService;
-    private final AdminRepository adminRepository;
-
-
 
     // 사용자 상태를 변경하는 일반화된 메소드
     // 상태 변경할 사용자 이름, 설정할 새로운 상태, 관련 캠프의 Id, 관리자 정보(권한 체크)
@@ -48,24 +40,7 @@ public class AdminService {
             throw new IllegalArgumentException("상태를 찾을 수 없습니다");
         }
 
-        // 상태 update or 생성
-//        if (userStatus != null) {
-//            // 현재 상태가 존재 => 새로운 // 상태로 업뎃
-//            userStatus.setStatus(newStatus);
-//        }
-//        else {
-//            // 현재 상태가 존재 X => 새로운 UserStatus 객체 생성
-//            UserStatus newUserStatus = new UserStatus();
-//            newUserStatus.setStatus(newStatus);
-//            newUserStatus.setUser(user);
-//            if (campId != null) { // 캠프 아이디가 있을 시 연결
-//                Camp camp = campService.findById(campId);
-//                newUserStatus.setCamp(camp);
-//            }
-//            user.addStatus(newUserStatus);
-//        }
         // 기존 상태를 제거하고 새로운 상태를 추가
-
         user.getUserStatuses().clear();
         user.addStatus(status.getStatus());
         userService.saveUser(user);

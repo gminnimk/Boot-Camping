@@ -86,17 +86,7 @@ public class UserService {
      * @param requestDto
      * @return
      */
-    // 📢 로그인 시도 횟수 제한 등 추가적인 보안 로직 추가 ?
-    // 📢 예외 처리에 대한 세분화 => 다양한 오류 상황 대비
     public TokenResponseDto login(LoginRequestDto requestDto) {
-        // 인증을 시도
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(requestDto.getUsername(), requestDto.getPassword())
-//        );
-//
-//        // 인증을 성공 시 사용자 정보를 가져옴
-//        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-//        User user = userDetails.getUser();
 
         User user = userRepository.findByUsername(requestDto.getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
@@ -125,10 +115,6 @@ public class UserService {
      * @return
      */
     public void logout(User user) {
-
-//        Hibernate.initialize(user.getUserStatuses());
-//        Hibernate.initialize(user.getUserCamps());
-
         // 리프레시 토큰을 제거
         refreshTokenService.removeRefreshToken(user.getId());
     }
@@ -141,12 +127,6 @@ public class UserService {
      * @param user 탈퇴할 사용자
      * @return
      */
-
-    // 사용자 탈퇴 시 재가입 가능 여부 설정
-    // 관리자에 의한 강제 탈퇴 시 => 재가입 불가
-    // 📢 사용자 정보를 즉시 삭제하는 대신 일정 기간 동안 보관하는 방식 ?
-    // => 재가입을 불가능하게 통일시킨다음
-    // 일정 기간 이후(30일 정도) 지나면 DB에서 삭제되게 설정 후 재가입 가능하게
     public void withdraw(User user) {
         // 리프레시 토큰을 제거
         refreshTokenService.removeRefreshToken(user.getId());
