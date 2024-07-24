@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로그인/회원가입</title>
-    <link rel="stylesheet" type="text/css" href="/css/login.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}">
 </head>
 <body>
 <div class="container" id="container">
@@ -20,6 +20,7 @@
             <span id="signUpSpan">or use your email for registration</span>
             <input type="text" id="signupId" placeholder="Id" required />
             <input type="text" id="signupName" placeholder="Name" required />
+            <input type="text" id="userAddress" placeholder="address" style="display: block;" />
             <div id="adminNameContainer" class="searchable-select" style="display: none;">
                 <input type="text" id="nameSearch" placeholder="부트캠프 조회" />
                 <ul id="nameList">
@@ -68,6 +69,6 @@
     <button class="user-type-button active learn-more" id="normalUserBtn">일반 회원</button>
     <button class="user-type-button learn-more" id="adminUserBtn">부트캠프 회원</button>
 </div>
-    <script src="/js/login.js" defer></script>
+    <script th:src="@{/js/login.js}" defer></script>
 </body>
 </html>

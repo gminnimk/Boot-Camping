@@ -1,3 +1,4 @@
+// Get elements by their IDs
 const signUpButton = document.getElementById('signUp');
 const signInButton = document.getElementById('signIn');
 const container = document.getElementById('container');
@@ -6,8 +7,9 @@ const adminUserBtn = document.getElementById('adminUserBtn');
 const adminNameContainer = document.getElementById('adminNameContainer');
 const nameSearch = document.getElementById('nameSearch');
 const nameList = document.getElementById('nameList');
-const names = ['Name1', 'Name2', 'Name3', 'Name4', 'Name5']; // Your list of names
+const names = ['스파르타', 'Name2', 'Name3', 'Name4', 'Name5']; // Your list of names
 
+// Handle sign-up and sign-in button clicks
 signUpButton.addEventListener('click', () => {
     container.classList.add("right-panel-active");
 });
@@ -16,6 +18,7 @@ signInButton.addEventListener('click', () => {
     container.classList.remove("right-panel-active");
 });
 
+// Handle user role button clicks
 normalUserBtn.addEventListener('click', () => {
     normalUserBtn.classList.add('active');
     adminUserBtn.classList.remove('active');
@@ -28,6 +31,7 @@ adminUserBtn.addEventListener('click', () => {
     updateContent('admin');
 });
 
+// Update content based on user type
 function updateContent(userType) {
     const signUpTitle = document.getElementById('signUpTitle');
     const signUpSpan = document.getElementById('signUpSpan');
@@ -40,6 +44,7 @@ function updateContent(userType) {
     const welcomeBackText = document.getElementById('welcomeBackText');
     const helloTitle = document.getElementById('helloTitle');
     const helloText = document.getElementById('helloText');
+    const userAddress = document.getElementById('userAddress');
 
     // Apply fade-out effect to the current content
     document.querySelector('.overlay-left').classList.add('fade-out');
@@ -59,6 +64,9 @@ function updateContent(userType) {
             helloTitle.textContent = '어서오세요!';
             helloText.textContent = '여러분의 부트캠프를 소개해주세요';
 
+            // Hide the user address input
+            userAddress.style.display = 'none';
+
             // Show the searchable name input
             adminNameContainer.style.display = 'block';
         } else {
@@ -73,6 +81,9 @@ function updateContent(userType) {
             welcomeBackText.textContent = '개인 정보로 입력해주세요';
             helloTitle.textContent = '안녕하세요!';
             helloText.textContent = '여러분의 의견을 들려주세요';
+
+            // Show the user address input
+            userAddress.style.display = 'block';
 
             // Hide the searchable name input
             adminNameContainer.style.display = 'none';
@@ -116,8 +127,89 @@ nameSearch.addEventListener('input', () => {
     nameList.style.display = filter ? 'block' : 'none';
 });
 
+// Hide name list if clicking outside
 document.addEventListener('click', (event) => {
     if (!adminNameContainer.contains(event.target)) {
         nameList.style.display = 'none';
+    }
+});
+
+// Event listener for the sign-up button
+document.getElementById('signUpButton').addEventListener('click', async (event) => {
+    event.preventDefault();
+
+    const username = document.getElementById('signupId').value;
+    const password = document.getElementById('signupPassword').value;
+    const name = document.getElementById('signupName').value;
+    const userAddrElement = document.getElementById('userAddress');
+    const campNameElement = document.getElementById('nameSearch');
+
+    const userAddr = userAddrElement ? userAddrElement.value : "";
+    const campName = campNameElement ? campNameElement.value : "";
+
+    const userRole = adminUserBtn.classList.contains('active') ? 'BOOTCAMP' : 'USER';
+
+    const data = {
+        username: username,
+        password: password,
+        name: name,
+        userAddr: userAddr,
+        campName: campName // Use the selected camp name
+    };
+
+    try {
+        const response = await fetch(`/api/auth/signup?userRole=${userRole}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            alert('회원가입 성공');
+        } else {
+            const result = await response.json();
+            console.error('회원가입 실패:', result); // 자세한 오류 메시지 로그
+            alert('회원가입 실패: ' + result.message);
+        }
+    } catch (error) {
+        console.error('회원가입 중 오류 발생:', error); // 자세한 오류 메시지 로그
+        alert('회원가입 중 오류 발생: ' + error.message);
+    }
+});
+
+// Event listener for the sign-in button
+document.getElementById('signInButton').addEventListener('click', async (event) => {
+    event.preventDefault();
+
+    const username = document.getElementById('loginId').value;
+    const password = document.getElementById('loginPassword').value;
+
+    const data = {
+        username: username,
+        password: password
+    };
+
+    try {
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            alert('로그인 성공');
+            localStorage.setItem('accessToken', result.data.accessToken);
+            localStorage.setItem('refreshToken', result.data.refreshToken);
+        } else {
+            const result = await response.json();
+            alert('로그인 실패: ' + result.message);
+        }
+    } catch (error) {
+        alert('로그인 중 오류 발생: ' + error.message);
     }
 });
