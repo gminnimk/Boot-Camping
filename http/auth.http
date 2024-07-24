@@ -1,0 +1,55 @@
+### 회원가입 signup (USER)
+POST {{apiUrl}}/auth/signup?userRole=USER
+Content-Type: application/json
+
+{
+  "username": "user77",
+  "password": "Password123!",
+  "name": "일반사용자",
+  "userAddr" : "대한민국 어딘가"
+}
+
+### 회원가입 signup (BOOTCAMP)
+POST {{apiUrl}}/auth/signup?userRole=BOOTCAMP
+Content-Type: application/json
+
+{
+  "username": "boot99",
+  "password": "Password123!",
+  "name": "부트캠프사용자",
+  "userAddr" : "대한민국 어딘가",
+  "campName" : "스파르타"
+}
+
+### 로그인 login
+POST {{apiUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "user77",
+  "password": "Password123!"
+}
+
+> {%
+    client.global.set("accessToken", response.body.data.accessToken)
+    client.global.set("refreshToken", response.body.data.refreshToken)
+
+    console.log('Response Status:', response.body.data.accessToken);
+    console.log('Response Data:', response.body.data.refreshToken);
+%}
+
+### 로그아웃 logout
+POST {{apiUrl}}/auth/logout
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### 회원탈퇴 withdraw
+POST {{apiUrl}}/auth/resign
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### 토큰 재발급
+POST {{apiUrl}}/auth/token/reissue
+Content-Type: application/json
+RefreshToken: Bearer {{refreshToken}}
+
