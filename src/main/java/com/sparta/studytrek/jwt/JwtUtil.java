@@ -114,9 +114,9 @@ public class JwtUtil {
 
     // HTTP 요청 헤더에서 Refresh Token 추출 메서드
     public String extractRefreshToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Refresh-Token");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+        String bearerToken = request.getHeader(REFRESH_TOKEN_HEADER);
+        if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(BEARER_PREFIX.length());
         }
         throw new IllegalArgumentException("Refresh token not found in request");
     }
