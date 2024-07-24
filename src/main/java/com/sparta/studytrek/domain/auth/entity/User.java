@@ -5,11 +5,9 @@ import com.sparta.studytrek.common.Timestamped;
 import com.sparta.studytrek.domain.auth.entity.match.UserCamp;
 import com.sparta.studytrek.domain.auth.entity.match.UserStatus;
 import com.sparta.studytrek.domain.camp.entity.Camp;
-import com.sparta.studytrek.domain.auth.entity.UserType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -58,7 +56,6 @@ public class User extends Timestamped {
         this.userType = userType;
         this.role = role;
     }
-
 
     public void addStatus(Status status) {
         UserStatus userStatus = new UserStatus(this, status);

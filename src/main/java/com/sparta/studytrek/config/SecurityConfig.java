@@ -65,6 +65,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/login").permitAll()
                         // 특정 엔드포인트에 대해 승인된 사용자만 접근할 수 있도록 설정
                         .requestMatchers("/api/approved/**").hasAuthority("ROLE_APPROVER")
+                        .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated() // 그 외 인증처리
         );
         // accessDeniedHandler 를 사용할 때, 새로 만든 빈 메서드를 호출하도록 변경

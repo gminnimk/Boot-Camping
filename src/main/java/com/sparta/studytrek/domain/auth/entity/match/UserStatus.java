@@ -4,7 +4,6 @@ import com.sparta.studytrek.domain.auth.entity.Status;
 import com.sparta.studytrek.domain.auth.entity.User;
 import com.sparta.studytrek.domain.camp.entity.Camp;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
