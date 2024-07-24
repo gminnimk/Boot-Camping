@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인/회원가입</title>
+    <link rel="stylesheet" href="../static/css/login.css">
+    <script src="../static/js/login.js" defer></script>
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form action="#">
+                <h1 id="signUpTitle">Create Account</h1>
+                <div class="social-container">
+                    <a href="https://facebook.com" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://google.com" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="https://linkedin.com" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span id="signUpSpan">or use your email for registration</span>
+                <input type="text" placeholder="Id" />
+                <input type="text" placeholder="Name" />
+                <div id="adminNameContainer" class="searchable-select" style="display: none;">
+                    <input type="text" id="nameSearch" placeholder="Search for a name..." />
+                    <ul id="nameList">
+                        <!-- Options will be populated by JavaScript -->
+                    </ul>
+                </div>
+                <input type="password" placeholder="Password" />
+                <button id="signUpButton">Sign Up</button>
+            </form>
+        </div>
+        <div class="form-container sign-in-container">
+            <form action="#">
+                <h1 id="signInTitle">Sign in</h1>
+                <div class="social-container">
+                    <a href="https://facebook.com" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://google.com" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="https://linkedin.com" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span id="signInSpan">or use your account</span>
+                <input type="text" placeholder="Id" />
+                <input type="password" placeholder="Password" />
+                <a href="https://example.com/forgot-password" id="forgotPassword">Forgot your password?</a>
+                <button id="signInButton">Sign In</button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1 id="welcomeBackTitle">Welcome Back!</h1>
+                    <p id="welcomeBackText">To keep connected with us please login with your personal info</p>
+                    <button class="ghost" id="signIn">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1 id="helloTitle">Hello, Friend!</h1>
+                    <p id="helloText">Enter your personal details and start journey with us</p>
+                    <button class="ghost" id="signUp">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="user-type-buttons">
+        <button class="user-type-button active learn-more" id="normalUserBtn">일반 회원</button>
+        <button class="user-type-button learn-more" id="adminUserBtn">부트캠프 회원</button>
+    </div>
+</body>
+</html>
