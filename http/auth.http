@@ -33,6 +33,9 @@ Content-Type: application/json
 > {%
     client.global.set("accessToken", response.body.data.accessToken)
     client.global.set("refreshToken", response.body.data.refreshToken)
+
+    console.log('Response Status:', response.body.data.accessToken);
+    console.log('Response Data:', response.body.data.refreshToken);
 %}
 
 ### 로그아웃 logout
@@ -44,3 +47,9 @@ Authorization: Bearer {{accessToken}}
 POST localhost:8080/api/auth/resign
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
+
+### 토큰 재발급
+POST localhost:8080/api/auth/token/reissue
+Content-Type: application/json
+RefreshToken: Bearer {{refreshToken}}
+
