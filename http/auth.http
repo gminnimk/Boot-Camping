@@ -1,20 +1,20 @@
 ### 회원가입 signup (USER)
-POST localhost:8080/api/auth/signup?userRole=USER
+POST {{apiUrl}}/auth/signup?userRole=USER
 Content-Type: application/json
 
 {
-  "username": "user45",
+  "username": "user77",
   "password": "Password123!",
   "name": "일반사용자",
   "userAddr" : "대한민국 어딘가"
 }
 
 ### 회원가입 signup (BOOTCAMP)
-POST localhost:8080/api/auth/signup?userRole=BOOTCAMP
+POST {{apiUrl}}/auth/signup?userRole=BOOTCAMP
 Content-Type: application/json
 
 {
-  "username": "boot78",
+  "username": "boot99",
   "password": "Password123!",
   "name": "부트캠프사용자",
   "userAddr" : "대한민국 어딘가",
@@ -22,11 +22,11 @@ Content-Type: application/json
 }
 
 ### 로그인 login
-POST localhost:8080/api/auth/login
+POST {{apiUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "username": "user23",
+  "username": "user77",
   "password": "Password123!"
 }
 
@@ -39,17 +39,17 @@ Content-Type: application/json
 %}
 
 ### 로그아웃 logout
-POST localhost:8080/api/auth/logout
+POST {{apiUrl}}/auth/logout
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 ### 회원탈퇴 withdraw
-POST localhost:8080/api/auth/resign
+POST {{apiUrl}}/auth/resign
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 ### 토큰 재발급
-POST localhost:8080/api/auth/token/reissue
+POST {{apiUrl}}/auth/token/reissue
 Content-Type: application/json
 RefreshToken: Bearer {{refreshToken}}
 

@@ -1,14 +1,14 @@
 ### 관리자용 회원가입
-POST localhost:8080/api/admin/auth/signup
+POST {{apiUrl}}/admin/auth/signup
 Content-Type: application/json
 
 
 ### 관리자용 로그인
-POST localhost:8080/api/admin/auth/login
+POST {{apiUrl}}/admin/auth/login
 Content-Type: application/json
 
 
 ### 회원탈퇴 withdraw (관리자용)
-PUT localhost:8080/api/admin/auth/withdraw?username=user10
+PUT {{apiUrl}}/admin/auth/withdraw?username=user10
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
