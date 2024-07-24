@@ -7,7 +7,6 @@ import com.sparta.studytrek.domain.auth.dto.SignUpRequestDto;
 import com.sparta.studytrek.domain.auth.dto.SignUpResponseDto;
 import com.sparta.studytrek.domain.auth.dto.TokenResponseDto;
 import com.sparta.studytrek.domain.auth.entity.*;
-import com.sparta.studytrek.domain.auth.entity.match.UserStatus;
 import com.sparta.studytrek.domain.auth.repository.RoleRepository;
 import com.sparta.studytrek.domain.auth.repository.StatusRepository;
 import com.sparta.studytrek.domain.auth.repository.UserRepository;
@@ -16,7 +15,6 @@ import com.sparta.studytrek.domain.camp.service.CampService;
 import com.sparta.studytrek.jwt.JwtUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -66,10 +64,8 @@ public class UserService {
 
             Status findStatus = statusRepository.findByStatus(userStatus)
                     .orElseThrow(() -> new IllegalArgumentException("Status not found"));
-            System.out.println("Found status: " + findStatus);
 
             user.addStatus(findStatus);
-            System.out.println("Status added to user: " + findStatus);
         } else if (roleEnum == UserRoleEnum.BOOTCAMP) {
             // BOOTCAMP 일 경우 userCamp 저장
             String campName = requestDto.getCampName();
@@ -79,9 +75,7 @@ public class UserService {
 
             Camp camp = campService.findByName(campName);
             user.addCamp(camp);
-            System.out.println("Camp added to user: " + camp);
         }
-
 
         return SignUpResponseDto.builder().user(user).build();
     }
