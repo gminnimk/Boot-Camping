@@ -136,9 +136,9 @@ a {
 
 button {
     border-radius: 20px;
-    border: 1px solid #ffe9e9;
-    background-color: #c2f4fd;
-    color: #FFFFFF;
+    border: 1px solid #426096;
+    background-color: #E5FBFF;
+    color: #333;
     font-size: 12px;
     font-weight: bold;
     padding: 12px 45px;
@@ -157,7 +157,8 @@ button:focus {
 
 button.ghost {
     background-color: transparent;
-    border-color: #FFFFFF;
+    border-color: #426096;
+    color: #426096;
     position: relative;
     z-index: 3;
 }
@@ -175,7 +176,7 @@ form {
 
 input {
     background-color: #fffefe;
-    border: 1px solid #c2f4fd;
+    border: 1px solid #426096;
     padding: 12px 15px;
     margin: 8px 0;
     width: 100%;
@@ -256,13 +257,9 @@ input {
 }
 
 .overlay {
-    background: #92f2ff;
-    background: -webkit-linear-gradient(to top, #bdf7ff, #fbd5ff);
-    background: linear-gradient(to top, #92f2ff, #ffe9e9);
-    background-repeat: no-repeat;
+    background: #E5FBFF;
     background-size: cover;
-    background-position: 0 0;
-    color: #FFFFFF;
+    color: #426096;
     position: relative;
     left: -100%;
     height: 100%;
@@ -312,7 +309,7 @@ input {
 }
 
 .social-container a {
-    border: 1px solid #b1edff;
+    border: 1px solid #426096;
     border-radius: 50%;
     display: inline-flex;
     justify-content: center;
@@ -338,20 +335,10 @@ footer p {
     margin: 10px 0;
 }
 
-footer i {
-    color: red;
-}
-
-footer a {
-    color: #3c97bf;
-    text-decoration: none;
-}
-
 .user-type-buttons {
     display: flex;
     justify-content: center;
     margin-top: 50px;
-    /* margin-bottom: 40px; */
 }
 
 .user-type-buttons button {
@@ -361,8 +348,8 @@ footer a {
 .user-type-button {
     margin: 0px 10px;
     padding: 10px 20px;
-    background-color: #3498db;
-    color: white;
+    background-color: #E5FBFF;
+    color: #333;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -370,7 +357,7 @@ footer a {
 }
 
 .user-type-button:hover {
-    background-color: #2980b9;
+    background-color: #d0fbff;
 }
 
 .user-type-button.active {
@@ -416,7 +403,7 @@ footer a {
 
 .searchable-select input {
     background-color: #fffefe;
-    border: 1px solid #c2f4fd;
+    border: 1px solid #426096;
     padding: 12px 15px;
     width: 100%;
     font-size: 13px;
@@ -430,7 +417,7 @@ footer a {
     left: 0;
     right: 0;
     background: #fff;
-    border: 1px solid #c2f4fd;
+    border: 1px solid #426096;
     border-top: none;
     max-height: 130px;
     overflow-y: auto;

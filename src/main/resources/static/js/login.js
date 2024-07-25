@@ -186,63 +186,6 @@ function updateContent(userType) {
     }, 500); // Duration should match the CSS animation duration
 }
 
-// Event listener for the sign-up button
-document.getElementById('signUpButton').addEventListener('click', async (event) => {
-    event.preventDefault();
-
-    const isUsernameValid = validateUsername();
-    const isPasswordValid = validatePassword();
-    const isNameValid = validateName();
-    const isAddressValid = document.getElementById('userAddress').style.display !== 'none' ? validateAddress() : true;
-    const isCampNameValid = document.getElementById('adminNameContainer').style.display !== 'none' ? document.getElementById('nameSearch').value.trim() !== '' : true;
-
-    if (!isUsernameValid || !isPasswordValid || !isNameValid || !isAddressValid || !isCampNameValid) {
-        alert('조건에 맞는 입력값을 넣어주세요.');
-        return;
-    }
-
-    const username = document.getElementById('signupId').value;
-    const password = document.getElementById('signupPassword').value;
-    const name = document.getElementById('signupName').value;
-    const userAddrElement = document.getElementById('userAddress');
-    const campNameElement = document.getElementById('nameSearch');
-
-    const userAddr = userAddrElement ? userAddrElement.value : "";
-    const campName = campNameElement ? campNameElement.value : "";
-
-    const userRole = adminUserBtn.classList.contains('active') ? 'BOOTCAMP' : 'USER';
-
-    const data = {
-        username: username,
-        password: password,
-        name: name,
-        userAddr: userAddr,
-        campName: campName // Use the selected camp name
-    };
-
-    try {
-        const response = await fetch(`/api/${userRole.toLowerCase()}/sign-up`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-
-        if (response.ok) {
-            // Handle successful sign-up
-            alert('가입이 완료되었습니다.');
-            window.location.href = '/';
-        } else {
-            // Handle sign-up error
-            alert('가입 중 오류가 발생했습니다. 다시 시도해주세요.');
-        }
-    } catch (error) {
-        // Handle network error
-        alert('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
-    }
-});
-
 // Initialize with normal user content
 updateContent('normal');
 
