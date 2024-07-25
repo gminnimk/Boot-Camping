@@ -31,6 +31,84 @@ adminUserBtn.addEventListener('click', () => {
     updateContent('admin');
 });
 
+// Validate address function
+function validateAddress() {
+    const userAddress = document.getElementById('userAddress');
+    const userAddressError = document.getElementById('userAddressError');
+    const addressPattern = /^[a-zA-Z0-9가-힣\s,.-]+$/;
+
+    if (!addressPattern.test(userAddress.value)) {
+        userAddress.classList.add('invalid');
+        userAddressError.style.display = 'block';
+        userAddressError.textContent = '영문과 한글, 쉼표(,), 마침표(.), 하이폰(-) 사용 가능합니다.';
+        return false;
+    } else {
+        userAddress.classList.remove('invalid');
+        userAddressError.style.display = 'none';
+        return true;
+    }
+}
+
+// Validate username function
+function validateUsername() {
+    const username = document.getElementById('signupId');
+    const usernameError = document.getElementById('signupIdError');
+    const usernamePattern = /^[a-z0-9]+$/;
+
+    if (!usernamePattern.test(username.value) || username.value.length < 6 || username.value.length > 20) {
+        username.classList.add('invalid');
+        usernameError.style.display = 'block';
+        usernameError.textContent = '아이디는 소문자 + 숫자로 구성되어야 하며, 6자 이상 20자 이하이어야 합니다.';
+        return false;
+    } else {
+        username.classList.remove('invalid');
+        usernameError.style.display = 'none';
+        return true;
+    }
+}
+
+// Validate password function
+function validatePassword() {
+    const password = document.getElementById('signupPassword');
+    const passwordError = document.getElementById('signupPasswordError');
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])\S{6,}$/;
+
+    if (!passwordPattern.test(password.value) || password.value.length < 6 || password.value.length > 255) {
+        password.classList.add('invalid');
+        passwordError.style.display = 'block';
+        passwordError.textContent = '비밀번호는 알파벳 대소문자 + 숫자 + 특수문자로 구성되어야 하며, 최소 6자 이상이어야 합니다.';
+        return false;
+    } else {
+        password.classList.remove('invalid');
+        passwordError.style.display = 'none';
+        return true;
+    }
+}
+
+// Validate name function
+function validateName() {
+    const name = document.getElementById('signupName');
+    const nameError = document.getElementById('signupNameError');
+    const namePattern = /^[a-zA-Z가-힣]+$/;
+
+    if (!namePattern.test(name.value) || name.value.length < 2 || name.value.length > 20) {
+        name.classList.add('invalid');
+        nameError.style.display = 'block';
+        nameError.textContent = '이름은 한글 또는 영어로 구성되어야 하며, 2자 이상 20자 이하이어야 합니다.';
+        return false;
+    } else {
+        name.classList.remove('invalid');
+        nameError.style.display = 'none';
+        return true;
+    }
+}
+
+// Event listeners for validation on blur
+document.getElementById('signupId').addEventListener('blur', validateUsername);
+document.getElementById('signupPassword').addEventListener('blur', validatePassword);
+document.getElementById('signupName').addEventListener('blur', validateName);
+document.getElementById('userAddress').addEventListener('blur', validateAddress);
+
 // Update content based on user type
 function updateContent(userType) {
     const signUpTitle = document.getElementById('signUpTitle');
@@ -45,6 +123,7 @@ function updateContent(userType) {
     const helloTitle = document.getElementById('helloTitle');
     const helloText = document.getElementById('helloText');
     const userAddress = document.getElementById('userAddress');
+    const userAddressError = document.getElementById('userAddressError');
 
     // Apply fade-out effect to the current content
     document.querySelector('.overlay-left').classList.add('fade-out');
@@ -67,6 +146,10 @@ function updateContent(userType) {
             // Hide the user address input
             userAddress.style.display = 'none';
 
+            // Hide user address error message
+            userAddress.classList.remove('invalid');
+            userAddressError.style.display = 'none';
+
             // Show the searchable name input
             adminNameContainer.style.display = 'block';
         } else {
@@ -85,6 +168,12 @@ function updateContent(userType) {
             // Show the user address input
             userAddress.style.display = 'block';
 
+            // Validate inputs if they contain values
+            if (userAddress.value.trim() !== '') validateAddress();
+            if (document.getElementById('signupId').value.trim() !== '') validateUsername();
+            if (document.getElementById('signupPassword').value.trim() !== '') validatePassword();
+            if (document.getElementById('signupName').value.trim() !== '') validateName();
+
             // Hide the searchable name input
             adminNameContainer.style.display = 'none';
         }
@@ -97,8 +186,67 @@ function updateContent(userType) {
     }, 500); // Duration should match the CSS animation duration
 }
 
+// Event listener for the sign-up button
+document.getElementById('signUpButton').addEventListener('click', async (event) => {
+    event.preventDefault();
+
+    const isUsernameValid = validateUsername();
+    const isPasswordValid = validatePassword();
+    const isNameValid = validateName();
+    const isAddressValid = document.getElementById('userAddress').style.display !== 'none' ? validateAddress() : true;
+    const isCampNameValid = document.getElementById('adminNameContainer').style.display !== 'none' ? document.getElementById('nameSearch').value.trim() !== '' : true;
+
+    if (!isUsernameValid || !isPasswordValid || !isNameValid || !isAddressValid || !isCampNameValid) {
+        alert('조건에 맞는 입력값을 넣어주세요.');
+        return;
+    }
+
+    const username = document.getElementById('signupId').value;
+    const password = document.getElementById('signupPassword').value;
+    const name = document.getElementById('signupName').value;
+    const userAddrElement = document.getElementById('userAddress');
+    const campNameElement = document.getElementById('nameSearch');
+
+    const userAddr = userAddrElement ? userAddrElement.value : "";
+    const campName = campNameElement ? campNameElement.value : "";
+
+    const userRole = adminUserBtn.classList.contains('active') ? 'BOOTCAMP' : 'USER';
+
+    const data = {
+        username: username,
+        password: password,
+        name: name,
+        userAddr: userAddr,
+        campName: campName // Use the selected camp name
+    };
+
+    try {
+        const response = await fetch(`/api/${userRole.toLowerCase()}/sign-up`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            // Handle successful sign-up
+            alert('가입이 완료되었습니다.');
+            window.location.href = '/';
+        } else {
+            // Handle sign-up error
+            alert('가입 중 오류가 발생했습니다. 다시 시도해주세요.');
+        }
+    } catch (error) {
+        // Handle network error
+        alert('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+    }
+});
+
 // Initialize with normal user content
 updateContent('normal');
+
+
 
 // Populate name list
 function populateNameList() {
@@ -134,61 +282,96 @@ document.addEventListener('click', (event) => {
     }
 });
 
-// Event listener for the sign-up button
+// 유효성 검사 함수
+function validateInput(input, pattern, errorMessage) {
+    const errorElement = document.getElementById(input.id + 'Error');
+    if (!pattern.test(input.value)) {
+        input.classList.add('invalid');
+        errorElement.textContent = errorMessage;
+        errorElement.style.display = 'block';
+        return false;
+    } else {
+        input.classList.remove('invalid');
+        errorElement.style.display = 'none';
+        return true;
+    }
+}
+
+// 회원가입 버튼 이벤트 리스너
 document.getElementById('signUpButton').addEventListener('click', async (event) => {
     event.preventDefault();
 
-    const username = document.getElementById('signupId').value;
-    const password = document.getElementById('signupPassword').value;
-    const name = document.getElementById('signupName').value;
-    const userAddrElement = document.getElementById('userAddress');
-    const campNameElement = document.getElementById('nameSearch');
+    const username = document.getElementById('signupId');
+    const password = document.getElementById('signupPassword');
+    const name = document.getElementById('signupName');
+    const userAddr = document.getElementById('userAddress');
+    const campName = document.getElementById('nameSearch');
 
-    const userAddr = userAddrElement ? userAddrElement.value : "";
-    const campName = campNameElement ? campNameElement.value : "";
+    // 유효성 검사 패턴
+    const usernamePattern = /^[a-z0-9]{6,20}$/;
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])\S{6,}$/;
+    const namePattern = /^[a-zA-Z가-힣]{2,20}$/;
+    const userAddrPattern = /^[a-zA-Z0-9가-힣\s,.-]*$/;
 
-    const userRole = adminUserBtn.classList.contains('active') ? 'BOOTCAMP' : 'USER';
+    const isUsernameValid = validateInput(username, usernamePattern, "소문자, 숫자로 구성된 6 ~ 20자 이내로 입력해주세요.");
+    const isPasswordValid = validateInput(password, passwordPattern, "대소문자, 숫자, 특수문자로 구성된 최소 6글자 이상으로 입력해 주세요.");
+    const isNameValid = validateInput(name, namePattern, "한글 or 영어로 구성된 2 ~ 20자 이내로 입력해주세요.");
+    const isUserAddrValid = userAddr.value === "" || validateInput(userAddr, userAddrPattern, "주소는 영문과 한글, 쉼표(,), 마침표(.), 하이폰(-) 사용 가능합니다.");
+    const isCampNameValid = !adminUserBtn.classList.contains('active') || campName.value !== "";
 
-    const data = {
-        username: username,
-        password: password,
-        name: name,
-        userAddr: userAddr,
-        campName: campName // Use the selected camp name
-    };
+    if (!isCampNameValid) {
+        campName.classList.add('invalid');
+        document.getElementById('nameSearchError').textContent = "부트캠프 이름을 입력해주세요.";
+        document.getElementById('nameSearchError').style.display = 'block';
+    } else {
+        campName.classList.remove('invalid');
+        document.getElementById('nameSearchError').style.display = 'none';
+    }
 
-    try {
-        const response = await fetch(`/api/auth/signup?userRole=${userRole}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
+    if (isUsernameValid && isPasswordValid && isNameValid && isUserAddrValid && isCampNameValid) {
+        const data = {
+            username: username.value,
+            password: password.value,
+            name: name.value,
+            userAddr: userAddr.value,
+            campName: campName.value
+        };
 
-        if (response.ok) {
-            alert('회원가입 성공');
-        } else {
-            const result = await response.json();
-            console.error('회원가입 실패:', result); // 자세한 오류 메시지 로그
-            alert('회원가입 실패: ' + result.message);
+        const userRole = adminUserBtn.classList.contains('active') ? 'BOOTCAMP' : 'USER';
+
+        try {
+            const response = await fetch(`/api/auth/signup?userRole=${userRole}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert('회원가입 성공');
+            } else {
+                const result = await response.json();
+                console.error('회원가입 실패:', result); // 자세한 오류 메시지 로그
+                alert('회원가입 실패: ' + result.message);
+            }
+        } catch (error) {
+            console.error('회원가입 중 오류 발생:', error); // 자세한 오류 메시지 로그
+            alert('회원가입 중 오류 발생: ' + error.message);
         }
-    } catch (error) {
-        console.error('회원가입 중 오류 발생:', error); // 자세한 오류 메시지 로그
-        alert('회원가입 중 오류 발생: ' + error.message);
     }
 });
 
-// Event listener for the sign-in button
+// 로그인 버튼 이벤트 리스너
 document.getElementById('signInButton').addEventListener('click', async (event) => {
     event.preventDefault();
 
-    const username = document.getElementById('loginId').value;
-    const password = document.getElementById('loginPassword').value;
+    const username = document.getElementById('loginId');
+    const password = document.getElementById('loginPassword');
 
     const data = {
-        username: username,
-        password: password
+        username: username.value,
+        password: password.value
     };
 
     try {

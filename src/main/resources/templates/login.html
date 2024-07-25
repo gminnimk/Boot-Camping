@@ -19,15 +19,20 @@
             </div>
             <span id="signUpSpan">or use your email for registration</span>
             <input type="text" id="signupId" placeholder="Id" required />
+            <div class="error-message" id="signupIdError"></div>
             <input type="text" id="signupName" placeholder="Name" required />
+            <div class="error-message" id="signupNameError"></div>
             <input type="text" id="userAddress" placeholder="address" style="display: block;" />
+            <div class="error-message" id="userAddressError"></div>
             <div id="adminNameContainer" class="searchable-select" style="display: none;">
                 <input type="text" id="nameSearch" placeholder="부트캠프 조회" />
                 <ul id="nameList">
                     <!-- Options will be populated by JavaScript -->
                 </ul>
+                <div class="error-message" id="nameSearchError"></div>
             </div>
             <input type="password" id="signupPassword" placeholder="Password" required />
+            <div class="error-message" id="signupPasswordError"></div>
             <button type="button" id="signUpButton">Sign Up</button>
         </form>
     </div>
@@ -43,7 +48,9 @@
             </div>
             <span id="signInSpan">or use your account</span>
             <input type="text" id="loginId" placeholder="Id" required />
+            <div class="error-message" id="loginIdError"></div>
             <input type="password" id="loginPassword" placeholder="Password" required />
+            <div class="error-message" id="loginPasswordError"></div>
             <a href="https://example.com/forgot-password" id="forgotPassword">Forgot your password?</a>
             <button type="button" id="signInButton">Sign In</button>
         </form>
