@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div th:fragment="sidebar(isSidebarOpen, isDarkMode)">
+    <div class="sidebar" th:classappend="${isSidebarOpen} ? '' : 'closed'">
+        <nav class="sidebar-menu">
+            <a class="sidebar-link" th:href="@{/home}">
+                <img th:src="@{/images/icon-board.svg}" alt="icon" /><span>Home</span>
+            </a>
+            <a class="sidebar-link" th:href="@{/profile}">
+                <img th:src="@{/images/icon-board.svg}" alt="icon" /><span>Profile</span>
+            </a>
+            <a class="sidebar-link" th:href="@{/settings}">
+                <img th:src="@{/images/icon-board.svg}" alt="icon" /><span>Settings</span>
+            </a>
+            <a class="sidebar-link" th:href="@{/etc}">
+                <img th:src="@{/images/icon-board.svg}" alt="icon" /><span>기타</span>
+            </a>
+            <a class="sidebar-link" th:href="@{/more}">
+                <img th:src="@{/images/icon-board.svg}" alt="icon" /><span>등등</span>
+            </a>
+            <a class="sidebar-link" th:href="@{/anything}">
+                <img th:src="@{/images/icon-board.svg}" alt="icon" /><span>아무거나</span>
+            </a>
+        </nav>
+        <div class="theme-toggle">
+            <img th:src="@{/images/icon-light-theme.svg}" alt="Light Theme Icon" />
+            <div class="toggle-container" th:onclick="|javascript:toggleTheme()|">
+                <div class="toggle-circle" th:classappend="${isDarkMode} ? 'dark' : ''"></div>
+            </div>
+            <img th:src="@{/images/icon-dark-theme.svg}" alt="Dark Theme Icon" />
+        </div>
+        <button class="close-sidebar-button" th:onclick="|javascript:toggleSidebar()|">
+            <img th:src="@{/images/icon-hide-sidebar.svg}" alt="Hide Sidebar Icon" />
+        </button>
+    </div>
+</div>
+</body>
+</html>

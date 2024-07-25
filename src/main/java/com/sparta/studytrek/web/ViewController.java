@@ -10,4 +10,9 @@ public class ViewController {
     public String showAuthPage() {
         return "login"; // 로그인&회원가입
     }
+
+    @GetMapping("/home")
+    public String showHome() {
+        return "home";
+    }
 }
