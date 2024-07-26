@@ -24,7 +24,7 @@ function createReviewCard(review) {
         <div class="review-card" onclick="goToReviewDetail(${review.id})">
             <div class="review-header">
                 <div class="reviews review-title">${review.title}</div>
-                <span class="reviews heart-icon" onclick="toggleLike(this, event)">♡</span>
+                <div class="reviews heart-icon heart-button"><i class="far fa-heart"></i></div>
             </div>
             <div class="reviewer-info">
                 <span class="reviews review-category">${review.category1}</span>
@@ -38,6 +38,24 @@ function createReviewCard(review) {
     `;
 }
 
+window.addEventListener('load', function() {
+    var allElements = document.getElementsByTagName('*');
+    Array.prototype.forEach.call(allElements, function(el) {
+        var includePath = el.dataset.includePath;
+        if (includePath) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    el.outerHTML = this.responseText;
+                }
+            };
+            xhttp.open('GET', includePath, true);
+            xhttp.send();
+        }
+    });
+    renderPage();  // 초기 페이지 렌더링 추가
+});
+
 // 페이지 렌더링 함수
 function renderPage() {
     const container = document.getElementById('reviewContainer');
@@ -50,6 +68,7 @@ function renderPage() {
     });
     updatePaginationButtons();
     renderPageNumbers();
+    addHeartButtonListeners();
 }
 
 // 페이지 변경 함수
@@ -125,15 +144,28 @@ function createPageButton(pageNumber) {
     return pageButton;
 }
 
-function toggleLike(button) {
-    button.classList.toggle('liked');
-    if (button.classList.contains('liked')) {
-        button.innerHTML = '♥';
-    } else {
-        button.innerHTML = '♡';
-    }
+function addHeartButtonListeners() {
+    document.querySelectorAll('.heart-button').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.stopPropagation();
+            const icon = this.querySelector('i');
+            if (icon.classList.contains('far')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+            }
+        });
+    });
 }
 
 
+function addReview() {
+    const addUrl = document.querySelector('.write-review-button').getAttribute('review-add-url');
+    window.location.href = addUrl;
+}
+
 // 초기 페이지 렌더링
 renderPage();
+document.addEventListener('DOMContentLoaded', addHeartButtonListeners);
