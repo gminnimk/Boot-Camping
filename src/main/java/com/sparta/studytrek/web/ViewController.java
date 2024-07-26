@@ -11,7 +11,7 @@ public class ViewController {
         return "login"; // 로그인&회원가입
     }
 
-    @GetMapping("/home")
+    @GetMapping("/api/home")
     public String showHome() {
         return "home";
     }
