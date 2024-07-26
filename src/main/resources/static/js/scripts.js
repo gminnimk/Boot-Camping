@@ -68,10 +68,37 @@ function onLogoutSuccess() {
 }
 
 // 로그아웃 요청을 보내는 함수
-function onLogout() {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    onLogoutSuccess();
+async function onLogout() {
+    try {
+        // 실제 로그아웃 API 호출을 건너뛰고 토큰을 삭제
+        // const response = await fetch('/api/auth/logout', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+        //         'Content-Type': 'application/json'
+        //     }
+        // });
+
+        // if (response.ok) {
+        //     localStorage.removeItem('accessToken');
+        //     localStorage.removeItem('refreshToken');
+        //     onLogoutSuccess();
+        // } else {
+        //     alert('로그아웃 실패');
+        // }
+
+        // 강제로 토큰을 제거하고 로그아웃 성공 처리
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        onLogoutSuccess();
+
+    } catch (error) {
+        alert('로그아웃 중 오류 발생: ' + error.message);
+        // 오류가 발생해도 로그아웃 처리
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        onLogoutSuccess();
+    }
 }
 
 // DOMContentLoaded 이벤트 리스너에 로그인 상태 체크 함수 추가
