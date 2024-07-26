@@ -64,7 +64,23 @@ function onLogoutSuccess() {
     const loginButton = document.querySelector('.add-task-button');
     loginButton.textContent = 'Login';
     loginButton.onclick = () => location.href = '/api/auth';
-    alert('로그아웃 성공');
+
+    Swal.fire({
+        toast: true,
+        position: 'center',
+        icon: 'success',
+        title: '로그아웃이 정상적으로 실행되었습니다.',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+        },
+        customClass: {
+            title: 'black-text'
+        }
+    });
 }
 
 // 로그아웃 요청을 보내는 함수
@@ -89,10 +105,6 @@ async function onLogout() {
 
     } catch (error) {
         alert('로그아웃 중 오류 발생: ' + error.message);
-        // 오류가 발생해도 로그아웃 처리
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        onLogoutSuccess();
     }
 }
 
