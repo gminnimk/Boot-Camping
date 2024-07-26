@@ -41,7 +41,7 @@ function toggleSidebar() {
     if (sidebar.classList.contains('closed')) {
         content.style.marginLeft = '30px';
     } else {
-        content.style.marginLeft = '300px';
+        content.style.marginLeft = '200px';
     }
 }
 
