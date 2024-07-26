@@ -15,4 +15,7 @@ public class ViewController {
     public String showHome() {
         return "home";
     }
+
+    @GetMapping("/api/review")
+    public String showReview() { return "review/reviewMain"; }
 }
