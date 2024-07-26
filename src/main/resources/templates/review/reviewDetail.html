@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홈</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/review/reviewDetail.css}">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/js/scripts.js}" defer></script>
+    <script th:src="@{/js/review/reviewDetail.js}" defer></script>
+</head>
+<body th:classappend="${isDarkMode} ? 'dark' : ''">
+<div th:replace="~{'fragments/topbar' :: topbar}"></div>
+<div class="main-container">
+    <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
+    <div class="content">
+        <div class="container">
+            <div id="viewMode">
+                <!-- 상세 보기용 -->
+                <div class="review-header">
+                    <div>
+                        <h2 class="review-title">Pine Valley Campground에서의 친절한 직원들</h2>
+                        <p class="review-subtitle" id="subtitleDisplay">소제목1</p> <!-- 소제목을 표시할 부분 -->
+                    </div>
+                    <button class="heart-button" onclick="toggleLike(this)">♡</button>
+                </div>
+
+                <div class="meta-info">
+                    <div>
+                        <span class="category">Forest</span>
+                        <span class="category">Fullstack</span>
+                    </div>
+                    <span class="date">2023-04-14</span>
+                </div>
+                <div class="rating">★★★★★</div>
+                <div class="detail-content">
+                    <p>Pine Valley Campground에서 정말 멋진 시간을 보냈습니다. 이 캠핑장의 가장 큰 장점은 단연 친절한 직원들입니다. 도착했을 때부터 떠날 때까지 모든 직원들이 매우 상냥하고 도움을 주려고 노력했습니다.</p>
+                    <p>시설도 매우 잘 관리되어 있었습니다. 화장실과 샤워 시설이 깨끗했고, 캠핑 구역도 잘 정돈되어 있었습니다. 각 사이트마다 충분한 공간이 있어서 프라이버시도 보장되었죠.</p>
+                    <p>주변 하이킹 트레일도 정말 훌륭했습니다. 캠핑장 직원들이 추천해준 트레일을 따라 걸었는데, 멋진 경치와 함께 적당한 난이도여서 매우 만족스러웠습니다. 숲속을 걸으며 신선한 공기를 마시는 것만으로도 도시의 스트레스를 모두 날려버릴 수 있었습니다.</p>
+                    <p>저녁에는 캠프파이어를 즐겼는데, 이 또한 잊지 못할 경험이었습니다. 별이 가득한 하늘 아래에서 marshmallow를 구워 먹으며 가족들과 이야기를 나누는 시간이 정말 소중했습니다.</p>
+                    <p>전반적으로, Pine Valley Campground는 가족 여행이나 친구들과의 아웃도어 활동을 위한 완벽한 장소입니다. 친절한 직원들, 잘 관리된 시설, 아름다운 자연 환경이 어우러져 최고의 캠핑 경험을 선사합니다. 다음에 또 방문하고 싶은 곳이에요!</p>
+                </div>
+                <div class="author">- Mike T.</div>
+                <div class="actions">
+                    <a href="/reviews" class="btn">목록으로 가기</a>
+                    <div>
+                        <button class="btn btn-edit" onclick="showEditForm()">수정</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 상세 수정용 -->
+            <div id="editMode" class="edit-form" style="display:none;">
+                <h2>리뷰 수정</h2>
+                <form onsubmit="return saveEdit()">
+                    <div class="form-group">
+                        <label for="editTitle">제목</label>
+                        <div class="form-description">제목을 입력하세요.</div>
+                        <input type="text" id="editTitle" value="Pine Valley Campground에서의 친절한 직원들" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSubtitle">부트캠프</label>
+                        <div class="form-description">리뷰할 부트캠프를 선택하세요</div>
+                        <select id="editSubtitle" name="editSubtitle" required>
+                            <option value="" disabled>부트캠프 선택</option>
+                            <option value="소제목1" selected>소제목1</option>
+                            <option value="소제목2">소제목2</option>
+                            <option value="소제목3">소제목3</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editCategory">카테고리</label>
+                        <div class="form-description">리뷰와 관련된 카테고리를 선택하세요.</div>
+                        <select id="editCategory" required>
+                            <option value="Forest" selected>Forest</option>
+                            <option value="Mountain">Mountain</option>
+                            <option value="Lake">Lake</option>
+                            <option value="Beach">Beach</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDevCategory">트랙</label>
+                        <div class="form-description">리뷰와 관련된 트랙을 선택하세요.</div>
+                        <select id="editDevCategory" required>
+                            <option value="Frontend">Frontend</option>
+                            <option value="Backend">Backend</option>
+                            <option value="Fullstack" selected>Fullstack</option>
+                            <option value="DevOps">DevOps</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editRating">평점</label>
+                        <div class="form-description">리뷰의 평점을 선택하세요.</div>
+                        <select id="editRating" required>
+                            <option value="5" selected>★★★★★</option>
+                            <option value="4">★★★★☆</option>
+                            <option value="3">★★★☆☆</option>
+                            <option value="2">★★☆☆☆</option>
+                            <option value="1">★☆☆☆☆</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editContent">내용</label>
+                        <div class="form-description">리뷰의 내용을 입력하세요.</div>
+                        <textarea id="editContent" required>Pine Valley Campground에서 정말 멋진 시간을 보냈습니다. 이 캠핑장의 가장 큰 장점은 단연 친절한 직원들입니다. 도착했을 때부터 떠날 때까지 모든 직원들이 매우 상냥하고 도움을 주려고 노력했습니다.
+
+            시설도 매우 잘 관리되어 있었습니다. 화장실과 샤워 시설이 깨끗했고, 캠핑 구역도 잘 정돈되어 있었습니다. 각 사이트마다 충분한 공간이 있어서 프라이버시도 보장되었죠.
+
+            주변 하이킹 트레일도 정말 훌륭했습니다. 캠핑장 직원들이 추천해준 트레일을 따라 걸었는데, 멋진 경치와 함께 적당한 난이도여서 매우 만족스러웠습니다. 숲속을 걸으며 신선한 공기를 마시는 것만으로도 도시의 스트레스를 모두 날려버릴 수 있었습니다.
+
+            저녁에는 캠프파이어를 즐겼는데, 이 또한 잊지 못할 경험이었습니다. 별이 가득한 하늘 아래에서 marshmallow를 구워 먹으며 가족들과 이야기를 나누는 시간이 정말 소중했습니다.
+
+            전반적으로, Pine Valley Campground는 가족 여행이나 친구들과의 아웃도어 활동을 위한 완벽한 장소입니다. 친절한 직원들, 잘 관리된 시설, 아름다운 자연 환경이 어우러져 최고의 캠핑 경험을 선사합니다. 다음에 또 방문하고 싶은 곳이에요!</textarea>
+                    </div>
+                    <button type="submit">저장</button>
+                    <button type="button" onclick="cancelEdit()">취소</button>
+                </form>
+            </div>
+
+            <!-- 댓글 영역 -->
+            <div class="comments-section">
+                <h3>댓글</h3>
+                <div class="add-comment">
+                    <input type="text" placeholder="댓글을 입력하세요..." id="commentInput">
+                    <button onclick="addComment()">댓글 등록</button>
+                </div>
+                <div class="comment" id="comment1">
+                    <div class="comment-header">
+                        <div class="comment-author">Sarah K.</div>
+                        <div class="comment-date">2023-04-15</div>
+                    </div>
+                    <div class="comment-content">저도 Pine Valley Campground에 다녀왔는데 정말 좋았어요! 직원들의 친절함이 인상적이었죠. 다음에 또 가고 싶네요.</div>
+                    <div class="comment-actions">
+                        <button class="reply-button" onclick="showReplyForm('comment1')">답글</button>
+                        <button class="edit-button" onclick="editComment('comment1')">수정</button>
+                        <button class="delete-button" onclick="deleteComment('comment1')">삭제</button>
+                    </div>
+                    <div class="reply-form">
+                        <input type="text" placeholder="답글을 입력하세요...">
+                        <button onclick="addReply('comment1')">답글 등록</button>
+                    </div>
+                    <div class="replies"></div>
+                </div>
+                <div class="comment" id="comment2">
+                    <div class="comment-header">
+                        <div class="comment-author">John D.</div>
+                        <div class="comment-date">2023-04-16</div>
+                    </div>
+                    <div class="comment-content">하이킹 트레일에 대해 자세히 설명해주셔서 감사합니다. 다음 달에 방문할 예정인데, 기대가 되네요!</div>
+                    <div class="comment-actions">
+                        <button class="reply-button" onclick="showReplyForm('comment2')">답글</button>
+                        <button class="edit-button" onclick="editComment('comment2')">수정</button>
+                        <button class="delete-button" onclick="deleteComment('comment2')">삭제</button>
+                    </div>
+                    <div class="reply-form">
+                        <input type="text" placeholder="답글을 입력하세요...">
+                        <button onclick="addReply('comment2')">답글 등록</button>
+                    </div>
+                    <div class="replies"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button class="open-sidebar-button hidden" th:onclick="|javascript:toggleSidebar()|">
+    <img th:src="@{/images/icon-show-sidebar.svg}" alt="사이드바 아이콘 보이기" />
+</button>
+</body>
+</html>

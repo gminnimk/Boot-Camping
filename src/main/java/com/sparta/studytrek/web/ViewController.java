@@ -18,4 +18,7 @@ public class ViewController {
 
     @GetMapping("/api/review")
     public String showReview() { return "review/reviewMain"; }
+
+    @GetMapping("/api/review/detail")
+    public String showReviewDetail() { return "review/reviewDetail"; }
 }
