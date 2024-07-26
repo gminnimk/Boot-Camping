@@ -8,10 +8,6 @@
     <link rel="stylesheet" th:href="@{/css/question.css}">
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
-    <!-- SweetAlert2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script th:src="@{/js/scripts.js}" defer></script>
-    <script th:src="@{/js/question.js}" defer></script>
 </head>
 <body th:classappend="${isDarkMode} ? 'dark' : ''">
 <div th:replace="~{'fragments/topbar' :: topbar}"></div>
@@ -61,7 +57,8 @@
             <form id="questionForm">
                 <label for="questionTitle">Title:</label>
                 <input type="text" id="questionTitle" required>
-                <label for="questionCategory">Category:</label>
+
+                <label for="selectedCategory">Category:</label>
                 <div class="category-select">
                     <div class="category-option" data-category="강의·강사">강의·강사</div>
                     <div class="category-option" data-category="커리큘럼">커리큘럼</div>
@@ -71,6 +68,7 @@
                     <div class="category-option" data-category="취업·취업연계">취업·취업연계</div>
                 </div>
                 <input type="hidden" id="selectedCategory" name="category" required>
+
                 <label for="questionContent">Question:</label>
                 <textarea id="questionContent" rows="6" required></textarea>
                 <button type="submit" class="submit-question-btn">Submit Question</button>
@@ -81,5 +79,10 @@
 <button class="open-sidebar-button hidden" th:onclick="|javascript:toggleSidebar()|">
     <img th:src="@{/images/icon-show-sidebar.svg}" alt="사이드바 아이콘 보이기" />
 </button>
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Custom Scripts -->
+<script th:src="@{/js/scripts.js}" defer></script>
+<script th:src="@{/js/question.js}" defer></script>
 </body>
 </html>
