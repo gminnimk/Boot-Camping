@@ -15,4 +15,9 @@ public class ViewController {
     public String showHome() {
         return "home";
     }
+
+    @GetMapping("/api/profile")
+    public String showProfilePage() {
+        return "profile";
+    }
 }

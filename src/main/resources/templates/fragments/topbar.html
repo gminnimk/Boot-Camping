@@ -1,9 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
 <div th:fragment="topbar">
     <div class="topbar">
         <div class="logo">
             <span>Study Trek</span>
         </div>
+        <nav class="topbar-menu">
+            <nav class="topbar-menu">
+                <a class="topbar-link" th:href="@{/api/settings}"><span>Welcome</span></a>
+                <a class="topbar-link" th:href="@{/api/etc}"><span>To</span></a>
+                <a class="topbar-link" th:href="@{/api/more}"><span>Study Trek</span></a>
+        </nav>
         <button class="add-task-button" id="loginButton" onclick="location.href='/api/auth'">Login</button>
     </div>
 </div>
-
+</body>
+</html>
