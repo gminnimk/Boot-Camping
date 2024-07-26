@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: var(--body-bg);
     margin: 0;
     padding: 0;
     display: flex;
@@ -8,8 +8,17 @@ body {
     align-items: center;
     height: 100vh;
 }
+
+body.dark {
+    --sidebar-bg: #20212C;
+    --body-bg: #2B2C37;
+    --color: #FFFFFF;
+    --hover-bg: #3A3B47;
+}
+
+
 header {
-    color: rgb(156, 224, 255);
+    color: #7FC8F8;
     text-align: center;
     position: relative;
     padding-bottom: 2px;
@@ -28,12 +37,11 @@ header::after {
     max-width: 800px;
     width: 100%;
     padding: 20px;
-    background-color: white;
+    background-color: var(--body-bg);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 .review-form {
-    background-color: white;
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -45,6 +53,11 @@ header::after {
 .form-group > label {
     margin-bottom: 15px;
 }
+.form-group input, .form-group select, .form-group textarea {
+    background-color: var(--sidebar-bg);
+    color: var(--color);
+}
+
 label {
     display: block;
     margin-bottom: 5px;
@@ -60,6 +73,11 @@ textarea {
     border-radius: 4px;
     font-size: 16px;
 }
+
+.form-group input {
+    width: 740px;
+}
+
 textarea {
     width: 735px;
     height: 150px;
@@ -76,13 +94,13 @@ textarea {
 .star-rating label {
     cursor: pointer;
     font-size: 30px;
-    color: #ddd;
+    color: var(--color);
     transition: color 0.2s;
 }
 .star-rating label:hover,
 .star-rating label:hover ~ label,
 .star-rating input:checked ~ label {
-    color: #ffee07;
+    color: #FFE45E;
 }
 .button-group {
     display: flex;
@@ -90,20 +108,22 @@ textarea {
     gap: 10px;
 }
 .submit-button {
-    background-color: #c2f4fd;
+    background-color: #7FC8F8;
     color: white;
     border: none;
     padding: 10px 20px;
     font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 .submit-button:hover {
-    background-color: #8aedff;
+    background-color: #5AA9E6;
 }
 .cancel-button {
-    background-color: #e6e6e6;
-    color: white;
+    background-color: var(--sidebar-bg);
+    color: var(--color);
+    font-weight: bold;
     border: none;
     padding: 10px 20px;
     font-size: 16px;
@@ -111,7 +131,7 @@ textarea {
     transition: background-color 0.3s;
 }
 .cancel-button:hover {
-    background-color: #ff7171;
+    background-color: #FF6B35;
 }
 .categories, .tracks {
     display: flex;
@@ -123,7 +143,7 @@ textarea {
     display: none;
 }
 .category-label, .track-label {
-    background-color: #e0e0e0;
+    background-color: var(--sidebar-bg);
     padding: 8px 15px;
     border-radius: 20px;
     cursor: pointer;
@@ -131,9 +151,11 @@ textarea {
 }
 .category-radio:checked + .category-label,
 .track-radio:checked + .track-label {
-    background-color: #c2f4fd;
-    color: white;
+    background-color: #5AA9E6;
+    color: var(--color);
+    font-weight: bold;
 }
+
 @media (max-width: 600px) {
     .content-wrapper {
         padding: 10px;
