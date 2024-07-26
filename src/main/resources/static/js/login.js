@@ -276,8 +276,8 @@ document.getElementById('signUpButton').addEventListener('click', async (event) 
             username: username.value,
             password: password.value,
             name: name.value,
-            userAddr: userAddr.value,
-            campName: campName.value
+            userAddr: adminUserBtn.classList.contains('active') ? null : userAddr.value, // 부트캠프 사용자일 경우 null
+            campName: adminUserBtn.classList.contains('active') ? campName.value : null // 부트캠프 사용자일 경우 campName 포함
         };
 
         const userRole = adminUserBtn.classList.contains('active') ? 'BOOTCAMP' : 'USER';
@@ -304,41 +304,6 @@ document.getElementById('signUpButton').addEventListener('click', async (event) 
         }
     }
 });
-
-function onLoginSuccess() {
-    const loginButton = document.querySelector('.add-task-button');
-    loginButton.textContent = 'Logout';
-    loginButton.onclick = onLogout;
-}
-
-function onLogoutSuccess() {
-    const loginButton = document.querySelector('.add-task-button');
-    loginButton.textContent = 'Login';
-    loginButton.onclick = () => location.href = '/api/auth';
-    alert('로그아웃 성공');
-}
-
-async function onLogout() {
-    try {
-        const response = await fetch('/api/auth/logout', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (response.ok) {
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
-            onLogoutSuccess();
-        } else {
-            alert('로그아웃 실패');
-        }
-    } catch (error) {
-        alert('로그아웃 중 오류 발생: ' + error.message);
-    }
-}
 
 // 로그인 버튼 이벤트 리스너
 document.getElementById('signInButton').addEventListener('click', async (event) => {
@@ -376,3 +341,37 @@ document.getElementById('signInButton').addEventListener('click', async (event) 
     }
 });
 
+function onLoginSuccess() {
+    const loginButton = document.querySelector('.add-task-button');
+    loginButton.textContent = 'Logout';
+    loginButton.onclick = onLogout;
+}
+
+function onLogoutSuccess() {
+    const loginButton = document.querySelector('.add-task-button');
+    loginButton.textContent = 'Login';
+    loginButton.onclick = () => location.href = '/api/auth';
+    alert('로그아웃 성공');
+}
+
+async function onLogout() {
+    try {
+        const response = await fetch('/api/auth/logout', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            onLogoutSuccess();
+        } else {
+            alert('로그아웃 실패');
+        }
+    } catch (error) {
+        alert('로그아웃 중 오류 발생: ' + error.message);
+    }
+}
