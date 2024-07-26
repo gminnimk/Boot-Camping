@@ -17,7 +17,8 @@ document.getElementById('reviewForm').addEventListener('submit', function(e) {
     // 예시로 alert를 사용하여 제출 완료를 알립니다.
     alert('리뷰가 성공적으로 제출되었습니다!');
     // 제출 후 리뷰 목록 페이지로 리디렉션합니다.
-    window.location.href = 'https://reviewsite.com/reviews';
+    const submitUrl = document.querySelector('.submit-button').getAttribute('data-submit-url');
+    window.location.href = submitUrl;
 });
 
 function cancelReview() {
