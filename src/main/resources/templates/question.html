@@ -19,7 +19,7 @@
     <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
     <div class="content">
         <button class="back-btn" onclick="showMainPage()">Back to Questions</button>
-        <div class="main-container">
+        <div class="question-main-container">
             <div class="question-container">
                 <div class="left-content">
                     <h1>Ask a Question</h1>
@@ -61,7 +61,6 @@
             <form id="questionForm">
                 <label for="questionTitle">Title:</label>
                 <input type="text" id="questionTitle" required>
-                <!--suppress XmlInvalidId -->
                 <label for="questionCategory">Category:</label>
                 <div class="category-select">
                     <div class="category-option" data-category="강의·강사">강의·강사</div>
