@@ -21,4 +21,7 @@ public class ViewController {
 
     @GetMapping("/api/review/detail")
     public String showReviewDetail() { return "review/reviewDetail"; }
+
+    @GetMapping("/api/review/add")
+    public String showAddReview() { return "review/reviewAdd"; }
 }
