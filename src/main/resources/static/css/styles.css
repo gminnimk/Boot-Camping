@@ -115,6 +115,7 @@ body {
     top: 0;
     left: 0;
     z-index: 2000;
+    box-sizing: border-box;
 }
 
 .logo {
@@ -133,6 +134,7 @@ body {
     cursor: pointer;
     font-weight: bold;
     transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+    margin-left: 10px;
 }
 
 .add-task-button:hover {

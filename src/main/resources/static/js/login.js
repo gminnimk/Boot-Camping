@@ -331,6 +331,7 @@ document.getElementById('signInButton').addEventListener('click', async (event) 
             alert('로그인 성공');
             localStorage.setItem('accessToken', result.data.accessToken);
             localStorage.setItem('refreshToken', result.data.refreshToken);
+            window.location.href = '/home';
         } else {
             const result = await response.json();
             alert('로그인 실패: ' + result.message);

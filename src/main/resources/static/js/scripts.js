@@ -26,32 +26,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
             toggleCircle.classList.remove('dark');
         }
     }
-
-    // 로그아웃 버튼 클릭 시 로그아웃 요청을 보내고 로그인 페이지로 리다이렉트
-    const logoutButton = document.querySelector('.nav-item.logout');
-    if (logoutButton) {
-        logoutButton.addEventListener('click', function() {
-            fetch('/api/auth/logout', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-                },
-                credentials: 'include',
-            })
-                .then(response => {
-                    if (response.ok) {
-                        // Clear tokens from localStorage
-                        localStorage.removeItem('accessToken');
-                        localStorage.removeItem('refreshToken');
-                        window.location.href = '/login'; // 로그아웃 성공 시 로그인 페이지로 리다이렉트
-                    } else {
-                        console.error('Logout failed');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        });
-    }
 });
 
 function toggleSidebar() {
