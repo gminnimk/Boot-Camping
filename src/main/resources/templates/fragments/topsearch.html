@@ -20,10 +20,10 @@
             <input class="search-rew" type="text" id="searchQuery" placeholder="검색어를 입력하세요" required>
         </div>
         <div class="search-button">
-            <button type="submit">검색</button>
+            <button class="main-search-btn" type="submit">검색</button>
         </div>
         <div class="filter-button">
-            <button type="button" onclick="toggleFilter()">필터</button>
+            <button class="main-filter-btn" type="button" onclick="toggleFilter()">필터</button>
         </div>
     </form>
 
@@ -70,8 +70,8 @@
         </div>
 
         <div class="filter-actions">
-            <button onclick="resetFilters()">초기화</button>
-            <button onclick="applyFilters()">필터 적용</button>
+            <button class="main-filter-reset" onclick="resetFilters()">초기화</button>
+            <button class="main-filter-apply" onclick="applyFilters()">필터 적용</button>
         </div>
     </div>
 </div>
