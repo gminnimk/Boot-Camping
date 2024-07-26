@@ -22,7 +22,7 @@ document.getElementById('reviewForm').addEventListener('submit', function(e) {
 
 function cancelReview() {
     if (confirm('작성 중인 리뷰를 취소하시겠습니까?')) {
-        // 사용자가 확인을 누르면 리뷰 목록 페이지로 리디렉션합니다.
-        window.location.href = 'https://reviewsite.com/reviews';
+        const cancelUrl = document.querySelector('.cancel-button').getAttribute('data-cancel-url');
+        window.location.href = cancelUrl;
     }
 }

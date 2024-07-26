@@ -100,7 +100,7 @@
                     <textarea id="review-content" name="review-content" required></textarea>
                 </div>
                 <div class="button-group">
-                    <button type="button" class="cancel-button" onclick="cancelReview()">취소</button>
+                    <button type="button" class="cancel-button" onclick="cancelReview()" th:data-cancel-url="@{/api/review}">취소</button>
                     <button type="submit" class="submit-button">리뷰 제출</button>
                 </div>
             </form>
