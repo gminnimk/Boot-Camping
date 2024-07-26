@@ -46,4 +46,18 @@ function toggleSidebar() {
 
 window.addEventListener('DOMContentLoaded', (event) => {
     toggleSidebar();
+    checkLoginStatus();
 });
+
+function checkLoginStatus() {
+    const loginButton = document.querySelector('.add-task-button');
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (accessToken) {
+        loginButton.textContent = 'Logout';
+        loginButton.onclick = onLogout;
+    } else {
+        loginButton.textContent = 'Login';
+        loginButton.onclick = () => location.href = '/api/auth';
+    }
+}

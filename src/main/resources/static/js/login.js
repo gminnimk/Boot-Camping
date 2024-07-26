@@ -305,6 +305,41 @@ document.getElementById('signUpButton').addEventListener('click', async (event) 
     }
 });
 
+function onLoginSuccess() {
+    const loginButton = document.querySelector('.add-task-button');
+    loginButton.textContent = 'Logout';
+    loginButton.onclick = onLogout;
+}
+
+function onLogoutSuccess() {
+    const loginButton = document.querySelector('.add-task-button');
+    loginButton.textContent = 'Login';
+    loginButton.onclick = () => location.href = '/api/auth';
+    alert('로그아웃 성공');
+}
+
+async function onLogout() {
+    try {
+        const response = await fetch('/api/auth/logout', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            onLogoutSuccess();
+        } else {
+            alert('로그아웃 실패');
+        }
+    } catch (error) {
+        alert('로그아웃 중 오류 발생: ' + error.message);
+    }
+}
+
 // 로그인 버튼 이벤트 리스너
 document.getElementById('signInButton').addEventListener('click', async (event) => {
     event.preventDefault();
@@ -340,3 +375,4 @@ document.getElementById('signInButton').addEventListener('click', async (event) 
         alert('로그인 중 오류 발생: ' + error.message);
     }
 });
+
