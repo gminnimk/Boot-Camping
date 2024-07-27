@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyTrek - 스터디 모집 플랫폼</title>
+    <link rel="stylesheet" th:href="@{/css/study/StudyWrite.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/js/scripts.js}" defer></script>
+</head>
+
+<body th:classappend="${isDarkMode} ? 'dark' : ''">
+<div th:replace="~{'fragments/topbar' :: topbar}"></div>
+<div class="container">
+    <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
+    <div class="content">
+        <div class="content-wrapper">
+            <div class="header">
+                <h1>StudyTrek</h1>
+                <button class="back-btn" onclick="goToMainPage()">메인 페이지로 돌아가기</button>
+            </div>
+
+            <div class="write-review">
+                <h2>스터디 모집글 작성</h2>
+                <form id="studyForm">
+                    <div class="form-group">
+                        <label for="title">제목:</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">카테고리:</label>
+                        <select id="category" name="category" required>
+                            <option value="">선택하세요</option>
+                            <option value="frontend">프론트엔드</option>
+                            <option value="backend">백엔드</option>
+                            <option value="data">데이터</option>
+                            <option value="game">게임</option>
+                            <option value="ai">AI</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">스터디 설명:</label>
+                        <textarea id="description" name="description" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maxMembers">최대 인원:</label>
+                        <input type="number" id="maxMembers" name="maxMembers" min="2" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duration">예상 기간:</label>
+                        <input type="text" id="duration" name="duration" placeholder="예: 8주" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="meetingFrequency">모임 주기:</label>
+                        <input type="text" id="meetingFrequency" name="meetingFrequency" placeholder="예: 주 2회" required>
+                    </div>
+
+                    <button type="submit" class="submit-btn">모집글 등록</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button class="open-sidebar-button hidden" th:onclick="|javascript:toggleSidebar()|">
+    <img th:src="@{/images/icon-show-sidebar.svg}" alt="사이드바 아이콘 보이기"/>
+</button>
+<script th:src="@{/js/study/StudyWrite.js}"></script>
+</body>
+</html>
