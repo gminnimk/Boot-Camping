@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyTrek - 스터디 상세 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/study/StudyDetail.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/js/scripts.js}" defer></script>
+</head>
+
+<body th:classappend="${isDarkMode} ? 'dark' : ''">
+<div th:replace="~{'fragments/topbar' :: topbar}"></div>
+<div class="container">
+    <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
+
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="header">
+                <div class="logo">StudyTrek</div>
+                <button class="back-btn" onclick="goToMainPage()">메인 페이지로 돌아가기</button>
+            </div>
+
+            <div class="study-details">
+                <h2 class="study-title">React 스터디원 구합니다</h2>
+                <div class="study-info">
+                    <span class="info-item"><strong>카테고리:</strong> 프론트엔드</span>
+                    <span class="info-item"><strong>최대 인원:</strong> 5명</span>
+                    <span class="info-item"><strong>예상 기간:</strong> 8주</span>
+                    <span class="info-item"><strong>모임 주기:</strong> 주 2회</span>
+                </div>
+                <div class="study-description">
+                    <p>React와 관련 라이브러리를 깊이 있게 학습하실 분들 모집합니다. 실전 프로젝트도 진행할 예정입니다.
+                        함께 성장하고 싶은 열정 있는 분들의 참여를 기다립니다!</p>
+                </div>
+                <div class="action-buttons">
+                    <button class="edit-btn" onclick="editStudy()">수정</button>
+                    <button class="delete-btn" onclick="deleteStudy()">삭제</button>
+                </div>
+            </div>
+
+            <div class="comments-section">
+                <h3>댓글</h3>
+                <div class="comment">
+                    <div class="comment-header">
+                        <div class="user-info">
+                            <div class="user-avatar">J</div>
+                            <strong>John Doe</strong>
+                        </div>
+                        <span class="comment-date">8월 20, 2021</span>
+                    </div>
+                    <div class="comment-content">
+                        <p>이 스터디에 참여하고 싶습니다. 제가 React를 배운지 얼마 안 됐는데 함께 공부할 수 있을까요?</p>
+                    </div>
+                    <div class="comment-actions">
+                        <button onclick="editComment(1)">수정</button>
+                        <button onclick="deleteComment(1)">삭제</button>
+                        <button onclick="toggleReplyForm(1)">답글</button>
+                    </div>
+                    <div class="reply-form" id="replyForm1" style="display: none;">
+                        <textarea placeholder="답글을 입력하세요"></textarea>
+                        <button onclick="submitReply(1)">답글 작성</button>
+                    </div>
+                </div>
+                <div class="comment" style="margin-left: 30px;">
+                    <div class="comment-header">
+                        <div class="user-info">
+                            <div class="user-avatar">S</div>
+                            <strong>Sarah (작성자)</strong>
+                        </div>
+                        <span class="comment-date">8월 20, 2021</span>
+                    </div>
+                    <div class="comment-content">
+                        <p>네, 물론이죠! 우리 스터디는 다양한 수준의 개발자들이 함께 배우고 성장하는 것을 목표로 하고 있습니다. 환영합니다!</p>
+                    </div>
+                    <div class="comment-actions">
+                        <button onclick="editComment(2)">수정</button>
+                        <button onclick="deleteComment(2)">삭제</button>
+                        <button onclick="toggleReplyForm(2)">답글</button>
+                    </div>
+                    <div class="reply-form" id="replyForm2" style="display: none;">
+                        <textarea placeholder="답글을 입력하세요"></textarea>
+                        <button onclick="submitReply(2)">답글 작성</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="leave-comment">
+                <h2>댓글 작성</h2>
+                <form class="comment-form">
+                    <input type="text" placeholder="이름" required>
+                    <textarea placeholder="댓글을 입력하세요" required></textarea>
+                    <button type="submit">댓글 작성</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<button class="open-sidebar-button hidden" th:onclick="|javascript:toggleSidebar()|">
+    <img th:src="@{/images/icon-show-sidebar.svg}" alt="사이드바 아이콘 보이기"/>
+</button>
+<script th:src="@{/js/study/StudyDetail.js}"></script>
+</body>
+</html>
