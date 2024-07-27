@@ -15,4 +15,28 @@ public class ViewController {
     public String showHome() {
         return "home";
     }
+
+    @GetMapping("/api/rank")
+    public String showRank() {
+        return "rank/Rank";
+    }
+    @GetMapping("/api/study/detail")
+    public String showStudyDetail() {
+        return "study/StudyDetail";
+    }
+
+    @GetMapping("/api/study/main")
+    public String showStudyMain() {
+        return "study/StudyMain";
+    }
+
+    @GetMapping("/api/study/modify")
+    public String showStudyModify() {
+        return "study/StudyModify";
+    }
+
+    @GetMapping("/api/study/write")
+    public String showStudyWrite() {
+        return "study/StudyWrite";
+    }
 }
