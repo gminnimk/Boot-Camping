@@ -109,7 +109,7 @@ textarea {
 }
 .submit-button {
     background-color: #7FC8F8;
-    color: white;
+    color: var(--color);
     border: none;
     padding: 10px 20px;
     font-size: 16px;
