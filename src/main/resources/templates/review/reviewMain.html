@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홈</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/review/reviewMain.css}">
+    <link rel="stylesheet" th:href="@{/css/topsearch.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/js/scripts.js}" defer></script>
+    <script th:src="@{/js/topsearch.js}" defer></script>
+    <script th:src="@{/js/review/reviewMain.js}" defer></script>
+</head>
+<body th:classappend="${isDarkMode} ? 'dark' : ''">
+<div th:replace="~{'fragments/topbar' :: topbar}"></div>
+<div class="main-container">
+    <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
+
+    <div class="content">
+        <!-- 헤더 -->
+        <div th:replace="~{'fragments/topsearch' :: topsearch}"></div>
+
+        <!-- 리뷰 작성 바로가기 베너 -->
+        <div class="write-review-section write-text">
+            <div class="content-wrapper">
+                <div class="write-review-content">
+                    <div class="write-review-text write-text">
+                        <h2>Write a Review</h2>
+                        <p>Share your experience with others</p>
+                    </div>
+                    <button class="write-review-button learn-more" onclick="addReview()" th:review-add-url="@{/api/review/add}">Start a Review</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 리뷰 목록 -->
+        <div class="content-wrapper">
+            <div class="review-container" id="reviewContainer">
+                <!-- Review cards will be dynamically added here -->
+            </div>
+            <div class="pagination">
+                <button id="prevButton" onclick="changePage(-1)" disabled>Previous</button>
+                <div class="page-numbers" id="pageNumbers">
+                    <!-- Page numbers will be dynamically added here -->
+                </div>
+                <button id="nextButton" onclick="changePage(1)">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="open-sidebar-button hidden" th:onclick="|javascript:toggleSidebar()|">
+        <img th:src="@{/images/icon-show-sidebar.svg}" alt="사이드바 아이콘 보이기" />
+    </button>
+    </div>
+</body>
+<script>
+    window.addEventListener('load', function() {
+        var allElements = document.getElementsByTagName('*');
+        Array.prototype.forEach.call(allElements, function(el) {
+            var includePath = el.dataset.includePath;
+            if (includePath) {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        el.outerHTML = this.responseText;
+                    }
+                };
+                xhttp.open('GET', includePath, true);
+                xhttp.send();
+            }
+        });
+    });
+</script>
+</html>
