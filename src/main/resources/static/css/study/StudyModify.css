@@ -1,0 +1,132 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+    background-color: var(--body-bg);
+    margin-top: 60px;
+    margin-bottom: 60px;
+}
+
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    transition: margin-left 0.3s ease;
+}
+
+.content {
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    margin-top: 60px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.main-page-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.main-page-btn:hover {
+    background-color: #0056b3;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+input[type="text"], select, textarea, input[type="number"] {
+    background-color: var(--body-bg);
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+textarea {
+    height: 150px;
+    resize: vertical;
+}
+
+.button-group {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.submit-btn, .cancel-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.submit-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.submit-btn:hover {
+    background-color: #218838;
+}
+
+.cancel-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.cancel-btn:hover {
+    background-color: #c82333;
+}
+
+.toggle-sidebar-button {
+    position: fixed;
+    left: 10px;
+    top: 10px;
+    z-index: 1000;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
