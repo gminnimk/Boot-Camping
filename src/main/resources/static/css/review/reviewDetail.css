@@ -1,16 +1,22 @@
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    color: #333;
-    background-color: #f4f4f4;
     margin: 0;
     padding: 0;
 }
+body.dark {
+    --sidebar-bg: #20212C;
+    --body-bg: #2B2C37;
+    --color: #FFFFFF;
+    --hover-bg: #3A3B47;
+    --review-card-bg: #333;
+    --review-card-shadow: rgba(255, 255, 255, 0.1);
+}
+
 .container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #fff;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 .review-header {
@@ -31,27 +37,35 @@ body {
     margin-top: 0.5rem;
     font-style: italic;
 }
-.heart-button {
-    width: 40px;
-    height: 40px;
+.heart-icon {
+    cursor: pointer;
+    font-size: 1.2em;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
-    background-color: #fff;
-    border: 2px solid #ff4136;
-    color: #ff4136;
-    font-size: 1.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: background-color 0.3s, color 0.3s;
+    flex-shrink: 0;
+}
+.heart-button {
+    background: none;
+    border: none;
     cursor: pointer;
-    transition: all 0.3s ease;
+    font-size: 1.2em;
+    color: var(--color);
+    transition: transform 0.2s ease;
 }
 .heart-button:hover {
-    background-color: #ff4136;
-    color: #fff;
+    transform: scale(1.1);
 }
-.heart-button.liked {
-    background-color: #ff4136;
-    color: #fff;
+.heart-button .far {
+    color: #ccc; /* 기본 색상 */
+}
+
+.heart-button .fas {
+    color: red; /* 클릭 후 색상 */
 }
 .meta-info {
     display: flex;
@@ -59,10 +73,9 @@ body {
     align-items: center;
     margin-bottom: 1rem;
     font-size: 0.9rem;
-    color: #666;
+    color: var(--color);
 }
 .category {
-    background-color: #e0e0e0;
     padding: 0.3rem 0.6rem;
     border-radius: 15px;
     font-size: 0.8rem;
@@ -70,7 +83,7 @@ body {
 }
 .rating {
     font-size: 1.5rem;
-    color: #ffc107;
+    color: #FFE45E;
     margin-bottom: 1rem;
 }
 .detail-content {
@@ -90,8 +103,8 @@ body {
     border-top: 1px solid #e0e0e0;
 }
 .btn {
-    background-color: #E5FBFF;
-    color: #426096;
+    background-color: var(--sidebar-bg);
+    color: var(--color);
     border: none;
     font-weight: bold;
     padding: 10px 20px;
@@ -105,17 +118,21 @@ body {
     transition: background-color 0.3s;
 }
 .btn:hover {
-    opacity: 0.8;
+    background-color: #5AA9E6;
 }
 button.btn.btn-edit {
-    color: white;
-    background-color: #426096;
+    color: var(--color);
+    background-color: #7FC8F8;
 }
+button.btn.btn-edit:hover {
+    background-color: #5AA9E6;
+}
+
 .comments-section {
     margin-top: 2rem;
 }
 .comment {
-    background-color: #f9f9f9;
+    background-color: var(--sidebar-bg);
     border: 1px solid #e0e0e0;
     border-radius: 4px;
     padding: 1rem 1rem 0rem 1rem;
@@ -132,7 +149,7 @@ button.btn.btn-edit {
 }
 .comment-date {
     font-size: 0.8rem;
-    color: #666;
+    color: var(--color);
 }
 .comment-content {
     margin-top: 0.5rem;
@@ -147,14 +164,16 @@ button.btn.btn-edit {
     flex-grow: 1;
     height: 60px;
     padding: 0 0.5rem;
+    background-color: var(--sidebar-bg);
+    color: var(--color);
     margin-right: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 4px;
     width: calc(100% - 120px);
 }
 .add-comment button {
-    background-color: #426096;
-    color: white;
+    background-color: #7FC8F8;
+    color: var(--color);
     border: none;
     height: 60px;
     padding: 10px 10px;
@@ -162,13 +181,14 @@ button.btn.btn-edit {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s;
     width: 100px;
 }
 .add-comment button:hover {
-    background-color: #62779e;
+    background-color: #5AA9E6;
 }
 .comment-actions {
     display: flex;
@@ -177,8 +197,7 @@ button.btn.btn-edit {
     margin-bottom: 10px;
 }
 .reply-button, .edit-button, .delete-button {
-    background-color: #426096;
-    color: white;
+    color: var(--color);
     border: none;
     padding: 5px 10px;
     font-weight: bold;
@@ -191,25 +210,34 @@ button.btn.btn-edit {
     border-radius: 4px;
     transition: background-color 0.3s;
 }
-.reply-button:hover, .edit-button:hover, .delete-button:hover {
-    color: #426096;
+.reply-button {
+    background-color: #7FC8F8;
 }
-.reply-button:hover {
-    background-color: #d1e1ff;
+.edit-button {
+    background-color: #FFE45E;
 }
-.edit-button:hover {
-    background-color: #E5FBFF;
-}
-.delete-button:hover {
-    background-color: #e9edfa;
+.delete-button {
+    background-color: #FF6B35;
 }
 
+.reply-button:hover {
+    background-color: #5AA9E6;
+}
+.edit-button:hover {
+    background-color: #dec95d;
+}
+.delete-button:hover {
+    background-color: #e5683b;
+}
 
 .reply-form {
     margin-top: 10px;
     display: none;
+    color: var(--color);
 }
 .reply-form input {
+    background-color: var(--sidebar-bg);
+    color: var(--color);
     width: calc(100% - 120px);
     height: 50px;
     padding: 0 0.5rem;
@@ -218,8 +246,8 @@ button.btn.btn-edit {
     border-radius: 4px;
 }
 .reply-form button {
-    background-color: #E5FBFF;
-    color: #426096;
+    background-color: #7FC8F8;
+    color: var(--color);
     font-weight: bold;
     border: none;
     height: 50px;
@@ -233,7 +261,7 @@ button.btn.btn-edit {
     transition: background-color 0.3s;
 }
 .reply-form button:hover {
-    background-color: #eaffff;
+    background-color: #5AA9E6;
 }
 .replies {
     margin-left: 20px;
@@ -247,15 +275,22 @@ button.btn.btn-edit {
 .edit-form input, .edit-form textarea, .edit-form select {
     width: 100%;
     padding: 10px;
+    background-color: var(--sidebar-bg);
     border: 1px solid #ddd;
     border-radius: 4px;
 }
+.form-group-track, .form-group-category, .form-group-camp, .form-group-title {
+    color: var(--color);
+}
+.form-group-star {
+    color: #FFE45E;
+}
+
 .edit-form textarea {
     height: 200px;
 }
 .edit-form button {
-    background-color: #E5FBFF;
-    color: #426096;
+    color: var(--color);
     border: none;
     padding: 10px 20px;
     text-align: center;
@@ -268,9 +303,19 @@ button.btn.btn-edit {
     border-radius: 4px;
     transition: background-color 0.3s;
 }
-.edit-form button:hover {
-    background-color: #426096;
-    color: white;
+
+.editMode-submit {
+    background-color: #FFE45E;
+}
+.editMode-cancel {
+    background-color: #FF6B35;
+}
+
+.editMode-submit:hover {
+    background-color: #dec95d;
+}
+.editMode-cancel:hover {
+    background-color: #e5683b;
 }
 
 .form-group {

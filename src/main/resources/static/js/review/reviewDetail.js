@@ -1,11 +1,19 @@
-function toggleLike(button) {
-    button.classList.toggle('liked');
-    if (button.classList.contains('liked')) {
-        button.innerHTML = '♥';
-    } else {
-        button.innerHTML = '♡';
-    }
+function addHeartButtonListeners() {
+    document.querySelectorAll('.heart-button').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.stopPropagation();
+            const icon = this.querySelector('i');
+            if (icon.classList.contains('far')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+            }
+        });
+    });
 }
+
 
 function addComment() {
     const commentText = document.getElementById('commentInput').value;
@@ -118,3 +126,4 @@ function saveEdit() {
     cancelEdit();
     return false; // Prevent form submission
 }
+document.addEventListener('DOMContentLoaded', addHeartButtonListeners);
