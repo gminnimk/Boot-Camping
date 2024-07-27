@@ -102,28 +102,40 @@ function showEditForm() {
 }
 
 function cancelEdit() {
-    document.getElementById('viewMode').style.display = 'block';
-    document.getElementById('editMode').style.display = 'none';
+    if (confirm('수정을 취소하시겠습니까? 변경사항이 저장되지 않습니다.')) {
+        document.getElementById('viewMode').style.display = 'block';
+        document.getElementById('editMode').style.display = 'none';
+    }
 }
 
 function saveEdit() {
-    const title = document.getElementById('editTitle').value;
-    const subtitle = document.getElementById('editSubtitle').value;
-    const category = document.getElementById('editCategory').value;
-    const devCategory = document.getElementById('editDevCategory').value;
-    const rating = document.getElementById('editRating').value;
-    const content = document.getElementById('editContent').value;
+    if (confirm('정말 수정하시겠습니까?')) {
+        const title = document.getElementById('editTitle').value;
+        const subtitle = document.getElementById('editSubtitle').value;
+        const category = document.getElementById('editCategory').value;
+        const devCategory = document.getElementById('editDevCategory').value;
+        const rating = document.getElementById('editRating').value;
+        const content = document.getElementById('editContent').value;
 
-    // Here you would typically send this data to the server
-    // For this example, we'll just update the view
-    document.querySelector('.review-title').textContent = title;
-    document.querySelector('.review-subtitle').textContent = subtitle;
-    const categories = document.querySelector('.meta-info').querySelector('div');
-    categories.innerHTML = `<span class="category">${category}</span><span class="category">${devCategory}</span>`;
-    document.querySelector('.rating').textContent = '★'.repeat(rating) + '☆'.repeat(5 - rating);
-    document.querySelector('.content').innerHTML = content.replace(/\n/g, '<br>');
+        // 뷰 업데이트
+        document.querySelector('.review-title').textContent = title;
+        document.querySelector('#subtitleDisplay').textContent = subtitle;
+        const categories = document.querySelector('.meta-info').querySelector('div');
+        categories.innerHTML = `<span class="category">${category}</span><span class="category">${devCategory}</span>`;
+        document.querySelector('.rating').textContent = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+        document.querySelector('.detail-content').innerHTML = content.replace(/\n/g, '<br>');
 
-    cancelEdit();
-    return false; // Prevent form submission
+        // 편집 모드 종료
+        document.getElementById('viewMode').style.display = 'block';
+        document.getElementById('editMode').style.display = 'none';
+
+        // 수정 완료 메시지 표시
+        Swal.fire({
+            title: '수정 완료',
+            text: '리뷰가 성공적으로 수정되었습니다.',
+            icon: 'success',
+            confirmButtonText: '확인'
+        });
+    }
 }
 document.addEventListener('DOMContentLoaded', addHeartButtonListeners);
