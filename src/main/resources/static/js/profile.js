@@ -114,22 +114,83 @@ form.addEventListener("submit", function(e) {
     const selectedTechStack = Array.from(document.querySelectorAll(".tech-stack-button.selected")).map(button => button.textContent);
     const certificateFile = bootcampCertificate.files[0];
 
-    console.log("부트캠프 이름:", bootcampName);
-    console.log("트랙:", track);
-    console.log("기수:", generation);
-    console.log("시작일:", startDate);
-    console.log("종료일:", endDate);
-    console.log("선택된 기술 스택:", selectedTechStack);
-
-    if (!isEditing) {
-        console.log("인증서 파일:", certificateFile);
-    }
-
     if (isEditing) {
+        // 수정 로직
         console.log("수정 중인 부트캠프:", currentEditingBootcamp);
-        // 여기에 수정 로직을 추가합니다.
+        console.log("부트캠프 이름:", bootcampName);
+        console.log("트랙:", track);
+        console.log("기수:", generation);
+        console.log("시작일:", startDate);
+        console.log("종료일:", endDate);
+        console.log("선택된 기술 스택:", selectedTechStack);
+
+        // Update the corresponding card in the DOM
+        const card = document.querySelector(`.edit-button[data-bootcamp="${currentEditingBootcamp}"]`).closest('.card');
+        card.querySelector('.card-title').textContent = bootcampName;
+        card.querySelector('.info-table').innerHTML = `
+            <tr>
+                <td>트랙</td>
+                <td>${track}</td>
+            </tr>
+            <tr>
+                <td>기수</td>
+                <td>${generation}</td>
+            </tr>
+            <tr>
+                <td>참여 기간</td>
+                <td>${startDate} - ${endDate}</td>
+            </tr>
+        `;
+        card.querySelector('.skill-container').innerHTML = selectedTechStack.map(skill => `<span class="skill">${skill}</span>`).join('');
     } else {
-        // 여기에 새로운 부트캠프 등록 로직을 추가합니다.
+        // 새로운 부트캠프 등록 로직
+        console.log("부트캠프 이름:", bootcampName);
+        console.log("트랙:", track);
+        console.log("기수:", generation);
+        console.log("시작일:", startDate);
+        console.log("종료일:", endDate);
+        console.log("선택된 기술 스택:", selectedTechStack);
+        console.log("인증서 파일:", certificateFile);
+
+        // Append the new card to the DOM (you can modify this part as needed)
+        const newCard = document.createElement('div');
+        newCard.className = 'card';
+        newCard.innerHTML = `
+            <div class="card-header">
+                <div class="card-title">${bootcampName}</div>
+                <div class="card-actions">
+                    <button class="edit-button" data-bootcamp="${bootcampName}" data-track="${track}" data-generation="${generation}" data-start-date="${startDate}" data-end-date="${endDate}" data-tech-stack="${selectedTechStack.join(',')}">수정</button>
+                    <button class="delete-button">삭제</button>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="info-column">
+                    <table class="info-table">
+                        <tr>
+                            <td>트랙</td>
+                            <td>${track}</td>
+                        </tr>
+                        <tr>
+                            <td>기수</td>
+                            <td>${generation}</td>
+                        </tr>
+                        <tr>
+                            <td>참여 기간</td>
+                            <td>${startDate} - ${endDate}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="tech-stack-column">
+                    <div class="column-title">기술 스택</div>
+                    <div class="skill-container">
+                        ${selectedTechStack.map(skill => `<span class="skill">${skill}</span>`).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const contentContainer = document.querySelector('.content-container');
+        contentContainer.appendChild(newCard);
     }
 
     modal.style.display = "none";
@@ -137,6 +198,7 @@ form.addEventListener("submit", function(e) {
     techStackButtons.forEach(button => button.classList.remove("selected"));
     certificatePreview.style.display = "none";
 });
+
 
 activityCards.forEach(card => {
     card.addEventListener("click", function() {

@@ -104,6 +104,7 @@ body {
     border-radius: 8px;
     margin-bottom: 20px;
     overflow: hidden;
+    width: 760px;
 }
 .card-header {
     background-color: var(--body-bg);
