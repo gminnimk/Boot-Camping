@@ -34,4 +34,9 @@ public class ViewController {
 
     @GetMapping("/api/review/add")
     public String showAddReview() { return "review/reviewAdd"; }
+
+    @GetMapping("/api/admin")
+    public String showAdmin() {
+        return "admin";
+    }
 }
