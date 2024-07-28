@@ -16,6 +16,15 @@ public class ViewController {
         return "home";
     }
 
+    @GetMapping("/api/review")
+    public String showReview() { return "review/reviewMain"; }
+
+    @GetMapping("/api/review/detail")
+    public String showReviewDetail() { return "review/reviewDetail"; }
+
+    @GetMapping("/api/review/add")
+    public String showAddReview() { return "review/reviewAdd"; }
+
     @GetMapping("/api/camp")
     public String showCamp() { return "recruitment/recruitmentMain"; }
 

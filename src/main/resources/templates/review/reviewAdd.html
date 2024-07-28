@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홈</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/review/reviewAdd.css}">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/js/scripts.js}" defer></script>
+    <script th:src="@{/js/review/reviewAdd.js}" defer></script>
+</head>
+<body th:classappend="${isDarkMode} ? 'dark' : ''">
+<div th:replace="~{'fragments/topbar' :: topbar}"></div>
+<div class="main-container">
+    <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
+    <div class="content">
+        <div class="content-wrapper">
+            <header>
+                <h1>리뷰 작성</h1>
+            </header>
+            <form class="review-form" id="reviewForm">
+                <div class="form-group">
+                    <label>카테고리 선택</label>
+                    <div class="categories">
+                        <input type="radio" id="category-lecture" name="category" value="강의" class="category-radio" required>
+                        <label for="category-lecture" class="category-label">강의</label>
+
+                        <input type="radio" id="category-instructor" name="category" value="강사" class="category-radio">
+                        <label for="category-instructor" class="category-label">강사</label>
+
+                        <input type="radio" id="category-materials" name="category" value="강의자료" class="category-radio">
+                        <label for="category-materials" class="category-label">강의자료</label>
+
+                        <input type="radio" id="category-curriculum" name="category" value="커리큘럼" class="category-radio">
+                        <label for="category-curriculum" class="category-label">커리큘럼</label>
+
+                        <input type="radio" id="category-environment" name="category" value="수강환경" class="category-radio">
+                        <label for="category-environment" class="category-label">수강환경</label>
+
+                        <input type="radio" id="category-assignment" name="category" value="과제" class="category-radio">
+                        <label for="category-assignment" class="category-label">과제</label>
+
+                        <input type="radio" id="category-project" name="category" value="프로젝트" class="category-radio">
+                        <label for="category-project" class="category-label">프로젝트</label>
+
+                        <input type="radio" id="category-job" name="category" value="취업연계" class="category-radio">
+                        <label for="category-job" class="category-label">취업연계</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>트랙 선택</label>
+                    <div class="tracks">
+                        <input type="radio" id="track-backend" name="track" value="backend" class="track-radio" required>
+                        <label for="track-backend" class="track-label">백엔드</label>
+
+                        <input type="radio" id="track-frontend" name="track" value="frontend" class="track-radio">
+                        <label for="track-frontend" class="track-label">프론트엔드</label>
+
+                        <input type="radio" id="track-fullstack" name="track" value="fullstack" class="track-radio">
+                        <label for="track-fullstack" class="track-label">풀스택</label>
+
+                        <input type="radio" id="track-bigdata" name="track" value="bigdata" class="track-radio">
+                        <label for="track-bigdata" class="track-label">빅데이터</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="review-title">리뷰 제목</label>
+                    <input type="text" id="review-title" name="review-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="sub-title">하위 제목 선택</label>
+                    <select id="sub-title" name="sub-title" required>
+                        <option value="" disabled selected>하위 제목을 선택하세요</option>
+                        <option value="소제목1">소제목1</option>
+                        <option value="소제목2">소제목2</option>
+                        <option value="소제목3">소제목3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>별점</label>
+                    <div class="star-rating">
+                        <input type="radio" id="star5" name="rating" value="5" required>
+                        <label for="star5">★</label>
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4">★</label>
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3">★</label>
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2">★</label>
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1">★</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="review-content">리뷰 내용</label>
+                    <textarea id="review-content" name="review-content" required></textarea>
+                </div>
+                <div class="button-group">
+                    <button type="button" class="cancel-button" onclick="cancelReview()" th:data-cancel-url="@{/api/review}">취소</button>
+                    <button type="submit" class="submit-button" th:data-submit-url="@{/api/review/detail}">리뷰 제출</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<button class="open-sidebar-button hidden" th:onclick="|javascript:toggleSidebar()|">
+    <img th:src="@{/images/icon-show-sidebar.svg}" alt="사이드바 아이콘 보이기" />
+</button>
+</body>
+</html>
