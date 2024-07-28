@@ -29,13 +29,16 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+    background-color: var(--body-bg);
+    border-radius: 8px;
 }
+
 
 header {
     width: 80%;
     max-width: 1200px;
     margin: 0 auto;
-    background-color: var(--sidebar-bg);
+    background-color: var(--body-bg);
     color: var(--header-color);
     padding-top: 30px;
     min-height: 70px;
