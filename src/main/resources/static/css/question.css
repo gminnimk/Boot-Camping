@@ -6,6 +6,9 @@
     --edit-bg: #FFD700;
     --comment-bg: #87CEEB;
     --delete-bg: #FF6347;
+    --modal-bg: #ffffff;
+    --modal-shadow: rgba(0, 0, 0, 0.25);
+    --close-hover-color: #f44336;
 }
 
 body.dark {
@@ -16,6 +19,9 @@ body.dark {
     --edit-bg: #543100;
     --comment-bg: #012938;
     --delete-bg: #330003;
+    --modal-bg: #3A3B47;
+    --modal-shadow: rgba(0, 0, 0, 0.5);
+    --close-hover-color: #e57373;
 }
 
 body {
@@ -221,6 +227,7 @@ h1, h2 {
     margin-top: 20px;
     border-top: 1px solid #ddd;
     padding-top: 20px;
+    padding-right: 20px;
 }
 
 .comment {
@@ -231,7 +238,7 @@ h1, h2 {
 }
 
 .comment-form textarea, #questionTitle, #questionContent {
-    width: 100%;
+    width: calc(100% - 20px);
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -252,6 +259,7 @@ h1, h2 {
     transition: background-color 0.3s;
     margin-top: 10px;
     margin-bottom: 20px;
+    margin-right: 20px;
 }
 
 .comment-form button:hover {
@@ -335,16 +343,26 @@ label {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
+    align-items: center;
+    justify-content: center;
 }
 
 .modal-content {
-    background-color: var(--body-bg);
-    margin: 15% auto;
+    background-color: var(--modal-bg);
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 60%;
+    max-width: 800px;
+    margin-left: 650px;
+    margin-top: 100px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 8px var(--modal-shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.modal-content:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 16px var(--modal-shadow);
 }
 
 .close {
@@ -352,11 +370,12 @@ label {
     float: right;
     font-size: 28px;
     font-weight: bold;
+    transition: color 0.3s ease;
 }
 
 .close:hover,
 .close:focus {
-    color: #000;
+    color: var(--close-hover-color);
     text-decoration: none;
     cursor: pointer;
 }
