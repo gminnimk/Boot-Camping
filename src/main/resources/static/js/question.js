@@ -85,7 +85,6 @@ const questions = [
         date: "2023-04-04",
         content: "커리큘럼이 유연하게 운영되어 학생들의 요구사항을 잘 반영해주셔서 좋았습니다."
     }
-
 ];
 
 let comments = {};
@@ -356,8 +355,22 @@ document.querySelector('.start-question-btn').addEventListener('click', () => {
     currentQuestionId = null; // Reset currentQuestionId for new question
     document.getElementById('questionForm').reset(); // Clear the form
     document.querySelectorAll('.category-option').forEach(option => option.classList.remove('active'));
-    showWriteQuestionPage();
+    showQuestionDetailPage();
 });
+
+function showQuestionDetailPage() {
+    document.querySelector('.main-container').style.display = 'none';
+    document.querySelector('.pagination').style.display = 'none';
+    const detailPage = document.getElementById('questionDetailPage');
+    detailPage.style.display = 'block';
+
+    document.getElementById('detailTitle').textContent = '새 질문 작성';
+    document.getElementById('detailCategory').textContent = '';
+    document.getElementById('detailDate').textContent = new Date().toISOString().split('T')[0];
+    document.getElementById('detailContent').textContent = '질문을 입력하세요.';
+
+    document.querySelector('.back-btn').style.display = 'block';
+}
 
 document.getElementById('questionForm').addEventListener('submit', function(e) {
     e.preventDefault();

@@ -144,6 +144,7 @@ h1, h2 {
     width: 100%;
 }
 
+
 .question-card {
     background-color: var(--body-bg);
     border-radius: 8px;
@@ -163,6 +164,16 @@ h1, h2 {
 
 .question-header {
     margin-bottom: 10px;
+}
+
+.question-and-pagination {
+    margin-left: 390px;
+    margin-right: 350px;
+}
+
+.comment-and-writeQuestionPage {
+    margin-left: 390px;
+    margin-right: 370px;
 }
 
 .question-title {

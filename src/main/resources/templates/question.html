@@ -15,67 +15,71 @@
     <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
     <div class="content">
         <button class="back-btn" onclick="showMainPage()">Back to Questions</button>
-        <div class="question-main-container">
-            <div class="question-container">
-                <div class="left-content">
-                    <h1>Ask a Question</h1>
-                    <p class="subtitle">Openly share what you're curious about.</p>
+        <div class="question-and-pagination">
+            <div class="question-main-container">
+                <div class="question-container">
+                    <div class="left-content">
+                        <h1>Ask a Question</h1>
+                        <p class="subtitle">Openly share what you're curious about.</p>
+                    </div>
+                    <button class="start-question-btn">ASK A QUESTION</button>
                 </div>
-                <button class="start-question-btn">ASK A QUESTION</button>
-            </div>
-            <div class="category-container">
-                <button class="category-btn active">최신순</button>
-                <button class="category-btn">답변 많은 순</button>
-            </div>
-            <div class="question-list">
-                <!-- Question cards will be dynamically inserted here -->
-            </div>
-        </div>
-        <div class="pagination">
-            <!-- Pagination buttons will be dynamically inserted here -->
-        </div>
-        <div id="questionDetailPage">
-            <h2 id="detailTitle"></h2>
-            <p id="detailCategory"></p>
-            <p id="detailDate"></p>
-            <p id="detailContent"></p>
-            <div class="question-actions">
-                <button class="edit-btn" onclick="editQuestion()">Edit Question</button>
-                <button class="delete-btn" onclick="deleteQuestion()">Delete Question</button>
-            </div>
-            <div class="comment-section">
-                <h3>Comments <span id="commentCount"></span></h3>
-                <div id="commentList"></div>
-                <div class="comment-form">
-                    <textarea id="newComment" rows="5" placeholder="댓글을 작성해주세요"></textarea>
-                    <button onclick="addComment()">Post Comment</button>
+                <div class="category-container">
+                    <button class="category-btn active">최신순</button>
+                    <button class="category-btn">답변 많은 순</button>
+                </div>
+                <div class="question-list">
+                    <!-- Question cards will be dynamically inserted here -->
                 </div>
             </div>
+            <div class="pagination">
+                <!-- Pagination buttons will be dynamically inserted here -->
+            </div>
         </div>
-        <div id="writeQuestionPage">
-            <h2>Ask a Question</h2>
-            <form id="questionForm">
-                <label for="questionTitle">Title:</label>
-                <input type="text" id="questionTitle" required>
+        <div class="comment-and-writeQuestionPage">
+            <div id="questionDetailPage">
+                <h2 id="detailTitle"></h2>
+                <p id="detailCategory"></p>
+                <p id="detailDate"></p>
+                <p id="detailContent"></p>
+                <div class="question-actions">
+                    <button class="edit-btn" onclick="editQuestion()">Edit Question</button>
+                    <button class="delete-btn" onclick="deleteQuestion()">Delete Question</button>
+                </div>
+                <div class="comment-section">
+                    <h3>Comments <span id="commentCount"></span></h3>
+                    <div id="commentList"></div>
+                    <div class="comment-form">
+                        <textarea id="newComment" rows="5" placeholder="댓글을 작성해주세요"></textarea>
+                        <button onclick="addComment()">Post Comment</button>
+                    </div>
+                </div>
+            </div>
+            <div id="writeQuestionPage">
+                <h2>Ask a Question</h2>
+                <form id="questionForm">
+                    <label for="questionTitle">Title:</label>
+                    <input type="text" id="questionTitle" required>
 
-                <label for="selectedCategory">Category:</label>
-                <div class="category-select">
-                    <div class="category-option" data-category="강의·강사">강의·강사</div>
-                    <div class="category-option" data-category="커리큘럼">커리큘럼</div>
-                    <div class="category-option" data-category="수강환경">수강환경</div>
-                    <div class="category-option" data-category="과제">과제</div>
-                    <div class="category-option" data-category="프로젝트">프로젝트</div>
-                    <div class="category-option" data-category="취업·취업연계">취업·취업연계</div>
-                </div>
-                <input type="hidden" id="selectedCategory" name="category" required>
+                    <label for="selectedCategory">Category:</label>
+                    <div class="category-select">
+                        <div class="category-option" data-category="강의·강사">강의·강사</div>
+                        <div class="category-option" data-category="커리큘럼">커리큘럼</div>
+                        <div class="category-option" data-category="수강환경">수강환경</div>
+                        <div class="category-option" data-category="과제">과제</div>
+                        <div class="category-option" data-category="프로젝트">프로젝트</div>
+                        <div class="category-option" data-category="취업·취업연계">취업·취업연계</div>
+                    </div>
+                    <input type="hidden" id="selectedCategory" name="category" required>
 
-                <label for="questionContent">Question:</label>
-                <textarea id="questionContent" rows="6" required></textarea>
-                <button type="submit" class="submit-question-btn">Submit Question</button>
-            </form>
+                    <label for="questionContent">Question:</label>
+                    <textarea id="questionContent" rows="6" required></textarea>
+                    <button type="submit" class="submit-question-btn">Submit Question</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+        </div>
 <button class="open-sidebar-button hidden" onclick="toggleSidebar()">
     <img src="/images/icon-show-sidebar.svg" alt="사이드바 아이콘 보이기" />
 </button>
