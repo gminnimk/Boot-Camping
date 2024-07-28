@@ -6,7 +6,7 @@ body {
 }
 
 .sidebar {
-    width: 150px;
+    width: 250px;
     height: 100vh;
     background-color: var(--sidebar-bg);
     color: var(--color);
@@ -108,7 +108,7 @@ body {
     color: var(--color);
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding: 0 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: fixed;
@@ -116,6 +116,47 @@ body {
     left: 0;
     z-index: 2000;
     box-sizing: border-box;
+}
+
+.topbar-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.topbar-link {
+    margin: 0 30px;
+    text-decoration: none;
+    color: var(--color);
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    transition: font-size 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    position: relative;
+}
+
+.topbar-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(135deg, #6c5ce7, #8e44ad);
+    transition: width 0.3s ease, left 0.3s ease;
+}
+
+.topbar-link:hover::after {
+    width: 100%;
+    left: 0;
+}
+
+.topbar-link:hover {
+    font-size: 20px;
+    color: #6c5ce7;
+    transform: translateY(-2px);
 }
 
 .black-text {
@@ -153,7 +194,7 @@ body {
 }
 
 .content {
-    margin-left: 300px;
+    margin-left: 280px;
     transition: margin-left 0.3s ease;
     flex: 1;
     overflow: hidden;

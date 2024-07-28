@@ -1,0 +1,107 @@
+/* Variables for light and dark themes */
+:root {
+    --sidebar-bg: #fff;
+    --body-bg: #f0f0f0;
+    --color: #000;
+    --hover-bg: #e0e0e0;
+    --profile-card-bg: #fff;
+    --profile-card-shadow: rgba(0, 0, 0, 0.1);
+    --profile-email-color: #777;
+}
+
+body.dark {
+    --sidebar-bg: #20212C;
+    --body-bg: #2B2C37;
+    --color: #FFFFFF;
+    --hover-bg: #3A3B47;
+    --profile-card-bg: #3C3C3C;
+    --profile-card-shadow: rgba(255, 255, 255, 0.1);
+    --profile-email-color: #bbb;
+}
+
+body {
+    background-color: var(--body-bg);
+    color: var(--color);
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.profile-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-left: 280px;
+    transition: margin-left 0.3s ease;
+    flex: 1;
+    overflow: hidden;
+}
+
+.profile-content .profile-card {
+    background: var(--profile-card-bg);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--profile-card-shadow);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    margin: 20px;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-content .profile-header {
+    position: relative;
+}
+
+.profile-content .profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+}
+
+.profile-content .profile-header h1 {
+    margin: 10px 0 5px;
+    font-size: 24px;
+}
+
+.profile-content .profile-email {
+    color: var(--profile-email-color);
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.profile-content .profile-details {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.profile-content .profile-details h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.profile-content .profile-details p {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: var(--color);
+    transition: color 0.3s ease;
+}
+
+.sidebar.closed + .profile-content {
+    margin-left: 30px;
+}
