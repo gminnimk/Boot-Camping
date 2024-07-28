@@ -90,6 +90,70 @@ const questions = [
 let comments = {};
 let currentQuestionId = null;
 
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById("questionModal");
+    const btn = document.querySelector(".start-question-btn");
+    const span = document.querySelector(".close");
+
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    document.querySelector('.start-question-btn').addEventListener('click', () => {
+        currentQuestionId = null; // Reset currentQuestionId for new question
+        document.getElementById('questionForm').reset(); // Clear the form
+        document.querySelectorAll('.category-option').forEach(option => option.classList.remove('active'));
+        modal.style.display = "block";
+    });
+
+    const categoryOptions = document.querySelectorAll('.category-option');
+    categoryOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            categoryOptions.forEach(opt => opt.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById('selectedCategory').value = this.dataset.category;
+        });
+    });
+
+    document.getElementById('questionForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const title = document.getElementById('questionTitle').value;
+        const category = document.getElementById('selectedCategory').value;
+        const content = document.getElementById('questionContent').value;
+        if (currentQuestionId === null) {
+            const newQuestion = {
+                id: questions.length + 1,
+                title: title,
+                category: category,
+                date: new Date().toISOString().split('T')[0],
+                content: content
+            };
+            questions.unshift(newQuestion);
+        } else {
+            const question = questions.find(r => r.id === currentQuestionId);
+            question.title = title;
+            question.category = category;
+            question.content = content;
+            question.date = new Date().toISOString().split('T')[0]; // Update the date
+        }
+        modal.style.display = "none";
+        displayQuestions(1);
+    });
+
+    displayQuestions(currentPage);
+    document.querySelector('.back-btn').style.display = 'none';
+});
+
 function displayQuestions(page) {
     const questionList = document.querySelector('.question-list');
     questionList.innerHTML = '';
@@ -305,7 +369,6 @@ function showMainPage() {
     document.querySelector('.main-container').style.display = 'flex';
     document.querySelector('.pagination').style.display = 'flex';
     document.getElementById('questionDetailPage').style.display = 'none';
-    document.getElementById('writeQuestionPage').style.display = 'none';
     document.querySelector('.back-btn').style.display = 'none';
 }
 
@@ -323,7 +386,6 @@ function editQuestion() {
     document.getElementById('selectedCategory').value = question.category;
     document.getElementById('questionContent').value = question.content;
 
-    // Highlight the correct category option
     document.querySelectorAll('.category-option').forEach(option => {
         option.classList.toggle('active', option.dataset.category === question.category);
     });
@@ -334,7 +396,7 @@ function editQuestion() {
         question.title = document.getElementById('questionTitle').value;
         question.category = document.getElementById('selectedCategory').value;
         question.content = document.getElementById('questionContent').value;
-        question.date = new Date().toISOString().split('T')[0]; // Update the date
+        question.date = new Date().toISOString().split('T')[0];
         showQuestionDetail(currentQuestionId);
     };
 }
@@ -351,61 +413,11 @@ function deleteQuestion() {
     }
 }
 
-document.querySelector('.start-question-btn').addEventListener('click', () => {
-    currentQuestionId = null; // Reset currentQuestionId for new question
-    document.getElementById('questionForm').reset(); // Clear the form
-    document.querySelectorAll('.category-option').forEach(option => option.classList.remove('active'));
-    showQuestionDetailPage();
-});
-
-function showQuestionDetailPage() {
-    document.querySelector('.main-container').style.display = 'none';
-    document.querySelector('.pagination').style.display = 'none';
-    const detailPage = document.getElementById('questionDetailPage');
-    detailPage.style.display = 'block';
-
-    document.getElementById('detailTitle').textContent = '새 질문 작성';
-    document.getElementById('detailCategory').textContent = '';
-    document.getElementById('detailDate').textContent = new Date().toISOString().split('T')[0];
-    document.getElementById('detailContent').textContent = '질문을 입력하세요.';
-
-    document.querySelector('.back-btn').style.display = 'block';
-}
-
-document.getElementById('questionForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const title = document.getElementById('questionTitle').value;
-    const category = document.getElementById('selectedCategory').value;
-    const content = document.getElementById('questionContent').value;
-    if (currentQuestionId === null) {
-        // This is a new question
-        const newQuestion = {
-            id: questions.length + 1,
-            title: title,
-            category: category,
-            date: new Date().toISOString().split('T')[0],
-            content: content
-        };
-        questions.unshift(newQuestion);
-    } else {
-        // This is an edit to an existing question
-        const question = questions.find(r => r.id === currentQuestionId);
-        question.title = title;
-        question.category = category;
-        question.content = content;
-        question.date = new Date().toISOString().split('T')[0]; // Update the date
-    }
-    showMainPage();
-    displayQuestions(1);
-});
-
 const categoryButtons = document.querySelectorAll('.category-btn');
 categoryButtons.forEach(button => {
     button.addEventListener('click', function() {
         categoryButtons.forEach(btn => btn.classList.remove('active'));
         this.classList.add('active');
-        console.log('Category selected:', this.textContent);
-        // Here you can add logic to filter questions by the selected sorting method
         if (this.textContent === '최신순') {
             questions.sort((a, b) => new Date(b.date) - new Date(a.date));
         } else if (this.textContent === '답변 많은 순') {
@@ -429,6 +441,5 @@ categoryOptions.forEach(option => {
     });
 });
 
-// Initial display
 displayQuestions(currentPage);
 document.querySelector('.back-btn').style.display = 'none';
