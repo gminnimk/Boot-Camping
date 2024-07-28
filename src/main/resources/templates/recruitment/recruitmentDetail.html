@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOME</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/recruitment/recruitmentDetail.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script th:src="@{/js/scripts.js}" defer></script>
+    <script th:src="@{/js/recruitment/recruitmentDetail.js}" defer></script>
+</head>
+<body th:classappend="${isDarkMode} ? 'dark' : ''">
+<div th:replace="~{'fragments/topbar' :: topbar}"></div>
+<div class="main-container">
+    <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
+    <div class="content">
+        <div class="container view-mode" id="courseContainer">
+            <div class="course-header">
+                <div class="course-title-container">
+                    <h1 class="course-title non-editable">코딩의 정석</h1>
+                    <input type="text" class="course-title editable" value="코딩의 정석">
+                    <div class="like-container">
+                        <button class="like-button" id="likeButton">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                        <span class="like-count" id="likeCount">1,234</span>
+                    </div>
+                </div>
+                <p class="course-institution non-editable">코딩 아카데미</p>
+                <input type="text" class="course-institution editable" value="코딩 아카데미">
+                <p class="course-intro non-editable">코딩의 정석은 초보자부터 전문가까지 모두를 위한 종합 프로그래밍 과정입니다. 실무 중심의 커리큘럼과 경험 많은 강사진이 여러분의 성장을 돕습니다.</p>
+                <textarea class="course-intro editable">코딩의 정석은 초보자부터 전문가까지 모두를 위한 종합 프로그래밍 과정입니다. 실무 중심의 커리큘럼과 경험 많은 강사진이 여러분의 성장을 돕습니다.</textarea>
+                <div class="course-actions">
+                    <button class="action-button wishlist-button">관심 목록에 추가</button>
+                    <button class="action-button edit-button" id="editButton">수정</button>
+                    <button class="action-button save-button" id="saveButton">저장</button>
+                    <button class="action-button cancel-button" id="cancelButton">취소</button>
+                    <button class="action-button delete-button" id="deleteButton">삭제</button>
+                </div>
+            </div>
+            <div class="course-details">
+                <div class="course-info">
+                    <div class="info-section">
+                        <h3>과정 소개</h3>
+                        <p class="non-editable">이 과정에서는 웹 개발의 기초부터 고급 주제까지 다루며, 실제 프로젝트를 통해 실무 경험을 쌓을 수 있습니다. 최신 기술 트렌드를 반영한 커리큘럼으로 취업과 실무에 필요한 스킬을 습득할 수 있습니다.</p>
+                        <textarea class="editable">이 과정에서는 웹 개발의 기초부터 고급 주제까지 다루며, 실제 프로젝트를 통해 실무 경험을 쌓을 수 있습니다. 최신 기술 트렌드를 반영한 커리큘럼으로 취업과 실무에 필요한 스킬을 습득할 수 있습니다.</textarea>
+                    </div>
+                    <div class="info-section">
+                        <h3>교육 내용</h3>
+                        <div class="non-editable">
+                            <p>- HTML, CSS, JavaScript 기초</p>
+                            <p>- React와 Node.js를 이용한 웹 애플리케이션 개발</p>
+                            <p>- 데이터베이스 설계 및 관리 (MySQL, MongoDB)</p>
+                            <p>- API 개발 및 통합</p>
+                            <p>- 버전 관리 및 협업 도구 (Git, GitHub)</p>
+                            <p>- 클라우드 서비스 활용 (AWS, Azure)</p>
+                        </div>
+                        <textarea class="editable">- HTML, CSS, JavaScript 기초
+- React와 Node.js를 이용한 웹 애플리케이션 개발
+- 데이터베이스 설계 및 관리 (MySQL, MongoDB)
+- API 개발 및 통합
+- 버전 관리 및 협업 도구 (Git, GitHub)
+- 클라우드 서비스 활용 (AWS, Azure)</textarea>
+                    </div>
+                </div>
+                <div class="course-sidebar">
+                    <div class="sidebar-section">
+                        <h4>과정 정보</h4>
+                        <p class="non-editable">기간: 2024/08/26 ~ 2024/09/26 (4주)</p>
+                        <input type="text" class="editable date-range" value="2024-08-26 to 2024-09-26">
+                        <p class="non-editable">수업 시간: 월-금 09:00-18:00</p>
+                        <input type="text" class="editable" value="월-금 09:00-18:00">
+                        <p class="non-editable">난이도: 중급</p>
+                        <select class="editable">
+                            <option value="초급">초급</option>
+                            <option value="중급" selected>중급</option>
+                            <option value="고급">고급</option>
+                        </select>
+                    </div>
+                    <div class="sidebar-section">
+                        <h4>카테고리</h4>
+                        <div class="course-tags">
+                            <span class="tag">온라인</span>
+                            <span class="tag">국비</span>
+                            <span class="tag">풀스택</span>
+                        </div>
+                        <div class="category-select">
+                            <div class="category-group">
+                                <h5>수업 방식</h5>
+                                <select id="classTypeSelect">
+                                    <option value="">선택하세요</option>
+                                    <option value="온라인">온라인</option>
+                                    <option value="오프라인">오프라인</option>
+                                    <option value="혼합">혼합</option>
+                                </select>
+                            </div>
+                            <div class="category-group">
+                                <h5>비용</h5>
+                                <select id="costTypeSelect">
+                                    <option value="">선택하세요</option>
+                                    <option value="국비">국비</option>
+                                    <option value="유료">유료</option>
+                                    <option value="무료">무료</option>
+                                </select>
+                            </div>
+                            <div class="category-group">
+                                <h5>학습 분야</h5>
+                                <select id="fieldTypeSelect">
+                                    <option value="">선택하세요</option>
+                                    <option value="풀스택">풀스택</option>
+                                    <option value="프론트엔드">프론트엔드</option>
+                                    <option value="백엔드">백엔드</option>
+                                    <option value="데이터사이언스">데이터사이언스</option>
+                                    <option value="인공지능">인공지능</option>
+                                </select>
+                            </div>
+                            <div id="selectedCategories"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button class="open-sidebar-button hidden" th:onclick="|javascript:toggleSidebar()|">
+    <img th:src="@{/images/icon-show-sidebar.svg}" alt="사이드바 아이콘 보이기" />
+</button>
+</body>
+</html>
