@@ -36,19 +36,19 @@ body.dark {
     margin: 0;
 }
 .course-title input {
-    background-color: var(--body-bg);
+    background-color: var(--sidebar-bg);
     color: var(--color);
 }
 .course-info textarea {
-    background-color: var(--body-bg);
+    background-color: var(--sidebar-bg);
     color: var(--color);
 }
 .course-sidebar input,search {
-    background-color: var(--body-bg);
+    background-color: var(--sidebar-bg);
     color: var(--color);
 }
 .sidebar-section select {
-    background-color: var(--body-bg);
+    background-color: var(--sidebar-bg);
     color: var(--color);
 }
 .like-container {
@@ -157,6 +157,13 @@ body.dark {
     font-size: 16px;
     color: var(--color);
     line-height: 1.6;
+}
+.info-section .editable-intro {
+    height: 130px;
+}
+
+.info-section .editable-content {
+    height: 250px;
 }
 .sidebar-section {
     margin-bottom: 20px;
