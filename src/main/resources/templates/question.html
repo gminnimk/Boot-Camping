@@ -36,21 +36,24 @@
                 <!-- Pagination buttons will be dynamically inserted here -->
             </div>
         </div>
-        <div id="questionDetailPage">
-            <h2 id="detailTitle"></h2>
-            <p id="detailCategory"></p>
-            <p id="detailDate"></p>
-            <p id="detailContent"></p>
-            <div class="question-actions">
-                <button class="edit-btn" onclick="editQuestion()">Edit Question</button>
-                <button class="delete-btn" onclick="deleteQuestion()">Delete Question</button>
-            </div>
-            <div class="comment-section">
-                <h3>Comments <span id="commentCount"></span></h3>
-                <div id="commentList"></div>
-                <div class="comment-form">
-                    <textarea id="newComment" rows="5" placeholder="댓글을 작성해주세요"></textarea>
-                    <button onclick="addComment()">Post Comment</button>
+        <div id="questionDetailPage" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeDetailModal()">&times;</span>
+                <h2 id="detailTitle"></h2>
+                <p id="detailCategory"></p>
+                <p id="detailDate"></p>
+                <p id="detailContent"></p>
+                <div class="question-actions">
+                    <button class="edit-btn" onclick="editQuestion()">Edit Question</button>
+                    <button class="delete-btn" onclick="deleteQuestion()">Delete Question</button>
+                </div>
+                <div class="comment-section">
+                    <h3>Comments <span id="commentCount"></span></h3>
+                    <div id="commentList"></div>
+                    <div class="comment-form">
+                        <textarea id="newComment" rows="5" placeholder="댓글을 작성해주세요"></textarea>
+                        <button onclick="addComment()">Post Comment</button>
+                    </div>
                 </div>
             </div>
         </div>

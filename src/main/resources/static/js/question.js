@@ -91,29 +91,35 @@ let comments = {};
 let currentQuestionId = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById("questionModal");
-    const btn = document.querySelector(".start-question-btn");
-    const span = document.querySelector(".close");
+    const questionModal = document.getElementById("questionModal");
+    const questionDetailModal = document.getElementById("questionDetailPage");
+    const startBtn = document.querySelector(".start-question-btn");
+    const closeBtns = document.querySelectorAll(".close");
 
-    btn.onclick = function() {
-        modal.style.display = "block";
+    startBtn.onclick = function() {
+        questionModal.style.display = "block";
     }
 
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
+    closeBtns.forEach(btn => {
+        btn.onclick = function() {
+            questionModal.style.display = "none";
+            questionDetailModal.style.display = "none";
+        }
+    });
 
     window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+        if (event.target == questionModal) {
+            questionModal.style.display = "none";
+        } else if (event.target == questionDetailModal) {
+            questionDetailModal.style.display = "none";
         }
     }
 
     document.querySelector('.start-question-btn').addEventListener('click', () => {
-        currentQuestionId = null; // Reset currentQuestionId for new question
-        document.getElementById('questionForm').reset(); // Clear the form
+        currentQuestionId = null;
+        document.getElementById('questionForm').reset();
         document.querySelectorAll('.category-option').forEach(option => option.classList.remove('active'));
-        modal.style.display = "block";
+        questionModal.style.display = "block";
     });
 
     const categoryOptions = document.querySelectorAll('.category-option');
@@ -144,9 +150,9 @@ document.addEventListener('DOMContentLoaded', () => {
             question.title = title;
             question.category = category;
             question.content = content;
-            question.date = new Date().toISOString().split('T')[0]; // Update the date
+            question.date = new Date().toISOString().split('T')[0];
         }
-        modal.style.display = "none";
+        questionModal.style.display = "none";
         displayQuestions(1);
     });
 
@@ -224,8 +230,6 @@ function updatePagination() {
 function showQuestionDetail(questionId) {
     currentQuestionId = questionId;
     const question = questions.find(r => r.id === questionId);
-    document.querySelector('.main-container').style.display = 'none';
-    document.querySelector('.pagination').style.display = 'none';
     const detailPage = document.getElementById('questionDetailPage');
     detailPage.style.display = 'block';
     document.getElementById('detailTitle').textContent = question.title;
@@ -233,7 +237,11 @@ function showQuestionDetail(questionId) {
     document.getElementById('detailDate').textContent = `Date: ${question.date}`;
     document.getElementById('detailContent').textContent = question.content;
     displayComments(questionId);
-    document.querySelector('.back-btn').style.display = 'block';
+}
+
+function closeDetailModal() {
+    const detailPage = document.getElementById('questionDetailPage');
+    detailPage.style.display = 'none';
 }
 
 function displayComments(questionId) {
@@ -369,15 +377,6 @@ function showMainPage() {
     document.querySelector('.main-container').style.display = 'flex';
     document.querySelector('.pagination').style.display = 'flex';
     document.getElementById('questionDetailPage').style.display = 'none';
-    document.querySelector('.back-btn').style.display = 'none';
-}
-
-function showWriteQuestionPage() {
-    document.querySelector('.main-container').style.display = 'none';
-    document.querySelector('.pagination').style.display = 'none';
-    document.getElementById('questionDetailPage').style.display = 'none';
-    document.getElementById('writeQuestionPage').style.display = 'block';
-    document.querySelector('.back-btn').style.display = 'block';
 }
 
 function editQuestion() {
@@ -390,7 +389,9 @@ function editQuestion() {
         option.classList.toggle('active', option.dataset.category === question.category);
     });
 
-    showWriteQuestionPage();
+    const questionModal = document.getElementById("questionModal");
+    questionModal.style.display = "block";
+
     document.getElementById('questionForm').onsubmit = function(e) {
         e.preventDefault();
         question.title = document.getElementById('questionTitle').value;
@@ -398,6 +399,7 @@ function editQuestion() {
         question.content = document.getElementById('questionContent').value;
         question.date = new Date().toISOString().split('T')[0];
         showQuestionDetail(currentQuestionId);
+        questionModal.style.display = "none";
     };
 }
 
