@@ -20,13 +20,6 @@
     <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
     <div class="content">
         <div class="container">
-            <div class="review-section">
-                <div>
-                    <h2>Write a Review</h2>
-                    <p>Share your experience with others.</p>
-                </div>
-                <button class="start-review-btn" onclick="startReview()" th:camp-add="@{/api/camp/add}">START A REVIEW</button>
-            </div>
             <div class="search-bar">
                 <div class="search-input-wrapper">
                     <input type="text" placeholder="부트캠프 검색..." id="search-input">
@@ -76,6 +69,13 @@
                     <button class="search-button reset-filters" onclick="resetFilters()">초기화</button>
                     <button class="search-button apply-filters" onclick="applyFilters()">필터 적용</button>
                 </div>
+            </div>
+            <div class="review-section">
+                <div>
+                    <h2>Write a Review</h2>
+                    <p>Share your experience with others.</p>
+                </div>
+                <button class="start-review-btn" onclick="startReview()" th:camp-add="@{/api/camp/add}">START A REVIEW</button>
             </div>
             <div class="sort-buttons">
                 <button class="sort-button" data-sort="views">조회순</button>
