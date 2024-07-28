@@ -137,7 +137,7 @@ body.dark {
     background-color: #f0f0f0;
 }
 .error-message {
-    color: red;
+    color: #FF6B35;
     font-size: 14px;
     margin-top: 5px;
 }
