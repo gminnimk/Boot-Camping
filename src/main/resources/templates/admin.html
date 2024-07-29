@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMIN</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/js/scripts.js}" defer></script>
+    <script th:src="@{/js/admin.js}" defer></script>
+</head>
+<body th:classappend="${isDarkMode} ? 'dark' : ''">
+<div th:replace="~{'fragments/topbar' :: topbar}"></div>
+<div class="main-container">
+    <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
+    <div class="content">
+        <header>
+            <div class="container">
+                <h1>부트캠프 관리자 페이지</h1>
+                <button id="btnBootcampRegister" class="btn-register">부트캠프 등록</button>
+            </div>
+        </header>
+        <div class="container">
+            <div class="main-content">
+                <div class="top-bar">
+                    <div class="approval-type-tabs">
+                        <div class="approval-type-tab active" data-type="user">승인 요청(유저)</div>
+                        <div class="approval-type-tab" data-type="bootcamp">승인 요청(부트캠프)</div>
+                    </div>
+                    <div class="category-tabs">
+                        <div class="category-tab active" data-category="all">전체</div>
+                        <div class="category-tab" data-category="pending">대기중</div>
+                        <div class="category-tab" data-category="approved">승인</div>
+                        <div class="category-tab" data-category="rejected">거절</div>
+                    </div>
+                </div>
+                <section id="approvalRequests" class="approval-requests">
+                    <div class="section-header">
+                        <h2 id="requestTypeTitle">승인 요청(유저)</h2>
+                        <select id="filterDropdown" class="filter-dropdown">
+                            <option value="newest">최신순</option>
+                            <option value="oldest">오래된순</option>
+                        </select>
+                    </div>
+                    <div id="requestsList">
+                        <!-- 승인 요청 목록이 여기에 동적으로 추가됩니다 -->
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div id="detailModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>상세 정보</h2>
+                <div id="modalContent"></div>
+            </div>
+        </div>
+
+        <div id="bootcampListModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>부트캠프 목록</h2>
+                <button id="btnRegisterBootcamp" class="btn-register">등록하기</button>
+                <div id="bootcampList" class="bootcamp-list">
+                    <!-- 부트캠프 목록이 여기에 동적으로 추가됩니다 -->
+                </div>
+            </div>
+        </div>
+
+        <div id="registerModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>부트캠프 등록</h2>
+                <input type="text" id="managerName" placeholder="부트캠프 관계자 이름">
+                <input type="text" id="bootcampName" placeholder="부트캠프 이름">
+                <button id="btnRegister" class="btn-register">등록하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<button class="open-sidebar-button hidden" th:onclick="|javascript:toggleSidebar()|">
+    <img th:src="@{/images/icon-show-sidebar.svg}" alt="사이드바 아이콘 보이기" />
+</button>
+</body>
+</html>
