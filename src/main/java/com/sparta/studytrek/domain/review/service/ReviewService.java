@@ -51,6 +51,19 @@ public class ReviewService {
     }
 
     /**
+     * 리뷰 삭제
+     *
+     * @param id   리뷰 ID
+     * @param user 요청한 유저의 정보
+     */
+    public void deleteReview(Long id, User user) {
+        Review review = getReview(id);
+        reqUserCheck(review.getUser().getId(), user.getId());
+
+        reviewRepository.delete(review);
+    }
+
+    /**
      * 리뷰 찾기
      *
      * @param id 리뷰 ID

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -65,7 +66,23 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    // 리뷰 삭제
+    /**
+     * 리뷰 삭제 API
+     *
+     * @param id          리뷰 ID
+     * @param userDetails 인증된 유저 정보
+     * @return 리뷰 삭제 응답 데이터
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse> deleteReview(@PathVariable("id") Long id,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        reviewService.deleteReview(id, userDetails.getUser());
+        ApiResponse response = ApiResponse.builder()
+            .msg("리뷰 삭제 성공")
+            .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
     // 리뷰 전체 조회
 

@@ -41,3 +41,8 @@ Authorization: Bearer {{accessToken}}
   "category": "수정된 카테고리",
   "trek": "수정된 트랙"
 }
+
+### 리뷰 삭제
+DELETE {{apiUrl}}/reviews/1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
