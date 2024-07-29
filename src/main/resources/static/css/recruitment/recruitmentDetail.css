@@ -1,0 +1,302 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+body.dark {
+    --sidebar-bg: #20212C;
+    --body-bg: #2B2C37;
+    --color: #FFFFFF;
+    --hover-bg: #3A3B47;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.course-header {
+    background-color: var(--sidebar-bg);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    color: var(--color);
+}
+.course-title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+.course-title {
+    font-size: 24px;
+    color: var(--color);
+    margin: 0;
+}
+.course-title input {
+    background-color: var(--sidebar-bg);
+    color: var(--color);
+}
+.course-info textarea {
+    background-color: var(--sidebar-bg);
+    color: var(--color);
+}
+.course-sidebar input,search {
+    background-color: var(--sidebar-bg);
+    color: var(--color);
+}
+.sidebar-section select {
+    background-color: var(--sidebar-bg);
+    color: var(--color);
+}
+.like-container {
+    display: flex;
+    color: var(--color);
+    flex-direction: column;
+    align-items: center;
+}
+.like-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: var(--color);
+    transition: color 0.3s;
+}
+.like-button.active {
+    color: #ff4136;
+}
+.like-count {
+    font-size: 14px;
+    color: var(--color);
+    margin-top: 5px;
+}
+.course-institution {
+    font-size: 18px;
+    color: var(--color);
+    margin-bottom: 10px;
+}
+.course-intro {
+    font-size: 16px;
+    color: var(--color);
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+.course-header input, textarea, p {
+    background-color: var(--sidebar-bg);
+    color: var(--color);
+}
+.course-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+.action-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.wishlist-button {
+    background-color: #5AA9E6;
+    color: var(--color);
+    font-weight: bold;
+    margin-top: 10px;
+}
+.wishlist-button:hover {
+    background-color: #7FC8F8;
+}
+.edit-button {
+    background-color: #FFE45E;
+    color: var(--color);
+    margin-top: 10px;
+}
+.edit-button:hover {
+    background-color: #d0b94a;
+}
+.delete-button {
+    background-color: #FF6B35;
+    color: var(--color);
+    margin-top: 10px;
+}
+.delete-button:hover {
+    background-color: #cc552b;
+}
+.course-details {
+    display: flex;
+    gap: 20px;
+}
+.course-info {
+    flex: 2;
+    background-color: var(--sidebar-bg);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.course-sidebar {
+    flex: 1;
+    background-color: var(--sidebar-bg);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.info-section {
+    margin-bottom: 20px;
+}
+.info-section h3 {
+    font-size: 18px;
+    color: var(--color);
+    margin-bottom: 10px;
+}
+.info-section p {
+    font-size: 16px;
+    color: var(--color);
+    line-height: 1.6;
+}
+.info-section .editable-intro {
+    height: 130px;
+}
+
+.info-section .editable-content {
+    height: 250px;
+}
+.sidebar-section {
+    margin-bottom: 20px;
+}
+.sidebar-section h4 {
+    font-size: 16px;
+    color: var(--color);
+    margin-bottom: 10px;
+}
+.sidebar-section p {
+    font-size: 14px;
+    color: var(--color);
+    margin-bottom: 5px;
+}
+.course-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+.tag {
+    background-color: #7FC8F8;
+    color: var(--color);
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+.editable {
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 4px;
+    font-size: inherit;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
+}
+.edit-mode .editable {
+    display: block;
+}
+.edit-mode .non-editable {
+    display: none;
+}
+.view-mode .editable {
+    display: none;
+}
+.view-mode .non-editable {
+    display: block;
+}
+.save-button, .cancel-button {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.save-button {
+    background-color: #FFE45E;
+    color: var(--color);
+}
+.save-button:hover {
+    background-color: #d9c250;
+}
+.cancel-button {
+    background-color: #f44336;
+    color: var(--color);
+}
+.cancel-button:hover {
+    background-color: #da190b;
+}
+.edit-mode .save-button, .edit-mode .cancel-button {
+    display: inline-block;
+}
+.edit-mode .edit-button {
+    display: none;
+}
+.category-select {
+    display: none;
+    margin-top: 10px;
+}
+.edit-mode .category-select {
+    display: block;
+}
+.edit-mode .course-tags {
+    display: none;
+}
+.category-select select {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+.selected-categories {
+    margin-top: 10px;
+}
+.selected-category {
+    display: inline-block;
+    background-color: #7FC8F8;
+    color: var(--color);
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+.remove-category {
+    cursor: pointer;
+    margin-left: 5px;
+}
+.category-group {
+    margin-bottom: 15px;
+}
+.category-group h5 {
+    margin-bottom: 5px;
+    color: var(--color);
+}
+.back-to-list-container {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.back-to-list-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--sidebar-bg);
+    color: var(--color);
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.back-to-list-button:hover {
+    background-color: #7FC8F8;
+}
