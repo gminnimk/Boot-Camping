@@ -62,6 +62,14 @@ public class Review extends Timestamped {
         this.user = user;
     }
 
+    public void updateReview(ReviewRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        this.scope = requestDto.getScope();
+        this.category = requestDto.getCategory();
+        this.trek = requestDto.getTrek();
+    }
+
     public Review(User user, String title, String content, int scope, String trek,
         String category) {
         this.user = user;

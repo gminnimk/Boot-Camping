@@ -1,13 +1,15 @@
 package com.sparta.studytrek.domain.review.service;
 
+import com.sparta.studytrek.common.exception.CustomException;
+import com.sparta.studytrek.common.exception.ErrorCode;
 import com.sparta.studytrek.domain.auth.entity.User;
 import com.sparta.studytrek.domain.review.dto.ReviewRequestDto;
 import com.sparta.studytrek.domain.review.dto.ReviewResponseDto;
 import com.sparta.studytrek.domain.review.entity.Review;
 import com.sparta.studytrek.domain.review.repository.ReviewRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import jakarta.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,13 +22,54 @@ public class ReviewService {
      *
      * @param requestDto 리뷰 등록 요청 데이터
      * @param user       요청한 유저의 정보
-     * @return
+     * @return 리뷰 응답 데이터
      */
     @Transactional
     public ReviewResponseDto createReview(ReviewRequestDto requestDto, User user) {
         Review review = new Review(requestDto, user);
         Review creatReview = reviewRepository.save(review);
-        ReviewResponseDto responseDto = new ReviewResponseDto(creatReview);
-        return responseDto;
+
+        return new ReviewResponseDto(creatReview);
+    }
+
+    /**
+     * 리뷰 수정
+     *
+     * @param id         리뷰 ID
+     * @param requestDto 리뷰 수정 요청 데이터
+     * @param user       요청한 유저의 정보
+     * @return 리뷰 응답 데이터
+     */
+    @Transactional
+    public ReviewResponseDto updateReview(Long id, ReviewRequestDto requestDto, User user) {
+        Review review = getReview(id);
+        reqUserCheck(review.getUser().getId(), user.getId());
+
+        review.updateReview(requestDto);
+
+        return new ReviewResponseDto(review);
+    }
+
+    /**
+     * 리뷰 찾기
+     *
+     * @param id 리뷰 ID
+     * @return 해당 리뷰의 정보
+     */
+    public Review getReview(Long id) {
+        return reviewRepository.findById(id)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW));
+    }
+
+    /**
+     * 리뷰를 작성한 유저와 해당 기능을 요청한 유저가 동일한지
+     *
+     * @param reviewUserId 리뷰를 작성한 유저 ID
+     * @param userId       유저 ID
+     */
+    public void reqUserCheck(Long reviewUserId, Long userId) {
+        if (!reviewUserId.equals(userId)) {
+            throw new CustomException(ErrorCode.REVIEW_NOT_AUTHORIZED);
+        }
     }
 }

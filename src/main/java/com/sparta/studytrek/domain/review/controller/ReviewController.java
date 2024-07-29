@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,7 +43,27 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // 리뷰 수정
+    /**
+     * 리뷰 수정 API
+     *
+     * @param id          리뷰 ID
+     * @param requestDto  리뷰 수정 데이터
+     * @param userDetails 인증된 유저 정보
+     * @return 리뷰 수정 응답 데이터
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> updateReview(@PathVariable("id") Long id,
+        @RequestBody ReviewRequestDto requestDto,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        ReviewResponseDto responseDto = reviewService.updateReview(id, requestDto,
+            userDetails.getUser());
+        ApiResponse response = ApiResponse.builder()
+            .msg("리뷰 수정 성공")
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(responseDto)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
     // 리뷰 삭제
 
