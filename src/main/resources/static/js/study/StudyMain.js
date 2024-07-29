@@ -50,3 +50,10 @@ document.addEventListener('DOMContentLoaded', function () {
         // Implement your filtering logic here
     }
 });
+
+
+function addReview() {
+    const addUrl = document.querySelector('.write-review-button').getAttribute('review-add-url');
+    window.location.href = addUrl;
+}
+

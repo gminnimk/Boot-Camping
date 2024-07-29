@@ -6,9 +6,11 @@
     <title>StudyTrek - 스터디 모집 플랫폼</title>
     <link rel="stylesheet" th:href="@{/css/study/StudyMain.css}">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/studyMaintopsearch.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script th:src="@{/js/scripts.js}" defer></script>
+    <script th:src="@{/js/studyMaintopsearch.js}" defer></script>
 </head>
 
 <body th:classappend="${isDarkMode} ? 'dark' : ''">
@@ -17,29 +19,67 @@
     <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
     <div class="content-wrapper">
         <div class="content">
-            <div class="write-review">
-                <h2>스터디 모집글 작성</h2>
-                <button class="start-review-btn" data-url="@{/studyhtml/StudyWrite}">모집글 작성</button>
-            </div>
+            <!-- 헤더 -->
+            <div th:replace="~{'fragments/studyMaintopsearch' :: studyMaintopsearch}"></div>
 
-            <div class="filter-section">
-                <div class="filter-title">정렬</div>
-                <div class="filter-options">
-                    <button class="filter-btn active" data-sort="views">조회 많은 순</button>
-                    <button class="filter-btn" data-sort="likes">좋아요 많은 순</button>
-                    <button class="filter-btn" data-sort="date">작성일자 순</button>
+            <!-- 스터디 작성 바로가기 베너 -->
+            <div class="write-review-section write-text">
+                <div class="content-wrapper">
+                    <div class="write-review-content">
+                        <div class="write-review-text write-text">
+                            <h2>모집글 작성하기</h2>
+                            <p>Share your experience with others</p>
+                        </div>
+                        <button class="write-review-button learn-more" onclick="addReview()" th:review-add-url="@{/api/study/write}">Start a Write</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="filter-section">
-                <div class="filter-title">트랙</div>
-                <div class="filter-options">
-                    <button class="filter-btn" data-track="all">전체</button>
-                    <button class="filter-btn" data-track="frontend">프론트엔드</button>
-                    <button class="filter-btn" data-track="backend">백엔드</button>
-                    <button class="filter-btn" data-track="data">데이터</button>
-                    <button class="filter-btn" data-track="game">게임</button>
-                    <button class="filter-btn" data-track="ai">AI</button>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Python 스터디 모집</h3>
+                        <span class="tag">AI</span>
+                    </div>
+                    <div class="rating">★★★★★</div>
+                    <div class="date">2023-05-15</div>
+                    <div class="card-content">
+                        <p>AI 트랙을 위한 Python 기초부터 고급까지 함께 공부할 분들을 모집합니다. 주 2회 온라인 미팅 예정.</p>
+                    </div>
+                    <div class="author">- Sarah M.</div>
+                    <div class="card-footer">
+                        <span class="heart-icon">♡</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">React 스터디원 구합니다</h3>
+                        <span class="tag">프론트엔드</span>
+                    </div>
+                    <div class="rating">★★★★★</div>
+                    <div class="date">2023-05-14</div>
+                    <div class="card-content">
+                        <p>React와 관련 라이브러리를 깊이 있게 학습하실 분들 모집합니다. 실전 프로젝트도 진행할 예정입니다.</p>
+                    </div>
+                    <div class="author">- Mike T.</div>
+                    <div class="card-footer">
+                        <span class="heart-icon">♡</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">데이터 분석 스터디</h3>
+                        <span class="tag">데이터</span>
+                    </div>
+                    <div class="rating">★★★★☆</div>
+                    <div class="date">2023-05-13</div>
+                    <div class="card-content">
+                        <p>R과 Python을 이용한 데이터 분석 스터디입니다. 기초 통계부터 머신러닝까지 다룰 예정입니다.</p>
+                    </div>
+                    <div class="author">- Emily L.</div>
+                    <div class="card-footer">
+                        <span class="heart-icon">♡</span>
+                    </div>
                 </div>
             </div>
 
