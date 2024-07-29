@@ -42,7 +42,7 @@ public class ReviewService {
      */
     @Transactional
     public ReviewResponseDto updateReview(Long id, ReviewRequestDto requestDto, User user) {
-        Review review = getReview(id);
+        Review review = findByReviewId(id);
         reqUserCheck(review.getUser().getId(), user.getId());
 
         review.updateReview(requestDto);
@@ -57,7 +57,7 @@ public class ReviewService {
      * @param user 요청한 유저의 정보
      */
     public void deleteReview(Long id, User user) {
-        Review review = getReview(id);
+        Review review = findByReviewId(id);
         reqUserCheck(review.getUser().getId(), user.getId());
 
         reviewRepository.delete(review);
@@ -69,7 +69,7 @@ public class ReviewService {
      * @param id 리뷰 ID
      * @return 해당 리뷰의 정보
      */
-    public Review getReview(Long id) {
+    public Review findByReviewId(Long id) {
         return reviewRepository.findById(id)
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW));
     }
