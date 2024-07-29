@@ -14,6 +14,7 @@ import com.sparta.studytrek.domain.camp.entity.Camp;
 import com.sparta.studytrek.domain.camp.service.CampService;
 import com.sparta.studytrek.jwt.JwtUtil;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -153,5 +154,16 @@ public class UserService {
 
     public void saveUser(User user) {
         userRepository.save(user);
+    }
+
+    /**
+     * 해당 유저가 참여한 캠프 목록 조회
+     *
+     * @param userId 유저 ID
+     * @return 참여한 캠프 목록
+     */
+    @Transactional
+    public List<String> getUserCampNames(Long userId) {
+        return userRepository.findCampNamesById(userId);
     }
 }
