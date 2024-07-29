@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROFILE</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/js/scripts.js}" defer></script>
+</head>
+<body th:classappend="${isDarkMode} ? 'dark' : ''">
+<div th:replace="~{'fragments/topbar' :: topbar}"></div>
+<div class="main-container">
+    <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
+    <div class="profile-content">
+        <div class="profile-card">
+            <div class="profile-header">
+                <img class="profile-pic" th:src="@{/images/default-profile.png}" alt="Profile Picture" />
+                <h1>홍길동</h1>
+                <p class="profile-email">honggildong@example.com</p>
+            </div>
+            <div class="profile-details">
+                <h2>소개</h2>
+                <p>여기에 자기 소개를 입력하세요.</p>
+                <h2>연락처</h2>
+                <p>010-1234-5678</p>
+                <h2>기타 정보</h2>
+                <p>기타 정보를 여기에 입력하세요.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<button class="open-sidebar-button hidden" th:onclick="|javascript:toggleSidebar()|">
+    <img th:src="@{/images/icon-show-sidebar.svg}" alt="사이드바 아이콘 보이기" />
+</button>
+</body>
+</html>
