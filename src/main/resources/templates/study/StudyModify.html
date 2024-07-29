@@ -17,10 +17,6 @@
     <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
     <div class="content-wrapper">
         <div class="content">
-            <div class="header">
-                <div class="logo-study"><h1>StudyTrek</h1></div>
-                <button class="main-page-btn" onclick="goToMainPage()">메인 페이지로 돌아가기</button>
-            </div>
 
             <h1>스터디 모집글 수정</h1>
             <form id="studyForm">
@@ -32,9 +28,11 @@
                     <option value="frontend" selected>프론트엔드</option>
                     <option value="backend">백엔드</option>
                     <option value="fullstack">풀스택</option>
-                    <option value="mobile">모바일</option>
-                    <option value="ai">AI/머신러닝</option>
-                    <option value="data">데이터 사이언스</option>
+                    <option value="Android">Android</option>
+                    <option value="iOS">iOS</option>
+                    <option value="ai">AI</option>
+                    <option value="data">데이터</option>
+                    <option value="data">UI/UX</option>
                 </select>
 
                 <label for="maxMembers">최대 인원</label>
@@ -50,8 +48,9 @@
                 <textarea id="description" name="description" required>React와 관련 라이브러리를 깊이 있게 학습하실 분들 모집합니다. 실전 프로젝트도 진행할 예정입니다. 함께 성장하고 싶은 열정 있는 분들의 참여를 기다립니다!</textarea>
 
                 <div class="button-group">
-                    <button type="submit" class="submit-btn">모집글 수정</button>
-                    <button type="button" class="cancel-btn" onclick="cancelEdit()">수정 취소</button>
+                    <button type="button" class="cancel-button" onclick="cancelReview()" th:data-cancel-url="@{/api/study/main}">취소</button>
+                    <button type="del" class="delete-btn" onclick="deleteStudy()">삭제</button>
+                    <button type="submit" class="submit-button" th:data-submit-url="@{/api/study/detail}">수정</button>
                 </div>
             </form>
         </div>

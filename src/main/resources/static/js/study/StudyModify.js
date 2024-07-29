@@ -10,9 +10,9 @@ document.getElementById('studyForm').addEventListener('submit', function(e) {
     window.location.href = 'https://studytrek.com/study/detail';
 });
 
-function cancelEdit() {
+function cancelReview() {
     if (confirm('수정을 취소하시겠습니까? 변경사항이 저장되지 않습니다.')) {
-        // 상세 페이지로 돌아갑니다.
-        window.location.href = 'https://studytrek.com/study/detail';
+        const cancelUrl = document.querySelector('.cancel-button').getAttribute('data-cancel-url');
+        window.location.href = cancelUrl;
     }
 }

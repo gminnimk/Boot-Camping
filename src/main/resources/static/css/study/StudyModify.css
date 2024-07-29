@@ -36,26 +36,6 @@ body {
     margin-bottom: 20px;
 }
 
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #007bff;
-}
-
-.main-page-btn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s;
-}
-
-.main-page-btn:hover {
-    background-color: #0056b3;
-}
 
 h1 {
     margin-bottom: 20px;
@@ -68,18 +48,19 @@ form {
 
 label {
     margin-top: 10px;
+    margin-bottom: 15px;
     font-weight: bold;
 }
 
 input[type="text"], select, textarea, input[type="number"] {
-    background-color: var(--body-bg);
-    width: 100%;
+    background-color: var(--sidebar-bg);
+    color: var(--color);
+    width: 740px;
     padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #fff;
+    border: 1px solid #ddd;
     border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 14px;
+    font-size: 16px;
+    margin-bottom: 15px;
 }
 
 textarea {
@@ -89,36 +70,36 @@ textarea {
 
 .button-group {
     display: flex;
-    justify-content: flex-start;
+    justify-content: flex-end;
     gap: 10px;
     margin-top: 20px;
 }
 
-.submit-btn, .cancel-btn {
-    padding: 10px 20px;
+.submit-button {
+    background-color: #7FC8F8;
+    color: var(--color);
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
+    padding: 10px 20px;
     font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
     transition: background-color 0.3s;
 }
-
-.submit-btn {
-    background-color: #28a745;
-    color: white;
+.submit-button:hover {
+    background-color: #5AA9E6;
 }
-
-.submit-btn:hover {
-    background-color: #218838;
+.cancel-button {
+    background-color: var(--sidebar-bg);
+    color: var(--color);
+    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
-
-.cancel-btn {
-    background-color: #dc3545;
-    color: white;
-}
-
-.cancel-btn:hover {
-    background-color: #c82333;
+.cancel-button:hover {
+    background-color: #FF6B35;
 }
 
 .toggle-sidebar-button {
@@ -129,4 +110,19 @@ textarea {
     background: none;
     border: none;
     cursor: pointer;
+}
+
+.delete-btn {
+    background-color: #FF6B35;
+    color: var(--color);
+    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-btn:hover {
+    background-color: #FF6B35;
 }
