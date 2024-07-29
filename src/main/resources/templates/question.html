@@ -6,6 +6,7 @@
     <title>Question</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link rel="stylesheet" th:href="@{/css/question.css}">
+    <link rel="stylesheet" th:href="@{/css/topsearch.css}">
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
 </head>
@@ -14,6 +15,9 @@
 <div class="main-container">
     <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
     <div class="content">
+
+        <div th:replace="~{'fragments/topsearch' :: topsearch}"></div>
+
         <button class="back-btn" onclick="showMainPage()">Back to Questions</button>
         <div class="question-and-pagination">
             <div class="question-main-container">
@@ -93,5 +97,6 @@
 <!-- Custom Scripts -->
 <script th:src="@{/js/scripts.js}" defer></script>
 <script th:src="@{/js/question.js}" defer></script>
+<script th:src="@{/js/topsearch.js}" defer></script>
 </body>
 </html>
