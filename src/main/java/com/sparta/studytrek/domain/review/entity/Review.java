@@ -2,6 +2,7 @@ package com.sparta.studytrek.domain.review.entity;
 
 import com.sparta.studytrek.common.Timestamped;
 import com.sparta.studytrek.domain.auth.entity.User;
+import com.sparta.studytrek.domain.camp.entity.Camp;
 import com.sparta.studytrek.domain.comment.entity.ReviewComment;
 import com.sparta.studytrek.domain.like.entity.ReviewLike;
 import com.sparta.studytrek.domain.review.dto.ReviewRequestDto;
@@ -47,27 +48,33 @@ public class Review extends Timestamped {
     @Column(nullable = false)
     private String trek;  // 트랙
 
+    @ManyToOne
+    @JoinColumn(name = "camp_id", nullable = false)
+    private Camp camp;  // 캠프 정보
+
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewLike> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewComment> comments = new ArrayList<>();
 
-    public Review(ReviewRequestDto requestDto, User user) {
+    public Review(ReviewRequestDto requestDto, User user, Camp camp) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.scope = requestDto.getScope();
         this.category = requestDto.getCategory();
         this.trek = requestDto.getTrek();
         this.user = user;
+        this.camp = camp;
     }
 
-    public void updateReview(ReviewRequestDto requestDto) {
+    public void updateReview(ReviewRequestDto requestDto, Camp camp) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.scope = requestDto.getScope();
         this.category = requestDto.getCategory();
         this.trek = requestDto.getTrek();
+        this.camp = camp;
     }
 
     public Review(User user, String title, String content, int scope, String trek,

@@ -9,6 +9,7 @@ public class ReviewResponseDto {
 
     private String title;
     private String content;
+    private String campName;
     private int scope;
     private String category;
     private String trek;
@@ -21,5 +22,6 @@ public class ReviewResponseDto {
         this.category = creatReview.getCategory();
         this.trek = creatReview.getTrek();
         this.createdAt = creatReview.getCreatedAt();
+        this.campName = creatReview.getCamp().getName();
     }
 }
