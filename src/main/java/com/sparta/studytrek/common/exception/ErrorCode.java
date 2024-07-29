@@ -32,7 +32,11 @@ public enum ErrorCode {
     BAD_MANAGER_TOKEN(HttpStatus.BAD_REQUEST, "잘못된 암호입니다."),
     HEADER_NOT_FOUND_REFRESH(HttpStatus.BAD_REQUEST,"헤더에 토큰이 존재하지 않습니다."),
     USER_NOT_AUTHENTICATED(HttpStatus.UNAUTHORIZED, "인증되지 않은 사용자입니다. 로그인해주세요."),
-    STATUS_NOT_FOUND(HttpStatus.BAD_REQUEST, "상태를 찾을 수 없습니다.");
+    STATUS_NOT_FOUND(HttpStatus.BAD_REQUEST, "상태를 찾을 수 없습니다."),
+
+    // Review
+    NOTFOUND_REVIEW(HttpStatus.BAD_REQUEST, "해당 리뷰는 존재하지 않습니다."),
+    REVIEW_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "해당 리뷰를 작성한 사용자가 아닙니다.");
 
     private HttpStatus httpStatus;
     private String msg;
