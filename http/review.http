@@ -34,6 +34,11 @@ GET {{apiUrl}}/reviews
 Content-Type: application/json
 
 
+### 리뷰 단건 조회
+GET {{apiUrl}}/reviews/3
+Content-Type: application/json
+
+
 ### 리뷰 수정
 PUT {{apiUrl}}/reviews/1
 Content-Type: application/json

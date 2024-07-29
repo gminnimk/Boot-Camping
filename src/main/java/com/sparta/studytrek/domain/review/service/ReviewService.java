@@ -77,6 +77,17 @@ public class ReviewService {
     }
 
     /**
+     * 리뷰 단건 조회
+     *
+     * @param id 리뷰 ID
+     * @return 해당 리뷰의 응답 데이터
+     */
+    public ReviewResponseDto getReview(Long id) {
+        Review review = findByReviewId(id);
+        return new ReviewResponseDto(review);
+    }
+
+    /**
      * 리뷰 찾기
      *
      * @param id 리뷰 ID

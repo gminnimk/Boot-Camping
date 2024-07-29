@@ -104,6 +104,20 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    // 리뷰 단건 조회
-
+    /**
+     * 리뷰 단건 조회 API
+     *
+     * @param id 리뷰 ID
+     * @return 해당 리뷰의 응답 데이터
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse> getReview(@PathVariable("id") Long id) {
+        ReviewResponseDto responseDto = reviewService.getReview(id);
+        ApiResponse response = ApiResponse.builder()
+            .msg("리뷰 단건 조회 성공")
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(responseDto)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }
