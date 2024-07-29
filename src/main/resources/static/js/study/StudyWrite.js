@@ -11,3 +11,10 @@ document.getElementById('studyForm').addEventListener('submit', function(e) {
     // 등록 후 메인 페이지로 리다이렉트
     window.location.href = 'https://studytrek.com/';
 });
+
+function cancelReview() {
+    if (confirm('작성 중인 모집글을 취소하시겠습니까?')) {
+        const cancelUrl = document.querySelector('.cancel-button').getAttribute('data-cancel-url');
+        window.location.href = cancelUrl;
+    }
+}
