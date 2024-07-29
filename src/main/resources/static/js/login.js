@@ -331,7 +331,7 @@ document.getElementById('signInButton').addEventListener('click', async (event) 
             alert('로그인 성공');
             localStorage.setItem('accessToken', result.data.accessToken);
             localStorage.setItem('refreshToken', result.data.refreshToken);
-            window.location.href = '/api/home';
+            window.location.href = '/home';
         } else {
             const result = await response.json();
             alert('로그인 실패: ' + result.message);
@@ -350,7 +350,7 @@ function onLoginSuccess() {
 function onLogoutSuccess() {
     const loginButton = document.querySelector('.add-task-button');
     loginButton.textContent = 'Login';
-    loginButton.onclick = () => location.href = '/api/auth';
+    loginButton.onclick = () => location.href = '/auth';
     alert('로그아웃 성공');
 }
 
