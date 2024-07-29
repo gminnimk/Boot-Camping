@@ -36,7 +36,10 @@ public enum ErrorCode {
 
     // Review
     NOTFOUND_REVIEW(HttpStatus.BAD_REQUEST, "해당 리뷰는 존재하지 않습니다."),
-    REVIEW_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "해당 리뷰를 작성한 사용자가 아닙니다.");
+    REVIEW_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "해당 리뷰를 작성한 사용자가 아닙니다."),
+
+    // Camp
+    NOTFOUND_CAMP_USER(HttpStatus.BAD_REQUEST, "해당 캠프에 참가한 이력이 존재하지 않습니다.");
 
     private HttpStatus httpStatus;
     private String msg;
