@@ -6,10 +6,13 @@ import com.sparta.studytrek.domain.review.dto.ReviewResponseDto;
 import com.sparta.studytrek.domain.review.service.ReviewService;
 import com.sparta.studytrek.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -84,7 +87,22 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    // 리뷰 전체 조회
+    /**
+     * 리뷰 전체 조회 API
+     *
+     * @param pageable 페이지 정보
+     * @return 리뷰 전체 목록
+     */
+    @GetMapping
+    public ResponseEntity<ApiResponse> getAllReviews(Pageable pageable) {
+        Page<ReviewResponseDto> responseDtos = reviewService.getAllReviews(pageable);
+        ApiResponse response = ApiResponse.builder()
+            .msg("리뷰 전체 조회 성공")
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(responseDtos)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
     // 리뷰 단건 조회
 

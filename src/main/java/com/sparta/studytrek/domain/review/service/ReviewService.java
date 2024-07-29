@@ -9,6 +9,8 @@ import com.sparta.studytrek.domain.review.entity.Review;
 import com.sparta.studytrek.domain.review.repository.ReviewRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -61,6 +63,17 @@ public class ReviewService {
         reqUserCheck(review.getUser().getId(), user.getId());
 
         reviewRepository.delete(review);
+    }
+
+    /**
+     * 리뷰 전체 조회
+     *
+     * @param pageable 페이지 정보
+     * @return 리뷰 전체 목록
+     */
+    public Page<ReviewResponseDto> getAllReviews(Pageable pageable) {
+        Page<Review> reviewPage = reviewRepository.findAllByOrderByCreatedAtDesc(pageable);
+        return reviewPage.map(ReviewResponseDto::new);
     }
 
     /**
