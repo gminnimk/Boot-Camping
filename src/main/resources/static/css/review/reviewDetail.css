@@ -289,31 +289,37 @@ button.btn.btn-edit:hover {
 .edit-form textarea {
     height: 200px;
 }
-.edit-form button {
-    color: var(--color);
-    border: none;
+
+.edit-form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.editMode-submit, .editMode-cancel {
     padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
-    border-radius: 4px;
     transition: background-color 0.3s;
 }
 
 .editMode-submit {
     background-color: #FFE45E;
+    color: var(--color);
 }
+
 .editMode-cancel {
     background-color: #FF6B35;
+    color: var(--color);
 }
 
 .editMode-submit:hover {
     background-color: #dec95d;
 }
+
 .editMode-cancel:hover {
     background-color: #e5683b;
 }

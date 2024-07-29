@@ -40,8 +40,10 @@ function toggleSidebar() {
 
     if (sidebar.classList.contains('closed')) {
         content.style.marginLeft = '30px';
+        content.style.marginRight = '0px'
     } else {
-        content.style.marginLeft = '200px';
+        content.style.marginLeft = '270px';
+        content.style.marginRight = '-250px'
     }
 }
 
@@ -113,3 +115,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     toggleSidebar();
     checkLoginStatus(); // 로그인 상태를 체크하는 함수 호출
 });
+
+function refreshPage() {
+    location.reload();
+}
