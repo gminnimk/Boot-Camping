@@ -23,6 +23,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final StatusRepository statusRepository;
@@ -35,7 +36,7 @@ public class UserService {
      * 회원가입 로직
      *
      * @param requestDto 회원가입 요청 데이터
-     * @param userRole 파라미터로 받은 권한 구분
+     * @param userRole   파라미터로 받은 권한 구분
      * @return 유저 회원가입 정보 반환
      */
     @Transactional
@@ -52,10 +53,11 @@ public class UserService {
         // ROLE 확인
         UserRoleEnum roleEnum = UserRoleEnum.valueOf(userRole);
         Role role = roleRepository.findByRole(roleEnum)
-                .orElseThrow(() -> new IllegalArgumentException("Role not found"));
+            .orElseThrow(() -> new IllegalArgumentException("Role not found"));
 
         // 사용자 저장
-        User user = new User(username, password, requestDto.getName(), requestDto.getUserAddr(), UserType.NORMAL, role);
+        User user = new User(username, password, requestDto.getName(), requestDto.getUserAddr(),
+            UserType.NORMAL, role);
         userRepository.save(user);
 
         if (roleEnum == UserRoleEnum.USER) {
@@ -63,11 +65,11 @@ public class UserService {
             UserStatusEnum userStatus = UserStatusEnum.getDefault();
 
             Status findStatus = statusRepository.findByStatus(userStatus)
-                    .orElseThrow(() -> new IllegalArgumentException("Status not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Status not found"));
 
             user.addStatus(findStatus);
         } else if (roleEnum == UserRoleEnum.BOOTCAMP) {
-            // BOOTCAMP 일 경우 userCamp 저장
+            // BOOTCAMP 일 경우 campUser 저장
             String campName = requestDto.getCampName();
             if (campName == null || campName.isEmpty()) {
                 throw new IllegalArgumentException("Camp name is required for BOOTCAMP role");
@@ -89,17 +91,19 @@ public class UserService {
     public TokenResponseDto login(LoginRequestDto requestDto) {
 
         User user = userRepository.findByUsername(requestDto.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
+            .orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
 
         if (user.isWithdrawn()) {
             throw new IllegalArgumentException("탈퇴한 회원입니다.");
-        } else if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+        } else if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
 
         // 토큰 생성
-        String accessToken = jwtUtil.createAccessToken(user.getUsername(), user.getRole().toString());
-        String refreshToken = jwtUtil.createRefreshToken(user.getUsername(), user.getRole().toString());
+        String accessToken = jwtUtil.createAccessToken(user.getUsername(),
+            user.getRole().toString());
+        String refreshToken = jwtUtil.createRefreshToken(user.getUsername(),
+            user.getRole().toString());
 
         // Refresh 토큰 저장
         refreshTokenService.saveRefreshToken(user.getId(), refreshToken);
@@ -118,7 +122,6 @@ public class UserService {
         // 리프레시 토큰을 제거
         refreshTokenService.removeRefreshToken(user.getId());
     }
-
 
 
     /**
@@ -143,12 +146,12 @@ public class UserService {
      */
     public User findByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 
     public Status findByStatus(UserStatusEnum status) {
         return statusRepository.findByStatus(status)
-                .orElseThrow(() -> new CustomException(ErrorCode.STATUS_NOT_FOUND));
+            .orElseThrow(() -> new CustomException(ErrorCode.STATUS_NOT_FOUND));
     }
 
     public void saveUser(User user) {
