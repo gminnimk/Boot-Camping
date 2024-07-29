@@ -58,4 +58,14 @@ public class ViewController {
     public String showStudyWrite() {
         return "study/StudyWrite";
     }
+
+    @GetMapping("/api/camp")
+    public String showCamp() { return "recruitment/recruitmentMain"; }
+
+    @GetMapping("/api/camp/add")
+    public String showAddCamp() { return "recruitment/recruitmentAdd"; }
+
+    @GetMapping("/api/camp/detail")
+    public String showCampDetail() { return "recruitment/recruitmentDetail"; }
+
 }
