@@ -40,32 +40,37 @@ function toggleSidebar() {
 
     if (sidebar.classList.contains('closed')) {
         content.style.marginLeft = '30px';
-        content.style.marginRight = '0px'
+        content.style.marginRight = '0px';
     } else {
         content.style.marginLeft = '270px';
-        content.style.marginRight = '-250px'
+        content.style.marginRight = '-250px';
     }
 }
 
 // 페이지 로드 시 로그인 상태를 체크하여 버튼을 업데이트하는 함수
 function checkLoginStatus() {
-    const loginButton = document.querySelector('.add-task-button');
+    const loginButton = document.querySelector('#loginButton');
+    const adminButton = document.querySelector('#adminButton');
     const accessToken = localStorage.getItem('accessToken');
 
     if (accessToken) {
         loginButton.textContent = 'Logout';
         loginButton.onclick = onLogout;
+        adminButton.style.display = 'inline-block'; // 로그인 상태일 때 ADMIN 버튼 표시
     } else {
         loginButton.textContent = 'Login';
         loginButton.onclick = () => location.href = '/api/auth';
+        adminButton.style.display = 'none'; // 로그아웃 상태일 때 ADMIN 버튼 숨기기
     }
 }
 
 // 로그아웃 성공 시 호출되는 함수
 function onLogoutSuccess() {
-    const loginButton = document.querySelector('.add-task-button');
+    const loginButton = document.querySelector('#loginButton');
+    const adminButton = document.querySelector('#adminButton');
     loginButton.textContent = 'Login';
     loginButton.onclick = () => location.href = '/api/auth';
+    adminButton.style.display = 'none'; // 로그아웃 후 ADMIN 버튼 숨기기
 
     Swal.fire({
         toast: true,
