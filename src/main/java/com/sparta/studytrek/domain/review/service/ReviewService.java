@@ -3,11 +3,15 @@ package com.sparta.studytrek.domain.review.service;
 import com.sparta.studytrek.common.exception.CustomException;
 import com.sparta.studytrek.common.exception.ErrorCode;
 import com.sparta.studytrek.domain.auth.entity.User;
+import com.sparta.studytrek.domain.auth.service.UserService;
+import com.sparta.studytrek.domain.camp.entity.Camp;
+import com.sparta.studytrek.domain.camp.service.CampService;
 import com.sparta.studytrek.domain.review.dto.ReviewRequestDto;
 import com.sparta.studytrek.domain.review.dto.ReviewResponseDto;
 import com.sparta.studytrek.domain.review.entity.Review;
 import com.sparta.studytrek.domain.review.repository.ReviewRepository;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +22,8 @@ import org.springframework.stereotype.Service;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final CampService campService;
+    private final UserService userService;
 
     /**
      * 리뷰 작성
@@ -28,7 +34,19 @@ public class ReviewService {
      */
     @Transactional
     public ReviewResponseDto createReview(ReviewRequestDto requestDto, User user) {
-        Review review = new Review(requestDto, user);
+
+        List<String> userCampNames = userService.getUserCampNames(user.getId());
+
+        boolean isUserInCamp = userCampNames.stream()
+            .anyMatch(campName -> campName.equalsIgnoreCase(requestDto.getCampName()));
+
+        if (!isUserInCamp) {
+            throw new CustomException(ErrorCode.NOTFOUND_CAMP_USER);
+        }
+
+        Camp camp = campService.findByName(requestDto.getCampName());
+
+        Review review = new Review(requestDto, user, camp);
         Review creatReview = reviewRepository.save(review);
 
         return new ReviewResponseDto(creatReview);
@@ -47,7 +65,18 @@ public class ReviewService {
         Review review = findByReviewId(id);
         reqUserCheck(review.getUser().getId(), user.getId());
 
-        review.updateReview(requestDto);
+        List<String> userCampNames = userService.getUserCampNames(user.getId());
+
+        boolean isUserInCamp = userCampNames.stream()
+            .anyMatch(campName -> campName.equalsIgnoreCase(requestDto.getCampName()));
+
+        if (!isUserInCamp) {
+            throw new CustomException(ErrorCode.NOTFOUND_CAMP_USER);
+        }
+
+        Camp camp = campService.findByName(requestDto.getCampName());
+
+        review.updateReview(requestDto, camp);
 
         return new ReviewResponseDto(review);
     }

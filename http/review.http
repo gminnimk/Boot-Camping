@@ -24,6 +24,7 @@ Authorization: Bearer {{accessToken}}
 {
   "title": "리뷰 제목",
   "content": "리뷰 내용",
+  "campName": "스파르타",
   "scope": 5,
   "category": "카테고리",
   "trek": "트랙"
@@ -35,7 +36,7 @@ Content-Type: application/json
 
 
 ### 리뷰 단건 조회
-GET {{apiUrl}}/reviews/3
+GET {{apiUrl}}/reviews/2
 Content-Type: application/json
 
 
@@ -47,12 +48,13 @@ Authorization: Bearer {{accessToken}}
 {
   "title": "수정된 리뷰 제목",
   "content": "수정된 리뷰 내용",
+  "campName": "스파르타",
   "scope": 3,
   "category": "수정된 카테고리",
   "trek": "수정된 트랙"
 }
 
 ### 리뷰 삭제
-DELETE {{apiUrl}}/reviews/1
+DELETE {{apiUrl}}/reviews/3
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
