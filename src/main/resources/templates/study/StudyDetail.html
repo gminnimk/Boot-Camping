@@ -18,11 +18,6 @@
 
     <div class="content-wrapper">
         <div class="content">
-            <div class="header">
-                <div class="logo">StudyTrek</div>
-                <button class="back-btn" onclick="goToMainPage()">메인 페이지로 돌아가기</button>
-            </div>
-
             <div class="study-details">
                 <h2 class="study-title">React 스터디원 구합니다</h2>
                 <div class="study-info">
@@ -35,29 +30,39 @@
                     <p>React와 관련 라이브러리를 깊이 있게 학습하실 분들 모집합니다. 실전 프로젝트도 진행할 예정입니다.
                         함께 성장하고 싶은 열정 있는 분들의 참여를 기다립니다!</p>
                 </div>
-                <div class="action-buttons">
-                    <button class="edit-btn" onclick="editStudy()">수정</button>
-                    <button class="delete-btn" onclick="deleteStudy()">삭제</button>
+                <div class="button-group">
+                    <a th:href="@{/api/study/main}" class="btn">목록으로 가기</a>
+                    <div>
+                        <button type="modify" class="modify-button" onclick="modifyStudy()" th:data-submit-url="@{/api/study/modify}">수정
+                        <button type="del" class="delete-btn" onclick="deleteStudy()">삭제</button>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="leave-comment">
+                <h2>댓글</h2>
+                <div class="add-comment">
+                    <input type="text" placeholder="댓글을 입력하세요..." id="commentInput">
+                    <button onclick="addComment()">댓글 등록</button>
                 </div>
             </div>
 
             <div class="comments-section">
-                <h3>댓글</h3>
                 <div class="comment">
                     <div class="comment-header">
                         <div class="user-info">
-                            <div class="user-avatar">J</div>
                             <strong>John Doe</strong>
                         </div>
-                        <span class="comment-date">8월 20, 2021</span>
+                        <span class="comment-date">2023-04-15</span>
                     </div>
                     <div class="comment-content">
                         <p>이 스터디에 참여하고 싶습니다. 제가 React를 배운지 얼마 안 됐는데 함께 공부할 수 있을까요?</p>
                     </div>
                     <div class="comment-actions">
-                        <button onclick="editComment(1)">수정</button>
-                        <button onclick="deleteComment(1)">삭제</button>
-                        <button onclick="toggleReplyForm(1)">답글</button>
+                        <button class="reply-button" onclick="toggleReplyForm(1)">답글</button>
+                        <button class="edit-button" onclick="editComment(1)">수정</button>
+                        <button class="delete-button" onclick="deleteComment(1)">삭제</button>
                     </div>
                     <div class="reply-form" id="replyForm1" style="display: none;">
                         <textarea placeholder="답글을 입력하세요"></textarea>
@@ -67,33 +72,18 @@
                 <div class="comment" style="margin-left: 30px;">
                     <div class="comment-header">
                         <div class="user-info">
-                            <div class="user-avatar">S</div>
                             <strong>Sarah (작성자)</strong>
                         </div>
-                        <span class="comment-date">8월 20, 2021</span>
+                        <span class="comment-date">2023-04-15</span>
                     </div>
                     <div class="comment-content">
                         <p>네, 물론이죠! 우리 스터디는 다양한 수준의 개발자들이 함께 배우고 성장하는 것을 목표로 하고 있습니다. 환영합니다!</p>
                     </div>
                     <div class="comment-actions">
-                        <button onclick="editComment(2)">수정</button>
-                        <button onclick="deleteComment(2)">삭제</button>
-                        <button onclick="toggleReplyForm(2)">답글</button>
-                    </div>
-                    <div class="reply-form" id="replyForm2" style="display: none;">
-                        <textarea placeholder="답글을 입력하세요"></textarea>
-                        <button onclick="submitReply(2)">답글 작성</button>
+                        <button class="reply-button" onclick="toggleReplyForm(2)">답글</button>
+                        <button class="edit-button" onclick="editComment(2)">수정</button>
                     </div>
                 </div>
-            </div>
-
-            <div class="leave-comment">
-                <h2>댓글 작성</h2>
-                <form class="comment-form">
-                    <input type="text" placeholder="이름" required>
-                    <textarea placeholder="댓글을 입력하세요" required></textarea>
-                    <button type="submit">댓글 작성</button>
-                </form>
             </div>
         </div>
     </div>

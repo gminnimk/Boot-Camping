@@ -24,38 +24,15 @@ body {
     padding: 20px;
     margin-top: 60px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 40px;
-    margin-bottom: 20px;
-}
-
-.back-btn {
-    background-color: #0056b3;
-    color:white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-}
-
-.back-btn:hover {
-    background-color: #0056b3;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .study-title {
     font-size: 24px;
-    color: #007bff;
     margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #007bff;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #ddd;
+    justify-content: space-between;
 }
 
 .study-info {
@@ -76,32 +53,61 @@ body {
     line-height: 1.6;
 }
 
-.action-buttons {
+.button-group {
     margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    margin-top: 2rem;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 1rem;
+    justify-content: space-between;
 }
 
-.edit-btn, .delete-btn {
-    background-color: #28a745;
-    color: white;
+.btn {
+    background-color: var(--sidebar-bg);
+    color: var(--color);
     border: none;
+    font-weight: bold;
     padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
     font-size: 16px;
-    margin-right: 10px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
     transition: background-color 0.3s;
 }
 
-.delete-btn {
-    background-color: #dc3545;
+.modify-button {
+    background-color: #7FC8F8;
+    color: var(--color);
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-right: 10px;
 }
 
-.edit-btn:hover {
-    background-color: #218838;
+.modify-button:hover {
+    background-color: #5AA9E6;
+}
+
+.delete-btn {
+    background-color: #FF6B35;
+    color: var(--color);
+    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .delete-btn:hover {
-    background-color: #c82333;
+    background-color: #FF6B35;
 }
 
 .comments-section {
@@ -113,6 +119,8 @@ body {
     padding: 15px;
     margin-bottom: 15px;
     border-radius: 8px;
+    background-color: var(--sidebar-bg);
+    color: var(--color);
 }
 
 .comment-header {
@@ -125,19 +133,6 @@ body {
 .user-info {
     display: flex;
     align-items: center;
-}
-
-.user-avatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: #007bff;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    margin-right: 10px;
 }
 
 .comment-date {
@@ -155,19 +150,52 @@ body {
     gap: 10px;
 }
 
-.comment-actions button {
-    background-color: transparent;
-    border: none;
-    color: #007bff;
-    cursor: pointer;
-    font-size: 0.9em;
+
+.add-comment {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
 }
 
-.reply-form, .comment-form {
+.add-comment input {
+    flex-grow: 1;
+    height: 60px;
+    padding: 0 0.5rem;
+    background-color: var(--sidebar-bg);
+    color: var(--color);
+    margin-right: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: calc(100% - 120px);
+}
+
+.add-comment button {
+    background-color: #7FC8F8;
+    color: var(--color);
+    border: none;
+    height: 60px;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    width: 100px;
+}
+
+.add-comment button:hover {
+    background-color: #5AA9E6;
+}
+
+
+.reply-form {
     margin-top: 20px;
 }
 
-.reply-form textarea, .comment-form textarea {
+.reply-form textarea {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
@@ -175,7 +203,7 @@ body {
     resize: vertical;
 }
 
-.reply-form button, .comment-form button {
+.reply-form button {
     background-color: #007bff;
     color: white;
     border: none;
@@ -187,45 +215,34 @@ body {
     transition: background-color 0.3s;
 }
 
-.reply-form button:hover, .comment-form button:hover {
+.reply-form button:hover, .add-comment button:hover {
     background-color: #0056b3;
 }
 
-.leave-comment {
-    margin-top: 30px;
+
+.reply-button {
+    background-color: #7FC8F8;
 }
 
-.leave-comment h2 {
-    font-size: 20px;
-    margin-bottom: 15px;
+.edit-button {
+    background-color: #FFE45E;
 }
 
-.comment-form input,
-.comment-form textarea {
-    width: 95%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: var(--body-bg);
-    color:white;
+.delete-button {
+    background-color: #FF6B35;
 }
 
-.comment-form textarea {
-    height: 100px;
-}
-
-.comment-form button {
-    background-color: #007bff;
-    color: white;
+.reply-button, .edit-button, .delete-button {
+    color: var(--color);
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 5px 10px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin-top: 10px;
     cursor: pointer;
-    font-size: 16px;
+    border-radius: 4px;
     transition: background-color 0.3s;
-}
-
-.comment-form button:hover {
-    background-color: #0056b3;
 }

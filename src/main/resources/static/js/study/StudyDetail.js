@@ -46,3 +46,7 @@ document.querySelector('.comment-form').addEventListener('submit', function(e) {
     // 여기에 새 댓글 제출 로직을 구현합니다.
 });
 
+function modifyStudy() {
+    const addUrl = document.querySelector('.modify-button').getAttribute('data-submit-url');
+    window.location.href = addUrl;
+}
