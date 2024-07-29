@@ -1,0 +1,206 @@
+body {
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+.container {
+    max-width: 1500px;
+    margin: 0 auto;
+    background-color: var(--body-bg);
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+}
+
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    transition: margin-left 0.3s ease;
+    justify-content: center;
+}
+
+.content {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    margin-top: 60px;
+    border-radius: 8px;
+}
+
+.header {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-top: 60px;
+    margin-bottom: 20px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+    cursor: pointer;
+    transition: transform 0.3s, text-shadow 0.3s;
+}
+
+.logo:hover {
+    transform: translateY(-3px);
+    text-shadow: 0 4px 8px rgba(0,123,255,0.3);
+}
+
+.search-bar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.search-bar select, .search-bar input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: var(--body-bg);
+}
+
+.search-bar button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.search-bar button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.login-button {
+    margin-left: 10px;
+}
+
+.ranking-count {
+    font-size: 14px;
+    color: #666;
+}
+
+.ranking-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.ranking-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.ranking-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.ranking-item h3 {
+    margin-top: 0;
+}
+
+.rating {
+    color: #ffc107;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.review-preview {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.review-meta {
+    font-size: 12px;
+    color: #999;
+}
+
+.like-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.like-button:hover {
+    transform: scale(1.1);
+}
+
+.like-button.liked {
+    color: #ff4136;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.pagination button {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    background-color: var(--sidebar-bg);
+    cursor: pointer;
+}
+
+/*.pagination button.active {*/
+/*    background-color: #007bff;*/
+/*    color: white;*/
+/*}*/
+
+
+.categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    justify-content: flex-end;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.category-radio {
+    display: none;
+}
+
+.category-label {
+    background-color: var(--sidebar-bg);
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.category-radio:checked + .category-label, .track-radio:checked + .track-label {
+    background-color: #5AA9E6;
+    color: var(--color);
+    font-weight: bold;
+    transition: background-color 0.3s;
+}

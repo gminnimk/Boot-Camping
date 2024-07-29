@@ -1,0 +1,133 @@
+.body {
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+.container {
+    width: 100%;
+    margin: 0 auto;
+    margin-bottom: 60px;
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+    background-color: var(--body-bg);
+}
+
+.content-wrapper {
+    margin: 0 auto;
+    max-width: 800px;
+    justify-content: center;
+}
+
+.content {
+    width: 100%;
+    padding: 20px;
+    margin-top: 60px;
+    border-radius: 8px;
+}
+
+.write-review {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.write-review h2 {
+    font-size: 24px;
+    margin: 0 0 20px 0;
+    text-align: center;
+    color: #7FC8F8;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.categories, .tracks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group textarea,
+.form-group select,
+.form-group input[type="number"] {
+    background-color: var(--sidebar-bg);
+    color: var(--color);
+    width: 740px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.category-radio, .track-radio {
+    display: none;
+}
+
+.category-label, .track-label {
+    background-color: var(--sidebar-bg);
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.category-radio:checked + .category-label, .track-radio:checked + .track-label {
+    background-color: #5AA9E6;
+    color: var(--color);
+    font-weight: bold;
+}
+
+.label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group textarea {
+    height: 150px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.submit-button {
+    background-color: #7FC8F8;
+    color: var(--color);
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.submit-button:hover {
+    background-color: #5AA9E6;
+}
+.cancel-button {
+    background-color: var(--sidebar-bg);
+    color: var(--color);
+    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.cancel-button:hover {
+    background-color: #FF6B35;
+}
