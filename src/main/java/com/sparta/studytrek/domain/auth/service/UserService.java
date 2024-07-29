@@ -6,7 +6,12 @@ import com.sparta.studytrek.domain.auth.dto.LoginRequestDto;
 import com.sparta.studytrek.domain.auth.dto.SignUpRequestDto;
 import com.sparta.studytrek.domain.auth.dto.SignUpResponseDto;
 import com.sparta.studytrek.domain.auth.dto.TokenResponseDto;
-import com.sparta.studytrek.domain.auth.entity.*;
+import com.sparta.studytrek.domain.auth.entity.Role;
+import com.sparta.studytrek.domain.auth.entity.Status;
+import com.sparta.studytrek.domain.auth.entity.User;
+import com.sparta.studytrek.domain.auth.entity.UserRoleEnum;
+import com.sparta.studytrek.domain.auth.entity.UserStatusEnum;
+import com.sparta.studytrek.domain.auth.entity.UserType;
 import com.sparta.studytrek.domain.auth.repository.RoleRepository;
 import com.sparta.studytrek.domain.auth.repository.StatusRepository;
 import com.sparta.studytrek.domain.auth.repository.UserRepository;
@@ -14,11 +19,10 @@ import com.sparta.studytrek.domain.camp.entity.Camp;
 import com.sparta.studytrek.domain.camp.service.CampService;
 import com.sparta.studytrek.jwt.JwtUtil;
 import jakarta.transaction.Transactional;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -85,7 +89,7 @@ public class UserService {
     /**
      * 로그인 로직
      *
-     * @param requestDto
+     * @param requestDto 로그인 요청 정보
      * @return
      */
     public TokenResponseDto login(LoginRequestDto requestDto) {
@@ -116,10 +120,8 @@ public class UserService {
      * 로그아웃 로직
      *
      * @param user 로그아웃할 사용자
-     * @return
      */
     public void logout(User user) {
-        // 리프레시 토큰을 제거
         refreshTokenService.removeRefreshToken(user.getId());
     }
 
@@ -128,13 +130,11 @@ public class UserService {
      * 회원탈퇴 로직
      *
      * @param user 탈퇴할 사용자
-     * @return
      */
     public void withdraw(User user) {
-        // 리프레시 토큰을 제거
         refreshTokenService.removeRefreshToken(user.getId());
 
-        user.withdraw();  // 사용자 탈퇴 처리
+        user.withdraw();
         userRepository.save(user);
     }
 
