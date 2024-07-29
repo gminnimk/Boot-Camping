@@ -3,8 +3,13 @@ package com.sparta.studytrek.domain.reply.entity;
 import com.sparta.studytrek.common.Timestamped;
 import com.sparta.studytrek.domain.auth.entity.User;
 import com.sparta.studytrek.domain.comment.entity.ReviewComment;
-import com.sparta.studytrek.domain.review.entity.Review;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ReviewReply extends Timestamped {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,17 +30,12 @@ public class ReviewReply extends Timestamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "review_id", nullable = false)
-    private Review review;
-
     @Column(nullable = false)
     private String content;
 
-    public ReviewReply(ReviewComment reviewComment, User user, Review review, String content) {
+    public ReviewReply(ReviewComment reviewComment, User user, String content) {
         this.reviewComment = reviewComment;
         this.user = user;
-        this.review = review;
         this.content = content;
     }
 }
