@@ -47,4 +47,25 @@ public class QuestionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    /**
+     * 질문 수정 API
+     *
+     * @param id          질문 ID
+     * @param requestDto  질문 수정 데이터
+     * @param userDetails 인증된 유저 정보
+     * @return 질문 수정 응답 데이터
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> updateQuestion(@PathVariable("id") Long id,
+        @RequestBody QuestionRequestDto requestDto,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        QuestionResponseDto responseDto = questionService.updateQuestion(id, requestDto,
+            userDetails.getUser());
+        ApiResponse response = ApiResponse.builder()
+            .msg("질문 수정 성공")
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(responseDto)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }

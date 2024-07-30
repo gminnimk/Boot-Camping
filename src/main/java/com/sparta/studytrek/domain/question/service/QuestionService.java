@@ -38,6 +38,23 @@ public class QuestionService {
     }
 
     /**
+     * 질문 수정
+     *
+     * @param id            질문 ID
+     * @param requestDto    질문 수정 요청 데이터
+     * @param user          요청한 유저의 정보
+     * @return  질문 응답 데이터
+     */
+    @Transactional
+    public QuestionResponseDto updateQuestion(Long id, QuestionRequestDto requestDto, User user) {
+        Question question = findByQuestionId(id);
+
+        question.update(requestDto);
+        return new QuestionResponseDto(question);
+
+    }
+
+    /**
      * 질문 찾기
      *
      * @param id 질문 ID

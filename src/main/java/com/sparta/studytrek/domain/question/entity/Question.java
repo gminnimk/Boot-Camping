@@ -46,6 +46,12 @@ public class Question extends Timestamped {
         this.user = user;
     }
 
+    public void update(QuestionRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        this.category = requestDto.getCategory();
+    }
+
     public Question(String title, String content, String open, User user) {
         this.title = title;
         this.content = content;
