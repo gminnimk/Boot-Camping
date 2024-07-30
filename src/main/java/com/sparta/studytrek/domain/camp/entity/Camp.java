@@ -2,6 +2,7 @@ package com.sparta.studytrek.domain.camp.entity;
 
 import com.sparta.studytrek.domain.auth.entity.match.CampUser;
 import com.sparta.studytrek.domain.rank.entity.Rank;
+import com.sparta.studytrek.domain.review.entity.Review;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,6 +37,9 @@ public class Camp {
 
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rank> ranks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
 
     public Camp(String name, String description) {
         this.name = name;

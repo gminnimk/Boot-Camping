@@ -19,6 +19,7 @@ import com.sparta.studytrek.domain.camp.entity.Camp;
 import com.sparta.studytrek.domain.camp.service.CampService;
 import com.sparta.studytrek.jwt.JwtUtil;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -57,11 +58,10 @@ public class UserService {
         // ROLE 확인
         UserRoleEnum roleEnum = UserRoleEnum.valueOf(userRole);
         Role role = roleRepository.findByRole(roleEnum)
-            .orElseThrow(() -> new IllegalArgumentException("Role not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Role not found"));
 
         // 사용자 저장
-        User user = new User(username, password, requestDto.getName(), requestDto.getUserAddr(),
-            UserType.NORMAL, role);
+        User user = new User(username, password, requestDto.getName(), requestDto.getUserAddr(), UserType.NORMAL, role);
         userRepository.save(user);
 
         if (roleEnum == UserRoleEnum.USER) {
@@ -69,7 +69,7 @@ public class UserService {
             UserStatusEnum userStatus = UserStatusEnum.getDefault();
 
             Status findStatus = statusRepository.findByStatus(userStatus)
-                .orElseThrow(() -> new IllegalArgumentException("Status not found"));
+                    .orElseThrow(() -> new IllegalArgumentException("Status not found"));
 
             user.addStatus(findStatus);
         } else if (roleEnum == UserRoleEnum.BOOTCAMP) {
@@ -156,5 +156,16 @@ public class UserService {
 
     public void saveUser(User user) {
         userRepository.save(user);
+    }
+
+    /**
+     * 해당 유저가 참여한 캠프 목록 조회
+     *
+     * @param userId 유저 ID
+     * @return 참여한 캠프 목록
+     */
+    @Transactional
+    public List<String> getUserCampNames(Long userId) {
+        return userRepository.findCampNamesById(userId);
     }
 }
