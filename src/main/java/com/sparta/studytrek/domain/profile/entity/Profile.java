@@ -44,7 +44,7 @@ public class Profile {
 	private User user;
 
 	public Profile(String bootcampName, String track, String generation, LocalDate startDate, LocalDate endDate,
-		String certificate, User user) {
+		String certificate, User user, Set<String> techStack) {
 		this.bootcampName = bootcampName;
 		this.track = track;
 		this.generation = generation;
@@ -52,6 +52,7 @@ public class Profile {
 		this.endDate = endDate;
 		this.certificate = certificate;
 		this.user = user;
+		this.techStack = techStack;
 	}
 
 	public void updateProfile(ProfileRequestDto requestDto) {

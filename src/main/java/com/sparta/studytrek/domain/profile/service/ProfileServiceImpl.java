@@ -30,7 +30,8 @@ public class ProfileServiceImpl implements ProfileService {
 			requestDto.getStartDate(),
 			requestDto.getEndDate(),
 			requestDto.getCertificate(),
-			user
+			user,
+			requestDto.getTechStack()
 		);
 		profileRepository.save(profile);
 		return ResponseEntity.ok("프로필 생성 성공.");
