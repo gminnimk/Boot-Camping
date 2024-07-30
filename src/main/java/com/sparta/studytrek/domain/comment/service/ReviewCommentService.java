@@ -10,6 +10,8 @@ import com.sparta.studytrek.domain.comment.repository.ReviewCommentRepository;
 import com.sparta.studytrek.domain.review.entity.Review;
 import com.sparta.studytrek.domain.review.service.ReviewService;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -62,15 +64,25 @@ public class ReviewCommentService {
     /**
      * 리뷰의 댓글 삭제
      *
-     * @param reviewId   리뷰 ID
-     * @param commentId  댓글 ID
-     * @param user       유저 정보
+     * @param reviewId  리뷰 ID
+     * @param commentId 댓글 ID
+     * @param user      유저 정보
      */
     public void deleteReviewComment(Long reviewId, Long commentId, User user) {
         reviewService.findByReviewId(reviewId);
         ReviewComment reviewComment = findByReviewCommentId(commentId);
-
         reviewCommentRepository.delete(reviewComment);
+    }
+
+    /**
+     * 리뷰의 댓글 전체 조회
+     *
+     * @param reviewId 리뷰 ID
+     * @return 리뷰 댓글 목록
+     */
+    public List<CommentResponseDto> getAllReviewComments(Long reviewId) {
+        List<ReviewComment> reviewComments = reviewCommentRepository.findByReviewId(reviewId);
+        return reviewComments.stream().map(CommentResponseDto::new).toList();
     }
 
     /**

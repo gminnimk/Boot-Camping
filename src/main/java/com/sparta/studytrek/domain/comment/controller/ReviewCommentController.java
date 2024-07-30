@@ -3,13 +3,16 @@ package com.sparta.studytrek.domain.comment.controller;
 import com.sparta.studytrek.common.ApiResponse;
 import com.sparta.studytrek.domain.comment.dto.CommentRequestDto;
 import com.sparta.studytrek.domain.comment.dto.CommentResponseDto;
+import com.sparta.studytrek.domain.comment.entity.ReviewComment;
 import com.sparta.studytrek.domain.comment.service.ReviewCommentService;
 import com.sparta.studytrek.security.UserDetailsImpl;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -86,6 +89,23 @@ public class ReviewCommentController {
         ApiResponse response = ApiResponse.builder()
             .msg("댓글 삭제 성공")
             .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    /**
+     * 리뷰의 댓글 전체 조회
+     *
+     * @param reviewId 리뷰 IDd
+     * @return 리뷰 댓글 전체 목록
+     */
+    @GetMapping
+    public ResponseEntity<ApiResponse> getAllReviewComments(@PathVariable Long reviewId) {
+        List<CommentResponseDto> comments = reviewCommentService.getAllReviewComments(reviewId);
+        ApiResponse response = ApiResponse.builder()
+            .msg("댓글 전체 조회 성공")
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(comments)
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
