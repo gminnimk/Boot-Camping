@@ -1,5 +1,6 @@
 package com.sparta.studytrek.domain.camp.entity;
 
+import com.sparta.studytrek.domain.auth.entity.match.CampUser;
 import com.sparta.studytrek.domain.rank.entity.Rank;
 import com.sparta.studytrek.domain.review.entity.Review;
 import jakarta.persistence.CascadeType;

@@ -1,6 +1,6 @@
 package com.sparta.studytrek.domain.auth.repository;
 
-import static com.sparta.studytrek.domain.auth.entity.match.QUserCamp.userCamp;
+import static com.sparta.studytrek.domain.auth.entity.match.QCampUser.campUser;
 import static com.sparta.studytrek.domain.camp.entity.QCamp.camp;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -18,8 +18,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     public List<String> findCampNamesById(Long id) {
         return jpaQueryFactory
             .select(camp.name)
-            .from(userCamp)
-            .where(userCamp.user.id.eq(id))
+            .from(campUser)
+            .where(campUser.user.id.eq(id))
             .fetch();
     }
 }
