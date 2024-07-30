@@ -37,7 +37,6 @@ public class ReviewCommentService {
 
         ReviewComment reviewComment = new ReviewComment(review, user, requestDto.getContent());
         ReviewComment saveComment = reviewCommentRepository.save(reviewComment);
-
         return new CommentResponseDto(saveComment);
     }
 
@@ -57,7 +56,6 @@ public class ReviewCommentService {
 
         ReviewComment reviewComment = findByReviewCommentId(commentId);
         reviewComment.updateComment(requestDto.getContent());
-
         return new CommentResponseDto(reviewComment);
     }
 
@@ -70,6 +68,7 @@ public class ReviewCommentService {
      */
     public void deleteReviewComment(Long reviewId, Long commentId, User user) {
         reviewService.findByReviewId(reviewId);
+
         ReviewComment reviewComment = findByReviewCommentId(commentId);
         reviewCommentRepository.delete(reviewComment);
     }

@@ -34,12 +34,10 @@ public class ReviewReplyService {
      */
     public ReplyResponseDto createReviewReply(Long reviewId, Long commentId,
         ReplyRequestDto requestDto, User user) {
-
         reviewService.findByReviewId(reviewId);
 
         ReviewComment comment = reviewCommentService.findByReviewCommentId(commentId);
         ReviewReply reply = new ReviewReply(comment, user, requestDto);
-
         ReviewReply saveReply = replyRepository.save(reply);
         return new ReplyResponseDto(saveReply);
     }
@@ -62,7 +60,6 @@ public class ReviewReplyService {
 
         ReviewReply reply = findByReviewReplyId(replyId);
         reply.updateReply(requestDto.getContent());
-
         return new ReplyResponseDto(reply);
     }
 
@@ -77,8 +74,8 @@ public class ReviewReplyService {
     public void deleteReviewReply(Long reviewId, Long commentId, Long replyId, User user) {
         reviewService.findByReviewId(reviewId);
         reviewCommentService.findByReviewCommentId(commentId);
-        ReviewReply reply = findByReviewReplyId(replyId);
 
+        ReviewReply reply = findByReviewReplyId(replyId);
         replyRepository.delete(reply);
     }
 
