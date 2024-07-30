@@ -3,6 +3,7 @@ package com.sparta.studytrek.domain.reply.entity;
 import com.sparta.studytrek.common.Timestamped;
 import com.sparta.studytrek.domain.auth.entity.User;
 import com.sparta.studytrek.domain.comment.entity.ReviewComment;
+import com.sparta.studytrek.domain.reply.dto.ReplyRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,6 +33,12 @@ public class ReviewReply extends Timestamped {
 
     @Column(nullable = false)
     private String content;
+
+    public ReviewReply(ReviewComment reviewComment, User user, ReplyRequestDto requestDto) {
+        this.reviewComment = reviewComment;
+        this.user = user;
+        this.content = requestDto.getContent();
+    }
 
     public ReviewReply(ReviewComment reviewComment, User user, String content) {
         this.reviewComment = reviewComment;

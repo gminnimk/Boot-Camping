@@ -1,0 +1,43 @@
+package com.sparta.studytrek.domain.reply.service;
+
+import com.sparta.studytrek.domain.auth.entity.User;
+import com.sparta.studytrek.domain.comment.entity.ReviewComment;
+import com.sparta.studytrek.domain.comment.service.ReviewCommentService;
+import com.sparta.studytrek.domain.reply.dto.ReplyRequestDto;
+import com.sparta.studytrek.domain.reply.dto.ReplyResponseDto;
+import com.sparta.studytrek.domain.reply.entity.ReviewReply;
+import com.sparta.studytrek.domain.reply.repository.ReviewReplyRepository;
+import com.sparta.studytrek.domain.review.entity.Review;
+import com.sparta.studytrek.domain.review.service.ReviewService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class ReviewReplyService {
+
+    private final ReviewReplyRepository replyRepository;
+    private final ReviewService reviewService;
+    private final ReviewCommentService reviewCommentService;
+
+    /**
+     * 리뷰 댓글의 댓글 작성
+     *
+     * @param reviewId 리뷰 ID
+     * @param commentId 리뷰의 댓글 ID
+     * @param requestDto 대댓글 요청 내용
+     * @param user 유저 정보
+     * @return 리뷰 댓글의 대댓글 응답 데이터
+     */
+    public ReplyResponseDto createReviewReply(Long reviewId, Long commentId,
+        ReplyRequestDto requestDto, User user) {
+
+        reviewService.findByReviewId(reviewId);
+
+        ReviewComment comment = reviewCommentService.findByCommentId(commentId);
+        ReviewReply reply = new ReviewReply(comment, user, requestDto);
+
+        ReviewReply saveReply = replyRepository.save(reply);
+        return new ReplyResponseDto(saveReply);
+    }
+}
