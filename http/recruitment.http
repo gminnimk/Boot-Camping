@@ -34,3 +34,23 @@ Authorization: Bearer {{accessToken}}
   "recruitStart": "2024-07-01",
   "recruitEnd": "2024-07-31"
 }
+
+### 모집글 수정
+PUT {{apiUrl}}/camps/1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "title": "모집글 제목 수정",
+  "process": "모집글 과정 소개글 수정",
+  "content": "모집글 내용 수정",
+  "place": "소장",
+  "cost": "유료",
+  "trek": "프론트엔드",
+  "level": "고급",
+  "classTime": "토-일 오전10시~오후6시",
+  "campStart": "2024-09-01",
+  "campEnd": "2024-09-30",
+  "recruitStart": "2024-08-01",
+  "recruitEnd": "2024-08-31"
+}

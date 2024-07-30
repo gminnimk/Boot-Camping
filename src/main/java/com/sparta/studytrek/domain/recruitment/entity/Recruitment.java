@@ -72,4 +72,19 @@ public class Recruitment extends Timestamped {
         this.recruitEnd = requestDto.getRecruitEnd();
         this.user = user;
     }
+
+    public void updateRecruitment(RecruitmentRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.process = requestDto.getProcess();
+        this.content = requestDto.getContent();
+        this.place = requestDto.getPlace();
+        this.cost = requestDto.getCost();
+        this.trek = requestDto.getTrek();
+        this.level = requestDto.getLevel();
+        this.classTime = requestDto.getClassTime();
+        this.campStart = requestDto.getCampStart();
+        this.campEnd = requestDto.getCampEnd();
+        this.recruitStart = requestDto.getRecruitStart();
+        this.recruitEnd = requestDto.getRecruitEnd();
+    }
 }
