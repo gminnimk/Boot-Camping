@@ -19,7 +19,7 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 ### 프로필 수정
-PUT {{apiUrl}}/profiles/36
+PUT {{apiUrl}}/profiles/38
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
@@ -34,6 +34,6 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### 프로필 삭제
-DELETE {{apiUrl}}/profiles/36
+DELETE {{apiUrl}}/profiles/38
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}

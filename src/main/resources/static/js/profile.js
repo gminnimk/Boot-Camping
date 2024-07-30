@@ -246,9 +246,14 @@ function fetchProfiles() {
         .then(response => response.json())
         .then(data => {
             console.log("프로필 데이터:", data);
-            data.forEach(profile => {
-                addCardToDOM(profile);
-            });
+
+            if (Array.isArray(data.data)) {
+                data.data.forEach(profile => {
+                    addCardToDOM(profile);
+                });
+            } else {
+                console.error("Unexpected response data format:", data);
+            }
         })
         .catch((error) => {
             console.error("에러:", error);
