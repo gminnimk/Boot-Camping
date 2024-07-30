@@ -18,10 +18,17 @@ public class AdminService {
     private final UserService userService;
     private final UserStatusService userStatusService;
 
-    // 사용자 상태를 변경하는 일반화된 메소드
-    // 상태 변경할 사용자 이름, 설정할 새로운 상태, 관련 캠프의 Id, 관리자 정보(권한 체크)
+    /**
+     * 사용자 상태를 변경하는 일반화된 메소드
+     *
+     * @param username  상태 변경할 사용자 이름
+     * @param newStatus 설정할 새로운 상태
+     * @param campId    관련 캠프의 Id
+     * @param adminUser 관리자 정보(권한 체크)
+     */
     @Transactional
-    public void changeUserStatus(String username, UserStatusEnum newStatus, Long campId, User adminUser) {
+    public void changeUserStatus(String username, UserStatusEnum newStatus, Long campId,
+        User adminUser) {
 
         // 권한 체크 로직 추가 (예: 현재 사용자가 관리자 권한을 가지고 있는지 확인)
         if (!adminUser.getRole().equals(UserRoleEnum.ADMIN)) {
@@ -66,6 +73,6 @@ public class AdminService {
     // 관리자가 사용자 상태를 APPROVER로 변경하는 메소드
     @Transactional
     public void approveUser(String username, UserDetailsImpl adminDetails) {
-        changeUserStatus(username, UserStatusEnum.APPROVER,null, adminDetails.getUser());
+        changeUserStatus(username, UserStatusEnum.APPROVER, null, adminDetails.getUser());
     }
 }
