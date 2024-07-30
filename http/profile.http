@@ -1,0 +1,39 @@
+### 프로필 생성
+POST {{apiUrl}}/profile
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "bootcampName": "Sparta Coding Club",
+  "track": "Web Development",
+  "generation": "3rd",
+  "startDate": "2024-01-01",
+  "endDate": "2024-06-30",
+  "techStack": ["Java", "Spring", "MySQL", "JavaScript"],
+  "certificate": "Certified Web Developer"
+}
+
+### 프로필 조회
+GET {{apiUrl}}/profile
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### 프로필 수정
+PUT {{apiUrl}}/profile/2
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "bootcampName": "Sparta Coding Korea",
+  "track": "Web Development",
+  "generation": "3rd",
+  "startDate": "2024-01-01",
+  "endDate": "2024-06-30",
+  "techStack": ["Java", "Spring", "MySQL", "JavaScript"],
+  "certificate": "Certified Web Developer"
+}
+
+### 프로필 삭제
+DELETE {{apiUrl}}/profile/4
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}

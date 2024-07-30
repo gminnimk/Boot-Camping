@@ -9,14 +9,14 @@ import lombok.Getter;
 
 @Getter
 public class ProfileResponseDto {
-	private Long id;
-	private String bootcampName;
-	private String track;
-	private String generation;
-	private LocalDate startDate;
-	private LocalDate endDate;
-	private Set<String> techStack;
-	private String certificate;
+	private final Long id;
+	private final String bootcampName;
+	private final String track;
+	private final String generation;
+	private final LocalDate startDate;
+	private final LocalDate endDate;
+	private final Set<String> techStack;
+	private final String certificate;
 
 	public ProfileResponseDto(Profile profile) {
 		this.id = profile.getId();
