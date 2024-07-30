@@ -28,7 +28,7 @@ public class ReviewReplyController {
     private final ReviewReplyService reviewReplyService;
 
     /**
-     * 리뷰 댓글의 대댓글 작성
+     * 리뷰 댓글의 대댓글 작성 API
      *
      * @param reviewId    리뷰 ID
      * @param commentId   댓글 ID
@@ -51,7 +51,7 @@ public class ReviewReplyController {
     }
 
     /**
-     * 리뷰 댓글의 대댓글 작성
+     * 리뷰 댓글의 대댓글 작성 API
      *
      * @param reviewId    리뷰 ID
      * @param commentId   댓글 ID
@@ -76,7 +76,7 @@ public class ReviewReplyController {
     }
 
     /**
-     * 리뷰 댓글의 대댓글 삭제
+     * 리뷰 댓글의 대댓글 삭제 API
      *
      * @param reviewId    리뷰 ID
      * @param commentId   댓글 ID
@@ -97,7 +97,7 @@ public class ReviewReplyController {
     }
 
     /**
-     * 리뷰 댓글의 대댓글 전체 조회
+     * 리뷰 댓글의 대댓글 전체 조회 API
      *
      * @param commentId 댓글 ID
      * @return 리뷰 댓글의 대댓글 전체 목록
@@ -114,9 +114,8 @@ public class ReviewReplyController {
     }
 
     /**
-     * 리뷰 댓글의 대댓글 단건 조회
+     * 리뷰 댓글의 대댓글 단건 조회 API
      *
-     * @param reviewId
      * @param commentId
      * @param replyId
      * @return

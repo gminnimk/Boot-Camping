@@ -28,7 +28,7 @@ public class ReviewCommentController {
     private final ReviewCommentService reviewCommentService;
 
     /**
-     * 리뷰의 댓글 작성
+     * 리뷰의 댓글 작성 API
      *
      * @param reviewId    리뷰 ID
      * @param requestDto  요청 받은 댓글 내용
@@ -50,7 +50,7 @@ public class ReviewCommentController {
     }
 
     /**
-     * 리뷰의 댓글 수정
+     * 리뷰의 댓글 수정 API
      *
      * @param reviewId    리뷰 ID
      * @param commentId   댓글 ID
@@ -74,7 +74,7 @@ public class ReviewCommentController {
     }
 
     /**
-     * 리뷰의 댓글 삭제
+     * 리뷰의 댓글 삭제 API
      *
      * @param reviewId    리뷰 ID
      * @param commentId   댓글 ID
@@ -94,7 +94,7 @@ public class ReviewCommentController {
     }
 
     /**
-     * 리뷰의 댓글 전체 조회
+     * 리뷰의 댓글 전체 조회 API
      *
      * @param reviewId 리뷰 ID
      * @return 리뷰 댓글 전체 목록
@@ -111,7 +111,7 @@ public class ReviewCommentController {
     }
 
     /**
-     * 리뷰의 댓글 단건 조회
+     * 리뷰의 댓글 단건 조회 API
      *
      * @param reviewId  리뷰 ID
      * @param commentId 댓글 ID
