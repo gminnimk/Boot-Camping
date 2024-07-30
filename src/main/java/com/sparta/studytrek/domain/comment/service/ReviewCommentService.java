@@ -10,7 +10,6 @@ import com.sparta.studytrek.domain.comment.repository.ReviewCommentRepository;
 import com.sparta.studytrek.domain.review.entity.Review;
 import com.sparta.studytrek.domain.review.service.ReviewService;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -80,7 +79,7 @@ public class ReviewCommentService {
      * @return 리뷰 댓글 목록
      */
     public List<CommentResponseDto> getAllReviewComments(Long reviewId) {
-        List<ReviewComment> reviewComments = reviewCommentRepository.findByReviewId(reviewId);
+        List<ReviewComment> reviewComments = reviewCommentRepository.findByReviewIdOrderByCreatedAtDesc(reviewId);
         return reviewComments.stream().map(CommentResponseDto::new).toList();
     }
 
