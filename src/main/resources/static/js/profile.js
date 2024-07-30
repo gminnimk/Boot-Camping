@@ -124,11 +124,11 @@ form.addEventListener("submit", function(e) {
         certificate: certificateFile ? certificateFile.name : null
     };
 
-    let apiUrl = "/api/profile";
+    let apiUrl = "/api/profiles";
     let method = "POST";
 
     if (isEditing) {
-        apiUrl = `/api/profile/${currentEditingProfileId}`;
+        apiUrl = `/api/profiles/${currentEditingProfileId}`;
         method = "PUT";
     }
 
@@ -199,7 +199,7 @@ document.addEventListener("click", function(e) {
             cancelButtonText: '아니오'
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`/api/profile/${profileId}`, {
+                fetch(`/api/profiles/${profileId}`, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",
@@ -236,7 +236,7 @@ document.addEventListener("click", function(e) {
 });
 
 function fetchProfiles() {
-    fetch("/api/profile", {
+    fetch("/api/profiles", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

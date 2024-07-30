@@ -1,5 +1,5 @@
 ### 프로필 생성
-POST {{apiUrl}}/profile
+POST {{apiUrl}}/profiles
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
@@ -14,17 +14,17 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### 프로필 조회
-GET {{apiUrl}}/profile
+GET {{apiUrl}}/profiles
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 ### 프로필 수정
-PUT {{apiUrl}}/profile/1
+PUT {{apiUrl}}/profiles/36
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "bootcampName": "Sparta Coding Korea",
+  "bootcampName": "Sparta Coding Korea22",
   "track": "Web Development",
   "generation": "3rd",
   "startDate": "2024-01-01",
@@ -34,6 +34,6 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### 프로필 삭제
-DELETE {{apiUrl}}/profile/5
+DELETE {{apiUrl}}/profiles/36
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
