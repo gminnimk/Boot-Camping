@@ -59,7 +59,7 @@ function checkLoginStatus() {
         adminButton.style.display = 'inline-block'; // 로그인 상태일 때 ADMIN 버튼 표시
     } else {
         loginButton.textContent = 'Login';
-        loginButton.onclick = () => location.href = '/api/auth';
+        loginButton.onclick = () => location.href = '/auth';
         adminButton.style.display = 'none'; // 로그아웃 상태일 때 ADMIN 버튼 숨기기
     }
 }
@@ -69,7 +69,7 @@ function onLogoutSuccess() {
     const loginButton = document.querySelector('#loginButton');
     const adminButton = document.querySelector('#adminButton');
     loginButton.textContent = 'Login';
-    loginButton.onclick = () => location.href = '/api/auth';
+    loginButton.onclick = () => location.href = '/auth';
     adminButton.style.display = 'none'; // 로그아웃 후 ADMIN 버튼 숨기기
 
     Swal.fire({

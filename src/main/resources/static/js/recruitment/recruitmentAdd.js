@@ -153,7 +153,7 @@ courseForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
     if (confirm('과정을 등록하시겠습니까?')) {
-        window.location.href = '/api/camp';
+        window.location.href = '/camp';
         // 서버 처리용 코드
         // // 폼 데이터 수집
         // const formData = new FormData(courseForm);
@@ -199,7 +199,7 @@ cancelButton.addEventListener('click', function(e) {
         updateSelectedCategories();
 
         // 목록 페이지로 이동
-        window.location.href = '/api/camp';  // 실제 목록 페이지 URL로 수정 필요
+        window.location.href = '/camp';  // 실제 목록 페이지 URL로 수정 필요
     }
 });
 

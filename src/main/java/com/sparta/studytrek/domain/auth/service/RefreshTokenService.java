@@ -22,52 +22,64 @@ public class RefreshTokenService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
+    /**
+     * 토큰 재발급
+     *
+     * @param request
+     * @return
+     */
     @Transactional
     public TokenResponseDto reissueToken(HttpServletRequest request) {
-        // Request에서 Refresh Token 추출
         String refreshToken = jwtUtil.extractRefreshToken(request);
 
-        // Refresh Token 유효성 검증
         if (!jwtUtil.validateToken(refreshToken)) {
             throw new IllegalArgumentException("Invalid refresh token");
         }
 
-        // Refresh Token으로 사용자 정보 조회
         RefreshToken storedToken = refreshTokenRepository.findByToken(refreshToken)
-                .orElseThrow(() -> new IllegalArgumentException("Refresh token not found"));
+            .orElseThrow(() -> new IllegalArgumentException("Refresh token not found"));
 
         User user = userRepository.findByUsername(storedToken.getUser().getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        // 새로운 Access Token 및 Refresh Token 생성
-        String newAccessToken = jwtUtil.createAccessToken(user.getUsername(), user.getRole().toString());
-        String newRefreshToken = jwtUtil.createRefreshToken(user.getUsername(), String.valueOf(user.getRole()));
+        String newAccessToken = jwtUtil.createAccessToken(user.getUsername(),
+            user.getRole().toString());
+        String newRefreshToken = jwtUtil.createRefreshToken(user.getUsername(),
+            String.valueOf(user.getRole()));
 
-        // Refresh Token 저장소 업데이트
         storedToken.updateToken(newRefreshToken);
 
-        // 새로운 토큰 반환
         return new TokenResponseDto(newAccessToken, newRefreshToken);
     }
 
+    /**
+     * 토큰 저장
+     *
+     * @param userId       사용자 ID
+     * @param refreshToken 리프레시 토큰
+     */
     @Transactional
     public void saveRefreshToken(Long userId, String refreshToken) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")
+            () -> new IllegalArgumentException("사용자를 찾을 수 없습니다.")
         );
         RefreshToken token = refreshTokenRepository.findByUserId(userId)
-                .orElseGet(() -> new RefreshToken(refreshToken, user));
+            .orElseGet(() -> new RefreshToken(refreshToken, user));
 
         token.updateToken(refreshToken);
         refreshTokenRepository.save(token);
     }
 
+    /**
+     * 토큰 삭제
+     *
+     * @param userId 사용자 ID
+     */
     @Transactional
     public void removeRefreshToken(Long userId) {
         RefreshToken token = refreshTokenRepository.findByUserId(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.TOKEN_NOT_FOUND));
+            .orElseThrow(() -> new CustomException(ErrorCode.TOKEN_NOT_FOUND));
 
         refreshTokenRepository.delete(token);
     }
-
 }

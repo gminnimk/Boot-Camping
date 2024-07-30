@@ -34,6 +34,13 @@ public enum ErrorCode {
     USER_NOT_AUTHENTICATED(HttpStatus.UNAUTHORIZED, "인증되지 않은 사용자입니다. 로그인해주세요."),
     STATUS_NOT_FOUND(HttpStatus.BAD_REQUEST, "상태를 찾을 수 없습니다."),
 
+    // Review
+    NOTFOUND_REVIEW(HttpStatus.BAD_REQUEST, "해당 리뷰는 존재하지 않습니다."),
+    REVIEW_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "해당 리뷰를 작성한 사용자가 아닙니다."),
+
+    // Camp
+    NOTFOUND_CAMP_USER(HttpStatus.BAD_REQUEST, "해당 캠프에 참가한 이력이 존재하지 않습니다."),
+
     // Study
     STUDY_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 스터디 모집글은 존재하지 않습니다."),
     STUDY_UPDATE_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "해당 스터디 모집글을 수정할 권한이 없습니다."),

@@ -6,66 +6,71 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ViewController {
 
-    @GetMapping("/api/auth")
+    @GetMapping("/auth")
     public String showAuthPage() {
         return "login"; // 로그인&회원가입
     }
 
-    @GetMapping("/api/home")
+    @GetMapping("/home")
     public String showHome() {
         return "home";
     }
 
-    @GetMapping("/api/question")
+    @GetMapping("/question")
     public String showQuestion(){
         return "question";
     }
 
-    @GetMapping("/api/profile")
+    @GetMapping("/admin")
+    public String showAdmin() {
+        return "admin";
+    }
+
+    @GetMapping("/profile")
     public String showProfilePage() {
         return "profile";
     }
 
-    @GetMapping("/api/review")
+    @GetMapping("/review")
     public String showReview() { return "review/reviewMain"; }
 
-    @GetMapping("/api/review/detail")
+    @GetMapping("/review/detail")
     public String showReviewDetail() { return "review/reviewDetail"; }
 
-    @GetMapping("/api/review/add")
+    @GetMapping("/review/add")
     public String showAddReview() { return "review/reviewAdd"; }
 
-    @GetMapping("/api/rank")
+    @GetMapping("/rank")
     public String showRank() {
         return "rank/Rank";
     }
-    @GetMapping("/api/study/detail")
+    @GetMapping("/study/detail")
     public String showStudyDetail() {
         return "study/StudyDetail";
     }
 
-    @GetMapping("/api/study/main")
+    @GetMapping("/study/main")
     public String showStudyMain() {
         return "study/StudyMain";
     }
 
-    @GetMapping("/api/study/modify")
+    @GetMapping("/study/modify")
     public String showStudyModify() {
         return "study/StudyModify";
     }
 
-    @GetMapping("/api/study/write")
+    @GetMapping("/study/write")
     public String showStudyWrite() {
         return "study/StudyWrite";
     }
 
-    @GetMapping("/api/camp")
+    @GetMapping("/camp")
     public String showCamp() { return "recruitment/recruitmentMain"; }
 
-    @GetMapping("/api/camp/add")
+    @GetMapping("/camp/add")
     public String showAddCamp() { return "recruitment/recruitmentAdd"; }
 
-    @GetMapping("/api/camp/detail")
+    @GetMapping("/camp/detail")
     public String showCampDetail() { return "recruitment/recruitmentDetail"; }
 
 }
