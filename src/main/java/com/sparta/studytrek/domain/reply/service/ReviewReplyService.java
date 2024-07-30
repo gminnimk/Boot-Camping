@@ -48,6 +48,7 @@ public class ReviewReplyService {
      *
      * @param reviewId   리뷰 ID
      * @param commentId  리뷰의 댓글 ID
+     * @param replyId    리뷰의 대댓글 ID
      * @param requestDto 대댓글 요청 내용
      * @param user       유저 정보
      * @return 리뷰 댓글의 대댓글 응답 데이터
@@ -62,6 +63,22 @@ public class ReviewReplyService {
         reply.updateReply(requestDto.getContent());
 
         return new ReplyResponseDto(reply);
+    }
+
+    /**
+     * 리뷰 댓글의 대댓글 삭제
+     *
+     * @param reviewId  리뷰 ID
+     * @param commentId 리뷰의 댓글 ID
+     * @param replyId   리뷰의 대댓글 ID
+     * @param user      유저 정보
+     */
+    public void deleteReviewReply(Long reviewId, Long commentId, Long replyId, User user) {
+        reviewService.findByReviewId(reviewId);
+        reviewCommentService.findByReviewCommentId(commentId);
+        ReviewReply reply = findByReviewReplyId(replyId);
+
+        replyRepository.delete(reply);
     }
 
     /**
