@@ -59,3 +59,7 @@ Authorization: Bearer {{accessToken}}
 DELETE {{apiUrl}}/camps/2
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
+
+### 모집글 전체 조회
+GET {{apiUrl}}/camps
+Content-Type: application/json

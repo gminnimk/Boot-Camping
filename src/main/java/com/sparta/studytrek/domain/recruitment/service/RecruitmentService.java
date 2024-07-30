@@ -9,6 +9,8 @@ import com.sparta.studytrek.domain.recruitment.entity.Recruitment;
 import com.sparta.studytrek.domain.recruitment.repository.RecruitmentRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -59,6 +61,17 @@ public class RecruitmentService {
         Recruitment recruitment = findByRecruitmentId(id);
         reqUserCheck(recruitment.getUser().getId(), user.getId());
         recruitmentRepository.delete(recruitment);
+    }
+
+    /**
+     * 모집글 전체 조회
+     *
+     * @param pageable 페이지 정보
+     * @return 모집글 전체 목록
+     */
+    public Page<RecruitmentResponseDto> getAllRecruitments(Pageable pageable) {
+        Page<Recruitment> recruitments = recruitmentRepository.findAllByOrderByCreatedAtDesc(pageable);
+        return recruitments.map(RecruitmentResponseDto::new);
     }
 
     /**

@@ -7,10 +7,13 @@ import com.sparta.studytrek.domain.recruitment.entity.Recruitment;
 import com.sparta.studytrek.domain.recruitment.service.RecruitmentService;
 import com.sparta.studytrek.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -78,7 +81,22 @@ public class RecruitmentController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    // 모집글 전체 조회
+    /**
+     * 모집글 전체 조회
+     *
+     * @param pageable 페이지 정보
+     * @return 모집글 전체 목록
+     */
+    @GetMapping
+    public ResponseEntity<ApiResponse> getAllRecruitments(Pageable pageable) {
+        Page<RecruitmentResponseDto> responseDtos = recruitmentService.getAllRecruitments(pageable);
+        ApiResponse response = ApiResponse.builder()
+            .msg("모집글 전체 조회 성공")
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(responseDtos)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
     // 모집글 단건 조회
 }
