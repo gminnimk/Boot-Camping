@@ -1,0 +1,27 @@
+### 로그인 login
+POST {{apiUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "test1234",
+  "password": "Test1234%^&"
+}
+
+> {%
+  client.global.set("accessToken", response.body.data.accessToken)
+  client.global.set("refreshToken", response.body.data.refreshToken)
+
+  console.log('Response Status:', response.body.data.accessToken);
+  console.log('Response Data:', response.body.data.refreshToken);
+%}
+
+### 질문 작성
+POST {{apiUrl}}/questions
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "title": "제목",
+  "content": "내용",
+  "category": "카테고리"
+}
