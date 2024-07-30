@@ -55,6 +55,19 @@ public class AnswerService {
         return new AnswerResponseDto(answer);
     }
 
+    /**
+     * 답변 삭제
+     *
+     * @param questionId    질문 ID
+     * @param answerId      답변 ID
+     * @param user  요청한 유저의 정보
+     */
+    public void deleteAnswer(Long questionId, Long answerId, User user) {
+        Question question = findById(questionId);
+        Answer answer = findByAnswerId(answerId);
+        answerRepository.delete(answer);
+    }
+
 
     /**
      * 질문 찾기
@@ -77,4 +90,5 @@ public class AnswerService {
         return answerRepository.findById(answerId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER));
     }
+
 }
