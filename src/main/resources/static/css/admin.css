@@ -76,7 +76,6 @@ header h1 {
     background-color: var(--header-color);
     color: var(--btn-color);
     cursor: pointer;
-    border: 1px solid #7FC8F8;
     border-radius: 5px;
     transition: background-color 0.3s;
 }
@@ -219,7 +218,6 @@ header h1 {
 .category-tab {
     padding: 10px 20px;
     cursor: pointer;
-    border: 1px solid #7FC8F8;
     background-color: var(--header-color);
     color: var(--btn-color);
     transition: background-color 0.3s;
