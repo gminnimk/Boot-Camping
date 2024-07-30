@@ -100,7 +100,7 @@ public class RecruitmentService {
      * 모집글을 작성한 유저와 해당 기능을 요청한 유저가 동일한지
      *
      * @param recruitmentUserId 모집글을 작성한 유저 ID
-     * @param userId 유저 ID
+     * @param userId            유저 ID
      */
     public void reqUserCheck(Long recruitmentUserId, Long userId) {
         if (!recruitmentUserId.equals(userId)) {

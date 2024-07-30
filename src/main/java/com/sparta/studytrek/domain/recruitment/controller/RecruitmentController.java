@@ -3,7 +3,6 @@ package com.sparta.studytrek.domain.recruitment.controller;
 import com.sparta.studytrek.common.ApiResponse;
 import com.sparta.studytrek.domain.recruitment.dto.RecruitmentRequestDto;
 import com.sparta.studytrek.domain.recruitment.dto.RecruitmentResponseDto;
-import com.sparta.studytrek.domain.recruitment.entity.Recruitment;
 import com.sparta.studytrek.domain.recruitment.service.RecruitmentService;
 import com.sparta.studytrek.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -52,8 +51,8 @@ public class RecruitmentController {
     /**
      * 모집글 수정 API
      *
-     * @param id 모집글 ID
-     * @param requestDto 모집글 수정 데이터
+     * @param id          모집글 ID
+     * @param requestDto  모집글 수정 데이터
      * @param userDetails 인증된 유저 정보
      * @return 모집글 수정 응답 데이터
      */
@@ -61,7 +60,8 @@ public class RecruitmentController {
     public ResponseEntity<ApiResponse> updateRecruitment(@PathVariable Long id,
         @RequestBody RecruitmentRequestDto requestDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        RecruitmentResponseDto responseDto = recruitmentService.updateRecruitment(id, requestDto, userDetails.getUser());
+        RecruitmentResponseDto responseDto = recruitmentService.updateRecruitment(id, requestDto,
+            userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("모집글 수정 성공")
             .statuscode(String.valueOf(HttpStatus.OK.value()))
@@ -70,9 +70,15 @@ public class RecruitmentController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    // 모집글 삭제
+    /**
+     * 모집글 삭제
+     *
+     * @param id          모집글 ID
+     * @param userDetails 요청한 유저의 정보
+     */
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> deleteRecruitment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ApiResponse> deleteRecruitment(@PathVariable Long id,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
         recruitmentService.deleteRecruitment(id, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("모집글 삭제 성공")
