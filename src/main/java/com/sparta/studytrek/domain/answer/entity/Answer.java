@@ -34,8 +34,9 @@ public class Answer extends Timestamped {
     @Column(nullable = false)
     private String content;
 
-    public Answer(AnswerRequestDto requestDto, User user){
+    public Answer(AnswerRequestDto requestDto, Question question,User user){
         this.content = requestDto.getContent();
+        this.question = question;
         this.user = user;
     }
 

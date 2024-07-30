@@ -22,6 +22,14 @@ public class AnswerController {
 
     private final AnswerService answerService;
 
+    /**
+     * 답변 작성 API
+     *
+     * @param questionId    질문 ID
+     * @param requestDto    답변 작성 데이터
+     * @param userDetails   인증된 유저 정보
+     * @return  답변 작성 응답 데이터
+     */
     @PostMapping
     public ResponseEntity<ApiResponse> createAnswer(@PathVariable("questionId") Long questionId,
         @RequestBody AnswerRequestDto requestDto,

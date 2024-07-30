@@ -98,4 +98,9 @@ public class QuestionService {
         return questionRepository.findById(id)
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_QUESTION));
     }
+
+    public Question findById(Long questionId) {
+        return questionRepository.findById(questionId)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_QUESTION));
+    }
 }
