@@ -78,6 +78,17 @@ public class QuestionService {
     }
 
     /**
+     * 리뷰 단건 조회
+     *
+     * @param id 질문 ID
+     * @return 해당 질문의 응답 데이터
+     */
+    public QuestionResponseDto getQuestion(Long id) {
+        Question question = findByQuestionId(id);
+        return new QuestionResponseDto(question);
+    }
+
+    /**
      * 질문 찾기
      *
      * @param id 질문 ID

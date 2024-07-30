@@ -103,4 +103,21 @@ public class QuestionController {
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    /**
+     * 리뷰 단건 조회
+     *
+     * @param id 질문 ID
+     * @return 해당 질문의 응답 데이터
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse> getQuestion(@PathVariable("id") Long id) {
+        QuestionResponseDto responseDto = questionService.getQuestion(id);
+        ApiResponse response = ApiResponse.builder()
+            .msg("리뷰 조회 성공")
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(responseDto)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }
