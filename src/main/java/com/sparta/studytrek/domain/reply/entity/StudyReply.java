@@ -1,6 +1,7 @@
 package com.sparta.studytrek.domain.reply.entity;
 
 import com.sparta.studytrek.domain.auth.entity.User;
+import com.sparta.studytrek.domain.study.entity.Study;
 import com.sparta.studytrek.domain.comment.entity.StudyComment;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,6 +23,10 @@ public class StudyReply {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "study_id", nullable = false)
+    private Study study;  // Study 엔티티와의 관계 추가
+
+    @ManyToOne
     @JoinColumn(name = "study_comment_id", nullable = false)
     private StudyComment studyComment;
 
@@ -32,7 +37,8 @@ public class StudyReply {
     @Column(nullable = false)
     private String content;
 
-    public StudyReply(StudyComment studyComment, User user, String content) {
+    public StudyReply(Study study, StudyComment studyComment, User user, String content) {
+        this.study = study;
         this.studyComment = studyComment;
         this.user = user;
         this.content = content;
