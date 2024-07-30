@@ -7,8 +7,6 @@ import com.sparta.studytrek.domain.answer.service.AnswerService;
 import com.sparta.studytrek.domain.question.dto.QuestionResponseDto;
 import com.sparta.studytrek.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
-import org.apache.tomcat.util.http.parser.HttpParser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -112,6 +110,25 @@ public class AnswerController {
             .msg("답변 전체 조회 성공")
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDtos)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    /**
+     * 잡변 단건 조회 API
+     *
+     * @param questionId 질문 ID
+     * @param answerId   답변 ID
+     * @return  해당 질문의 응답 데이터
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse> getAnswer(@PathVariable("questionId") Long questionId,
+        @PathVariable("answerId") Long answerId) {
+        AnswerResponseDto responseDto = answerService.getAnswer(questionId, answerId);
+        ApiResponse response = ApiResponse.builder()
+            .msg("리뷰 조회 성공")
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(responseDto)
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
