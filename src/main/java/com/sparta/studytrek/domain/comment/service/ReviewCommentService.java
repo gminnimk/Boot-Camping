@@ -60,6 +60,20 @@ public class ReviewCommentService {
     }
 
     /**
+     * 리뷰의 댓글 삭제
+     *
+     * @param reviewId   리뷰 ID
+     * @param commentId  댓글 ID
+     * @param user       유저 정보
+     */
+    public void deleteReviewComment(Long reviewId, Long commentId, User user) {
+        reviewService.findByReviewId(reviewId);
+        ReviewComment reviewComment = findByReviewCommentId(commentId);
+
+        reviewCommentRepository.delete(reviewComment);
+    }
+
+    /**
      * 댓글 찾기
      *
      * @param id 댓글 ID

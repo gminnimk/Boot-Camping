@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -65,6 +66,26 @@ public class ReviewCommentController {
             .msg("댓글 수정 성공")
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    /**
+     * 리뷰의 댓글 삭제
+     *
+     * @param reviewId    리뷰 ID
+     * @param commentId   댓글 ID
+     * @param userDetails 인증된 유저 정보
+     * @return 리뷰의 댓글 삭제 응답 데이터
+     */
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<ApiResponse> deleteReviewComment(@PathVariable Long reviewId,
+        @PathVariable Long commentId,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        reviewCommentService.deleteReviewComment(reviewId, commentId, userDetails.getUser());
+        ApiResponse response = ApiResponse.builder()
+            .msg("댓글 삭제 성공")
+            .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

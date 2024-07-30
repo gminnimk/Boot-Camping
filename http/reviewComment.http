@@ -33,4 +33,10 @@ Authorization: Bearer {{accessToken}}
   "content" : "댓글 수정"
 }
 
+### 리뷰의 댓글 삭제
+DELETE {{apiUrl}}/reviews/1/comments/2
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+
 
