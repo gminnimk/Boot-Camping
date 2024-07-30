@@ -67,6 +67,17 @@ public class QuestionService {
     }
 
     /**
+     * 질문 전체 조회
+     *
+     * @param pageable 페이지 정보
+     * @return 질문 전체 목록
+     */
+    public Page<QuestionResponseDto> getQuestions(Pageable pageable) {
+        Page<Question> questionPage = questionRepository.findByAllByOrderByCreatedAtDesc(pageable);
+        return questionPage.map(QuestionResponseDto::new);
+    }
+
+    /**
      * 질문 찾기
      *
      * @param id 질문 ID

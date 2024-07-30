@@ -86,4 +86,21 @@ public class QuestionController {
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    /**
+     * 질문 전체 조회 API
+     *
+     * @param pageable 페이지 정보
+     * @return 질문 전체 목록
+     */
+    @GetMapping
+    public ResponseEntity<ApiResponse> getQuestions(Pageable pageable) {
+        Page<QuestionResponseDto> responseDtos = questionService.getQuestions(pageable);
+        ApiResponse response = ApiResponse.builder()
+            .msg("질문 전체 조회 성공")
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(responseDtos)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }
