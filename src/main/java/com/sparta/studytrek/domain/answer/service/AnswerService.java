@@ -12,6 +12,8 @@ import com.sparta.studytrek.domain.question.entity.Question;
 import com.sparta.studytrek.domain.question.repository.QuestionRepository;
 import com.sparta.studytrek.domain.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,6 +68,17 @@ public class AnswerService {
         Question question = findById(questionId);
         Answer answer = findByAnswerId(answerId);
         answerRepository.delete(answer);
+    }
+
+    /**
+     * 답변 전체 조회
+     *
+     * @param pageable  페이지 정보
+     * @return  답변 전체 목록
+     */
+    public Page<AnswerResponseDto> getAnswers(Pageable pageable) {
+        Page<Answer> answerPage = answerRepository.findByAllByOrderByCreatedAtDesc(pageable);
+        return answerPage.map(AnswerResponseDto::new);
     }
 
 

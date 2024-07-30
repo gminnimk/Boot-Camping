@@ -4,15 +4,19 @@ import com.sparta.studytrek.common.ApiResponse;
 import com.sparta.studytrek.domain.answer.dto.AnswerRequestDto;
 import com.sparta.studytrek.domain.answer.dto.AnswerResponseDto;
 import com.sparta.studytrek.domain.answer.service.AnswerService;
+import com.sparta.studytrek.domain.question.dto.QuestionResponseDto;
 import com.sparta.studytrek.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.apache.tomcat.util.http.parser.HttpParser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -95,5 +99,21 @@ public class AnswerController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
     }
 
+    /**
+     * 답변 전체 조회 API
+     *
+     * @param pageable  페이지 정보
+     * @return  답변 전체 목록
+     */
+    @GetMapping
+    public ResponseEntity<ApiResponse> getAnswers(Pageable pageable) {
+        Page<AnswerResponseDto> responseDtos = answerService.getAnswers(pageable);
+        ApiResponse response = ApiResponse.builder()
+            .msg("답변 전체 조회 성공")
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(responseDtos)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
 }
