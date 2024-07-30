@@ -55,6 +55,18 @@ public class QuestionService {
     }
 
     /**
+     * 질문 삭제
+     *
+     * @param id   질문 ID
+     * @param user 요청한 유저의 정보
+     */
+    public void deleteQuestion(Long id, User user) {
+        Question question = findByQuestionId(id);
+
+        questionRepository.delete(question);
+    }
+
+    /**
      * 질문 찾기
      *
      * @param id 질문 ID

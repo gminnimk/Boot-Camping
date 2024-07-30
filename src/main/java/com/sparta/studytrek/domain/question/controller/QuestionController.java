@@ -68,4 +68,22 @@ public class QuestionController {
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    /**
+     * 질문 삭제 API
+     *
+     * @param id          질문 ID
+     * @param userDetails 인증된 유저 정보
+     * @return 질문 삭제 응답 데이터
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse> deleteQuestion(@PathVariable("id") Long id,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        questionService.deleteQuestion(id, userDetails.getUser());
+        ApiResponse response = ApiResponse.builder()
+            .msg("질문 삭제 성공")
+            .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }
