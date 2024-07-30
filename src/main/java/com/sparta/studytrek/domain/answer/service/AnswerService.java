@@ -7,8 +7,10 @@ import com.sparta.studytrek.domain.answer.dto.AnswerResponseDto;
 import com.sparta.studytrek.domain.answer.entity.Answer;
 import com.sparta.studytrek.domain.answer.repository.AnswerRepository;
 import com.sparta.studytrek.domain.auth.entity.User;
+import com.sparta.studytrek.domain.question.dto.QuestionResponseDto;
 import com.sparta.studytrek.domain.question.entity.Question;
 import com.sparta.studytrek.domain.question.repository.QuestionRepository;
+import com.sparta.studytrek.domain.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -79,18 +81,6 @@ public class AnswerService {
         return answerPage.map(AnswerResponseDto::new);
     }
 
-    /**
-     * 답변 단건 조회
-     *
-     * @param questionId    질문 ID
-     * @param answerId      답변 ID
-     * @return  답변 정보
-     */
-    public AnswerResponseDto getAnswer(Long questionId, Long answerId) {
-        Answer answer = answerRepository.findByQuestionIdAndId(questionId, answerId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER));
-        return new AnswerResponseDto(answer);
-    }
 
     /**
      * 질문 찾기
