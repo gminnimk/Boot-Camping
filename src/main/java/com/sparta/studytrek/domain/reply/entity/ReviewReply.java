@@ -34,6 +34,10 @@ public class ReviewReply extends Timestamped {
     @Column(nullable = false)
     private String content;
 
+    public void updateReply(String content) {
+        this.content = content;
+    }
+
     public ReviewReply(ReviewComment reviewComment, User user, ReplyRequestDto requestDto) {
         this.reviewComment = reviewComment;
         this.user = user;
