@@ -2,22 +2,34 @@ package com.sparta.studytrek.domain.auth.entity;
 
 
 import com.sparta.studytrek.common.Timestamped;
-import com.sparta.studytrek.domain.auth.entity.match.UserCamp;
+import com.sparta.studytrek.domain.auth.entity.match.CampUser;
 import com.sparta.studytrek.domain.auth.entity.match.UserStatus;
 import com.sparta.studytrek.domain.camp.entity.Camp;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "users")
 @Getter
 @NoArgsConstructor
 public class User extends Timestamped {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -46,9 +58,10 @@ public class User extends Timestamped {
     private List<UserStatus> userStatuses = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<UserCamp> userCamps = new ArrayList<>();
+    private List<CampUser> campUsers = new ArrayList<>();
 
-    public User(String username, String password, String name, String userAddr, UserType userType ,Role role) {
+    public User(String username, String password, String name, String userAddr, UserType userType,
+        Role role) {
         this.username = username;
         this.password = password;
         this.name = name;
@@ -70,15 +83,15 @@ public class User extends Timestamped {
     }
 
     public void addCamp(Camp camp) {
-        UserCamp userCamp = new UserCamp(this, camp);
-        userCamps.add(userCamp);
-        camp.getUserCamps().add(userCamp);
+        CampUser campUser = new CampUser(this, camp);
+        campUsers.add(campUser);
+        camp.getCampUsers().add(campUser);
     }
 
     public void addCamp(Camp camp, LocalDate periodStart, LocalDate periodEnd, String trek) {
-        UserCamp userCamp = new UserCamp(this, camp, periodStart, periodEnd, trek);
-        userCamps.add(userCamp);
-        camp.getUserCamps().add(userCamp);
+        CampUser campUser = new CampUser(this, camp, periodStart, periodEnd, trek);
+        campUsers.add(campUser);
+        camp.getCampUsers().add(campUser);
     }
 
     public UserStatusEnum getStatus() {
