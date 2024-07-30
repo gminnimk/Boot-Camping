@@ -86,6 +86,19 @@ public class ReviewCommentService {
     }
 
     /**
+     * 리뷰의 댓글 단건 조회
+     *
+     * @param reviewId 리뷰 ID
+     * @param commentId 댓글 ID
+     * @return 리뷰 댓글의 정보
+     */
+    public CommentResponseDto getReviewComment(Long reviewId, Long commentId) {
+        ReviewComment reviewComment = reviewCommentRepository.findByReviewIdAndId(reviewId, commentId)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW_COMMENT));
+        return new CommentResponseDto(reviewComment);
+    }
+
+    /**
      * 댓글 찾기
      *
      * @param id 댓글 ID

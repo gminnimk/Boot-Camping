@@ -96,7 +96,7 @@ public class ReviewCommentController {
     /**
      * 리뷰의 댓글 전체 조회
      *
-     * @param reviewId 리뷰 IDd
+     * @param reviewId 리뷰 ID
      * @return 리뷰 댓글 전체 목록
      */
     @GetMapping
@@ -106,6 +106,25 @@ public class ReviewCommentController {
             .msg("댓글 전체 조회 성공")
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(comments)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    /**
+     * 리뷰의 댓글 단건 조회
+     *
+     * @param reviewId  리뷰 ID
+     * @param commentId 댓글 ID
+     * @return 리뷰 댓글 단건 응답 데이터
+     */
+    @GetMapping("/{commentId}")
+    public ResponseEntity<ApiResponse> getReviewComment(@PathVariable Long reviewId,
+        @PathVariable Long commentId) {
+        CommentResponseDto responseDto = reviewCommentService.getReviewComment(reviewId, commentId);
+        ApiResponse response = ApiResponse.builder()
+            .msg("댓글 단건 조회 성공")
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(responseDto)
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
