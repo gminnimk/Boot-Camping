@@ -1,0 +1,36 @@
+### 로그인 login
+POST {{apiUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "boot12",
+  "password": "Password123!"
+}
+
+> {%
+  client.global.set("accessToken", response.body.data.accessToken)
+  client.global.set("refreshToken", response.body.data.refreshToken)
+
+  console.log('Response Status:', response.body.data.accessToken);
+  console.log('Response Data:', response.body.data.refreshToken);
+%}
+
+### 모집글 작성
+POST {{apiUrl}}/camps
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "title": "모집글 제목",
+  "process": "모집글 과정 소개글",
+  "content": "모집글 내용",
+  "place": "장소",
+  "cost": "국비",
+  "trek": "백엔드",
+  "level": "초급",
+  "classTime": "월-금 오전9시~오후6시",
+  "campStart": "2024-08-01",
+  "campEnd": "2024-08-31",
+  "recruitStart": "2024-07-01",
+  "recruitEnd": "2024-07-31"
+}
