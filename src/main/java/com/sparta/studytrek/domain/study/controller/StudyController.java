@@ -5,6 +5,7 @@ import com.sparta.studytrek.domain.study.dto.StudyRequestDto;
 import com.sparta.studytrek.domain.study.dto.StudyResponseDto;
 import com.sparta.studytrek.domain.study.service.StudyService;
 import com.sparta.studytrek.security.UserDetailsImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +31,7 @@ public class StudyController {
      */
     @PostMapping
     public ResponseEntity<ApiResponse<StudyResponseDto>> createStudy(
-        @RequestBody StudyRequestDto request,
+        @Valid @RequestBody StudyRequestDto request,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         StudyResponseDto responseDtos = studyService.createStudy(request, userDetails.getUser());
         ApiResponse<StudyResponseDto> apiResponse = ApiResponse.<StudyResponseDto>builder()
@@ -85,7 +86,7 @@ public class StudyController {
      */
     @PutMapping("/{studyId}")
     public ResponseEntity<ApiResponse<StudyResponseDto>> updateStudy(@PathVariable Long studyId,
-        @RequestBody StudyRequestDto request,
+        @Valid @RequestBody StudyRequestDto request,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         StudyResponseDto updatedStudy = studyService.updateStudy(studyId, request,
             userDetails.getUser());
