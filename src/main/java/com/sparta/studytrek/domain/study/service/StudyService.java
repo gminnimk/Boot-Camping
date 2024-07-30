@@ -128,6 +128,7 @@ public class StudyService {
             .periodExpected(study.getPeriodExpected())
             .cycle(study.getCycle())
             .createdAt(study.getCreatedAt().toString())
+            .modifiedAt(study.getModifiedAt().toString())
             .build();
     }
 }

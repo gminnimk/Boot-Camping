@@ -15,4 +15,5 @@ public class StudyResponseDto {
     private String periodExpected;
     private String cycle;
     private String createdAt;
+    private String modifiedAt;
 }
