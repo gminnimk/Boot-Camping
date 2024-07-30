@@ -55,7 +55,7 @@ public class AdminService {
 
     // 관리자가 사용자를 강제 탈퇴시키는 메서드
     @Transactional
-    public void adminWithdraw(String username, User adminUser) {
+    public void adminDelete(String username, User adminUser) {
         UserRoleEnum roleEnum = adminUser.getRole().getRole();
 
         if (!roleEnum.equals(UserRoleEnum.ADMIN)) {

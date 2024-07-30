@@ -22,10 +22,10 @@ public class AdminController {
      * @param username
      * @param adminDetails
      */
-    @PutMapping("/auth/withdraw")
-    public void adminWithdraw(@RequestParam String username,
+    @PutMapping("/auth/delete")
+    public void adminDelete(@RequestParam String username,
                               @AuthenticationPrincipal UserDetailsImpl adminDetails) {
-        adminService.adminWithdraw(username, adminDetails.getUser());
+        adminService.adminDelete(username, adminDetails.getUser());
     }
 
 }
