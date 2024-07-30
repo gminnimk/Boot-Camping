@@ -21,15 +21,12 @@ import jakarta.persistence.Table;
 import com.sparta.studytrek.domain.like.entity.StudyLike;
 import com.sparta.studytrek.domain.reply.entity.StudyReply;
 import com.sparta.studytrek.domain.study.entity.Study;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "users")
@@ -67,8 +64,6 @@ public class User extends Timestamped {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<CampUser> campUsers = new ArrayList<>();
 
-    public User(String username, String password, String name, String userAddr, UserType userType,
-        Role role) {
     // 유저와 스터디 연관관계
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Study> studies = new ArrayList<>();
@@ -79,8 +74,8 @@ public class User extends Timestamped {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudyReply> studyReplies = new ArrayList<>();
 
-
-    public User(String username, String password, String name, String userAddr, UserType userType ,Role role) {
+    public User(String username, String password, String name, String userAddr, UserType userType,
+        Role role) {
         this.username = username;
         this.password = password;
         this.name = name;
