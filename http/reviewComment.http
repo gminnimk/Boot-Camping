@@ -1,0 +1,28 @@
+### 로그인 login
+POST {{apiUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "user12",
+  "password": "Password123!"
+}
+
+> {%
+  client.global.set("accessToken", response.body.data.accessToken)
+  client.global.set("refreshToken", response.body.data.refreshToken)
+
+  console.log('Response Status:', response.body.data.accessToken);
+  console.log('Response Data:', response.body.data.refreshToken);
+%}
+
+### 리뷰의 댓글 작성
+POST {{apiUrl}}/reviews/1/comments
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "content" : "댓글 작성"
+}
+
+
+
