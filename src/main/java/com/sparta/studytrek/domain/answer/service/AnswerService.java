@@ -13,6 +13,7 @@ import com.sparta.studytrek.domain.question.repository.QuestionRepository;
 import com.sparta.studytrek.domain.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +39,24 @@ public class AnswerService {
     }
 
     /**
+     * 답변 수정
+     *
+     * @param questionId    질문 ID
+     * @param answerId      답변 ID
+     * @param requestDto    답변 수정 요청 데이터
+     * @param user  요청한 유저의 정보
+     * @return  답변 응답 데이터
+     */
+    @Transactional
+    public AnswerResponseDto updateAnswer(Long questionId, Long answerId, AnswerRequestDto requestDto, User user) {
+        Question question = findById(questionId);
+        Answer answer = findByAnswerId(answerId);
+        answer.update(requestDto);
+        return new AnswerResponseDto(answer);
+    }
+
+
+    /**
      * 질문 찾기
      *
      * @param questionId    질문 ID
@@ -46,5 +65,16 @@ public class AnswerService {
     private Question findById(Long questionId) {
         return questionRepository.findById(questionId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_QUESTION));
+    }
+
+    /**
+     * 답변 찾기
+     *
+     * @param answerId  답변 ID
+     * @return  해당 답변의 정보
+     */
+    private Answer findByAnswerId(Long answerId) {
+        return answerRepository.findById(answerId)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER));
     }
 }

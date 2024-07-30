@@ -40,6 +40,10 @@ public class Answer extends Timestamped {
         this.user = user;
     }
 
+    public void update(AnswerRequestDto requestDto){
+        this.content = requestDto.getContent();
+    }
+
     public Answer(Question question, User user, String content) {
         this.question = question;
         this.user = user;

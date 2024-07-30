@@ -42,7 +42,10 @@ public enum ErrorCode {
     NOTFOUND_CAMP_USER(HttpStatus.BAD_REQUEST, "해당 캠프에 참가한 이력이 존재하지 않습니다."),
 
     //Question
-    NOTFOUND_QUESTION(HttpStatus.BAD_REQUEST, "해당 질문은 존재하지 않습니다.");
+    NOTFOUND_QUESTION(HttpStatus.BAD_REQUEST, "해당 질문은 존재하지 않습니다."),
+
+    //Answer
+    NOTFOUND_ANSWER(HttpStatus.BAD_REQUEST, "해당 답변은 존재하지 않습니다.");
 
     private HttpStatus httpStatus;
     private String msg;
