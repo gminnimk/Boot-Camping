@@ -75,6 +75,17 @@ public class RecruitmentService {
     }
 
     /**
+     * 모집글 단건 조회
+     *
+     * @param id 모집글 ID
+     * @return 해당 모집글의 응답 데이터
+     */
+    public RecruitmentResponseDto getRecruitment(Long id) {
+        Recruitment recruitment = findByRecruitmentId(id);
+        return new RecruitmentResponseDto(recruitment);
+    }
+
+    /**
      * 모집글 찾기
      *
      * @param id 모집글 ID

@@ -98,5 +98,20 @@ public class RecruitmentController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    // 모집글 단건 조회
+    /**
+     * 모집글 단건 조회 API
+     *
+     * @param id 모집글 ID
+     * @return 해당 모집글의 응답 데이터
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse> getRecruitment(@PathVariable Long id) {
+        RecruitmentResponseDto responseDto = recruitmentService.getRecruitment(id);
+        ApiResponse response = ApiResponse.builder()
+            .msg("모집글 단건 조회 성공")
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(responseDto)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }

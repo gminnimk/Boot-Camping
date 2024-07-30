@@ -63,3 +63,7 @@ Authorization: Bearer {{accessToken}}
 ### 모집글 전체 조회
 GET {{apiUrl}}/camps
 Content-Type: application/json
+
+### 모집글 단건 조회
+GET {{apiUrl}}/camps/3
+Content-Type: application/json
