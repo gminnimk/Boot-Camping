@@ -42,7 +42,10 @@ public enum ErrorCode {
     NOTFOUND_CAMP_USER(HttpStatus.BAD_REQUEST, "해당 캠프에 참가한 이력이 존재하지 않습니다."),
 
     // Comment
-    NOTFOUND_REVIEW_COMMENT(HttpStatus.BAD_REQUEST, "해당 댓글은 존재하지 않습니다.");
+    NOTFOUND_REVIEW_COMMENT(HttpStatus.BAD_REQUEST, "해당 댓글은 존재하지 않습니다."),
+
+    // Reply
+    NOTFOUND_REVIEW_REPLY(HttpStatus.BAD_REQUEST, "해당 대댓글은 존재하지 않습니다.");
 
     private HttpStatus httpStatus;
     private String msg;
