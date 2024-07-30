@@ -6,6 +6,7 @@ import com.sparta.studytrek.domain.reply.dto.ReplyResponseDto;
 import com.sparta.studytrek.domain.reply.service.ReviewReplyService;
 import com.sparta.studytrek.security.UserDetailsImpl;
 import java.util.List;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -108,6 +109,26 @@ public class ReviewReplyController {
             .msg("대댓글 전체 조회 성공")
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(replys)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    /**
+     * 리뷰 댓글의 대댓글 단건 조회
+     *
+     * @param reviewId
+     * @param commentId
+     * @param replyId
+     * @return
+     */
+    @GetMapping("/{replyId}")
+    public ResponseEntity<ApiResponse> getReviewReply(@PathVariable Long commentId,
+        @PathVariable Long replyId) {
+        ReplyResponseDto responseDto = reviewReplyService.getReviewReply(commentId, replyId);
+        ApiResponse response = ApiResponse.builder()
+            .msg("대댓글 단건 조회 성공")
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(responseDto)
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

@@ -94,6 +94,19 @@ public class ReviewReplyService {
     }
 
     /**
+     * 리뷰 댓글의 대댓글 단건 조회
+     *
+     * @param commentId 댓글 ID
+     * @param replyId 대댓글 ID
+     * @return 리뷰 댓글의 대댓글 정보
+     */
+    public ReplyResponseDto getReviewReply(Long commentId, Long replyId) {
+        ReviewReply reviewReply = replyRepository.findByReviewCommentIdAndId(commentId, replyId)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW_REPLY));
+        return new ReplyResponseDto(reviewReply);
+    }
+
+    /**
      * 대댓글 찾기
      *
      * @param id 대댓글 ID
