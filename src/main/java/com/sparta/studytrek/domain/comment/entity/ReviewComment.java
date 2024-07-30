@@ -31,9 +31,12 @@ public class ReviewComment extends Timestamped {
     @Column(nullable = false)
     private String content;  // 댓글 내용
 
-
     @OneToMany(mappedBy = "reviewComment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewReply> replies = new ArrayList<>();
+
+    public void updateComment(String content) {
+        this.content = content;
+    }
 
     public ReviewComment(Review review, User user, CommentRequestDto requestDto) {
         this.review = review;

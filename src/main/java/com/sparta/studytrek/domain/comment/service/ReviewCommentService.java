@@ -40,12 +40,32 @@ public class ReviewCommentService {
     }
 
     /**
+     * 리뷰의 댓글 수정
+     *
+     * @param reviewId   리뷰 ID
+     * @param commentId  댓글 ID
+     * @param requestDto 댓글 요청 내용
+     * @param user       유저 정보
+     * @return 리뷰의 댓글 응답 데이터
+     */
+    @Transactional
+    public CommentResponseDto updateReviewComment(Long reviewId, Long commentId,
+        CommentRequestDto requestDto, User user) {
+        reviewService.findByReviewId(reviewId);
+
+        ReviewComment reviewComment = findByReviewCommentId(commentId);
+        reviewComment.updateComment(requestDto.getContent());
+
+        return new CommentResponseDto(reviewComment);
+    }
+
+    /**
      * 댓글 찾기
      *
      * @param id 댓글 ID
      * @return 해당 댓글의 정보
      */
-    public ReviewComment findByCommentId(Long id) {
+    public ReviewComment findByReviewCommentId(Long id) {
         return reviewCommentRepository.findById(id)
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW_COMMENT));
     }
