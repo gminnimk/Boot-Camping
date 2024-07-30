@@ -1,5 +1,26 @@
 document.addEventListener("DOMContentLoaded", function() {
     fetchProfiles();
+
+    const profileStatus = localStorage.getItem('profileStatus');
+    if (profileStatus) {
+        Swal.fire({
+            toast: true,
+            position: 'center',
+            icon: 'success',
+            title: profileStatus === 'edited' ? '프로필이 수정되었습니다.' : '프로필이 등록되었습니다.',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            },
+            customClass: {
+                title: 'black-text'
+            }
+        });
+        localStorage.removeItem('profileStatus');
+    }
 });
 
 const modal = document.getElementById("bootcampModal");
@@ -124,45 +145,12 @@ form.addEventListener("submit", function(e) {
             console.log("성공:", data);
             if (isEditing) {
                 updateCardInDOM(currentEditingProfileId, profileData);
-                Swal.fire({
-                    toast: true,
-                    position: 'center',
-                    icon: 'success',
-                    title: '프로필이 수정되었습니다.',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer);
-                        toast.addEventListener('mouseleave', Swal.resumeTimer);
-                    },
-                    customClass: {
-                        title: 'black-text'
-                    }
-                });
+                localStorage.setItem('profileStatus', 'edited');
             } else {
                 addCardToDOM(data);
-                Swal.fire({
-                    toast: true,
-                    position: 'center',
-                    icon: 'success',
-                    title: '프로필이 등록되었습니다.',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer);
-                        toast.addEventListener('mouseleave', Swal.resumeTimer);
-                    },
-                    customClass: {
-                        title: 'black-text'
-                    }
-                });
+                localStorage.setItem('profileStatus', 'registered');
             }
-            modal.style.display = "none";
-            form.reset();
-            techStackButtons.forEach(button => button.classList.remove("selected"));
-            certificatePreview.style.display = "none";
+            window.location.reload(); // 페이지 새로고침
         })
         .catch((error) => {
             console.error("에러:", error);
