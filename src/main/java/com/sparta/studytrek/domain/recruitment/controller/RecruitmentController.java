@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -67,6 +68,15 @@ public class RecruitmentController {
     }
 
     // 모집글 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse> deleteRecruitment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        recruitmentService.deleteRecruitment(id, userDetails.getUser());
+        ApiResponse response = ApiResponse.builder()
+            .msg("모집글 삭제 성공")
+            .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
     // 모집글 전체 조회
 

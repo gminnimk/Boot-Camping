@@ -50,6 +50,18 @@ public class RecruitmentService {
     }
 
     /**
+     * 모집글 삭제
+     *
+     * @param id   모집글 ID
+     * @param user 요청한 유저의 정보
+     */
+    public void deleteRecruitment(Long id, User user) {
+        Recruitment recruitment = findByRecruitmentId(id);
+        reqUserCheck(recruitment.getUser().getId(), user.getId());
+        recruitmentRepository.delete(recruitment);
+    }
+
+    /**
      * 모집글 찾기
      *
      * @param id 모집글 ID

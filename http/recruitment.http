@@ -54,3 +54,8 @@ Authorization: Bearer {{accessToken}}
   "recruitStart": "2024-08-01",
   "recruitEnd": "2024-08-31"
 }
+
+### 모집글 삭제
+DELETE {{apiUrl}}/camps/2
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
