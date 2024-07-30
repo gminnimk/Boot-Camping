@@ -86,7 +86,7 @@ public class ReviewReplyService {
      * @return 리뷰 댓글의 대댓글 목록
      */
     public List<ReplyResponseDto> getAllReviewReply(Long commentId) {
-        List<ReviewReply> reviewReplies = replyRepository.findByReviewCommentId(commentId);
+        List<ReviewReply> reviewReplies = replyRepository.findByReviewCommentIdOrderByCreatedAtDesc(commentId);
         return reviewReplies.stream().map(ReplyResponseDto::new).toList();
     }
 

@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ReviewReplyRepository extends JpaRepository<ReviewReply, Long> {
-    List<ReviewReply> findByReviewCommentId(Long commentId);
+    List<ReviewReply> findByReviewCommentIdOrderByCreatedAtDesc(Long commentId);
     Optional<ReviewReply> findByReviewCommentIdAndId(Long commentId, Long replyId);
 }
