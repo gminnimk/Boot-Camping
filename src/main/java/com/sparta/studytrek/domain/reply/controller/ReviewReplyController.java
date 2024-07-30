@@ -3,14 +3,15 @@ package com.sparta.studytrek.domain.reply.controller;
 import com.sparta.studytrek.common.ApiResponse;
 import com.sparta.studytrek.domain.reply.dto.ReplyRequestDto;
 import com.sparta.studytrek.domain.reply.dto.ReplyResponseDto;
-import com.sparta.studytrek.domain.reply.entity.ReviewReply;
 import com.sparta.studytrek.domain.reply.service.ReviewReplyService;
 import com.sparta.studytrek.security.UserDetailsImpl;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -90,6 +91,23 @@ public class ReviewReplyController {
         ApiResponse response = ApiResponse.builder()
             .msg("대댓글 삭제 성공")
             .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    /**
+     * 리뷰 댓글의 대댓글 전체 조회
+     *
+     * @param commentId 댓글 ID
+     * @return 리뷰 댓글의 대댓글 전체 목록
+     */
+    @GetMapping
+    public ResponseEntity<ApiResponse> getAllReviewReply(@PathVariable Long commentId) {
+        List<ReplyResponseDto> replys = reviewReplyService.getAllReviewReply(commentId);
+        ApiResponse response = ApiResponse.builder()
+            .msg("대댓글 전체 조회 성공")
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(replys)
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

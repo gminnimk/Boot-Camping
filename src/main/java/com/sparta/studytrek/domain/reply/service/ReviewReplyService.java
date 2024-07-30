@@ -11,6 +11,7 @@ import com.sparta.studytrek.domain.reply.entity.ReviewReply;
 import com.sparta.studytrek.domain.reply.repository.ReviewReplyRepository;
 import com.sparta.studytrek.domain.review.service.ReviewService;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -79,6 +80,17 @@ public class ReviewReplyService {
         ReviewReply reply = findByReviewReplyId(replyId);
 
         replyRepository.delete(reply);
+    }
+
+    /**
+     * 리뷰 댓글의 대댓글 전체 조회
+     *
+     * @param commentId  리뷰의 댓글 ID
+     * @return 리뷰 댓글의 대댓글 목록
+     */
+    public List<ReplyResponseDto> getAllReviewReply(Long commentId) {
+        List<ReviewReply> reviewReplies = replyRepository.findByReviewCommentId(commentId);
+        return reviewReplies.stream().map(ReplyResponseDto::new).toList();
     }
 
     /**
