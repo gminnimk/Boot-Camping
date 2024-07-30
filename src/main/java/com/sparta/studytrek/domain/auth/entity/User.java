@@ -5,6 +5,9 @@ import com.sparta.studytrek.common.Timestamped;
 import com.sparta.studytrek.domain.auth.entity.match.UserCamp;
 import com.sparta.studytrek.domain.auth.entity.match.UserStatus;
 import com.sparta.studytrek.domain.camp.entity.Camp;
+import com.sparta.studytrek.domain.like.entity.StudyLike;
+import com.sparta.studytrek.domain.reply.entity.StudyReply;
+import com.sparta.studytrek.domain.study.entity.Study;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,6 +50,17 @@ public class User extends Timestamped {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<UserCamp> userCamps = new ArrayList<>();
+
+    // 유저와 스터디 연관관계
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Study> studies = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudyLike> studyLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudyReply> studyReplies = new ArrayList<>();
+
 
     public User(String username, String password, String name, String userAddr, UserType userType ,Role role) {
         this.username = username;
