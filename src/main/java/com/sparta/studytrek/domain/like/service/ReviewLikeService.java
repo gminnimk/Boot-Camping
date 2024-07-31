@@ -37,4 +37,15 @@ public class ReviewLikeService {
         ReviewLike saveReviewLike = reviewLikeRepository.save(reviewLike);
         return reviewLikeRepository.countLikeById(reviewId);
     }
+
+    public int reviewUnlike(Long reviewId, User user) {
+        Review review = reviewRepository.findById(reviewId)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW));
+
+        ReviewLike reviewLike = reviewLikeRepository.findByIdAndUserId(reviewId, user.getId())
+            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_LIKE));
+
+        reviewLikeRepository.delete(reviewLike);
+        return reviewLikeRepository.countLikeById(reviewId);
+    }
 }

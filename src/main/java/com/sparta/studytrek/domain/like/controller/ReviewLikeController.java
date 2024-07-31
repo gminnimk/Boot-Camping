@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,19 @@ public class ReviewLikeController {
         int reviewAllLike = reviewLikeService.reviewLike(reviewId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("해당 리뷰에 좋아요 성공 : "  + reviewAllLike)
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<ApiResponse> reviewUnlike(@PathVariable Long campId,
+        @PathVariable Long reviewId,
+        @AuthenticationPrincipal UserDetailsImpl userDetails){
+
+        int reviewAllLike = reviewLikeService.reviewUnlike(reviewId, userDetails.getUser());
+        ApiResponse response = ApiResponse.builder()
+            .msg("해당 리뷰에 좋아요 취소 성공 : "  + reviewAllLike)
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);

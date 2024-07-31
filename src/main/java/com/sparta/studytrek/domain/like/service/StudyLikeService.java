@@ -35,4 +35,16 @@ public class StudyLikeService {
 
         return studyLikeRepository.countLikeById(studyId);
     }
+
+    @Transactional
+    public int studyUnlike(Long studyId, User user) {
+        Study study = studyRepository.findById(studyId)
+            .orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
+
+        StudyLike studyLike = studyLikeRepository.findByIdAndUserId(studyId, user.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_LIKE));
+
+        studyLikeRepository.delete(studyLike);
+        return studyLikeRepository.countLikeById(studyId);
+    }
 }

@@ -34,4 +34,15 @@ public class RecruitmentLikeService {
         RecruitmentLike saveRecruitmentLike = recruitmentLikeRepository.save(recruitmentLike);
         return recruitmentLikeRepository.countLikeById(campId);
     }
+
+    public int recruitUnlike(Long campId, User user) {
+        Recruitment recruitment = recruitmentRepository.findById(campId)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_RECRUITMENT));
+
+        RecruitmentLike recruitmentLike = recruitmentLikeRepository.findByIdAndUserId(campId, user.getId())
+            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_LIKE));
+
+        recruitmentLikeRepository.delete(recruitmentLike);
+        return recruitmentLikeRepository.countLikeById(campId);
+    }
 }
