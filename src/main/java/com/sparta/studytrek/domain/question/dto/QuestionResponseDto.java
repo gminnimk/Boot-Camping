@@ -2,7 +2,9 @@ package com.sparta.studytrek.domain.question.dto;
 
 import com.sparta.studytrek.domain.question.entity.Question;
 import java.time.LocalDateTime;
+import lombok.Getter;
 
+@Getter
 public class QuestionResponseDto {
 
     private String title;

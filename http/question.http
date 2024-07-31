@@ -25,3 +25,29 @@ Authorization: Bearer {{accessToken}}
   "content": "내용",
   "category": "카테고리"
 }
+
+### 질문 전체 조회
+GET {{apiUrl}}/questions
+Content-Type: application/json
+
+
+### 질문 단건 조회
+GET {{apiUrl}}/questions/1
+Content-Type: application/json
+
+
+### 질문 수정
+PUT {{apiUrl}}/questions/1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "title": "수정된 제목",
+  "content": "수정된 내용",
+  "category": "수정된 카테고리"
+}
+
+### 질문 삭제
+DELETE {{apiUrl}}/questions/1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}

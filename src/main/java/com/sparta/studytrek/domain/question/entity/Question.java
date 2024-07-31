@@ -29,9 +29,6 @@ public class Question extends Timestamped {
     @Column(nullable = false)
     private String category;
 
-    @Column(nullable = false)
-    private String open;
-
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -52,10 +49,9 @@ public class Question extends Timestamped {
         this.category = requestDto.getCategory();
     }
 
-    public Question(String title, String content, String open, User user) {
+    public Question(String title, String content, User user) {
         this.title = title;
         this.content = content;
-        this.open = open;
         this.user = user;
     }
 }

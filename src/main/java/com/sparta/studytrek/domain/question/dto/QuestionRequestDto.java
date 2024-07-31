@@ -14,7 +14,7 @@ public class QuestionRequestDto {
     @NotBlank(message = "내용은 필수 입력입니다.")
     private String content;
 
-    @NotBlank(message = "카테고리 선택으 필수 입니다.")
+    @NotBlank(message = "카테고리 선택은 필수 입니다.")
     private String category;
 
 }
