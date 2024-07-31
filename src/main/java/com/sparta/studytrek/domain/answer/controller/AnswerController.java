@@ -6,6 +6,7 @@ import com.sparta.studytrek.domain.answer.dto.AnswerResponseDto;
 import com.sparta.studytrek.domain.answer.service.AnswerService;
 import com.sparta.studytrek.domain.question.dto.QuestionResponseDto;
 import com.sparta.studytrek.security.UserDetailsImpl;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.apache.tomcat.util.http.parser.HttpParser;
@@ -102,16 +103,16 @@ public class AnswerController {
     /**
      * 답변 전체 조회 API
      *
-     * @param pageable  페이지 정보
+     * @param questionId  질문 ID
      * @return  답변 전체 목록
      */
     @GetMapping
-    public ResponseEntity<ApiResponse> getAnswers(Pageable pageable) {
-        Page<AnswerResponseDto> responseDtos = answerService.getAnswers(pageable);
+    public ResponseEntity<ApiResponse> getAnswers(@PathVariable Long questionId) {
+        List<AnswerResponseDto> answers = answerService.getAnswers(questionId);
         ApiResponse response = ApiResponse.builder()
             .msg("답변 전체 조회 성공")
             .statuscode(String.valueOf(HttpStatus.OK.value()))
-            .data(responseDtos)
+            .data(answers)
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -129,7 +130,7 @@ public class AnswerController {
 
         AnswerResponseDto responseDto = answerService.getAnswer(questionId, answerId);
         ApiResponse response = ApiResponse.builder()
-            .msg("답변 조회 성공")
+            .msg("답변 단건 조회 성공")
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();
