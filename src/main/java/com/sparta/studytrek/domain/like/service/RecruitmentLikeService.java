@@ -20,29 +20,30 @@ public class RecruitmentLikeService {
     private final RecruitmentRepository recruitmentRepository;
 
     @Transactional
-    public int recruitLike(Long campId, User user) {
-        Recruitment recruitment = recruitmentRepository.findById(campId)
+    public int recruitLike(Long recruitmentId, User user) {
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_RECRUITMENT));
 
-        Optional<RecruitmentLike> existingLike = recruitmentLikeRepository.findByIdAndUserId(campId, user.getId());
+        Optional<RecruitmentLike> existingLike = recruitmentLikeRepository.findByRecruitmentIdAndUserId(recruitmentId, user.getId());
 
         if(existingLike.isPresent()){
             throw new CustomException(ErrorCode.ALREADY_LIKE);
         }
 
         RecruitmentLike recruitmentLike = new RecruitmentLike(recruitment, user);
-        RecruitmentLike saveRecruitmentLike = recruitmentLikeRepository.save(recruitmentLike);
-        return recruitmentLikeRepository.countLikeById(campId);
+        recruitmentLikeRepository.save(recruitmentLike);
+        return recruitmentLikeRepository.countLikeByRecruitmentId(recruitmentId);
     }
 
-    public int recruitUnlike(Long campId, User user) {
-        Recruitment recruitment = recruitmentRepository.findById(campId)
+    @Transactional
+    public int recruitUnlike(Long recruitmentId, User user) {
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_RECRUITMENT));
 
-        RecruitmentLike recruitmentLike = recruitmentLikeRepository.findByIdAndUserId(campId, user.getId())
+        RecruitmentLike recruitmentLike = recruitmentLikeRepository.findByRecruitmentIdAndUserId(recruitmentId, user.getId())
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_LIKE));
 
         recruitmentLikeRepository.delete(recruitmentLike);
-        return recruitmentLikeRepository.countLikeById(campId);
+        return recruitmentLikeRepository.countLikeByRecruitmentId(recruitmentId);
     }
 }

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RecruitmentLikeRepository extends JpaRepository<RecruitmentLike, Long> {
-    Optional<RecruitmentLike> findByIdAndUserId(Long campId, Long id);
-
-    int countLikeById(Long campId);
+    Optional<RecruitmentLike> findByRecruitmentIdAndUserId(Long recruitmentId, Long userId);
+    int countLikeByRecruitmentId(Long campId);
 }

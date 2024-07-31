@@ -16,16 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/camps/{campId}/likes")
+@RequestMapping("/api/recruiments/{recruitmentId}/likes")
 public class RecruitmentLikeController {
 
     private final RecruitmentLikeService recruitmentLikeService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse> recruitLike(@PathVariable Long campId,
+    public ResponseEntity<ApiResponse> recruitLike(@PathVariable Long recruitmentId,
         @AuthenticationPrincipal UserDetailsImpl userDetails){
 
-        int recruitAllLike = recruitmentLikeService.recruitLike(campId, userDetails.getUser());
+        int recruitAllLike = recruitmentLikeService.recruitLike(recruitmentId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("해당 부트캠프 모집글에 좋아요 성공 : "  + recruitAllLike)
             .statuscode(String.valueOf(HttpStatus.OK.value()))
@@ -34,12 +34,12 @@ public class RecruitmentLikeController {
     }
 
     @DeleteMapping
-    public ResponseEntity<ApiResponse> recruitUnlike(@PathVariable Long campId,
+    public ResponseEntity<ApiResponse> recruitUnlike(@PathVariable Long recruitmentId,
         @AuthenticationPrincipal UserDetailsImpl userDetails){
 
-        int recruitAllLike = recruitmentLikeService.recruitUnlike(campId, userDetails.getUser());
+        int recruitAllLike = recruitmentLikeService.recruitUnlike(recruitmentId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("해당 부트캠프 모집글에 좋아요 성공 : "  + recruitAllLike)
+            .msg("해당 부트캠프 모집글에 좋아요 취소 성공 : "  + recruitAllLike)
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);

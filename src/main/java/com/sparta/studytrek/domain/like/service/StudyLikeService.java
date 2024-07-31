@@ -24,16 +24,16 @@ public class StudyLikeService {
         Study study = studyRepository.findById(studyId)
             .orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
 
-        Optional<StudyLike> existingLike = studyLikeRepository.findByIdAndUserId(studyId, user.getId());
+        Optional<StudyLike> existingLike = studyLikeRepository.findByStudyIdAndUserId(studyId, user.getId());
 
         if (existingLike.isPresent()) {
             throw new CustomException(ErrorCode.ALREADY_LIKE);
         }
 
         StudyLike studyLike = new StudyLike(study, user);
-        StudyLike saveStudyLike = studyLikeRepository.save(studyLike);
+        studyLikeRepository.save(studyLike);
 
-        return studyLikeRepository.countLikeById(studyId);
+        return studyLikeRepository.countLikeByStudyId(studyId);
     }
 
     @Transactional
@@ -41,10 +41,10 @@ public class StudyLikeService {
         Study study = studyRepository.findById(studyId)
             .orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
 
-        StudyLike studyLike = studyLikeRepository.findByIdAndUserId(studyId, user.getId())
+        StudyLike studyLike = studyLikeRepository.findByStudyIdAndUserId(studyId, user.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_LIKE));
 
         studyLikeRepository.delete(studyLike);
-        return studyLikeRepository.countLikeById(studyId);
+        return studyLikeRepository.countLikeByStudyId(studyId);
     }
 }
