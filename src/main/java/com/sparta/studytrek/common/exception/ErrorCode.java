@@ -50,7 +50,7 @@ public enum ErrorCode {
     STUDY_UPDATE_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "해당 스터디 모집글을 수정할 권한이 없습니다."),
     STUDY_DELETE_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "해당 스터디 모집글을 삭제할 권한이 없습니다."),
   
-    NOTFOUND_CAMP_USER(HttpStatus.BAD_REQUEST, "해당 캠프에 참가한 이력이 존재하지 않습니다."),
+    // NOTFOUND_CAMP_USER(HttpStatus.BAD_REQUEST, "해당 캠프에 참가한 이력이 존재하지 않습니다."),
 
     //Question
     NOTFOUND_QUESTION(HttpStatus.BAD_REQUEST, "해당 질문은 존재하지 않습니다."),

@@ -43,6 +43,7 @@ public class AnswerController {
     public ResponseEntity<ApiResponse> createAnswer(@PathVariable("questionId") Long questionId,
         @RequestBody AnswerRequestDto requestDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
         AnswerResponseDto responseDto = answerService.createAnswer(questionId, requestDto,
             userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
@@ -107,6 +108,7 @@ public class AnswerController {
      */
     @GetMapping
     public ResponseEntity<ApiResponse> getAnswers(Pageable pageable) {
+
         Page<AnswerResponseDto> responseDtos = answerService.getAnswers(pageable);
         ApiResponse response = ApiResponse.builder()
             .msg("답변 전체 조회 성공")
@@ -116,4 +118,23 @@ public class AnswerController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    /**
+     * 답변 단건 조회API
+     *
+     * @param questionId    질문 ID
+     * @param answerId      답변 ID
+     * @return  해당 답변의 응답 데이터
+     */
+    @GetMapping("{answerId}")
+    public ResponseEntity<ApiResponse> getAnswer(@PathVariable("questionId") Long questionId,
+        @PathVariable("answerId") Long answerId){
+
+        AnswerResponseDto responseDto = answerService.getAnswer(questionId, answerId);
+        ApiResponse response = ApiResponse.builder()
+            .msg("답변 조회 성공")
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(responseDto)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }
