@@ -2,6 +2,7 @@ const reviewsPerPage = 9;  // 한 페이지당 개수
 let currentPage = 1;
 let totalReviews = 0;
 let totalPages = 0;
+const accessToken = localStorage.getItem('accessToken');
 
 // API에서 리뷰 데이터를 가져오는 함수
 function fetchReviews() {
@@ -151,9 +152,15 @@ function addHeartButtonListeners() {
     });
 }
 
+
 function addReview() {
-    const addUrl = document.querySelector('.write-review-button').getAttribute('review-add-url');
-    window.location.href = addUrl;
+    if (!accessToken) {
+        alert('로그인이 필요합니다.');
+        window.location.href = '/auth';
+    } else {
+        const addUrl = document.querySelector('.write-review-button').getAttribute('review-add-url');
+        window.location.href = addUrl;
+    }
 }
 
 // 초기 페이지 렌더링
