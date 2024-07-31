@@ -17,7 +17,7 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### 답변 삭제
-DELETE {{apiUrl}}/questions/2/answers/6
+DELETE {{apiUrl}}/questions/2/answers/8
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 

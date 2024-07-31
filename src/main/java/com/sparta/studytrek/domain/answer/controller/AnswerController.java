@@ -97,7 +97,7 @@ public class AnswerController {
             .msg("답변 삭제 성공")
             .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
             .build();
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     /**
