@@ -22,4 +22,9 @@ public class StudyLike {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id", nullable = false)
     private Study study;
+
+    public StudyLike(Study study, User user) {
+        this.study = study;
+        this.user = user;
+    }
 }
