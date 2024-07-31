@@ -121,46 +121,12 @@
             </div>
 
             <!-- 댓글 영역 -->
+            <div class="add-comment">
+                <input type="text" placeholder="댓글을 입력하세요..." id="commentInput">
+                <button onclick="addComment()">댓글 등록</button>
+            </div>
             <div class="comments-section">
-                <h3>댓글</h3>
-                <div class="add-comment">
-                    <input type="text" placeholder="댓글을 입력하세요..." id="commentInput">
-                    <button onclick="addComment()">댓글 등록</button>
-                </div>
-                <div class="comment" id="comment1">
-                    <div class="comment-header">
-                        <div class="comment-author">Sarah K.</div>
-                        <div class="comment-date">2023-04-15</div>
-                    </div>
-                    <div class="comment-content">저도 Pine Valley Campground에 다녀왔는데 정말 좋았어요! 직원들의 친절함이 인상적이었죠. 다음에 또 가고 싶네요.</div>
-                    <div class="comment-actions">
-                        <button class="reply-button" onclick="showReplyForm('comment1')">답글</button>
-                        <button class="edit-button" onclick="editComment('comment1')">수정</button>
-                        <button class="delete-button" onclick="deleteComment('comment1')">삭제</button>
-                    </div>
-                    <div class="reply-form">
-                        <input type="text" placeholder="답글을 입력하세요...">
-                        <button onclick="addReply('comment1')">답글 등록</button>
-                    </div>
-                    <div class="replies"></div>
-                </div>
-                <div class="comment" id="comment2">
-                    <div class="comment-header">
-                        <div class="comment-author">John D.</div>
-                        <div class="comment-date">2023-04-16</div>
-                    </div>
-                    <div class="comment-content">하이킹 트레일에 대해 자세히 설명해주셔서 감사합니다. 다음 달에 방문할 예정인데, 기대가 되네요!</div>
-                    <div class="comment-actions">
-                        <button class="reply-button" onclick="showReplyForm('comment2')">답글</button>
-                        <button class="edit-button" onclick="editComment('comment2')">수정</button>
-                        <button class="delete-button" onclick="deleteComment('comment2')">삭제</button>
-                    </div>
-                    <div class="reply-form">
-                        <input type="text" placeholder="답글을 입력하세요...">
-                        <button onclick="addReply('comment2')">답글 등록</button>
-                    </div>
-                    <div class="replies"></div>
-                </div>
+                <!-- 댓글이 여기에 삽입됩니다 -->
             </div>
         </div>
     </div>

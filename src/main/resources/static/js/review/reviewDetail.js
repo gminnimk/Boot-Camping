@@ -1,11 +1,10 @@
-let currentReviewId;
-
 document.addEventListener('DOMContentLoaded', function() {
     const pathSegments = window.location.pathname.split('/');
     currentReviewId = pathSegments[pathSegments.length - 1]; // URL에서 리뷰 ID 추출
 
     if (currentReviewId) {
         fetchReviewDetails(currentReviewId);
+        fetchComments(currentReviewId); // 댓글을 가져오는 함수 호출
     } else {
         console.error('리뷰 ID가 제공되지 않았습니다.');
     }
@@ -262,6 +261,97 @@ function addHeartButtonListeners() {
         });
     });
 }
+
+// 댓글을 가져오는 함수
+function fetchComments(reviewId) {
+    fetch(`/api/reviews/${reviewId}/comments`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.statuscode === "200") {
+            displayComments(data.data);
+        } else {
+            console.error('댓글 조회 에러:', data.msg);
+        }
+    })
+    .catch(error => console.error('API 호출 중 에러 발생:', error));
+}
+
+
+// 댓글을 화면에 표시하는 함수
+function displayComments(comments) {
+    const commentsSection = document.querySelector('.comments-section');
+    commentsSection.innerHTML = ''; // 기존 댓글 제거
+
+    comments.forEach(comment => {
+        const commentElement = document.createElement('div');
+        commentElement.className = 'comment';
+        commentElement.id = `comment${comment.id}`;
+        commentElement.innerHTML = `
+            <div class="comment-header">
+                <div class="comment-author">${comment.author || '익명 사용자'}</div>
+                <div class="comment-date">${new Date(comment.createdAt).toISOString().split('T')[0]}</div>
+            </div>
+            <div class="comment-content">${comment.content}</div>
+            <div class="comment-actions">
+                <button class="reply-button" onclick="showReplyForm('${comment.id}')">답글</button>
+                <button class="edit-button" onclick="editComment('${comment.id}')">수정</button>
+                <button class="delete-button" onclick="deleteComment('${comment.id}')">삭제</button>
+            </div>
+            <div class="reply-form" style="display: none;">
+                <input type="text" placeholder="답글을 입력하세요...">
+                <button onclick="addReply('${comment.id}')">답글 등록</button>
+            </div>
+            <div class="replies"></div>
+        `;
+        commentsSection.appendChild(commentElement);
+        fetchReplies(currentReviewId, comment.id); // 각 댓글의 대댓글을 가져오는 함수 호출
+    });
+}
+
+// 대댓글을 가져오는 함수
+function fetchReplies(reviewId, commentId) {
+    fetch(`/api/reviews/${reviewId}/comments/${commentId}/reply`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.statuscode === "200") {
+            displayReplies(commentId, data.data);
+        } else {
+            console.error('대댓글 조회 에러:', data.msg);
+        }
+    })
+    .catch(error => console.error('API 호출 중 에러 발생:', error));
+}
+
+// 대댓글을 화면에 표시하는 함수
+function displayReplies(commentId, replies) {
+    const repliesSection = document.querySelector(`#comment${commentId} .replies`);
+
+    // 대댓글이 이미 존재하는지 확인하고 있으면 제거
+    repliesSection.innerHTML = '';
+
+    replies.forEach(reply => {
+        const replyElement = document.createElement('div');
+        replyElement.className = 'comment';
+        replyElement.id = `reply${reply.id}`;
+        replyElement.innerHTML = `
+            <div class="comment-header">
+                <div class="comment-author">${reply.author || '익명 사용자'}</div>
+                <div class="comment-date">${new Date(reply.createdAt).toISOString().split('T')[0]}</div>
+            </div>
+            <div class="comment-content">${reply.content}</div>
+            <div class="comment-actions">
+                <button class="edit-button" onclick="editReply('${reply.id}')">수정</button>
+                <button class="delete-button" onclick="deleteReply('${reply.id}')">삭제</button>
+            </div>
+        `;
+        repliesSection.appendChild(replyElement);
+    });
+}
+
+
+
+
+
 
 // 댓글 추가 함수
 function addComment() {

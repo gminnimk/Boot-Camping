@@ -163,6 +163,7 @@ button.btn.btn-del:hover {
     margin-bottom: 0.3rem;
 }
 .add-comment {
+    margin-top: 2rem;
     margin-bottom: 1rem;
     display: flex;
     align-items: center;
