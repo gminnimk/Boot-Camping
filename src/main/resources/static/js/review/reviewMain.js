@@ -24,6 +24,15 @@ function fetchReviews() {
     });
 }
 
+// 날짜를 "2024. 7. 31." 형식으로 변환하는 함수
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // 월은 0부터 시작하므로 +1
+    const day = date.getDate();
+    return `${year}. ${month}. ${day}.`;
+}
+
 // 리뷰 카드 생성 함수
 function createReviewCard(review) {
     return `
@@ -35,14 +44,15 @@ function createReviewCard(review) {
             <div class="reviewer-info">
                 <span class="reviews review-category">${review.category}</span>
                 <span class="reviews review-category">${review.trek}</span>
-                <span class="reviews review-date">${review.createdAt}</span>
+                <span class="reviews review-date">${formatDate(review.createdAt)}</span>
             </div>
-            <div class="review-stars">${'★'.repeat(review.scope)}${'☆'.repeat(5-(review.scope))}</div>
+            <div class="review-stars">${'★'.repeat(review.scope)}${'☆'.repeat(5 - review.scope)}</div>
             <p class="reviews review-content">${review.content}</p>
             <span class="reviews review-author">- ${review.author || '작성자 미상'}</span>
         </div>
     `;
 }
+
 
 function goToReviewDetail(reviewId) {
     const url = new URL(`/review/${reviewId}`, window.location.origin);
