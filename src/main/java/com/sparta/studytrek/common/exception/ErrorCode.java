@@ -25,6 +25,7 @@ public enum ErrorCode {
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST,"최소 8자 이상, 15자 이하이며 알파벳 대소문자(az, AZ), 숫자(0~9),특수문자로 구성되어야 합니다."),
     INCORRECT_PASSWORD(HttpStatus.BAD_REQUEST,"비밀번호가 일치하지 않습니다."),
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "등록되지 않은 사용자입니다."),
+    NOT_FOUND_USER(HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다."),
     INCORRECT_USER(HttpStatus.BAD_REQUEST,"사용자가 동일하지 않습니다."),
     DUPLICATE_USER(HttpStatus.BAD_REQUEST,"이미 등록된 사용자 입니다."),
     WITHDRAW_USER(HttpStatus.BAD_REQUEST, "탈퇴한 회원입니다."),
@@ -43,12 +44,19 @@ public enum ErrorCode {
 
     // Profile
     NOTFOUND_PROFILE(HttpStatus.BAD_REQUEST, "해당 프로필을 찾을 수 없습니다."),
-    PROFILE_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "프로필을 수정할 권한이 없습니다.");
+    PROFILE_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "프로필을 수정할 권한이 없습니다."),
 
     // Study
     STUDY_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 스터디 모집글은 존재하지 않습니다."),
     STUDY_UPDATE_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "해당 스터디 모집글을 수정할 권한이 없습니다."),
-    STUDY_DELETE_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "해당 스터디 모집글을 삭제할 권한이 없습니다.");
+    STUDY_DELETE_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "해당 스터디 모집글을 삭제할 권한이 없습니다."),
+
+    // Admin
+    DUPLICATE_ADMIN_TOKEN(HttpStatus.BAD_REQUEST, "관리자 토큰이 이미 사용중입니다."),
+    ADMIN_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "관리자 권한이 필요합니다."),
+    USER_STATUS_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자 상태를 찾을 수 없습니다."),
+    INVALID_ADMIN_TOKEN(HttpStatus.FORBIDDEN, "잘못된 관리자 토큰입니다.");
+
   
 
     private HttpStatus httpStatus;

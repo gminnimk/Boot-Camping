@@ -1,6 +1,6 @@
 package com.sparta.studytrek.domain.admin.controller;
 
-import com.sparta.studytrek.domain.admin.service.AdminService;
+import com.sparta.studytrek.domain.admin.service.AdminServiceImpl;
 import com.sparta.studytrek.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/admin")
 public class AdminController {
 
-    private final AdminService adminService;
+    private final AdminServiceImpl adminService;
 
     /**
      * 회원탈퇴(관리자용)
@@ -27,5 +27,4 @@ public class AdminController {
                               @AuthenticationPrincipal UserDetailsImpl adminDetails) {
         adminService.adminDelete(username, adminDetails.getUser());
     }
-
 }
