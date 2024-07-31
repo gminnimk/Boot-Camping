@@ -1,0 +1,49 @@
+### 로그인 login
+POST {{apiUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "username",
+  "password": "비밀번호"
+}
+
+> {%
+  client.global.set("accessToken", response.body.data.accessToken)
+  client.global.set("refreshToken", response.body.data.refreshToken)
+
+  console.log('Response Status:', response.body.data.accessToken);
+  console.log('Response Data:', response.body.data.refreshToken);
+%}
+
+### 스터디의 대댓글 작성
+POST {{apiUrl}}/studies/17/comments/5/replies
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "content" : "댓글 작성2"
+}
+
+### 스터디의 대댓글 수정
+PUT {{apiUrl}}/studies/17/comments/5/replies/13
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "content" : "댓글 수정"
+}
+
+### 스터디의 대댓글 삭제
+DELETE {{apiUrl}}/studies/17/comments/5/replies/13
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+
+### 스터디의 대댓글 전체 조회
+GET {{apiUrl}}/studies/17/comments/5/replies
+Content-Type: application/json
+
+
+### 스터디의 대댓글 단건 조회
+GET {{apiUrl}}/studies/17/comments/5/replies/7
+Content-Type: application/json
