@@ -24,7 +24,7 @@ public class ReviewLikeController {
         @PathVariable Long reviewId,
         @AuthenticationPrincipal UserDetailsImpl userDetails){
 
-        int reviewAllLike = reviewLikeService.reviewLike(campId, reviewId, userDetails.getUser());
+        int reviewAllLike = reviewLikeService.reviewLike(reviewId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("해당 리뷰에 좋아요 성공 : "  + reviewAllLike)
             .statuscode(String.valueOf(HttpStatus.OK.value()))
