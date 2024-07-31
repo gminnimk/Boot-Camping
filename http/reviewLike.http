@@ -1,0 +1,9 @@
+### 리뷰 좋아요 추가
+POST {{apiUrl}}/reviews/1/likes
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### 리뷰 좋아요 취소
+DELETE  {{apiUrl}}/reviews/1/likes
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
