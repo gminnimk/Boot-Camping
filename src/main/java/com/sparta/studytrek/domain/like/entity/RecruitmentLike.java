@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "recruit_like")
 @Getter
 @NoArgsConstructor
-public class RecruitLike {
+public class RecruitmentLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,4 +22,9 @@ public class RecruitLike {
     @ManyToOne
     @JoinColumn(name = "recruitment_id", nullable = false)
     private Recruitment recruitment;
+
+    public RecruitmentLike(Recruitment recruitment, User user){
+        this.recruitment = recruitment;
+        this.user = user;
+    }
 }

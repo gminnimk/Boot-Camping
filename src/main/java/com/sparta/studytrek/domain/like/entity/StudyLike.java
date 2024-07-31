@@ -1,7 +1,7 @@
 package com.sparta.studytrek.domain.like.entity;
 
 import com.sparta.studytrek.domain.auth.entity.User;
-import com.sparta.studytrek.domain.review.entity.Review;
+import com.sparta.studytrek.domain.study.entity.Study;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,5 +21,10 @@ public class StudyLike {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id", nullable = false)
-    private Review study;
+    private Study study;
+
+    public StudyLike(Study study, User user) {
+        this.study = study;
+        this.user = user;
+    }
 }
