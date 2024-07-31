@@ -1,3 +1,28 @@
+document.addEventListener("DOMContentLoaded", function() {
+    fetchProfiles();
+
+    const profileStatus = localStorage.getItem('profileStatus');
+    if (profileStatus) {
+        Swal.fire({
+            toast: true,
+            position: 'center',
+            icon: 'success',
+            title: profileStatus === 'edited' ? '프로필이 수정되었습니다.' : '프로필이 등록되었습니다.',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            },
+            customClass: {
+                title: 'black-text'
+            }
+        });
+        localStorage.removeItem('profileStatus');
+    }
+});
+
 const modal = document.getElementById("bootcampModal");
 const activityModal = document.getElementById("activityModal");
 const registerBtn = document.getElementById("openModal");
@@ -5,7 +30,6 @@ const span = document.getElementsByClassName("close")[0];
 const activitySpan = document.getElementsByClassName("close")[1];
 const form = document.getElementById("bootcampForm");
 const techStackButtons = document.querySelectorAll(".tech-stack-button");
-const editButtons = document.querySelectorAll(".edit-button");
 const modalTitle = document.getElementById("modalTitle");
 const submitButton = document.getElementById("submitButton");
 const bootcampNameSelect = document.getElementById("bootcampName");
@@ -18,7 +42,14 @@ const certificatePreview = document.getElementById("certificatePreview");
 const certificateGroup = document.getElementById("certificateGroup");
 
 let isEditing = false;
-let currentEditingBootcamp = null;
+let currentEditingProfileId = null;
+
+const accessToken = localStorage.getItem('accessToken');
+
+if (!accessToken) {
+    alert('로그인이 필요합니다.');
+    window.location.href = '/auth';
+}
 
 registerBtn.onclick = function() {
     isEditing = false;
@@ -33,37 +64,6 @@ registerBtn.onclick = function() {
     modal.style.display = "block";
 }
 
-editButtons.forEach(button => {
-    button.addEventListener("click", function() {
-        isEditing = true;
-        currentEditingBootcamp = this.dataset.bootcamp;
-        modalTitle.textContent = "부트캠프 정보 수정";
-        submitButton.textContent = "수정";
-
-        // 기존 데이터를 폼에 채우기
-        bootcampNameSelect.value = this.dataset.bootcamp;
-        bootcampNameSelect.disabled = true;
-        trackSelect.value = this.dataset.track;
-        trackSelect.disabled = true;
-        document.getElementById("generation").value = this.dataset.generation;
-        document.getElementById("startDate").value = this.dataset.startDate;
-        document.getElementById("endDate").value = this.dataset.endDate;
-
-        // 기술 스택 선택
-        const techStack = this.dataset.techStack.split(',');
-        techStackButtons.forEach(button => {
-            if (techStack.includes(button.textContent)) {
-                button.classList.add("selected");
-            } else {
-                button.classList.remove("selected");
-            }
-        });
-
-        certificateGroup.style.display = "none";
-        modal.style.display = "block";
-    });
-});
-
 span.onclick = function() {
     modal.style.display = "none";
 }
@@ -73,10 +73,10 @@ activitySpan.onclick = function() {
 }
 
 window.onclick = function(event) {
-    if (event.target == modal) {
+    if (event.target === modal) {
         modal.style.display = "none";
     }
-    if (event.target == activityModal) {
+    if (event.target === activityModal) {
         activityModal.style.display = "none";
     }
 }
@@ -114,91 +114,217 @@ form.addEventListener("submit", function(e) {
     const selectedTechStack = Array.from(document.querySelectorAll(".tech-stack-button.selected")).map(button => button.textContent);
     const certificateFile = bootcampCertificate.files[0];
 
+    const profileData = {
+        bootcampName,
+        track,
+        generation,
+        startDate,
+        endDate,
+        techStack: selectedTechStack,
+        certificate: certificateFile ? certificateFile.name : null
+    };
+
+    let apiUrl = "/api/profiles";
+    let method = "POST";
+
     if (isEditing) {
-        // 수정 로직
-        console.log("수정 중인 부트캠프:", currentEditingBootcamp);
-        console.log("부트캠프 이름:", bootcampName);
-        console.log("트랙:", track);
-        console.log("기수:", generation);
-        console.log("시작일:", startDate);
-        console.log("종료일:", endDate);
-        console.log("선택된 기술 스택:", selectedTechStack);
-
-        // Update the corresponding card in the DOM
-        const card = document.querySelector(`.edit-button[data-bootcamp="${currentEditingBootcamp}"]`).closest('.card');
-        card.querySelector('.card-title').textContent = bootcampName;
-        card.querySelector('.info-table').innerHTML = `
-            <tr>
-                <td>트랙</td>
-                <td>${track}</td>
-            </tr>
-            <tr>
-                <td>기수</td>
-                <td>${generation}</td>
-            </tr>
-            <tr>
-                <td>참여 기간</td>
-                <td>${startDate} - ${endDate}</td>
-            </tr>
-        `;
-        card.querySelector('.skill-container').innerHTML = selectedTechStack.map(skill => `<span class="skill">${skill}</span>`).join('');
-    } else {
-        // 새로운 부트캠프 등록 로직
-        console.log("부트캠프 이름:", bootcampName);
-        console.log("트랙:", track);
-        console.log("기수:", generation);
-        console.log("시작일:", startDate);
-        console.log("종료일:", endDate);
-        console.log("선택된 기술 스택:", selectedTechStack);
-        console.log("인증서 파일:", certificateFile);
-
-        // Append the new card to the DOM (you can modify this part as needed)
-        const newCard = document.createElement('div');
-        newCard.className = 'card';
-        newCard.innerHTML = `
-            <div class="card-header">
-                <div class="card-title">${bootcampName}</div>
-                <div class="card-actions">
-                    <button class="edit-button" data-bootcamp="${bootcampName}" data-track="${track}" data-generation="${generation}" data-start-date="${startDate}" data-end-date="${endDate}" data-tech-stack="${selectedTechStack.join(',')}">수정</button>
-                    <button class="delete-button">삭제</button>
-                </div>
-            </div>
-            <div class="card-content">
-                <div class="info-column">
-                    <table class="info-table">
-                        <tr>
-                            <td>트랙</td>
-                            <td>${track}</td>
-                        </tr>
-                        <tr>
-                            <td>기수</td>
-                            <td>${generation}</td>
-                        </tr>
-                        <tr>
-                            <td>참여 기간</td>
-                            <td>${startDate} - ${endDate}</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="tech-stack-column">
-                    <div class="column-title">기술 스택</div>
-                    <div class="skill-container">
-                        ${selectedTechStack.map(skill => `<span class="skill">${skill}</span>`).join('')}
-                    </div>
-                </div>
-            </div>
-        `;
-
-        const contentContainer = document.querySelector('.content-container');
-        contentContainer.appendChild(newCard);
+        apiUrl = `/api/profiles/${currentEditingProfileId}`;
+        method = "PUT";
     }
 
-    modal.style.display = "none";
-    form.reset();
-    techStackButtons.forEach(button => button.classList.remove("selected"));
-    certificatePreview.style.display = "none";
+    fetch(apiUrl, {
+        method: method,
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + accessToken
+        },
+        body: JSON.stringify(profileData)
+    })
+        .then(response => response.text())
+        .then(data => {
+            console.log("성공:", data);
+            if (isEditing) {
+                updateCardInDOM(currentEditingProfileId, profileData);
+                localStorage.setItem('profileStatus', 'edited');
+            } else {
+                addCardToDOM(data);
+                localStorage.setItem('profileStatus', 'registered');
+            }
+            window.location.reload(); // 페이지 새로고침
+        })
+        .catch((error) => {
+            console.error("에러:", error);
+        });
 });
 
+document.addEventListener("click", function(e) {
+    if (e.target && e.target.classList.contains("edit-button")) {
+        isEditing = true;
+        currentEditingProfileId = e.target.dataset.profileId;
+        modalTitle.textContent = "부트캠프 정보 수정";
+        submitButton.textContent = "수정";
+
+        bootcampNameSelect.value = e.target.dataset.bootcamp;
+        bootcampNameSelect.disabled = true;
+        trackSelect.value = e.target.dataset.track;
+        trackSelect.disabled = true;
+        document.getElementById("generation").value = e.target.dataset.generation;
+        document.getElementById("startDate").value = e.target.dataset.startDate;
+        document.getElementById("endDate").value = e.target.dataset.endDate;
+
+        const techStack = e.target.dataset.techStack.split(',');
+        techStackButtons.forEach(button => {
+            if (techStack.includes(button.textContent)) {
+                button.classList.add("selected");
+            } else {
+                button.classList.remove("selected");
+            }
+        });
+
+        certificateGroup.style.display = "none";
+        modal.style.display = "block";
+    }
+
+    if (e.target && e.target.classList.contains("delete-button")) {
+        const profileId = e.target.dataset.profileId;
+
+        Swal.fire({
+            title: '정말 삭제하겠습니까?',
+            text: "이 작업은 되돌릴 수 없습니다!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '예',
+            cancelButtonText: '아니오'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/api/profiles/${profileId}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + accessToken
+                    }
+                })
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log("삭제 성공:", data);
+                        removeCardFromDOM(profileId);
+                        Swal.fire({
+                            toast: true,
+                            position: 'center',
+                            icon: 'success',
+                            title: '프로필이 삭제되었습니다.',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            },
+                            customClass: {
+                                title: 'black-text'
+                            }
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("에러:", error);
+                    });
+            }
+        });
+    }
+});
+
+function fetchProfiles() {
+    fetch("/api/profiles", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + accessToken
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("프로필 데이터:", data);
+
+            if (Array.isArray(data.data)) {
+                data.data.forEach(profile => {
+                    addCardToDOM(profile);
+                });
+            } else {
+                console.error("Unexpected response data format:", data);
+            }
+        })
+        .catch((error) => {
+            console.error("에러:", error);
+        });
+}
+
+function addCardToDOM(profile) {
+    const newCard = document.createElement('div');
+    newCard.className = 'card';
+    newCard.innerHTML = `
+        <div class="card-header">
+            <div class="card-title">${profile.bootcampName}</div>
+            <div class="card-actions">
+                <button class="edit-button" data-profile-id="${profile.id}" data-bootcamp="${profile.bootcampName}" data-track="${profile.track}" data-generation="${profile.generation}" data-start-date="${profile.startDate}" data-end-date="${profile.endDate}" data-tech-stack="${(profile.techStack || []).join(',')}">수정</button>
+                <button class="delete-button" data-profile-id="${profile.id}">삭제</button>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="info-column">
+                <table class="info-table">
+                    <tr>
+                        <td>트랙</td>
+                        <td>${profile.track}</td>
+                    </tr>
+                    <tr>
+                        <td>기수</td>
+                        <td>${profile.generation}</td>
+                    </tr>
+                    <tr>
+                        <td>참여 기간</td>
+                        <td>${profile.startDate} - ${profile.endDate}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tech-stack-column">
+                <div class="column-title">기술 스택</div>
+                <div class="skill-container">
+                    ${(profile.techStack || []).map(skill => `<span class="skill">${skill}</span>`).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+
+    const contentContainer = document.querySelector('.content-container');
+    contentContainer.appendChild(newCard);
+}
+
+function updateCardInDOM(profileId, profileData) {
+    const card = document.querySelector(`.edit-button[data-profile-id="${profileId}"]`).closest('.card');
+    card.querySelector('.card-title').textContent = profileData.bootcampName;
+    card.querySelector('.info-table').innerHTML = `
+        <tr>
+            <td>트랙</td>
+            <td>${profileData.track}</td>
+        </tr>
+        <tr>
+            <td>기수</td>
+            <td>${profileData.generation}</td>
+        </tr>
+        <tr>
+            <td>참여 기간</td>
+            <td>${profileData.startDate} - ${profileData.endDate}</td>
+        </tr>
+    `;
+    card.querySelector('.skill-container').innerHTML = profileData.techStack.map(skill => `<span class="skill">${skill}</span>`).join('');
+}
+
+function removeCardFromDOM(profileId) {
+    const card = document.querySelector(`.delete-button[data-profile-id="${profileId}"]`).closest('.card');
+    card.remove();
+}
 
 activityCards.forEach(card => {
     card.addEventListener("click", function() {
