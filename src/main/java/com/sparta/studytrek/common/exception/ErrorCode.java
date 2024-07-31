@@ -41,6 +41,11 @@ public enum ErrorCode {
     // Camp
     NOTFOUND_CAMP_USER(HttpStatus.BAD_REQUEST, "해당 캠프에 참가한 이력이 존재하지 않습니다."),
 
+
+    // recruitment
+    NOTFOUND_RECRUITMENT(HttpStatus.BAD_REQUEST,"해당 모집글은 존재하지 않습니다."),
+    RECRUITMENT_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "해당 모집글을 작성한 사용자가 아닙니다.");
+
     // Comment
     NOTFOUND_REVIEW_COMMENT(HttpStatus.BAD_REQUEST, "해당 댓글은 존재하지 않습니다."),
 
