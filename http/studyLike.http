@@ -1,0 +1,9 @@
+### 스터디 모집글 좋아요 추가
+POST {{apiUrl}}/studies/1/likes
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### 스터디 모집글 좋아요 취소
+DELETE  {{apiUrl}}/studies/1/likes
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}

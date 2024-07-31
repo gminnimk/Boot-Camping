@@ -32,7 +32,7 @@ public class StudyController {
     @PostMapping
     public ResponseEntity<ApiResponse<StudyResponseDto>> createStudy(
         @Valid @RequestBody StudyRequestDto request,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails ) {
         StudyResponseDto responseDtos = studyService.createStudy(request, userDetails.getUser());
         ApiResponse<StudyResponseDto> apiResponse = ApiResponse.<StudyResponseDto>builder()
             .msg("스터디 모집글 작성 성공")
@@ -49,7 +49,7 @@ public class StudyController {
      * @return 스터디 모집글 페이징 조회 데이터
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<StudyResponseDto>>> getAllStudies(Pageable pageable) {
+    public ResponseEntity<ApiResponse<Page<StudyResponseDto>>> getAllStudies(Pageable pageable ) {
         Page<StudyResponseDto> response = studyService.getAllStudies(pageable);
         ApiResponse<Page<StudyResponseDto>> apiResponse = ApiResponse.<Page<StudyResponseDto>>builder()
             .msg("스터디 모집글 전체 조회 성공")
@@ -66,7 +66,7 @@ public class StudyController {
      * @return 스터디 모집글 응답 데이터
      */
     @GetMapping("/{studyId}")
-    public ResponseEntity<ApiResponse<StudyResponseDto>> getStudy(@PathVariable Long studyId) {
+    public ResponseEntity<ApiResponse<StudyResponseDto>> getStudy(@PathVariable Long studyId ) {
         StudyResponseDto study = studyService.getStudy(studyId);
         ApiResponse<StudyResponseDto> apiResponse = ApiResponse.<StudyResponseDto>builder()
             .msg("스터디 모집글 단건 조회 성공")
@@ -87,7 +87,7 @@ public class StudyController {
     @PutMapping("/{studyId}")
     public ResponseEntity<ApiResponse<StudyResponseDto>> updateStudy(@PathVariable Long studyId,
         @Valid @RequestBody StudyRequestDto request,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails ) {
         StudyResponseDto updatedStudy = studyService.updateStudy(studyId, request,
             userDetails.getUser());
         ApiResponse<StudyResponseDto> apiResponse = ApiResponse.<StudyResponseDto>builder()
@@ -107,12 +107,12 @@ public class StudyController {
      */
     @DeleteMapping("/{studyId}")
     public ResponseEntity<ApiResponse<Void>> deleteStudy(@PathVariable Long studyId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails ) {
         studyService.deleteStudy(studyId, userDetails.getUser());
         ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
             .msg("스터디 모집글 삭제 성공")
             .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
             .build();
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(apiResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 }
