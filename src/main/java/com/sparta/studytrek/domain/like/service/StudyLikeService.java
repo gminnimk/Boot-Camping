@@ -19,6 +19,13 @@ public class StudyLikeService {
     private final StudyLikeRepository studyLikeRepository;
     private final StudyRepository studyRepository;
 
+    /**
+     * 좋아요 추가
+     *
+     * @param studyId   스터디 ID
+     * @param user  유저 정보
+     * @return  좋아요 응답 데이터
+     */
     @Transactional
     public int studyLike(Long studyId, User user) {
         Study study = studyRepository.findById(studyId)
@@ -36,6 +43,13 @@ public class StudyLikeService {
         return studyLikeRepository.countLikeByStudyId(studyId);
     }
 
+    /**
+     * 좋아요 취소
+     *
+     * @param studyId   스터디 ID
+     * @param user  유저 정보
+     * @return  좋아요 취소 응답 데이터
+     */
     @Transactional
     public int studyUnlike(Long studyId, User user) {
         Study study = studyRepository.findById(studyId)

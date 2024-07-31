@@ -20,10 +20,17 @@ public class ReviewLikeController {
 
     private final ReviewLikeService reviewLikeService;
 
+    /**
+     * 리뷰 좋아요 API
+     *
+     * @param reviewId      리뷰 ID
+     * @param userDetails   인증된 유저 정보
+     * @return  좋아요 응답 데이터
+     */
     @PostMapping
     public ResponseEntity<ApiResponse> reviewLike(@PathVariable Long reviewId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails){
-
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         int reviewAllLike = reviewLikeService.reviewLike(reviewId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("해당 리뷰에 좋아요 성공 : "  + reviewAllLike)
@@ -32,10 +39,17 @@ public class ReviewLikeController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    /**
+     * 리뷰 좋아요 취소 API
+     *
+     * @param reviewId      리뷰 ID
+     * @param userDetails   인증된 유저 정보
+     * @return  좋아요 응답 데이터
+     */
     @DeleteMapping
     public ResponseEntity<ApiResponse> reviewUnlike(@PathVariable Long reviewId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails){
-
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         int reviewAllLike = reviewLikeService.reviewUnlike(reviewId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("해당 리뷰에 좋아요 취소 성공 : "  + reviewAllLike)

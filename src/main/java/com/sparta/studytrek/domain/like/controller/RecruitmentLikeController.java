@@ -21,10 +21,17 @@ public class RecruitmentLikeController {
 
     private final RecruitmentLikeService recruitmentLikeService;
 
+    /**
+     * 부트캠프 모집글 좋아요 API
+     *
+     * @param recruitmentId 모집글 ID
+     * @param userDetails   인증된 유저 정보
+     * @return  좋아요 응답 데이터
+     */
     @PostMapping
     public ResponseEntity<ApiResponse> recruitLike(@PathVariable Long recruitmentId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails){
-
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         int recruitAllLike = recruitmentLikeService.recruitLike(recruitmentId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("해당 부트캠프 모집글에 좋아요 성공 : "  + recruitAllLike)
@@ -33,10 +40,17 @@ public class RecruitmentLikeController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    /**
+     * 부트캠프 모집글 취소 API
+     *
+     * @param recruitmentId 모집글 ID
+     * @param userDetails   인증된 유저 정보
+     * @return  좋아요 취소 응답 데이터
+     */
     @DeleteMapping
     public ResponseEntity<ApiResponse> recruitUnlike(@PathVariable Long recruitmentId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails){
-
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         int recruitAllLike = recruitmentLikeService.recruitUnlike(recruitmentId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("해당 부트캠프 모집글에 좋아요 취소 성공 : "  + recruitAllLike)

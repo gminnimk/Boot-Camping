@@ -19,6 +19,13 @@ public class ReviewLikeService {
     private final ReviewLikeRepository reviewLikeRepository;
     private final ReviewRepository reviewRepository;
 
+    /**
+     * 좋아요 추가
+     *
+     * @param reviewId  리뷰 ID
+     * @param user  유저 정보
+     * @return  좋아요 응답 데이터
+     */
     @Transactional
     public int reviewLike(Long reviewId, User user) {
         Review review = reviewRepository.findById(reviewId)
@@ -35,6 +42,13 @@ public class ReviewLikeService {
         return reviewLikeRepository.countLikeByReviewId(reviewId);
     }
 
+    /**
+     * 좋아요 취소
+     *
+     * @param reviewId  리뷰 ID
+     * @param user  유저 정보
+     * @return  좋아요 취소 응답 데이터
+     */
     @Transactional
     public int reviewUnlike(Long reviewId, User user) {
         Review review = reviewRepository.findById(reviewId)

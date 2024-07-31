@@ -21,10 +21,17 @@ public class StudyLikeController {
 
     private final StudyLikeService studyLikeService;
 
+    /**
+     * 스터디 모집글 좋아요 API
+     *
+     * @param studyId       스터디 ID
+     * @param userDetails   이증된 유저 정보
+     * @return  좋아요 응답 데이터
+     */
     @PostMapping
     public ResponseEntity<ApiResponse> studyLike(@PathVariable Long studyId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails){
-
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         int studyAllLike = studyLikeService.studyLike(studyId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("해당 스터디 모집글에 좋아요 성공 : "  + studyAllLike)
@@ -33,10 +40,17 @@ public class StudyLikeController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    /**
+     * 스터디 모집글 좋아요 취소 API
+     *
+     * @param studyId       스터디 ID
+     * @param userDetails   이증된 유저 정보
+     * @return  좋아요 취소 응답 데이터
+     */
     @DeleteMapping
     public ResponseEntity<ApiResponse> studyUnlike(@PathVariable Long studyId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails){
-
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         int studyAllLike = studyLikeService.studyUnlike(studyId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("해당 스터디 모집글에 좋아요 취소 성공 : "  + studyAllLike)
@@ -44,6 +58,5 @@ public class StudyLikeController {
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-
 
 }

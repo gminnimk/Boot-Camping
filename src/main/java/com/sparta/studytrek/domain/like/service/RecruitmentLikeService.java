@@ -19,6 +19,13 @@ public class RecruitmentLikeService {
     private final RecruitmentLikeRepository recruitmentLikeRepository;
     private final RecruitmentRepository recruitmentRepository;
 
+    /**
+     * 좋아요 추가
+     *
+     * @param recruitmentId 부트캠프 모집글 ID
+     * @param user  유저 정보
+     * @return  좋아요 응답 데이터
+     */
     @Transactional
     public int recruitLike(Long recruitmentId, User user) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
@@ -35,6 +42,13 @@ public class RecruitmentLikeService {
         return recruitmentLikeRepository.countLikeByRecruitmentId(recruitmentId);
     }
 
+    /**
+     * 좋아요 취소
+     *
+     * @param recruitmentId 부트캠프 모집글 ID
+     * @param user  유저 정보
+     * @return  좋아요 취소 응답 데이터
+     */
     @Transactional
     public int recruitUnlike(Long recruitmentId, User user) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
