@@ -22,6 +22,7 @@ public class RecruitmentResponseDto {
     private LocalDate recruitEnd;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
+    private String campName;
 
     public RecruitmentResponseDto(Recruitment createRecruitment) {
         this.id = createRecruitment.getId();
@@ -39,5 +40,6 @@ public class RecruitmentResponseDto {
         this.recruitEnd = createRecruitment.getRecruitEnd();
         this.createAt = createRecruitment.getCreatedAt();
         this.updateAt = createRecruitment.getUpdatedAt();
+        this.campName = createRecruitment.getCampName();
     }
 }

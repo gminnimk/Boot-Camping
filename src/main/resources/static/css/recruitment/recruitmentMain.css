@@ -325,3 +325,37 @@ body.dark {
     opacity: 0.5;
     cursor: not-allowed;
 }
+.page-numbers-container {
+    display: flex;
+    align-items: center;
+}
+
+.page-number {
+    padding: 10px 15px;
+    margin: 0 5px;
+    border: none;
+    background-color: var(--sidebar-bg);
+    color: var(--color);
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.page-number:hover {
+    background-color: #5AA9E6;
+}
+
+.page-number.active {
+    background-color: #7FC8F8;
+    color: var(--color);
+}
+
+.ellipsis {
+    padding: 10px 15px;
+    margin: 0 5px;
+    color: var(--color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
