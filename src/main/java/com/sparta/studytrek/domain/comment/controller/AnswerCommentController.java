@@ -41,8 +41,8 @@ public class AnswerCommentController {
     public ResponseEntity<ApiResponse> createAnswerComment(@PathVariable("questionId") Long questionId,
         @PathVariable("answerId") Long answerId,
         @RequestBody AnswerCommentRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         AnswerCommentResponseDto responseDto = answerCommentService.createAnswerComment(questionId, answerId, requestDto, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("댓글 작성 성공")
@@ -68,8 +68,8 @@ public class AnswerCommentController {
         @PathVariable("answerId") Long answerId,
         @PathVariable("commentId") Long commentId,
         @RequestBody AnswerCommentRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails){
-
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         AnswerCommentResponseDto responseDto = answerCommentService.updateAnswerComment(questionId, answerId, commentId, requestDto, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("답변 수정 성공")
@@ -92,8 +92,8 @@ public class AnswerCommentController {
     public ResponseEntity<ApiResponse> updateAnswerComment(@PathVariable("questionId") Long questionId,
         @PathVariable("answerId") Long answerId,
         @PathVariable("commentId") Long commentId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails){
-
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         answerCommentService.deleteAnswer(questionId, answerId, commentId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("댓글 삭제 성공")
@@ -109,8 +109,8 @@ public class AnswerCommentController {
      * @return  댓글의 전체 목록
      */
     @GetMapping
-    public ResponseEntity<ApiResponse> getAnswerComments(@PathVariable Long answerId){
-
+    public ResponseEntity<ApiResponse> getAnswerComments(@PathVariable Long answerId)
+    {
         List<AnswerCommentResponseDto> comments = answerCommentService.getAnswerComments(answerId);
         ApiResponse response = ApiResponse.builder()
             .msg("댓글 전체 조회 성공")
@@ -129,7 +129,8 @@ public class AnswerCommentController {
      */
     @GetMapping("/{commentId}")
     public ResponseEntity<ApiResponse> getAnswerComment(@PathVariable Long answerId,
-        @PathVariable Long commentId){
+        @PathVariable Long commentId)
+    {
         AnswerCommentResponseDto responseDto = answerCommentService.getAnswerComment(answerId, commentId);
         ApiResponse response = ApiResponse.builder()
             .msg("댓글 단건 조회 성공")
