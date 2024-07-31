@@ -6,12 +6,14 @@ import com.sparta.studytrek.domain.comment.dto.AnswerCommentRequestDto;
 import com.sparta.studytrek.domain.comment.dto.AnswerCommentResponseDto;
 import com.sparta.studytrek.domain.comment.service.AnswerCommentService;
 import com.sparta.studytrek.security.UserDetailsImpl;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -77,4 +79,43 @@ public class AnswerCommentController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    /**
+     * 질문에 대한 답변의 댓글 삭제 API
+     *
+     * @param questionId    질문 ID
+     * @param answerId      답변 ID
+     * @param commentId     댓글 ID
+     * @param userDetails   인증된 유저 정보
+     * @return  댓글 삭제 응답 데이터
+     */
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<ApiResponse> updateAnswerComment(@PathVariable("questionId") Long questionId,
+        @PathVariable("answerId") Long answerId,
+        @PathVariable("commentId") Long commentId,
+        @AuthenticationPrincipal UserDetailsImpl userDetails){
+
+        answerCommentService.deleteAnswer(questionId, answerId, commentId, userDetails.getUser());
+        ApiResponse response = ApiResponse.builder()
+            .msg("댓글 삭제 성공")
+            .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
+            .build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+    }
+
+    /**
+     * 질문에 대한 답변의 댓글 전체 조회 API
+     *
+     * @param commentId 댓글 ID
+     * @return  댓글의 전체 목록
+     */
+    @GetMapping
+    public ResponseEntity<ApiResponse> getAnswerComments(@PathVariable Long commentId){
+        List<AnswerCommentResponseDto> comments = answerCommentService.getAnswerComments(commentId);
+        ApiResponse response = ApiResponse.builder()
+            .msg("댓글 전체 조회 성공")
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(comments)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }

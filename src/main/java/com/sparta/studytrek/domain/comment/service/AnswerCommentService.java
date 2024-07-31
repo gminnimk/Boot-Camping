@@ -12,6 +12,7 @@ import com.sparta.studytrek.domain.comment.entity.AnswerComment;
 import com.sparta.studytrek.domain.comment.repository.AnswerCommentRepository;
 import com.sparta.studytrek.domain.question.entity.Question;
 import com.sparta.studytrek.domain.question.repository.QuestionRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -61,6 +62,32 @@ public class AnswerCommentService {
     }
 
     /**
+     * 댓글 삭제
+     *
+     * @param questionId    질문 ID
+     * @param answerId      답변 ID
+     * @param commentId     댓글 ID
+     * @param user  요청한 유저의 정보
+     */
+    public void deleteAnswer(Long questionId, Long answerId, Long commentId, User user) {
+        Question question = findById(questionId);
+        Answer answer = findByAnswerId(answerId);
+        AnswerComment answerComment = findByAnswerCommentId(commentId);
+        answerCommentRepository.delete(answerComment);
+    }
+
+    /**
+     * 댓글 전체 조회
+     *
+     * @param commentId 댓글 ID
+     * @return  댓글의 전체 목록
+     */
+    public List<AnswerCommentResponseDto> getAnswerComments(Long commentId) {
+        List<AnswerComment> answerComments = answerCommentRepository.findByIdOrderByCreatedAtDesc(commentId);
+        return answerComments.stream().map(AnswerCommentResponseDto::new).toList();
+    }
+
+    /**
      * 질문 찾기
      *
      * @param questionId    질문 ID
@@ -92,4 +119,5 @@ public class AnswerCommentService {
         return answerCommentRepository.findById(commentId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER_COMMENT));
     }
+
 }
