@@ -1,3 +1,109 @@
+let currentReviewId;
+
+// 페이지 로드 시 실행되는 함수
+document.addEventListener('DOMContentLoaded', function() {
+    // URL 경로에서 리뷰 ID 추출
+    const pathSegments = window.location.pathname.split('/');
+    currentReviewId = pathSegments[pathSegments.length - 1]; // 예: '/review/16'에서 '16' 추출
+
+    if (currentReviewId) {
+        fetchReviewDetails(currentReviewId);
+    } else {
+        console.error('리뷰 ID가 제공되지 않았습니다.');
+    }
+
+    addHeartButtonListeners();
+});
+
+// 리뷰 상세 정보를 가져오는 함수
+function fetchReviewDetails(id) {
+    fetch(`/api/reviews/${id}`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.statuscode === "200") {
+            updateReviewDetails(data.data);
+        } else {
+            console.error('에러:', data.msg);
+        }
+    })
+    .catch(error => console.error('API 호출 중 에러 발생:', error));
+}
+
+// 리뷰 상세 정보를 화면에 표시하는 함수
+function updateReviewDetails(review) {
+    document.querySelector('.review-title').textContent = review.title;
+    document.querySelector('#subtitleDisplay').textContent = review.campName;
+    const categories = document.querySelector('.meta-info div');
+    categories.innerHTML = `<span class="category">${review.category}</span><span class="category">${review.trek}</span>`;
+    document.querySelector('.date').textContent = new Date(review.createdAt).toLocaleDateString();
+    document.querySelector('.rating').textContent = '★'.repeat(review.scope) + '☆'.repeat(5 - review.scope);
+    document.querySelector('.detail-content').innerHTML = review.content.replace(/\n/g, '<br>');
+    document.querySelector('.author').textContent = `- ${review.author || '익명'}`;
+
+    // 수정 폼의 초기값 설정
+    document.getElementById('editTitle').value = review.title;
+    document.getElementById('editSubtitle').value = review.campName;
+    document.getElementById('editCategory').value = review.category;
+    document.getElementById('editDevCategory').value = review.trek;
+    document.getElementById('editRating').value = review.scope;
+    document.getElementById('editContent').value = review.content;
+}
+
+// 리뷰 수정 함수
+function saveEdit() {
+    if (confirm('정말 수정하시겠습니까?')) {
+        const updatedReview = {
+            title: document.getElementById('editTitle').value,
+            campName: document.getElementById('editSubtitle').value,
+            category: document.getElementById('editCategory').value,
+            trek: document.getElementById('editDevCategory').value,
+            scope: document.getElementById('editRating').value,
+            content: document.getElementById('editContent').value
+        };
+
+        fetch(`/api/reviews/${currentReviewId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedReview)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.statuscode === "200") {
+                updateReviewDetails(data.data);
+                document.getElementById('viewMode').style.display = 'block';
+                document.getElementById('editMode').style.display = 'none';
+                Swal.fire({
+                    title: '수정 완료',
+                    text: '리뷰가 성공적으로 수정되었습니다.',
+                    icon: 'success',
+                    confirmButtonText: '확인'
+                });
+            } else {
+                console.error('에러:', data.msg);
+                Swal.fire({
+                    title: '수정 실패',
+                    text: '리뷰 수정 중 오류가 발생했습니다.',
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('API 호출 중 에러 발생:', error);
+            Swal.fire({
+                title: '수정 실패',
+                text: '네트워크 오류가 발생했습니다.',
+                icon: 'error',
+                confirmButtonText: '확인'
+            });
+        });
+    }
+}
+
+
+// 좋아요 버튼 리스너 추가 함수
 function addHeartButtonListeners() {
     document.querySelectorAll('.heart-button').forEach(button => {
         button.addEventListener('click', function(event) {
@@ -14,7 +120,7 @@ function addHeartButtonListeners() {
     });
 }
 
-
+// 댓글 추가 함수
 function addComment() {
     const commentText = document.getElementById('commentInput').value;
     if (commentText.trim() !== '') {
@@ -34,7 +140,7 @@ function addComment() {
                 <button class="edit-button" onclick="editComment('${commentId}')">수정</button>
                 <button class="delete-button" onclick="deleteComment('${commentId}')">삭제</button>
             </div>
-            <div class="reply-form">
+            <div class="reply-form" style="display: none;">
                 <input type="text" placeholder="답글을 입력하세요...">
                 <button onclick="addReply('${commentId}')">답글 등록</button>
             </div>
@@ -47,11 +153,13 @@ function addComment() {
     }
 }
 
+// 답글 폼 표시 함수
 function showReplyForm(commentId) {
     const replyForm = document.querySelector(`#${commentId} .reply-form`);
     replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
 }
 
+// 답글 추가 함수
 function addReply(commentId) {
     const replyForm = document.querySelector(`#${commentId} .reply-form`);
     const replyText = replyForm.querySelector('input').value;
@@ -80,6 +188,7 @@ function addReply(commentId) {
     }
 }
 
+// 댓글 수정 함수
 function editComment(commentId) {
     const commentContent = document.querySelector(`#${commentId} .comment-content`);
     const currentContent = commentContent.textContent;
@@ -89,6 +198,7 @@ function editComment(commentId) {
     }
 }
 
+// 댓글 삭제 함수
 function deleteComment(commentId) {
     if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
         const comment = document.getElementById(commentId);
@@ -96,46 +206,16 @@ function deleteComment(commentId) {
     }
 }
 
+// 수정 폼 보기 함수
 function showEditForm() {
     document.getElementById('viewMode').style.display = 'none';
     document.getElementById('editMode').style.display = 'block';
 }
 
+// 수정 취소 함수
 function cancelEdit() {
     if (confirm('수정을 취소하시겠습니까? 변경사항이 저장되지 않습니다.')) {
         document.getElementById('viewMode').style.display = 'block';
         document.getElementById('editMode').style.display = 'none';
     }
 }
-
-function saveEdit() {
-    if (confirm('정말 수정하시겠습니까?')) {
-        const title = document.getElementById('editTitle').value;
-        const subtitle = document.getElementById('editSubtitle').value;
-        const category = document.getElementById('editCategory').value;
-        const devCategory = document.getElementById('editDevCategory').value;
-        const rating = document.getElementById('editRating').value;
-        const content = document.getElementById('editContent').value;
-
-        // 뷰 업데이트
-        document.querySelector('.review-title').textContent = title;
-        document.querySelector('#subtitleDisplay').textContent = subtitle;
-        const categories = document.querySelector('.meta-info').querySelector('div');
-        categories.innerHTML = `<span class="category">${category}</span><span class="category">${devCategory}</span>`;
-        document.querySelector('.rating').textContent = '★'.repeat(rating) + '☆'.repeat(5 - rating);
-        document.querySelector('.detail-content').innerHTML = content.replace(/\n/g, '<br>');
-
-        // 편집 모드 종료
-        document.getElementById('viewMode').style.display = 'block';
-        document.getElementById('editMode').style.display = 'none';
-
-        // 수정 완료 메시지 표시
-        Swal.fire({
-            title: '수정 완료',
-            text: '리뷰가 성공적으로 수정되었습니다.',
-            icon: 'success',
-            confirmButtonText: '확인'
-        });
-    }
-}
-document.addEventListener('DOMContentLoaded', addHeartButtonListeners);
