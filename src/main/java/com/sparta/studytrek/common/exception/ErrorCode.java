@@ -41,6 +41,12 @@ public enum ErrorCode {
     // Camp
     NOTFOUND_CAMP_USER(HttpStatus.BAD_REQUEST, "해당 캠프에 참가한 이력이 존재하지 않습니다."),
 
+    // Comment
+    NOTFOUND_REVIEW_COMMENT(HttpStatus.BAD_REQUEST, "해당 댓글은 존재하지 않습니다."),
+
+    // Reply
+    NOTFOUND_REVIEW_REPLY(HttpStatus.BAD_REQUEST, "해당 대댓글은 존재하지 않습니다.");
+
     // Profile
     NOTFOUND_PROFILE(HttpStatus.BAD_REQUEST, "해당 프로필을 찾을 수 없습니다."),
     PROFILE_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "프로필을 수정할 권한이 없습니다.");
@@ -49,7 +55,7 @@ public enum ErrorCode {
     STUDY_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 스터디 모집글은 존재하지 않습니다."),
     STUDY_UPDATE_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "해당 스터디 모집글을 수정할 권한이 없습니다."),
     STUDY_DELETE_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "해당 스터디 모집글을 삭제할 권한이 없습니다.");
-  
+
 
     private HttpStatus httpStatus;
     private String msg;
