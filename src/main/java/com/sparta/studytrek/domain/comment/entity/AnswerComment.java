@@ -34,6 +34,10 @@ public class AnswerComment extends Timestamped {
         this.user = user;
     }
 
+    public void update(AnswerCommentRequestDto requestDto){
+        this.content = requestDto.getContent();
+    }
+
     public AnswerComment(Answer answer, User user, String content) {
         this.answer = answer;
         this.user = user;

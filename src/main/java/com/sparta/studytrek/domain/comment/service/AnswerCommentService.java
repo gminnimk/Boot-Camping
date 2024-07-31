@@ -2,6 +2,7 @@ package com.sparta.studytrek.domain.comment.service;
 
 import com.sparta.studytrek.common.exception.CustomException;
 import com.sparta.studytrek.common.exception.ErrorCode;
+import com.sparta.studytrek.domain.answer.dto.AnswerRequestDto;
 import com.sparta.studytrek.domain.answer.entity.Answer;
 import com.sparta.studytrek.domain.answer.repository.AnswerRepository;
 import com.sparta.studytrek.domain.auth.entity.User;
@@ -42,6 +43,24 @@ public class AnswerCommentService {
     }
 
     /**
+     * 질문에 대한 답변의 댓글 수정
+     *
+     * @param questionId    질문 ID
+     * @param answerId      답변 ID
+     * @param commentId     댓글 ID
+     * @param requestDto    댓글 수정 요청 데이터
+     * @param user  인증된 유저의 정보
+     * @return  댓글 응답 데이터
+     */
+    public AnswerCommentResponseDto updateAnswerComment(Long questionId, Long answerId, Long commentId, AnswerCommentRequestDto requestDto, User user) {
+        Question question = findById(questionId);
+        Answer answer = findByAnswerId(answerId);
+        AnswerComment answerComment = findByAnswerCommentId(commentId);
+        answerComment.update(requestDto);
+        return new AnswerCommentResponseDto(answerComment);
+    }
+
+    /**
      * 질문 찾기
      *
      * @param questionId    질문 ID
@@ -61,5 +80,16 @@ public class AnswerCommentService {
     private Answer findByAnswerId(Long answerId) {
         return answerRepository.findById(answerId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER));
+    }
+
+    /**
+     * 댓글 찾기
+     *
+     * @param commentId 댓글 ID
+     * @return  해당 댓글의 정보
+     */
+    private AnswerComment findByAnswerCommentId(Long commentId) {
+        return answerCommentRepository.findById(commentId)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER_COMMENT));
     }
 }

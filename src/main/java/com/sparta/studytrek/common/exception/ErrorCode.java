@@ -56,7 +56,10 @@ public enum ErrorCode {
     NOTFOUND_QUESTION(HttpStatus.BAD_REQUEST, "해당 질문은 존재하지 않습니다."),
 
     //Answer
-    NOTFOUND_ANSWER(HttpStatus.BAD_REQUEST, "해당 답변은 존재하지 않습니다.");
+    NOTFOUND_ANSWER(HttpStatus.BAD_REQUEST, "해당 답변은 존재하지 않습니다."),
+
+    //Answer_Comment
+    NOTFOUND_ANSWER_COMMENT(HttpStatus.BAD_REQUEST, "해당 댓글은 존재하지 않습니다.");
 
     private HttpStatus httpStatus;
     private String msg;
