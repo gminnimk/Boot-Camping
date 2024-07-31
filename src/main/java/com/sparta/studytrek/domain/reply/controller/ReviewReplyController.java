@@ -51,7 +51,7 @@ public class ReviewReplyController {
     }
 
     /**
-     * 리뷰 댓글의 대댓글 작성 API
+     * 리뷰 댓글의 대댓글 수정 API
      *
      * @param reviewId    리뷰 ID
      * @param commentId   댓글 ID
@@ -69,7 +69,7 @@ public class ReviewReplyController {
             replyId, requestDto, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("대댓글 수정 성공")
-            .statuscode(String.valueOf(HttpStatus.CREATED.value()))
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
