@@ -12,110 +12,160 @@ const selectedCategories = document.getElementById('selectedCategories');
 
 let originalContent = {};
 let selectedCategoryList = {
-classType: '온라인',
-costType: '국비',
-fieldType: '풀스택'
+  classType: '',
+  costType: '',
+  fieldType: ''
 };
-
-
 
 // Flatpickr 초기화
 flatpickr(".date-range", {
-mode: "range",
-dateFormat: "Y-m-d",
-disable: [
+  mode: "range",
+  dateFormat: "Y-m-d",
+  disable: [
     function(date) {
-        // 주말 선택 불가
-        return (date.getDay() === 0 || date.getDay() === 6);
+      return (date.getDay() === 0 || date.getDay() === 6);
     }
-],
-locale: {
-    firstDayOfWeek: 1 // 월요일부터 시작
-}
+  ],
+  locale: {
+    firstDayOfWeek: 1
+  }
 });
 
+// 모든 카테고리 항목을 가져오는 함수
+function getAllTags() {
+  return document.querySelectorAll('.course-tags .tag');
+}
+
+// 카테고리 태그를 업데이트하는 함수
+function updateTagVisibility() {
+  const tags = getAllTags();
+  tags.forEach(tag => {
+    const tagValue = tag.textContent.trim();
+    if (Object.values(selectedCategoryList).includes(tagValue)) {
+      tag.style.display = 'inline'; // 태그를 보이게 설정
+    } else {
+      tag.style.display = 'none'; // 태그를 숨김
+    }
+  });
+}
+
+// 선택된 카테고리를 업데이트하는 함수
 function updateSelectedCategories() {
-selectedCategories.innerHTML = '';
-for (const [key, value] of Object.entries(selectedCategoryList)) {
+  selectedCategories.innerHTML = ''; // 기존 카테고리 제거
+  for (const [key, value] of Object.entries(selectedCategoryList)) {
     if (value) {
-        const span = document.createElement('span');
-        span.className = 'selected-category';
-        span.innerHTML = `${value} <span class="remove-category" data-category="${key}">✕</span>`;
-        selectedCategories.appendChild(span);
+      const span = document.createElement('span');
+      span.className = 'selected-category';
+      span.innerHTML = `${value} <span class="remove-category" data-category="${key}">✕</span>`;
+      selectedCategories.appendChild(span);
     }
-}
+  }
 
-// 삭제 버튼에 이벤트 리스너 추가
-document.querySelectorAll('.remove-category').forEach(button => {
+  // 삭제 버튼에 이벤트 리스너 추가
+  document.querySelectorAll('.remove-category').forEach(button => {
     button.addEventListener('click', function() {
-        const categoryToRemove = this.getAttribute('data-category');
-        selectedCategoryList[categoryToRemove] = '';
-        updateSelectedCategories();
-        // 해당 select 요소의 선택을 초기화
-        document.getElementById(`${categoryToRemove}Select`).value = '';
+      const categoryToRemove = this.getAttribute('data-category');
+      selectedCategoryList[categoryToRemove] = '';
+      updateSelectedCategories();
+      updateTagVisibility();
+      document.getElementById(`${categoryToRemove}Select`).value = '';
     });
-});
+  });
 }
 
+// Select 요소의 변경 이벤트 처리
 [classTypeSelect, costTypeSelect, fieldTypeSelect].forEach(select => {
-select.addEventListener('change', function() {
+  select.addEventListener('change', function() {
     const categoryType = this.id.replace('Select', '');
     selectedCategoryList[categoryType] = this.value;
     updateSelectedCategories();
-});
+    updateTagVisibility();
+  });
 });
 
+// 수정 버튼 클릭 시
 editButton.addEventListener('click', function() {
-courseContainer.classList.remove('view-mode');
-courseContainer.classList.add('edit-mode');
+  courseContainer.classList.remove('view-mode');
+  courseContainer.classList.add('edit-mode');
 
-// 현재 내용 저장
-document.querySelectorAll('.editable').forEach(elem => {
+  // 현재 내용 저장
+  document.querySelectorAll('.editable').forEach(elem => {
     originalContent[elem.className] = elem.value;
-});
+  });
 
-// 현재 선택된 카테고리로 select 요소 업데이트
-for (const [key, value] of Object.entries(selectedCategoryList)) {
+  // 현재 선택된 카테고리로 select 요소 업데이트
+  for (const [key, value] of Object.entries(selectedCategoryList)) {
     const selectElem = document.getElementById(`${key}Select`);
     if (selectElem) {
-        selectElem.value = value;
+      selectElem.value = value;
     }
-}
+  }
 
-updateSelectedCategories();
+  updateSelectedCategories();
 });
 
+// 저장 버튼 클릭 시
 saveButton.addEventListener('click', function() {
-  const formData = new FormData(document.getElementById('recruitmentForm'));
-  const recruitmentData = Object.fromEntries(formData);
+  const [campStart, campEnd] = document.querySelector('.course-sidebar .editable.date-range').value.split(' to ');
 
-  // 날짜 형식 변환
-  const dateRange = recruitmentData.dateRange.split(' to ');
-  recruitmentData.campStart = dateRange[0];
-  recruitmentData.campEnd = dateRange[1];
-  delete recruitmentData.dateRange;
+  const recruitmentData = {
+    title: document.querySelector('.course-title.editable').value,
+    campName: document.querySelector('.course-institution.editable').value,
+    process: document.querySelector('.course-intro.editable').value,
+    content: document.querySelector('.course-info .editable').value,
+    place: classTypeSelect.value,
+    cost: costTypeSelect.value,
+    trek: fieldTypeSelect.value,
+    level: document.querySelector('.course-sidebar select').value,
+    classTime: document.querySelector('.editable.class-time').value,
+    campStart: campStart,
+    campEnd: campEnd,
+    recruitStart: '2024-07-01',
+    recruitEnd: '2024-07-31'
+  };
 
   // API 호출
-  fetch('/api/camps/' + recruitmentId, {
+  fetch(`/api/camps/${recruitmentId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('accessToken')}` // Access Token 추가
     },
     body: JSON.stringify(recruitmentData)
   })
   .then(response => response.json())
   .then(data => {
     if (data.statuscode === '200') {
-      alert('변경사항이 저장되었습니다.');
-      // 화면 업데이트 로직
-      updateViewMode(data.data);
+      Swal.fire({
+        title: '수정 완료',
+        text: '모집글이 성공적으로 수정되었습니다.',
+        icon: 'success',
+        confirmButtonText: '확인'
+      }).then(() => {
+        window.location.href = `/camp/${recruitmentId}`;
+      });
     } else {
-      alert('저장에 실패했습니다: ' + data.msg);
+      console.error('에러:', data.msg);
+      Swal.fire({
+        title: '수정 실패',
+        text: '모집글 수정 중 오류가 발생했습니다.',
+        icon: 'error',
+        confirmButtonText: '확인'
+      });
     }
   })
-  .catch(error => console.error('Error:', error));
+  .catch(error => {
+    console.error('API 호출 중 에러 발생:', error);
+    Swal.fire({
+      title: '수정 실패',
+      text: '네트워크 오류가 발생했습니다.',
+      icon: 'error',
+      confirmButtonText: '확인'
+    });
+  });
 });
 
+// 뷰 모드 업데이트
 function updateViewMode(data) {
   // 제목 업데이트
   document.querySelector('.course-title.non-editable').textContent = data.title;
@@ -157,11 +207,12 @@ function updateViewMode(data) {
   // 태그 업데이트
   let tags = data.tags || [];
   document.querySelectorAll('.course-tags .tag').forEach(tagElement => {
-    tagElement.style.display = tags.includes(tagElement.textContent) ? 'inline' : 'none';
+    tagElement.style.display = tags.includes(tagElement.textContent.trim()) ? 'inline' : 'none';
   });
 
   // 선택된 카테고리 업데이트
-  updateSelectedCategories(data.selectedCategoryList || {});
+  selectedCategoryList = data.selectedCategoryList || {};
+  updateSelectedCategories();
 }
 
 let recruitmentId = '';
@@ -171,60 +222,74 @@ document.addEventListener('DOMContentLoaded', function() {
   const urlParts = window.location.pathname.split('/');
   recruitmentId = urlParts[urlParts.length - 1];
 
-  fetch('/api/camps/' + recruitmentId)
-  .then(response => response.json())
-  .then(data => {
-    if (data.statuscode === '200') {
-      updateViewMode(data.data);
-    } else {
-      alert('데이터를 불러오는데 실패했습니다: ' + data.msg);
-    }
-  })
-  .catch(error => console.error('Error:', error));
+  if (recruitmentId) {
+    fetch(`/api/camps/${encodeURIComponent(recruitmentId)}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.statuscode === '200') {
+        updateViewMode(data.data);
+      } else {
+        alert('데이터를 불러오는데 실패했습니다: ' + data.msg);
+      }
+    })
+    .catch(error => console.error('Error:', error));
+  } else {
+    console.error('Invalid recruitment ID');
+  }
 });
 
-// 카테고리 업데이트
-const tagContainer = document.querySelector('.course-tags');
-tagContainer.innerHTML = '';
-for (const value of Object.values(selectedCategoryList)) {
+// URL 파라미터 제거
+const url = new URL(window.location.href);
+url.search = ''; // 모든 쿼리 파라미터 제거
+window.history.replaceState({}, '', url);
+
+// 카테고리 태그 업데이트
+function updateTagContainer() {
+  const tagContainer = document.querySelector('.course-tags');
+  tagContainer.innerHTML = '';
+  for (const value of Object.values(selectedCategoryList)) {
     if (value) {
-        const tag = document.createElement('span');
-        tag.className = 'tag';
-        tag.textContent = value;
-        tagContainer.appendChild(tag);
+      const tag = document.createElement('span');
+      tag.className = 'tag';
+      tag.textContent = value;
+      tagContainer.appendChild(tag);
     }
+  }
 }
+updateTagContainer();
 
+// 취소 버튼 클릭 시
 cancelButton.addEventListener('click', function() {
-courseContainer.classList.remove('edit-mode');
-courseContainer.classList.add('view-mode');
+  courseContainer.classList.remove('edit-mode');
+  courseContainer.classList.add('view-mode');
 
-// 원래 내용으로 복구
-document.querySelectorAll('.editable').forEach(elem => {
+  // 원래 내용으로 복구
+  document.querySelectorAll('.editable').forEach(elem => {
     elem.value = originalContent[elem.className];
-});
+  });
 
-// 카테고리 복구
-const tags = document.querySelectorAll('.course-tags .tag');
-selectedCategoryList = {
+  // 카테고리 복구
+  const tags = document.querySelectorAll('.course-tags .tag');
+  selectedCategoryList = {
     classType: '',
     costType: '',
     fieldType: ''
-};
-tags.forEach(tag => {
-    const text = tag.textContent;
+  };
+  tags.forEach(tag => {
+    const text = tag.textContent.trim();
     if (['온라인', '오프라인'].includes(text)) {
-        selectedCategoryList.classType = text;
+      selectedCategoryList.classType = text;
     } else if (['국비', '유료', '무료'].includes(text)) {
-        selectedCategoryList.costType = text;
+      selectedCategoryList.costType = text;
     } else {
-        selectedCategoryList.fieldType = text;
+      selectedCategoryList.fieldType = text;
     }
-});
-updateSelectedCategories();
+  });
+  updateSelectedCategories();
+  updateTagVisibility();
 });
 
-// 삭제 버튼
+// 삭제 버튼 클릭 시
 deleteButton.addEventListener('click', function() {
   if (confirm('정말로 이 리뷰를 삭제하시겠습니까?')) {
     fetch(`/api/camps/${recruitmentId}`, {
@@ -236,7 +301,7 @@ deleteButton.addEventListener('click', function() {
     })
     .then(response => response.json())
     .then(data => {
-      if (data.statuscode === "204") { // 성공적으로 삭제됨
+      if (data.statuscode === "204") {
         Swal.fire({
           title: '삭제 완료',
           text: '모집글이 성공적으로 삭제되었습니다.',
@@ -282,6 +347,3 @@ likeButton.addEventListener('click', function() {
 document.querySelector('.wishlist-button').addEventListener('click', function() {
   alert('관심 목록에 추가되었습니다!');
 });
-
-// 초기 카테고리 설정
-updateSelectedCategories();
