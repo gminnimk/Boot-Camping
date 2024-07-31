@@ -116,3 +116,71 @@ document.querySelectorAll('.filter-option').forEach(option => {
         this.classList.toggle('active');
     });
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    fetchCourses(0); // 초기 페이지 번호 0으로 시작
+});
+
+async function fetchCourses(page) {
+    try {
+        const response = await fetch(`/api/camps?page=${page}`);
+        const result = await response.json();
+
+        if (response.ok) {
+            displayCourses(result.data.content);
+            setupPagination(result.data);
+        } else {
+            console.error('데이터 가져오기 실패:', result);
+        }
+    } catch (error) {
+        console.error('코스 데이터를 가져오는 중 오류 발생:', error);
+    }
+}
+
+
+function displayCourses(courses) {
+    const container = document.getElementById('courses-container');
+    container.innerHTML = ''; // 기존 콘텐츠를 지웁니다
+
+    courses.forEach(course => {
+        const courseElement = `
+            <div class="course" data-id="${course.id}">
+                <div class="course-image" style="background-image: url('${course.imageUrl || 'default-image.jpg'}');"></div>
+                <div class="course-info">
+                    <div class="course-header">
+                        <h3>${course.title}</h3>
+                        <div class="heart-container">
+                            <button class="heart-button" data-likes="${course.likes}">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            <div class="like-count">${course.likes}</div>
+                        </div>
+                    </div>
+                    <div class="course-categories">
+                        <span class="category">${course.process}</span>
+                        <span class="category">${course.trek}</span>
+                    </div>
+                    <p class="course-institution">운영기관: ${course.place}</p>
+                    <p>모집 기간: ${course.recruitStart} ~ ${course.recruitEnd}</p>
+                    <p>참여 기간: ${course.campStart} ~ ${course.campEnd}</p>
+                </div>
+            </div>
+        `;
+        container.innerHTML += courseElement;
+    });
+}
+
+function setupPagination(paginationData) {
+    const paginationContainer = document.getElementById('pagination-container');
+    paginationContainer.innerHTML = ''; // 기존 페이지 네비게이션을 지웁니다
+
+    if (paginationData.totalPages > 1) {
+        for (let i = 0; i < paginationData.totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.textContent = i + 1;
+            pageButton.className = i === paginationData.pageable.pageNumber ? 'active' : '';
+            pageButton.addEventListener('click', () => fetchCourses(i));
+            paginationContainer.appendChild(pageButton);
+        }
+    }
+}
