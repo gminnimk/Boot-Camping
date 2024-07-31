@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/studied/{studyId}/likes")
+@RequestMapping("/api/studies/{studyId}/likes")
 public class StudyLikeController {
 
     private final StudyLikeService studyLikeService;

@@ -15,14 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/camps/{campId}/reviews/{reviewId}/likes")
+@RequestMapping("/api/reviews/{reviewId}/likes")
 public class ReviewLikeController {
 
     private final ReviewLikeService reviewLikeService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse> reviewLike(@PathVariable Long campId,
-        @PathVariable Long reviewId,
+    public ResponseEntity<ApiResponse> reviewLike(@PathVariable Long reviewId,
         @AuthenticationPrincipal UserDetailsImpl userDetails){
 
         int reviewAllLike = reviewLikeService.reviewLike(reviewId, userDetails.getUser());
@@ -34,8 +33,7 @@ public class ReviewLikeController {
     }
 
     @DeleteMapping
-    public ResponseEntity<ApiResponse> reviewUnlike(@PathVariable Long campId,
-        @PathVariable Long reviewId,
+    public ResponseEntity<ApiResponse> reviewUnlike(@PathVariable Long reviewId,
         @AuthenticationPrincipal UserDetailsImpl userDetails){
 
         int reviewAllLike = reviewLikeService.reviewUnlike(reviewId, userDetails.getUser());
