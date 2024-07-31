@@ -1,10 +1,8 @@
 let currentReviewId;
 
-// 페이지 로드 시 실행되는 함수
 document.addEventListener('DOMContentLoaded', function() {
-    // URL 경로에서 리뷰 ID 추출
     const pathSegments = window.location.pathname.split('/');
-    currentReviewId = pathSegments[pathSegments.length - 1]; // 예: '/review/16'에서 '16' 추출
+    currentReviewId = pathSegments[pathSegments.length - 1]; // URL에서 리뷰 ID 추출
 
     if (currentReviewId) {
         fetchReviewDetails(currentReviewId);
@@ -57,7 +55,7 @@ function saveEdit() {
             campName: document.getElementById('editSubtitle').value,
             category: document.getElementById('editCategory').value,
             trek: document.getElementById('editDevCategory').value,
-            scope: document.getElementById('editRating').value,
+            scope: parseInt(document.getElementById('editRating').value, 10), // 별점 숫자로 변환
             content: document.getElementById('editContent').value
         };
 
@@ -65,6 +63,7 @@ function saveEdit() {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}` // Access Token 추가
             },
             body: JSON.stringify(updatedReview)
         })
@@ -102,6 +101,150 @@ function saveEdit() {
     }
 }
 
+// 기타 함수 (좋아요 버튼 리스너, 댓글 추가 등) 는 기존과 동일
+document.addEventListener('DOMContentLoaded', function() {
+    const pathSegments = window.location.pathname.split('/');
+    currentReviewId = pathSegments[pathSegments.length - 1]; // URL에서 리뷰 ID 추출
+
+    if (currentReviewId) {
+        fetchReviewDetails(currentReviewId);
+    } else {
+        console.error('리뷰 ID가 제공되지 않았습니다.');
+    }
+
+    addHeartButtonListeners();
+});
+
+// 리뷰 상세 정보를 가져오는 함수
+function fetchReviewDetails(id) {
+    fetch(`/api/reviews/${id}`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.statuscode === "200") {
+            updateReviewDetails(data.data);
+        } else {
+            console.error('에러:', data.msg);
+        }
+    })
+    .catch(error => console.error('API 호출 중 에러 발생:', error));
+}
+
+// 리뷰 상세 정보를 화면에 표시하는 함수
+function updateReviewDetails(review) {
+    document.querySelector('.review-title').textContent = review.title;
+    document.querySelector('#subtitleDisplay').textContent = review.campName;
+    const categories = document.querySelector('.meta-info div');
+    categories.innerHTML = `<span class="category">${review.category}</span><span class="category">${review.trek}</span>`;
+    document.querySelector('.date').textContent = new Date(review.createdAt).toLocaleDateString();
+    document.querySelector('.rating').textContent = '★'.repeat(review.scope) + '☆'.repeat(5 - review.scope);
+    document.querySelector('.detail-content').innerHTML = review.content.replace(/\n/g, '<br>');
+    document.querySelector('.author').textContent = `- ${review.author || '익명'}`;
+
+    // 수정 폼의 초기값 설정
+    document.getElementById('editTitle').value = review.title;
+    document.getElementById('editSubtitle').value = review.campName;
+    document.getElementById('editCategory').value = review.category;
+    document.getElementById('editDevCategory').value = review.trek;
+    document.getElementById('editRating').value = review.scope;
+    document.getElementById('editContent').value = review.content;
+}
+
+// 리뷰 수정 함수
+function saveEdit() {
+    if (confirm('정말 수정하시겠습니까?')) {
+        const updatedReview = {
+            title: document.getElementById('editTitle').value,
+            campName: document.getElementById('editSubtitle').value,
+            category: document.getElementById('editCategory').value,
+            trek: document.getElementById('editDevCategory').value,
+            scope: parseInt(document.getElementById('editRating').value, 10), // 별점 숫자로 변환
+            content: document.getElementById('editContent').value
+        };
+
+        fetch(`/api/reviews/${currentReviewId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}` // Access Token 추가
+            },
+            body: JSON.stringify(updatedReview)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.statuscode === "200") {
+                updateReviewDetails(data.data);
+                document.getElementById('viewMode').style.display = 'block';
+                document.getElementById('editMode').style.display = 'none';
+                Swal.fire({
+                    title: '수정 완료',
+                    text: '리뷰가 성공적으로 수정되었습니다.',
+                    icon: 'success',
+                    confirmButtonText: '확인'
+                });
+            } else {
+                console.error('에러:', data.msg);
+                Swal.fire({
+                    title: '수정 실패',
+                    text: '리뷰 수정 중 오류가 발생했습니다.',
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('API 호출 중 에러 발생:', error);
+            Swal.fire({
+                title: '수정 실패',
+                text: '네트워크 오류가 발생했습니다.',
+                icon: 'error',
+                confirmButtonText: '확인'
+            });
+        });
+    }
+}
+
+// 리뷰 삭제 함수
+function reviewDel() {
+    if (confirm('정말로 이 리뷰를 삭제하시겠습니까?')) {
+        fetch(`/api/reviews/${currentReviewId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}` // Access Token 추가
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.statuscode === "204") { // 성공적으로 삭제됨
+                Swal.fire({
+                    title: '삭제 완료',
+                    text: '리뷰가 성공적으로 삭제되었습니다.',
+                    icon: 'success',
+                    confirmButtonText: '확인'
+                }).then(() => {
+                    window.location.href = '/review'; // 리뷰 목록 페이지로 리디렉션
+                });
+            } else {
+                console.error('에러:', data.msg);
+                Swal.fire({
+                    title: '삭제 실패',
+                    text: '리뷰 삭제 중 오류가 발생했습니다.',
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('API 호출 중 에러 발생:', error);
+            Swal.fire({
+                title: '삭제 실패',
+                text: '네트워크 오류가 발생했습니다.',
+                icon: 'error',
+                confirmButtonText: '확인'
+            });
+        });
+    }
+}
 
 // 좋아요 버튼 리스너 추가 함수
 function addHeartButtonListeners() {

@@ -127,6 +127,13 @@ button.btn.btn-edit {
 button.btn.btn-edit:hover {
     background-color: #5AA9E6;
 }
+button.btn.btn-del {
+    color: var(--color);
+    background-color: #FF6B35;
+}
+button.btn.btn-del:hover {
+    background-color: #e5683b;
+}
 
 .comments-section {
     margin-top: 2rem;
