@@ -105,17 +105,38 @@ public class AnswerCommentController {
     /**
      * 질문에 대한 답변의 댓글 전체 조회 API
      *
-     * @param commentId 댓글 ID
+     * @param answerId 답변 ID
      * @return  댓글의 전체 목록
      */
     @GetMapping
-    public ResponseEntity<ApiResponse> getAnswerComments(@PathVariable Long commentId){
-        List<AnswerCommentResponseDto> comments = answerCommentService.getAnswerComments(commentId);
+    public ResponseEntity<ApiResponse> getAnswerComments(@PathVariable Long answerId){
+
+        List<AnswerCommentResponseDto> comments = answerCommentService.getAnswerComments(answerId);
         ApiResponse response = ApiResponse.builder()
             .msg("댓글 전체 조회 성공")
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(comments)
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    /**
+     * 질문에 대한 답변의 댓글 단건 조회 API
+     *
+     * @param answerId  답변 ID
+     * @param commentId 댓글 ID
+     * @return  댓글 단건 조회
+     */
+    @GetMapping("/{commentId}")
+    public ResponseEntity<ApiResponse> getAnswerComment(@PathVariable Long answerId,
+        @PathVariable Long commentId){
+        AnswerCommentResponseDto responseDto = answerCommentService.getAnswerComment(answerId, commentId);
+        ApiResponse response = ApiResponse.builder()
+            .msg("댓글 단건 조회 성공")
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(responseDto)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+
     }
 }

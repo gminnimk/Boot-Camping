@@ -79,12 +79,18 @@ public class AnswerCommentService {
     /**
      * 댓글 전체 조회
      *
-     * @param commentId 댓글 ID
+     * @param answerId 댓글 ID
      * @return  댓글의 전체 목록
      */
-    public List<AnswerCommentResponseDto> getAnswerComments(Long commentId) {
-        List<AnswerComment> answerComments = answerCommentRepository.findByIdOrderByCreatedAtDesc(commentId);
+    public List<AnswerCommentResponseDto> getAnswerComments(Long answerId) {
+        List<AnswerComment> answerComments = answerCommentRepository.findByAnswerIdOrderByCreatedAtDesc(answerId);
         return answerComments.stream().map(AnswerCommentResponseDto::new).toList();
+    }
+
+    public AnswerCommentResponseDto getAnswerComment(Long answerId, Long commentId) {
+        AnswerComment answerComment = answerCommentRepository.findByAnswerIdAndId(answerId, commentId)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER_COMMENT));
+        return new AnswerCommentResponseDto(answerComment);
     }
 
     /**
@@ -119,5 +125,4 @@ public class AnswerCommentService {
         return answerCommentRepository.findById(commentId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER_COMMENT));
     }
-
 }
