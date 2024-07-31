@@ -3,6 +3,7 @@ let currentPage = 1;
 const coursesPerPage = 9; // 페이지당 코스 수
 let totalCourses = 0;
 let totalPages = 0;
+const accessToken = localStorage.getItem('accessToken');
 
 // 페이지 렌더링 함수
 function renderPage() {
@@ -45,6 +46,10 @@ function fetchCourses() {
 
 // 코스 엘리먼트를 생성합니다
 function createCourseElement(course) {
+    // 날짜와 시간 포맷팅
+    const formatDate = (dateStr) => dateStr ? new Date(dateStr).toLocaleDateString() : '정보 없음';
+
+    // 코스 요소를 생성
     const div = document.createElement('div');
     div.className = 'course';
     div.dataset.id = course.id;
@@ -52,9 +57,7 @@ function createCourseElement(course) {
     // imageUrl이 없을 경우 기본 이미지 사용
     const imageUrl = course.imageUrl || 'https://example.com/default-image.jpg';
 
-    // 날짜와 시간 포맷팅
-    const formatDate = (dateStr) => dateStr ? new Date(dateStr).toLocaleDateString() : '정보 없음';
-
+    // 코스 정보 HTML 구성
     div.innerHTML = `
         <div class="course-image" style="background-image: url('${imageUrl}');"></div>
         <div class="course-info">
@@ -68,8 +71,8 @@ function createCourseElement(course) {
                 </div>
             </div>
             <div class="course-categories">
-                <span class="category">${course.trek}</span>
-                <span class="category">${course.cost}</span>
+                <span class="category">${course.trek || '정보 없음'}</span>
+                <span class="category">${course.cost || '정보 없음'}</span>
             </div>
             <p class="course-institution">운영기관 : ${course.campName || '정보 없음'}</p>
             <p>모집 기간 : ${formatDate(course.recruitStart)} ~ ${formatDate(course.recruitEnd)}</p>
@@ -77,8 +80,18 @@ function createCourseElement(course) {
         </div>
     `;
 
+    // 코스 요소 클릭 시 상세 페이지로 이동
+    div.addEventListener('click', () => goToCourseDetail(course.id));
+
     return div;
 }
+
+// 페이지에서 코스 상세보기 함수 예시
+function goToCourseDetail(courseId) {
+    const url = new URL(`/camp/${courseId}`, window.location.origin);
+    window.location.href = url.href;
+}
+
 
 // 페이지네이션 버튼 업데이트 함수
 function updatePaginationButtons() {
@@ -178,6 +191,17 @@ function addHeartButtonListeners() {
             likeCountElement.textContent = likes;
         });
     });
+}
+
+
+function addReview() {
+    if (!accessToken) {
+        alert('로그인이 필요합니다.');
+        window.location.href = '/auth';
+    } else {
+        const addUrl = document.querySelector('.write-review-button').getAttribute('review-add-url');
+        window.location.href = addUrl;
+    }
 }
 
 // 페이지 로드 시 코스 데이터를 가져와서 렌더링
@@ -302,9 +326,4 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('필터가 적용되었습니다. 실제 구현 시 서버와 통신하여 결과를 표시합니다.');
     }
 });
-
-function startReview() {
-    const addUrl = document.querySelector('.start-review-btn').getAttribute('camp-add');
-    window.location.href = addUrl;
-}
 
