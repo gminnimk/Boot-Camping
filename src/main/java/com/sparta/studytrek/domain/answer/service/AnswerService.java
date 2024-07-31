@@ -81,6 +81,17 @@ public class AnswerService {
         return answerPage.map(AnswerResponseDto::new);
     }
 
+    /**
+     * 답변 단건 조회
+     *
+     * @param questionId    질문 ID
+     * @param answerId      답변 ID
+     * @return  해당 답변의 응답 데이터
+     */
+    public AnswerResponseDto getAnswer(Long questionId, Long answerId) {
+        Answer answer = findByAnswerId(answerId);
+        return new AnswerResponseDto(answer);
+    }
 
     /**
      * 질문 찾기
