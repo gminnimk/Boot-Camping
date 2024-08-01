@@ -1,0 +1,53 @@
+### 로그인 login
+POST {{apiUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "test1234",
+  "password": "Test1234%^&"
+}
+
+> {%
+  client.global.set("accessToken", response.body.data.accessToken)
+  client.global.set("refreshToken", response.body.data.refreshToken)
+
+  console.log('Response Status:', response.body.data.accessToken);
+  console.log('Response Data:', response.body.data.refreshToken);
+%}
+
+### 질문 작성
+POST {{apiUrl}}/questions
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "title": "제목",
+  "content": "내용",
+  "category": "카테고리"
+}
+
+### 질문 전체 조회
+GET {{apiUrl}}/questions
+Content-Type: application/json
+
+
+### 질문 단건 조회
+GET {{apiUrl}}/questions/1
+Content-Type: application/json
+
+
+### 질문 수정
+PUT {{apiUrl}}/questions/1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "title": "수정된 제목",
+  "content": "수정된 내용",
+  "category": "수정된 카테고리"
+}
+
+### 질문 삭제
+DELETE {{apiUrl}}/questions/1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
