@@ -1,52 +1,59 @@
-function goToMainPage() {
-    console.log("메인 페이지로 이동");
-    // 실제로는 window.location.href = "메인페이지URL"; 를 사용할 것입니다.
-}
+document.addEventListener('DOMContentLoaded', function () {
+  const pathSegments = window.location.pathname.split('/');
+  currentStudyId = pathSegments[pathSegments.length - 1]; // URL에서 스터디 ID 추출
 
-function editStudy() {
-    console.log("스터디 정보 수정");
-    // 여기에 수정 로직을 구현합니다.
-}
+  if (currentStudyId) {
+    fetchStudyDetails(currentStudyId);
+    fetchComments(currentStudyId); // 댓글을 가져오는 함수 호출
+  } else {
+    console.error('스터디 ID가 제공되지 않았습니다.');
+  }
 
-function deleteStudy() {
-    if (confirm("정말로 이 스터디를 삭제하시겠습니까?")) {
-        console.log("스터디 삭제");
-        // 여기에 삭제 로직을 구현합니다.
-    }
-}
-
-function editComment(commentId) {
-    console.log("댓글 " + commentId + " 수정");
-    // 여기에 댓글 수정 로직을 구현합니다.
-}
-
-function deleteComment(commentId) {
-    if (confirm("정말로 이 댓글을 삭제하시겠습니까?")) {
-        console.log("댓글 " + commentId + " 삭제");
-        // 여기에 댓글 삭제 로직을 구현합니다.
-    }
-}
-
-function toggleReplyForm(commentId) {
-    const replyForm = document.getElementById('replyForm' + commentId);
-    replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
-}
-
-function submitReply(commentId) {
-    const replyText = document.querySelector('#replyForm' + commentId + ' textarea').value;
-    console.log("댓글 " + commentId + "에 답글 작성: " + replyText);
-    // 여기에 답글 제출 로직을 구현합니다.
-}
-
-document.querySelector('.comment-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const name = this.querySelector('input[type="text"]').value;
-    const comment = this.querySelector('textarea').value;
-    console.log("새 댓글 작성: " + name + " - " + comment);
-    // 여기에 새 댓글 제출 로직을 구현합니다.
+  addHeartButtonListeners();
 });
 
-function modifyStudy() {
-    const addUrl = document.querySelector('.modify-button').getAttribute('data-submit-url');
-    window.location.href = addUrl;
+// 스터디 상세 정보를 가져오는 함수
+function fetchStudyDetails(id) {
+  fetch(`/api/studies/${id}`)  // 백틱(`)을 사용하여 템플릿 리터럴로 수정
+  .then(response => response.json())
+  .then(data => {
+    if (data.statuscode === "200") {
+      updateStudyDetails(data.data);
+    } else {
+      console.error('에러:', data.msg);
+    }
+  })
+  .catch(error => console.error('API 호출 중 에러 발생:', error));
+}
+
+// 스터디 상세 정보를 화면에 표시하는 함수
+function updateStudyDetails(study) {
+  // 제목 설정
+  document.querySelector('#title').textContent = study.title || '';
+
+  // 카테고리 설정
+  document.querySelector('#category').textContent = study.category || '';
+
+  // 설명 설정
+  document.querySelector('#description').textContent = study.content || '';
+
+  // 최대 인원 설정
+  document.querySelector('#maxMembers').textContent = study.maxCount || '';
+
+  // 예상 기간 설정
+  document.querySelector('#duration').textContent = study.periodExpected || '';
+
+  // 모임 주기 설정
+  document.querySelector('#meetingFrequency').textContent = study.cycle || '';
+}
+
+// 선택된 카테고리를 가져오는 함수
+function getCheckedCategory() {
+  const categoryRadios = document.querySelectorAll('.category-radio');
+  for (const radio of categoryRadios) {
+    if (radio.checked) {
+      return radio.value;
+    }
+  }
+  return ''; // 기본값으로 빈 문자열 반환
 }
