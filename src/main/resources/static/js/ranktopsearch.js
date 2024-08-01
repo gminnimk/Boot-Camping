@@ -57,41 +57,6 @@ function applyFilters() {
   toggleFilter(); // 필터 메뉴를 닫습니다.
 }
 
-
-function updateResults(data) {
-  resultsContainer.innerHTML = ''; // 기존 결과를 지웁니다.
-
-  data.forEach(rank => {
-    const camp = rank.camp; // RankResponseDto의 camp 필드
-    const track = camp.track;
-    const environment = camp.environment;
-    const cost = camp.cost;
-    const name = camp.name;
-
-    const resultItem = document.createElement('div');
-    resultItem.classList.add('ranking-item');
-    resultItem.setAttribute('data-track', track);
-    resultItem.setAttribute('data-environment', environment);
-    resultItem.setAttribute('data-cost', cost);
-
-    // 결과 항목의 HTML을 생성하여 추가합니다.
-    resultItem.innerHTML = `
-                <button class="like-button">❤</button>
-                <h3>${name}</h3>
-                <div class="rating">★★★★☆</div>
-                <div class="review-preview">
-                    "실무에 바로 적용할 수 있는 skills을 배웠습니다. 다만, 속도가 조금 빨랐어요."
-                </div>
-                <div class="review-meta">
-                    작성자: John D. | 날짜: 2023-05-15
-                </div>
-            `;
-
-    resultsContainer.appendChild(resultItem); // 결과 항목을 결과 컨테이너에 추가합니다.
-  });
-  applyFilters(); // 필터를 적용하여 화면에 표시할 항목을 결정합니다.
-}
-
 // 활성화된 필터 옵션들을 확인하고, 이를 필터 요청 객체로 변환하는 함수
 // 활성화된 필터 옵션을 기반으로 필터 요청 객체를 생성합니다.
 function getFilterRequest() {
