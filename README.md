@@ -26,6 +26,11 @@
 - Framework : SpringBoot 3.2.5
 - 인증/인가 방식 : JWT
 
+
+<div style="text-align: left;">  <div style="text-align: left;"> 
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=hgi4657&layout=compact&bg_color=60,7fc8f8,f9f9f9&title_color=ffffff&text_color=ffffff"
+           /> </div> 
+    </div>
   
 # 👍 팀원 소개
 ### 팀명 : ???<br>
