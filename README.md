@@ -13,15 +13,15 @@
 - Framework : SpringBoot 3.2.5
 - 인증/인가 방식 : JWT
   
-# 👉 팀원 소개
-### 팀명 : 감자들 🥔<br>
+# 👍 팀원 소개
+### 팀명 : ???<br>
 - 팀장  : ${\textsf{\color{coral}박민영}}$
 - 부팀장 :  ${\textsf{\color{orange}조성훈A}}$
 - 팀원 
   - 김경민
   - 최지연
 
-# 👊 역할 분담
+# 👉 역할 분담 👈
 <details>
 <summary>
 박민영
@@ -54,7 +54,7 @@
  
 </details>
 
-# 🎬 프로젝트 소개
+# 🔍 프로젝트 소개
 #### 기능 소개
 <details>
 <summary>
@@ -104,7 +104,7 @@
   
 </details>
 
-# 📱 와이어 프레임
+# 🖼️ 와이어 프레임
 
 
 
@@ -138,7 +138,7 @@ API 명세서
 </details>
 
 
-# 📓 회고
+# ✍️ 회고
 
 <details>
 <summary>
