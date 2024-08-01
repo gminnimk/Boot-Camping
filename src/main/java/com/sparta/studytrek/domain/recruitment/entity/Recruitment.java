@@ -53,6 +53,8 @@ public class Recruitment extends Timestamped {
     @Column(nullable = false)
     private LocalDate recruitEnd;  // 모집 종료일
 
+    private String campName; // 캠프 이름
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;  // 유저 정보
@@ -71,6 +73,7 @@ public class Recruitment extends Timestamped {
         this.recruitStart = requestDto.getRecruitStart();
         this.recruitEnd = requestDto.getRecruitEnd();
         this.user = user;
+        this.campName = requestDto.getCampName();
     }
 
     public void updateRecruitment(RecruitmentRequestDto requestDto) {
@@ -86,5 +89,6 @@ public class Recruitment extends Timestamped {
         this.campEnd = requestDto.getCampEnd();
         this.recruitStart = requestDto.getRecruitStart();
         this.recruitEnd = requestDto.getRecruitEnd();
+        this.campName = requestDto.getCampName();
     }
 }

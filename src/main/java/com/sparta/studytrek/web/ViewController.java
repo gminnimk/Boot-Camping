@@ -70,7 +70,7 @@ public class ViewController {
     @GetMapping("/camp/add")
     public String showAddCamp() { return "recruitment/recruitmentAdd"; }
 
-    @GetMapping("/camp/detail")
+    @GetMapping("/camp/{campId}")
     public String showCampDetail() { return "recruitment/recruitmentDetail"; }
 
 }
