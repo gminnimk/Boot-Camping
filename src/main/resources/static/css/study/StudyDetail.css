@@ -192,31 +192,43 @@ body {
 
 
 .reply-form {
-    margin-top: 20px;
-}
-
-.reply-form textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    resize: vertical;
-}
-
-.reply-form button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
     margin-top: 10px;
+    display: none;
+    color: var(--color);
+}
+.reply-form input {
+    background-color: var(--sidebar-bg);
+    color: var(--color);
+    width: calc(100% - 120px);
+    height: 50px;
+    padding: 0 0.5rem;
+    margin-right: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.reply-form button {
+    background-color: #7FC8F8;
+    color: var(--color);
+    font-weight: bold;
+    border: none;
+    height: 50px;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
     transition: background-color 0.3s;
 }
-
-.reply-form button:hover, .add-comment button:hover {
-    background-color: #0056b3;
+.reply-form button:hover {
+    background-color: #5AA9E6;
+}
+.replies {
+    margin-left: 20px;
+    border-left: 2px solid #e0e0e0;
+    padding-left: 10px;
+    margin-top: 15px;
 }
 
 
@@ -231,6 +243,7 @@ body {
 .delete-button {
     background-color: #FF6B35;
 }
+
 
 .reply-button, .edit-button, .delete-button {
     color: var(--color);
