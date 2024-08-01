@@ -21,13 +21,9 @@ let selectedCategoryList = {
 flatpickr(".date-range", {
   mode: "range",
   dateFormat: "Y-m-d",
-  disable: [
-    function(date) {
-      return (date.getDay() === 0 || date.getDay() === 6);
-    }
-  ],
+  disable: [], // 주말 비활성화 설정 제거
   locale: {
-    firstDayOfWeek: 1
+    firstDayOfWeek: 6 // 토요일부터 시작
   }
 });
 
@@ -107,6 +103,7 @@ editButton.addEventListener('click', function() {
 // 저장 버튼 클릭 시
 saveButton.addEventListener('click', function() {
   const [campStart, campEnd] = document.querySelector('.course-sidebar .editable.date-range').value.split(' to ');
+  const [recruitStart, recruitEnd] = document.querySelector('.course-sidebar .editable.recruit').value.split(' to ');
 
   const recruitmentData = {
     title: document.querySelector('.course-title.editable').value,
@@ -120,8 +117,8 @@ saveButton.addEventListener('click', function() {
     classTime: document.querySelector('.editable.class-time').value,
     campStart: campStart,
     campEnd: campEnd,
-    recruitStart: '2024-07-01',
-    recruitEnd: '2024-07-31'
+    recruitStart: recruitStart,
+    recruitEnd: recruitEnd
   };
 
   // API 호출
@@ -183,9 +180,13 @@ function updateViewMode(data) {
   document.querySelector('.course-info .non-editable').textContent = data.content;
   document.querySelector('.course-info .editable').value = data.content;
 
-  // 기간 업데이트
-  document.querySelector('.course-sidebar .non-editable').textContent = `기간: ${data.campStart} ~ ${data.campEnd}`;
+  // 참여 기간 업데이트
+  document.querySelector('.course-sidebar .non-editable').textContent = `참여 기간: ${data.campStart} ~ ${data.campEnd}`;
   document.querySelector('.course-sidebar .editable.date-range').value = `${data.campStart} to ${data.campEnd}`;
+
+  // 모집 기간 업데이트
+  document.querySelector('.course-sidebar .non-editable.recruit').textContent = `모집 기간: ${data.recruitStart} ~ ${data.recruitEnd}`;
+  document.querySelector('.course-sidebar .editable.recruit.date-range').value = `${data.recruitStart} to ${data.recruitEnd}`;
 
   // 수업 시간 업데이트
   document.querySelector('.non-editable.class-time').textContent = `수업 시간: ${data.classTime}`;
