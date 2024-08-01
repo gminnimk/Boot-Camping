@@ -61,7 +61,7 @@ public class StudyReplyService {
             commentId);
         return replies.stream()
             .map(this::buildStudyReplyResponseDto)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     /**

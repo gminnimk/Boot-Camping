@@ -28,6 +28,7 @@ Authorization: Bearer {{accessToken}}
   "cost": "국비",
   "trek": "백엔드",
   "level": "초급",
+  "campName" : "스파르타",
   "classTime": "월-금 오전9시~오후6시",
   "campStart": "2024-08-01",
   "campEnd": "2024-08-31",

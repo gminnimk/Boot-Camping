@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class ReviewResponseDto {
-
+    private Long id;
     private String title;
     private String content;
     private String campName;
@@ -16,6 +16,7 @@ public class ReviewResponseDto {
     private LocalDateTime createdAt;
 
     public ReviewResponseDto(Review creatReview) {
+        this.id = creatReview.getId();
         this.title = creatReview.getTitle();
         this.content = creatReview.getContent();
         this.scope = creatReview.getScope();

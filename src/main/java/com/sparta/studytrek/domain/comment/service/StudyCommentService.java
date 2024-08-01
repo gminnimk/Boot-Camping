@@ -52,7 +52,7 @@ public class StudyCommentService {
     public List<StudyCommentResponseDto> getComments(Long studyId) {
         List<StudyComment> comments = studyCommentRepository.findByStudyId(studyId);
         return comments.stream().map(this::buildStudyCommentResponseDto)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     /**

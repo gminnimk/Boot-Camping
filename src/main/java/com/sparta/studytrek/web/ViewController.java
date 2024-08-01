@@ -34,7 +34,7 @@ public class ViewController {
     @GetMapping("/review")
     public String showReview() { return "review/reviewMain"; }
 
-    @GetMapping("/review/detail")
+    @GetMapping("/review/{reviewId}")
     public String showReviewDetail() { return "review/reviewDetail"; }
 
     @GetMapping("/review/add")
@@ -70,7 +70,7 @@ public class ViewController {
     @GetMapping("/camp/add")
     public String showAddCamp() { return "recruitment/recruitmentAdd"; }
 
-    @GetMapping("/camp/detail")
+    @GetMapping("/camp/{campId}")
     public String showCampDetail() { return "recruitment/recruitmentDetail"; }
 
 }

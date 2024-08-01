@@ -1,6 +1,7 @@
 package com.sparta.studytrek.domain.answer.entity;
 
 import com.sparta.studytrek.common.Timestamped;
+import com.sparta.studytrek.domain.answer.dto.AnswerRequestDto;
 import com.sparta.studytrek.domain.auth.entity.User;
 import com.sparta.studytrek.domain.comment.entity.AnswerComment;
 import com.sparta.studytrek.domain.question.entity.Question;
@@ -32,6 +33,16 @@ public class Answer extends Timestamped {
 
     @Column(nullable = false)
     private String content;
+
+    public Answer(AnswerRequestDto requestDto, Question question,User user){
+        this.content = requestDto.getContent();
+        this.question = question;
+        this.user = user;
+    }
+
+    public void update(AnswerRequestDto requestDto){
+        this.content = requestDto.getContent();
+    }
 
     public Answer(Question question, User user, String content) {
         this.question = question;
