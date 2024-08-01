@@ -3,6 +3,9 @@
 ### 트랙만 조회
 GET {{apiUrl}}/ranks/filter?track=백엔드
 
+### 트랙 여럿 조회
+GET {{apiUrl}}/ranks/filter?track=백엔드&track=프론트엔드
+
 ### 수업 환경만 조회
 GET {{apiUrl}}/ranks/filter?environment=오프라인
 
