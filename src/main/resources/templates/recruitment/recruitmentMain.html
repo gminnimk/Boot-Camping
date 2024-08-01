@@ -23,7 +23,7 @@
             <div class="search-bar">
                 <div class="search-input-wrapper">
                     <input type="text" placeholder="부트캠프 검색..." id="search-input">
-                    <button class="search-button" onclick="searchCourses()">검색</button>
+                    <button id="search-button" class="search-button">검색</button>
                 </div>
                 <button class="filter-button" onclick="toggleFilters()">필터</button>
             </div>
@@ -75,7 +75,7 @@
                     <h2>Write a Review</h2>
                     <p>Share your experience with others.</p>
                 </div>
-                <button class="start-review-btn" onclick="startReview()" th:camp-add="@{/api/camp/add}">START A REVIEW</button>
+                <button class="start-review-btn" onclick="addReview()" th:camp-add="@{/camp/add}">START A REVIEW</button>
             </div>
             <div class="sort-buttons">
                 <button class="sort-button" data-sort="views">조회순</button>
@@ -83,7 +83,7 @@
                 <button class="sort-button" data-sort="likes">좋아요순</button>
                 <button class="sort-button" data-sort="deadline">마감임박</button>
             </div>
-            <div class="courses">
+            <div class="courses"id="courses-container">
                 <div class="course" data-id="1">
                     <div class="course-image" style="background-image: url('https://example.com/coding1.jpg');"></div>
                     <div class="course-info">
@@ -150,12 +150,9 @@
                     </div>
                 </div>
             </div>
-            <div class="pagination">
+            <div class="pagination" id="pagination-container">
                 <button id="prevBtn" disabled>Previous</button>
-                <button class="active">1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>4</button>
+                <div id="pageNumbers" class="page-numbers-container"></div> <!-- 페이지 번호 컨테이너 추가 -->
                 <button id="nextBtn">Next</button>
             </div>
         </div>

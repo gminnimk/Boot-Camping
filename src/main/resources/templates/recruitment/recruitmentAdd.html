@@ -33,7 +33,6 @@
                                 <option value="">선택하세요</option>
                                 <option value="온라인">온라인</option>
                                 <option value="오프라인">오프라인</option>
-                                <option value="혼합">혼합</option>
                             </select>
                         </div>
                         <div class="category-group">
@@ -78,6 +77,7 @@
                     <label for="institution">운영기관</label>
                     <div class="institution-search">
                         <input type="text" id="institution" name="institution" required autocomplete="off">
+                        <div id="institutionResults" class="institution-results"></div>
                     </div>
                     <div id="institutionError" class="error-message"></div>
                 </div>
@@ -87,14 +87,19 @@
                     <div id="courseIntroError" class="error-message"></div>
                 </div>
                 <div class="form-group">
-                    <label for="courseContent">교육 내용</label>
+                    <label for="courseContent">모집 내용</label>
                     <textarea id="courseContent" name="courseContent" required></textarea>
                     <div id="courseContentError" class="error-message"></div>
                 </div>
                 <div class="form-group">
-                    <label for="coursePeriod">기간</label>
+                    <label for="coursePeriod">참여 기간</label>
                     <input type="text" id="coursePeriod" name="coursePeriod" class="date-range" required>
                     <div id="coursePeriodError" class="error-message"></div>
+                </div>
+                <div class="form-group">
+                    <label for="coursePeriod">모집 기간</label>
+                    <input type="text" id="courseRecruitment" name="courseRecruitment" class="date-range" required>
+                    <div id="courseRecruitmentError" class="error-message"></div>
                 </div>
                 <div class="form-group">
                     <label for="courseTime">수업 시간</label>
