@@ -32,21 +32,51 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 ### 프로필 승인 (관리자용)
-POST {{apiUrl}}/admin/profiles/2/approve
+POST {{apiUrl}}/admin/profiles/8/approve
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 ### 프로필 거절 (관리자용)
-POST {{apiUrl}}/admin/profiles/3/reject
+POST {{apiUrl}}/admin/profiles/9/reject
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
-### 프로필 전체 조회 (관리자용)
-GET {{apiUrl}}/admin/profiles
+### Role 별 프로필 전체 조회 (관리자용) BOOTCAMP
+GET {{apiUrl}}/admin/profiles/role/BOOTCAMP
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
-### 프로필 상태별 조회 (관리자용)
-GET {{apiUrl}}/admin/profiles/status/REJECTED
+### Role 별 프로필 전체 조회 (관리자용) USER
+GET {{apiUrl}}/admin/profiles/role/USER
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### Role 별 Status 별 프로필 조회 (관리자용) BOOTCAMP, PENDING
+GET {{apiUrl}}/admin/profiles/role/BOOTCAMP/status/PENDING
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### Role 별 Status 별 프로필 조회 (관리자용) BOOTCAMP, APPROVED
+GET {{apiUrl}}/admin/profiles/role/BOOTCAMP/status/APPROVED
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### Role 별 Status 별 프로필 조회 (관리자용) BOOTCAMP, REJECTD
+GET {{apiUrl}}/admin/profiles/role/BOOTCAMP/status/REJECTED
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### Role 별 Status 별 프로필 조회 (관리자용) USER, PENDING
+GET {{apiUrl}}/admin/profiles/role/USER/status/PENDING
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### Role 별 Status 별 프로필 조회 (관리자용) USER, APPROVED
+GET {{apiUrl}}/admin/profiles/role/USER/status/APPROVED
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### Role 별 Status 별 프로필 조회 (관리자용) USER, REJECTD
+GET {{apiUrl}}/admin/profiles/role/USER/status/REJECTED
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}

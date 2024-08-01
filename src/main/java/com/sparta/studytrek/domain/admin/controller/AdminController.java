@@ -19,6 +19,7 @@ import com.sparta.studytrek.domain.admin.dto.AdminRequestDto;
 import com.sparta.studytrek.domain.admin.dto.AdminResponseDto;
 import com.sparta.studytrek.domain.admin.service.AdminService;
 import com.sparta.studytrek.domain.auth.dto.TokenResponseDto;
+import com.sparta.studytrek.domain.auth.entity.UserRoleEnum;
 import com.sparta.studytrek.domain.profile.dto.ProfileResponseDto;
 import com.sparta.studytrek.domain.profile.entity.ProfileStatus;
 import com.sparta.studytrek.domain.profile.service.ProfileService;
@@ -74,7 +75,7 @@ public class AdminController {
      * @return 회원탈퇴 성공 응답 데이터
      */
     @DeleteMapping("/users/{userId}")
-    public ResponseEntity<ApiResponse> adminDelete(@PathVariable("userId") Long userId, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ApiResponse> adminDelete(@PathVariable("userId") Long userId) {
         adminService.adminDelete(userId);
         ApiResponse response = ApiResponse.builder()
             .msg("회원 탈퇴 성공")
@@ -90,7 +91,7 @@ public class AdminController {
      * @return 승인 성공 응답 데이터
      */
     @PostMapping("/profiles/{profileId}/approve")
-    public ResponseEntity<ApiResponse> approveProfile(@PathVariable("profileId") Long profileId , @AuthenticationPrincipal UserDetails userDetails ) {
+    public ResponseEntity<ApiResponse> approveProfile(@PathVariable("profileId") Long profileId) {
         profileService.approveProfile(profileId);
         ApiResponse response = ApiResponse.builder()
             .msg("프로필 승인 성공")
@@ -106,7 +107,7 @@ public class AdminController {
      * @return 거절 성공 응답 데이터
      */
     @PostMapping("/profiles/{profileId}/reject")
-    public ResponseEntity<ApiResponse> rejectProfile(@PathVariable("profileId") Long profileId, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ApiResponse> rejectProfile(@PathVariable("profileId") Long profileId) {
         profileService.rejectProfile(profileId);
         ApiResponse response = ApiResponse.builder()
             .msg("프로필 거절 성공")
@@ -120,9 +121,9 @@ public class AdminController {
      *
      * @return 조회 성공 응답 데이터
      */
-    @GetMapping("/profiles")
-    public ResponseEntity<ApiResponse> getAllProfiles(@AuthenticationPrincipal UserDetails userDetails) {
-        List<ProfileResponseDto> responseDtos = profileService.getAllProfiles().getBody();
+    @GetMapping("/profiles/role/{role}")
+    public ResponseEntity<ApiResponse> getAllProfiles(@PathVariable("role")UserRoleEnum role) {
+        List<ProfileResponseDto> responseDtos = profileService.getProfilesByRole(role).getBody();
         ApiResponse response = ApiResponse.builder()
             .msg("전체 프로필 조회 성공")
             .statuscode(String.valueOf(HttpStatus.OK.value()))
@@ -137,11 +138,11 @@ public class AdminController {
      * @param status 조회할 프로필 상태를 선택
      * @return 조회 성공 응답 데이터
      */
-    @GetMapping("/profiles/status/{status}")
-    public ResponseEntity<ApiResponse> getProfileByStatus(@PathVariable ProfileStatus status, @AuthenticationPrincipal UserDetails userDetails) {
-        List<ProfileResponseDto> responseDtos = profileService.getProfilesByStatus(status).getBody();
+    @GetMapping("/profiles/role/{role}/status/{status}")
+    public ResponseEntity<ApiResponse> getProfileByStatus(@PathVariable("role") UserRoleEnum role, @PathVariable("status") ProfileStatus status) {
+        List<ProfileResponseDto> responseDtos = profileService.getProfilesByRoleAndStatus(role, status).getBody();
         ApiResponse response = ApiResponse.builder()
-            .msg(status + " 상태의 프로필 조회 성공")
+            .msg(role + " 역할과" + status + " 상태의 프로필 조회 성공")
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDtos)
             .build();

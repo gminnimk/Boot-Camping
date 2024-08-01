@@ -2,7 +2,9 @@ package com.sparta.studytrek.domain.profile.service;
 
 import com.sparta.studytrek.common.exception.CustomException;
 import com.sparta.studytrek.common.exception.ErrorCode;
+import com.sparta.studytrek.domain.auth.entity.Role;
 import com.sparta.studytrek.domain.auth.entity.User;
+import com.sparta.studytrek.domain.auth.entity.UserRoleEnum;
 import com.sparta.studytrek.domain.auth.service.UserService;
 import com.sparta.studytrek.domain.profile.dto.ProfileRequestDto;
 import com.sparta.studytrek.domain.profile.dto.ProfileResponseDto;
@@ -99,8 +101,10 @@ public class ProfileServiceImpl implements ProfileService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public ResponseEntity<List<ProfileResponseDto>> getAllProfiles() {
-		List<Profile> profiles = profileRepository.findAll();
+	public ResponseEntity<List<ProfileResponseDto>> getProfilesByRole(UserRoleEnum roleEnum) {
+		Role role = userService.findRoleByName(roleEnum);
+
+		List<Profile> profiles = profileRepository.findAllByUser_Role(role);
 		List<ProfileResponseDto> responseDtos = profiles.stream()
 			.map(ProfileResponseDto::new)
 			.collect(Collectors.toList());
@@ -109,8 +113,10 @@ public class ProfileServiceImpl implements ProfileService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public ResponseEntity<List<ProfileResponseDto>> getProfilesByStatus(ProfileStatus status) {
-		List<Profile> profiles = profileRepository.findAllByStatus(status);
+	public ResponseEntity<List<ProfileResponseDto>> getProfilesByRoleAndStatus(UserRoleEnum roleEnum, ProfileStatus status) {
+		Role role = userService.findRoleByName(roleEnum);
+
+		List<Profile> profiles = profileRepository.findAllByUser_RoleAndStatus(role, status);
 		List<ProfileResponseDto> responseDtos = profiles.stream()
 			.map(ProfileResponseDto::new)
 			.collect(Collectors.toList());

@@ -1,5 +1,6 @@
 package com.sparta.studytrek.domain.profile.service;
 
+import com.sparta.studytrek.domain.auth.entity.UserRoleEnum;
 import com.sparta.studytrek.domain.profile.dto.ProfileRequestDto;
 import com.sparta.studytrek.domain.profile.dto.ProfileResponseDto;
 import com.sparta.studytrek.domain.profile.entity.ProfileStatus;
@@ -17,6 +18,6 @@ public interface ProfileService {
 	ResponseEntity<Void> deleteProfile(Long profileId, UserDetails userDetails);
 	ResponseEntity<Void> approveProfile(Long profileId);
 	ResponseEntity<Void> rejectProfile(Long profileId);
-	ResponseEntity<List<ProfileResponseDto>> getAllProfiles();
-	ResponseEntity<List<ProfileResponseDto>> getProfilesByStatus(ProfileStatus status);
+	ResponseEntity<List<ProfileResponseDto>> getProfilesByRole(UserRoleEnum role);
+	ResponseEntity<List<ProfileResponseDto>> getProfilesByRoleAndStatus(UserRoleEnum roleEnum, ProfileStatus status);
 }

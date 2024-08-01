@@ -3,6 +3,7 @@ package com.sparta.studytrek.domain.profile.dto;
 import java.time.LocalDate;
 import java.util.Set;
 
+import com.sparta.studytrek.domain.auth.entity.Role;
 import com.sparta.studytrek.domain.profile.entity.Profile;
 import com.sparta.studytrek.domain.profile.entity.ProfileStatus;
 
@@ -20,6 +21,7 @@ public class ProfileResponseDto {
 	private final String certificate;
 	private final ProfileStatus status;
 	private final String name;
+	private final Role role;
 
 	public ProfileResponseDto(Profile profile) {
 		this.id = profile.getId();
@@ -32,5 +34,6 @@ public class ProfileResponseDto {
 		this.certificate = profile.getCertificate();
 		this.status = profile.getStatus();
 		this.name = profile.getUser().getName();
+		this.role = profile.getUser().getRole();
 	}
 }
