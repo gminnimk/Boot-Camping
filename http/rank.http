@@ -13,5 +13,5 @@ GET {{apiUrl}}/ranks/filter?cost=사비
 GET {{apiUrl}}/ranks/filter?track=백엔드&environment=온라인
 
 ###트랙과 수업환경 & 비용 포함 조회
-GET {{apiUrl}}/ranks/filter?track=백엔드&environment=온라인&cost=국비
+GET {{apiUrl}}/ranks/filter?track=프론트엔드&environment=오프라인&cost=사비
 
