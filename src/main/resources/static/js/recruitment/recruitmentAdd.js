@@ -194,10 +194,6 @@ courseForm.addEventListener('submit', function(e) {
             recruitEnd: recruitToDate
         };
 
-
-        // 데이터 확인 (디버깅용)
-        console.log('폼 데이터:', formData);
-
         // 서버로 데이터 전송
         fetch('/api/camps', {
             method: 'POST',
