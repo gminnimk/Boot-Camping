@@ -41,11 +41,10 @@ public class UserService {
      * 회원가입 로직
      *
      * @param requestDto 회원가입 요청 데이터
-     * @param userRole   파라미터로 받은 권한 구분
      * @return 유저 회원가입 정보 반환
      */
     @Transactional
-    public SignUpResponseDto signup(SignUpRequestDto requestDto, String userRole) {
+    public SignUpResponseDto signup(SignUpRequestDto requestDto) {
         String username = requestDto.getUsername();
         String password = passwordEncoder.encode(requestDto.getPassword());
 
@@ -56,7 +55,7 @@ public class UserService {
         }
 
         // ROLE 확인
-        UserRoleEnum roleEnum = UserRoleEnum.valueOf(userRole);
+        UserRoleEnum roleEnum = UserRoleEnum.valueOf(requestDto.getUserRole());
         Role role = roleRepository.findByRole(roleEnum)
                 .orElseThrow(() -> new IllegalArgumentException("Role not found"));
 
