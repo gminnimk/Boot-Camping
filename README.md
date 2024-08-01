@@ -57,7 +57,7 @@
 
 <details>
 <summary>
-공통 구현
+👥 공통 구현
 </summary>
 
 - 로그인
@@ -100,17 +100,56 @@
 </details>
 
 
-# 📢 Github Rules & Code Convention
+# ⚖️ Github Rules
 <details>
 <summary>
-  ⚖️ Github Rules
+브랜치 이름 규칙
 </summary>
   
-
+- dev 브랜치, 각자 개발 기능 구현 feat/(기능이름) 브랜치
+- 두가지 단어라면 ‘ - ’ (하이픈) 사용해서 구분
+- feat/signup, feat/order-create
 </details>
 <details>
 <summary>
-  🔑 Code Convention
+커밋 메시지 규칙  
+</summary>
+  
+- **✨ update - #1 로그인 함수 구현**
+    - #1 은 이슈 번호
+- ✨ update, 🩹 fix - #1 로그인 함수 구현, 회원가입 함수명 수정
+</details>
+<details>
+<summary>
+이슈 작성 규칙 (자세한 내용은 아래의 이슈 템플릿)
+</summary>
+  
+- title : [Feat]  이슈 제목
+- description : 템플릿 따라서 작성
+</details>
+<details>
+<summary>
+PR 작성 규칙
+</summary>
+  
+- pr 규칙 사용 [현재날짜] 브랜치명 >> 간단한 설명
+- ex) [2024/06/19] feat/signup 로그인 기능 구현
+</details>
+
+<summary>
+코드 리뷰 적용 (리뷰 1개 이상 merge 가능)
+</summary>
+  
+- 코드 리뷰 할 때 할 말이 없어도 뭐라도 적기
+- ex)  빨리 하셨네요, 고생하셨어요, 확인했습니다
+</details>
+
+- RP Merge Approve 1명 이상 있을 때만 승인 설정
+
+# 🔑 Code Convention
+<details>
+<summary>
+  
 </summary>
 
   
