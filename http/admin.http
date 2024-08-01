@@ -1,5 +1,5 @@
 ### 관리자용 회원가입
-POST {{apiUrl}}/admin/signup
+POST {{apiUrl}}/admin/auth/signup
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ### 관리자용 로그인
-POST {{apiUrl}}/admin/login
+POST {{apiUrl}}/admin/auth/login
 Content-Type: application/json
 
 {

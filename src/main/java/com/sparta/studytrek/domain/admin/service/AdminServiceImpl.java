@@ -35,7 +35,6 @@ public class AdminServiceImpl implements AdminService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final UserService userService;
-    private final UserStatusService userStatusService;
     private final RefreshTokenService refreshTokenService;
     private final AdminMapper adminMapper;
     private final UserRepository userRepository;

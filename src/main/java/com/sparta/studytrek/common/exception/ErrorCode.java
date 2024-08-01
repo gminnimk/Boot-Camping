@@ -68,7 +68,7 @@ public enum ErrorCode {
     COMMENT_DELETE_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "댓글 삭제 권한이 없습니다."),
     REPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "대댓글이 존재하지 않습니다."),
     REPLY_UPDATE_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "대댓글 수정 권한이 없습니다."),
-    REPLY_DELETE_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "대댓글 삭제 권한이 없습니다.");
+    REPLY_DELETE_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "대댓글 삭제 권한이 없습니다."),
 
     // Like
     ALREADY_LIKE(HttpStatus.BAD_REQUEST,"이미 좋아요를 눌렀습니다."),
