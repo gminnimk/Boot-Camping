@@ -1,65 +1,79 @@
-// 필터 토글 기능
-document.addEventListener('DOMContentLoaded', function() {
-  const filterToggle = document.querySelector('.filter-toggle');
-  const filterPanel = document.querySelector('.filter-panel');
+// 페이지당 항목 수와 현재 페이지 변수
+const ITEMS_PER_PAGE = 9;
+let currentPage = 1;
+let totalPages = 1;
+let allResults = [];
 
-  if (filterToggle && filterPanel) {  // 요소가 존재하는지 확인
-    filterToggle.addEventListener('click', function () {
-      if (filterPanel.style.display === 'none' || filterPanel.style.display === '') {
-        filterPanel.style.display = 'block';
-        filterToggle.textContent = '상세 필터 ▲';
-      } else {
-        filterPanel.style.display = 'none';
-        filterToggle.textContent = '상세 필터 ▼';
-      }
+// 페이지네이션 기능을 업데이트합니다.
+function updatePagination() {
+  const paginationContainer = document.getElementById('pageNumbers');
+  const prevButton = document.getElementById('prevButton');
+  const nextButton = document.getElementById('nextButton');
+
+  paginationContainer.innerHTML = ''; // 기존 페이지 번호를 지웁니다.
+
+  // 페이지 번호 추가
+  for (let i = 1; i <= totalPages; i++) {
+    const pageNumber = document.createElement('button');
+    pageNumber.textContent = i;
+    pageNumber.classList.add('page-number');
+    if (i === currentPage) {
+      pageNumber.classList.add('active');
+    }
+    pageNumber.addEventListener('click', () => {
+      currentPage = i;
+      updateResultsForCurrentPage();
     });
+    paginationContainer.appendChild(pageNumber);
   }
-});
 
-// API를 호출하여 필터링된 결과를 가져옵니다.
-function fetchFilteredResults(filterRequest) {
-  const queryString = new URLSearchParams(filterRequest).toString();
-  fetch(`/ranks/filter?${queryString}`)
-      .then(response => response.json())
-      .then(data => {
-        updateResults(data);
-      })
-      .catch(error => console.error('Error fetching ranks:', error));
+  // Previous 버튼 상태 업데이트
+  prevButton.disabled = currentPage === 1;
+
+  // Next 버튼 상태 업데이트
+  nextButton.disabled = currentPage === totalPages;
 }
 
-// 필터를 적용하여 화면에 표시할 항목을 결정합니다.
-function applyFilters() {
-  const filterRequest = getFilterRequest(); // 현재 필터 요청을 가져옵니다.
-  fetchFilteredResults(filterRequest); // 필터링된 결과를 가져옵니다.
-  console.log('Applying filters:', filterRequest);
-}
+// 현재 페이지에 맞는 결과만 업데이트합니다.
+function updateResultsForCurrentPage() {
+  const resultsContainer = document.getElementById('resultsContainer');
+  resultsContainer.innerHTML = ''; // 기존 결과를 지웁니다.
 
-// 페이지네이션 기능
-function applyPaginationListeners() {
-  const paginationButtons = document.querySelectorAll('.pagination button');
-  if (paginationButtons.length > 0) {
-    paginationButtons.forEach(button => {
-      button.addEventListener('click', function () {
-        if (!this.classList.contains('active')) {
-          document.querySelector('.pagination button.active')?.classList.remove('active');
-          this.classList.add('active');
-        }
-      });
-    });
-  }
-}
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, allResults.length);
 
-// 좋아요 버튼 기능
-function applyLikeButtonListeners() {
-  const likeButtons = document.querySelectorAll('.like-button');
-  if (likeButtons.length > 0) {
-    likeButtons.forEach(button => {
-      button.addEventListener('click', function (e) {
-        e.stopPropagation();
-        this.classList.toggle('liked');
-      });
-    });
+  for (let i = startIndex; i < endIndex; i++) {
+    const rank = allResults[i];
+    const camp = rank.camp;
+    const track = camp.track;
+    const environment = camp.environment;
+    const cost = camp.cost;
+    const name = camp.name;
+
+    const resultItem = document.createElement('div');
+    resultItem.classList.add('ranking-item');
+    resultItem.setAttribute('data-track', track);
+    resultItem.setAttribute('data-environment', environment);
+    resultItem.setAttribute('data-cost', cost);
+
+    resultItem.innerHTML = `
+      <button class="like-button">❤</button>
+      <h3>${name}</h3>
+      <div class="rating">Ranking: ${rank.ranking}</div>
+      <div class="review-preview">
+        "${camp.description}"
+      </div>
+      <div class="review-meta">
+        작성자: John D. | 날짜: 2023-05-15
+      </div>
+    `;
+
+    resultsContainer.appendChild(resultItem);
   }
+
+  applyLikeButtonListeners(); // 새로 추가된 항목에 좋아요 버튼 리스너 적용
+  applyHoverAnimationListeners(); // 새로 추가된 항목에 호버 애니메이션 리스너 적용
+  updatePagination(); // 페이지네이션 업데이트
 }
 
 // 리뷰 아이템 호버 애니메이션
@@ -82,43 +96,35 @@ function applyHoverAnimationListeners() {
   }
 }
 
+// 좋아요 버튼 기능
+function applyLikeButtonListeners() {
+  const likeButtons = document.querySelectorAll('.like-button');
+  if (likeButtons.length > 0) {
+    likeButtons.forEach(button => {
+      button.addEventListener('click', function (e) {
+        e.stopPropagation();
+        this.classList.toggle('liked');
+      });
+    });
+  }
+}
+
+// 페이지 이동 함수
+function changePage(direction) {
+  if (direction === -1 && currentPage > 1) {
+    currentPage--;
+  } else if (direction === 1 && currentPage < totalPages) {
+    currentPage++;
+  }
+  updateResultsForCurrentPage();
+}
+
 // 결과를 업데이트하여 화면에 표시합니다.
 function updateResults(data) {
-  const resultsContainer = document.getElementById('resultsContainer');
-  resultsContainer.innerHTML = ''; // 기존 결과를 지웁니다.
-
-  data.forEach(rank => {
-    const camp = rank.camp; // RankResponseDto의 camp 필드
-    const track = camp.track;
-    const environment = camp.environment;
-    const cost = camp.cost;
-    const name = camp.name;
-
-    const resultItem = document.createElement('div');
-    resultItem.classList.add('ranking-item');
-    resultItem.setAttribute('data-track', track);
-    resultItem.setAttribute('data-environment', environment);
-    resultItem.setAttribute('data-cost', cost);
-
-    // 결과 항목의 HTML을 생성하여 추가합니다.
-    resultItem.innerHTML = `
-      <button class="like-button">❤</button>
-      <h3>${name}</h3>
-      <div class="rating">Ranking: ${rank.ranking}</div>
-      <div class="review-preview">
-        "${camp.description}"
-      </div>
-      <div class="review-meta">
-        작성자: John D. | 날짜: 2023-05-15
-      </div>
-    `;
-
-    resultsContainer.appendChild(resultItem); // 결과 항목을 결과 컨테이너에 추가합니다.
-  });
-
-  applyLikeButtonListeners(); // 새로 추가된 항목에 좋아요 버튼 리스너 적용
-  applyHoverAnimationListeners(); // 새로 추가된 항목에 호버 애니메이션 리스너 적용
-  applyPaginationListeners(); // 새로 추가된 항목에 페이지네이션 리스너 적용
+  allResults = data; // 전체 결과를 저장합니다.
+  totalPages = Math.ceil(allResults.length / ITEMS_PER_PAGE); // 총 페이지 수 계산
+  currentPage = 1; // 페이지 초기화
+  updateResultsForCurrentPage(); // 현재 페이지의 결과만 업데이트
 }
 
 // DOMContentLoaded 이벤트가 발생하면 필터링된 결과를 업데이트합니다.
@@ -144,9 +150,10 @@ if (rankingSortSelect) {
 
 // 현재 필터 요청을 생성하는 함수
 function getFilterRequest() {
-  const track = document.querySelector('input[name="category"]:checked')?.value || '';
+  const track = document.querySelector('input[name="category"]:checked')?.value
+      || '';
   const environment = '';
   const cost = '';
 
-  return { track, environment, cost };
+  return {track, environment, cost};
 }
