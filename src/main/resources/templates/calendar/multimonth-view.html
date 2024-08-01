@@ -37,6 +37,21 @@
         // 캘린더 헤더의 제목 형식을 "년 월"로 설정
         return date.date.year + '년 ' + (parseInt(date.date.month) + 1) + '월';
       },
+      dayCellContent: function(info) {
+        // "일"을 제거하고 날짜만 표시
+        var number = document.createElement("a");
+        number.classList.add("fc-daygrid-day-number");
+        number.innerHTML = info.dayNumberText.replace('일', ''); // "일"을 제거한 날짜 숫자 설정
+
+        if (info.view.type === "dayGridMonth") {
+          return {
+            html: number.outerHTML // HTML로 반환
+          };
+        }
+        return {
+          domNodes: [] // 다른 뷰에서는 빈 배열 반환
+        };
+      },
       initialView: 'dayGridMonth',  // 디폴트 화면
       initialDate: getCurrentDate(), // 현재 날짜 설정
       editable: true,
@@ -95,6 +110,13 @@
   #calendar {
     max-width: 1000px;
     margin: 0 auto;
+  }
+
+  .fc-day-sun a{
+    color: red;
+  }
+  .fc-day-sat a{
+    color: blue;
   }
 
 </style>
