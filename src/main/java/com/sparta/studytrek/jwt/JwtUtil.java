@@ -118,7 +118,7 @@ public class JwtUtil {
         if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(BEARER_PREFIX.length());
         }
-        throw new IllegalArgumentException("Refresh token not found in request");
+        throw new CustomException(ErrorCode.HEADER_NOT_FOUND_AUTH);
     }
 
     public String getTokenFromRequest(HttpServletRequest req) {

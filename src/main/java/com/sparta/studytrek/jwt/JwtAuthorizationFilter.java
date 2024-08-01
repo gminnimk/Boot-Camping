@@ -44,7 +44,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
                 setAuthentication(username);
             } catch (CustomException e) {
-                handleException(res, "커스텀 필터에러", HttpServletResponse.SC_UNAUTHORIZED);
+                handleException(res, "validate : ", HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             } catch (Exception e) {
                 log.error("Authentication Error: {}", e.getMessage());
