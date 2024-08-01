@@ -1,6 +1,5 @@
 package com.sparta.studytrek.domain.comment.entity;
 
-
 import com.sparta.studytrek.common.Timestamped;
 import com.sparta.studytrek.domain.auth.entity.User;
 import com.sparta.studytrek.domain.reply.entity.StudyReply;
@@ -16,6 +15,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class StudyComment extends Timestamped {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,16 +27,20 @@ public class StudyComment extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    
+
     @Column(nullable = false)
     private String content;
 
     @OneToMany(mappedBy = "studyComment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudyReply> replies = new ArrayList<>();
 
-    public StudyComment (Study study, User user, String content) {
+    public StudyComment(Study study, User user, String content) {
         this.study = study;
         this.user = user;
+        this.content = content;
+    }
+
+    public void updateContent(String content) {
         this.content = content;
     }
 }
