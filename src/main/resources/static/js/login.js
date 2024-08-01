@@ -330,12 +330,13 @@ document.getElementById('signUpButton').addEventListener('click', async (event) 
 document.getElementById('signInButton').addEventListener('click', async (event) => {
     event.preventDefault();
 
-    const username = document.getElementById('loginId');
-    const password = document.getElementById('loginPassword');
+    const username = document.getElementById('loginId').value;
+    const password = document.getElementById('loginPassword').value;
 
     const data = {
-        username: username.value,
-        password: password.value
+        username: username,
+        password: password,
+        role: userDistinction
     };
 
     try {
@@ -347,26 +348,30 @@ document.getElementById('signInButton').addEventListener('click', async (event) 
             body: JSON.stringify(data)
         });
 
+        const result = await response.json();
+
         if (response.ok) {
-            const result = await response.json();
-            alert('로그인 성공');
             localStorage.setItem('accessToken', result.data.accessToken);
             localStorage.setItem('refreshToken', result.data.refreshToken);
             window.location.href = '/home';
         } else {
-            const result = await response.json();
-            alert('로그인 실패: ' + result.message);
+            Swal.fire({
+                title: '로그인 실패',
+                text: result.message || '알 수 없는 오류가 발생했습니다.',
+                icon: 'error',
+                confirmButtonText: '확인'
+            });
         }
     } catch (error) {
-        alert('로그인 중 오류 발생: ' + error.message);
+        console.error('서버 오류:', error);
+        Swal.fire({
+            title: '로그인 실패',
+            text: '서버와의 통신 오류가 발생했습니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+        });
     }
 });
-
-function onLoginSuccess() {
-    const loginButton = document.querySelector('.add-task-button');
-    loginButton.textContent = 'Logout';
-    loginButton.onclick = onLogout;
-}
 
 function onLogoutSuccess() {
     const loginButton = document.querySelector('.add-task-button');

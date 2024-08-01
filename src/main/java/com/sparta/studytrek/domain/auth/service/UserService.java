@@ -92,23 +92,25 @@ public class UserService {
      * @return
      */
     public TokenResponseDto login(LoginRequestDto requestDto) {
-
         User user = userRepository.findByUsername(requestDto.getUsername())
-            .orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         if (user.isWithdrawn()) {
-            throw new IllegalArgumentException("탈퇴한 회원입니다.");
+            throw new CustomException(ErrorCode.WITHDRAW_USER);
         } else if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+            throw new CustomException(ErrorCode.INCORRECT_PASSWORD);
         }
 
-        // 토큰 생성
+        UserRoleEnum roleEnum = UserRoleEnum.valueOf(requestDto.getRole());
+        if (!user.getRole().getRole().equals(roleEnum)) {
+            throw new CustomException(ErrorCode.NOT_AUTHENTICATED_LOGIN);
+        }
+
         String accessToken = jwtUtil.createAccessToken(user.getUsername(),
             user.getRole().toString());
         String refreshToken = jwtUtil.createRefreshToken(user.getUsername(),
             user.getRole().toString());
 
-        // Refresh 토큰 저장
         refreshTokenService.saveRefreshToken(user.getId(), refreshToken);
 
         return new TokenResponseDto(accessToken, refreshToken);
