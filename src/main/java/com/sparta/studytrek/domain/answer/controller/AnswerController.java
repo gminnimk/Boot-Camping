@@ -43,7 +43,8 @@ public class AnswerController {
     @PostMapping
     public ResponseEntity<ApiResponse> createAnswer(@PathVariable("questionId") Long questionId,
         @RequestBody AnswerRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         AnswerResponseDto responseDto = answerService.createAnswer(questionId, requestDto,
             userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
@@ -68,8 +69,8 @@ public class AnswerController {
     public ResponseEntity<ApiResponse> updateAnswer(@PathVariable("questionId") Long questionId,
         @PathVariable("answerId") Long answerId,
         @RequestBody AnswerRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails){
-
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         AnswerResponseDto responseDto = answerService.updateAnswer(questionId, answerId,requestDto, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("답변 수정 성공")
@@ -90,8 +91,8 @@ public class AnswerController {
     @DeleteMapping("/{answerId}")
     public ResponseEntity<ApiResponse> deleteAnswer(@PathVariable("questionId") Long questionId,
         @PathVariable("answerId") Long answerId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails){
-
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         answerService.deleteAnswer(questionId, answerId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("답변 삭제 성공")
@@ -107,7 +108,8 @@ public class AnswerController {
      * @return  답변 전체 목록
      */
     @GetMapping
-    public ResponseEntity<ApiResponse> getAnswers(@PathVariable Long questionId) {
+    public ResponseEntity<ApiResponse> getAnswers(@PathVariable Long questionId)
+    {
         List<AnswerResponseDto> answers = answerService.getAnswers(questionId);
         ApiResponse response = ApiResponse.builder()
             .msg("답변 전체 조회 성공")
@@ -126,8 +128,8 @@ public class AnswerController {
      */
     @GetMapping("{answerId}")
     public ResponseEntity<ApiResponse> getAnswer(@PathVariable("questionId") Long questionId,
-        @PathVariable("answerId") Long answerId){
-
+        @PathVariable("answerId") Long answerId)
+    {
         AnswerResponseDto responseDto = answerService.getAnswer(questionId, answerId);
         ApiResponse response = ApiResponse.builder()
             .msg("답변 단건 조회 성공")
