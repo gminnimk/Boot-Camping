@@ -24,34 +24,46 @@
 # 👉 역할 분담 👈
 <details>
 <summary>
-박민영
+⭐ 박민영
 </summary>
-
+  
+- 부트캠프
+- 리뷰
 </details>
 <details>
 <summary> 
-조성훈A
+👀 조성훈A
 </summary>
 
+- 어드민
+- 마이페이지
 </details>
 <details>
 <summary>
-김경민
+👾 김경민
 </summary>
 
+- 스터디
+- 순위
 </details>
 <details>
 <summary>
-최지연
+📌 최지연
 </summary>
 
+- 질문
+- 좋아요
 </details>  
 
 <details>
 <summary>
 공통 구현
 </summary>
- 
+
+- 로그인
+- 회원가입 
+- 토큰 재발급
+- 프론트 구현 (각자 구현 부분) 
 </details>
 
 # 🔍 프로젝트 소개
