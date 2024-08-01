@@ -73,4 +73,7 @@ public class ViewController {
     @GetMapping("/camp/{campId}")
     public String showCampDetail() { return "recruitment/recruitmentDetail"; }
 
+    @GetMapping("/calendar")
+    public String showCalendar() { return "calendar/multimonth-view"; }
+
 }
