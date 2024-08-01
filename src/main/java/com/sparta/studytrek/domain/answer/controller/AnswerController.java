@@ -6,6 +6,7 @@ import com.sparta.studytrek.domain.answer.dto.AnswerResponseDto;
 import com.sparta.studytrek.domain.answer.service.AnswerService;
 import com.sparta.studytrek.domain.question.dto.QuestionResponseDto;
 import com.sparta.studytrek.security.UserDetailsImpl;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.apache.tomcat.util.http.parser.HttpParser;
@@ -42,8 +43,8 @@ public class AnswerController {
     @PostMapping
     public ResponseEntity<ApiResponse> createAnswer(@PathVariable("questionId") Long questionId,
         @RequestBody AnswerRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         AnswerResponseDto responseDto = answerService.createAnswer(questionId, requestDto,
             userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
@@ -68,8 +69,8 @@ public class AnswerController {
     public ResponseEntity<ApiResponse> updateAnswer(@PathVariable("questionId") Long questionId,
         @PathVariable("answerId") Long answerId,
         @RequestBody AnswerRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails){
-
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         AnswerResponseDto responseDto = answerService.updateAnswer(questionId, answerId,requestDto, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("답변 수정 성공")
@@ -90,30 +91,30 @@ public class AnswerController {
     @DeleteMapping("/{answerId}")
     public ResponseEntity<ApiResponse> deleteAnswer(@PathVariable("questionId") Long questionId,
         @PathVariable("answerId") Long answerId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails){
-
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         answerService.deleteAnswer(questionId, answerId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("답변 삭제 성공")
             .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
             .build();
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     /**
      * 답변 전체 조회 API
      *
-     * @param pageable  페이지 정보
+     * @param questionId  질문 ID
      * @return  답변 전체 목록
      */
     @GetMapping
-    public ResponseEntity<ApiResponse> getAnswers(Pageable pageable) {
-
-        Page<AnswerResponseDto> responseDtos = answerService.getAnswers(pageable);
+    public ResponseEntity<ApiResponse> getAnswers(@PathVariable Long questionId)
+    {
+        List<AnswerResponseDto> answers = answerService.getAnswers(questionId);
         ApiResponse response = ApiResponse.builder()
             .msg("답변 전체 조회 성공")
             .statuscode(String.valueOf(HttpStatus.OK.value()))
-            .data(responseDtos)
+            .data(answers)
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -127,14 +128,15 @@ public class AnswerController {
      */
     @GetMapping("{answerId}")
     public ResponseEntity<ApiResponse> getAnswer(@PathVariable("questionId") Long questionId,
-        @PathVariable("answerId") Long answerId){
-
+        @PathVariable("answerId") Long answerId)
+    {
         AnswerResponseDto responseDto = answerService.getAnswer(questionId, answerId);
         ApiResponse response = ApiResponse.builder()
-            .msg("답변 조회 성공")
+            .msg("답변 단건 조회 성공")
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
 }

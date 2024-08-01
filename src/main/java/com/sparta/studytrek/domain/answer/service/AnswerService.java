@@ -11,6 +11,7 @@ import com.sparta.studytrek.domain.question.dto.QuestionResponseDto;
 import com.sparta.studytrek.domain.question.entity.Question;
 import com.sparta.studytrek.domain.question.repository.QuestionRepository;
 import com.sparta.studytrek.domain.question.service.QuestionService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -73,12 +74,12 @@ public class AnswerService {
     /**
      * 답변 전체 조회
      *
-     * @param pageable  페이지 정보
+     * @param questionId  페이지 정보
      * @return  답변 전체 목록
      */
-    public Page<AnswerResponseDto> getAnswers(Pageable pageable) {
-        Page<Answer> answerPage = answerRepository.findByAllByOrderByCreatedAtDesc(pageable);
-        return answerPage.map(AnswerResponseDto::new);
+    public List<AnswerResponseDto> getAnswers(Long questionId) {
+        List<Answer> answerPage = answerRepository.findByQuestionIdOrderByCreatedAtDesc(questionId);
+        return answerPage.stream().map(AnswerResponseDto::new).toList();
     }
 
     /**
@@ -89,7 +90,8 @@ public class AnswerService {
      * @return  해당 답변의 응답 데이터
      */
     public AnswerResponseDto getAnswer(Long questionId, Long answerId) {
-        Answer answer = findByAnswerId(answerId);
+        Answer answer = answerRepository.findByQuestionIdAndId(questionId, answerId)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER));
         return new AnswerResponseDto(answer);
     }
 
