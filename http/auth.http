@@ -26,7 +26,7 @@ POST {{apiUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "username": "user77",
+  "username": "boot99",
   "password": "Password123!"
 }
 

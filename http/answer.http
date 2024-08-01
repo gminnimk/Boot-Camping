@@ -1,0 +1,32 @@
+### 답변 작성
+POST {{apiUrl}}/questions/2/answers
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "content" : "답변 작성"
+}
+
+### 답변 수정
+PUT {{apiUrl}}/questions/2/answers/4
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "content" : "답변 수정"
+}
+
+### 답변 삭제
+DELETE {{apiUrl}}/questions/2/answers/8
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+
+### 답변 전체 조회
+GET {{apiUrl}}/questions/2/answers
+Content-Type: application/json
+
+
+### 답변 단건 조회
+GET {{apiUrl}}/questions/2/answers/3
+Content-Type: application/json
