@@ -1,14 +1,32 @@
 ### 관리자용 회원가입
-POST {{apiUrl}}/admin/auth/signup
+POST {{apiUrl}}/admin/signup
 Content-Type: application/json
 
+{
+  "username": "adminuser1",
+  "password": "Password1!",
+  "name" : "관리자1"
+}
 
 ### 관리자용 로그인
-POST {{apiUrl}}/admin/auth/login
+POST {{apiUrl}}/admin/login
 Content-Type: application/json
+
+{
+  "username": "adminuser1",
+  "password": "Password1!"
+}
+
+> {%
+    client.global.set("accessToken", response.body.data.accessToken)
+    client.global.set("refreshToken", response.body.data.refreshToken)
+
+    console.log('Response Status:', response.body.data.accessToken);
+    console.log('Response Data:', response.body.data.refreshToken);
+%}
 
 
 ### 회원탈퇴 withdraw (관리자용)
-PUT {{apiUrl}}/admin/auth/withdraw?username=user10
+DELETE {{apiUrl}}/admin/users/4
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}

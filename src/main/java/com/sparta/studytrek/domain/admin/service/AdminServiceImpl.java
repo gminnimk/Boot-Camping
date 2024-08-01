@@ -1,5 +1,7 @@
 package com.sparta.studytrek.domain.admin.service;
 
+import java.util.Optional;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import com.sparta.studytrek.domain.auth.entity.UserRoleEnum;
 import com.sparta.studytrek.domain.auth.entity.UserStatusEnum;
 import com.sparta.studytrek.domain.auth.entity.UserType;
 import com.sparta.studytrek.domain.auth.entity.match.UserStatus;
+import com.sparta.studytrek.domain.auth.repository.UserRepository;
 import com.sparta.studytrek.domain.auth.service.RefreshTokenService;
 import com.sparta.studytrek.domain.auth.service.UserService;
 import com.sparta.studytrek.domain.auth.service.UserStatusService;
@@ -35,6 +38,7 @@ public class AdminServiceImpl implements AdminService {
     private final UserStatusService userStatusService;
     private final RefreshTokenService refreshTokenService;
     private final AdminMapper adminMapper;
+    private final UserRepository userRepository;
 
     /**
      *  관리자 회원가입
@@ -45,23 +49,24 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public AdminResponseDto adminSignup(AdminRequestDto adminRequestDto) {
-        String encodedPassword = passwordEncoder.encode(adminRequestDto.password());
+        Optional<User> existingUser = userRepository.findByUsername(adminRequestDto.username());
 
-        User user = adminMapper.toUser(adminRequestDto);
-
-        Role adminRole = userService.findRoleByName(UserRoleEnum.ADMIN);
-        user = new User(
-            user.getUsername(),
-            encodedPassword,
-            user.getName(),
-            user.getUserAddr(),
-            user.getUserType(),
-            adminRole
-        );
-
-        if (userService.findByUsername(user.getUsername()) != null) {
+        if (existingUser.isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE_USER);
         }
+
+        String encodedPassword = passwordEncoder.encode(adminRequestDto.password());
+
+        Role adminRole = userService.findRoleByName(UserRoleEnum.ADMIN);
+
+        User user = new User(
+            adminRequestDto.username(),
+            encodedPassword,
+            adminRequestDto.name(),
+            null,
+            UserType.NORMAL,
+            adminRole
+        );
 
         userService.saveUser(user);
         return adminMapper.toAdminResponseDto(user);
@@ -109,52 +114,4 @@ public class AdminServiceImpl implements AdminService {
         user.withdraw();
         userService.saveUser(user);
     }
-
-    /**
-     * 사용자 상태를 변경하는 일반화된 메소드
-     *
-     * @param username  상태 변경할 사용자 이름
-     * @param newStatus 설정할 새로운 상태
-     * @param campId    관련 캠프의 Id
-     * @param adminUser 관리자 정보(권한 체크)
-     */
-    // @Override
-    // @Transactional
-    // public ResponseEntity<Void> changeUserStatus(String username, UserStatusEnum newStatus, Long campId,
-    //     User adminUser) {
-    //     validateAdminAuthority(adminUser);
-    //
-    //     User user = userService.findByUsername(username);
-    //
-    //     // 해당 사용자의 현재 상태를 조회 (campId 를 사용하여 특정 캠프와 관련된 상태 get)
-    //     UserStatus userStatus = userStatusService.getUserStatus(username, campId);
-    //     if (userStatus == null) {
-    //         throw new CustomException(ErrorCode.USER_STATUS_NOT_FOUND);
-    //     }
-    //     UserStatus status = userStatusService.findByStatus(newStatus);
-    //     if (status == null) {
-    //         throw new CustomException(ErrorCode.STATUS_NOT_FOUND);
-    //     }
-    //     // 기존 상태를 제거하고 새로운 상태를 추가
-    //     user.getUserStatuses().clear();
-    //     user.addStatus(status.getStatus());
-    //     userService.saveUser(user);
-    //
-    //     return ResponseEntity.ok().build();
-    // }
-
-
-
-    // /**
-    //  * 관리자가 사용자 상태를 APPROVER로 변경하는 메소드
-    //  *
-    //  * @param username
-    //  * @param adminDetails
-    //  */
-    // @Override
-    // @Transactional
-    // public ResponseEntity<Void> approveUser(String username, UserDetailsImpl adminDetails) {
-    //     changeUserStatus(username, UserStatusEnum.APPROVER, null, adminDetails.getUser());
-    //     return ResponseEntity.ok().build();
-    // }
 }
