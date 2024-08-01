@@ -30,10 +30,8 @@ public class QuestionService {
      * @return 질문 응답 데이터
      */
     public QuestionResponseDto createQuestion(QuestionRequestDto requestDto, User user) {
-
         Question question = new Question(requestDto, user);
         Question createQuestion = questionRepository.save(question);
-
         return new QuestionResponseDto(createQuestion);
     }
 
@@ -48,10 +46,8 @@ public class QuestionService {
     @Transactional
     public QuestionResponseDto updateQuestion(Long id, QuestionRequestDto requestDto, User user) {
         Question question = findByQuestionId(id);
-
         question.update(requestDto);
         return new QuestionResponseDto(question);
-
     }
 
     /**
@@ -62,7 +58,6 @@ public class QuestionService {
      */
     public void deleteQuestion(Long id, User user) {
         Question question = findByQuestionId(id);
-
         questionRepository.delete(question);
     }
 
