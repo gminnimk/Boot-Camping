@@ -1,4 +1,4 @@
-// 검색 폼 제출 시 호출되는 함수 (검색 기능 함수)
+// 검색 폼 제출 시 호출되는 함수
 function performSearch(event) {
   event.preventDefault();
   const searchType = document.getElementById('searchType').value;
@@ -27,7 +27,6 @@ function resetFilters() {
   updateSelectedFilters();
 }
 
-// 필터링 요청을 서버에 전송하는 함수
 // 필터 요청을 서버에 전송하여 필터링된 결과를 가져옵니다.
 function applyFilters() {
   const filterRequest = getFilterRequest(); // 현재 필터 요청 객체를 가져옵니다.
@@ -45,19 +44,17 @@ function applyFilters() {
       'Content-Type': 'application/json'
     }
   })
-  .then(response => response.json()) // 응답을 JSON으로 파싱합니다.
+  .then(response => response.json())
   .then(data => {
-    console.log('Filtered Results:', data); // 필터링된 결과를 콘솔에 출력합니다.
-    localStorage.setItem('filteredResults', JSON.stringify(data)); // 필터링된 결과를 로컬 스토리지에 저장합니다.
+    console.log('Filtered Results:', data);
+    localStorage.setItem('filteredResults', JSON.stringify(data)); // 필터링된 결과를 로컬 스토리지에 저장
     updateResults(data);
-    // window.location.href = '/rank'; // 필터링된 결과를 표시할 페이지로 이동합니다.
   })
-  .catch(error => console.error('Error:', error)); // 오류가 발생하면 콘솔에 출력합니다.
+  .catch(error => console.error('Error:', error));
 
-  toggleFilter(); // 필터 메뉴를 닫습니다.
+  toggleFilter();
 }
 
-// 활성화된 필터 옵션들을 확인하고, 이를 필터 요청 객체로 변환하는 함수
 // 활성화된 필터 옵션을 기반으로 필터 요청 객체를 생성합니다.
 function getFilterRequest() {
   const activeFilters = document.querySelectorAll('.filter-option.active');
@@ -66,23 +63,22 @@ function getFilterRequest() {
     track: Array.from(activeFilters)
     .filter(el => ['프론트엔드', '백엔드', '풀스택', 'Android', 'iOS', '게임', 'AI', '데이터',
       'UI/UX'].includes(el.textContent.trim()))
-    .map(el => el.textContent.trim())[0] || null, // 트랙 필터 요청을 설정합니다.
+    .map(el => el.textContent.trim())[0] || null, // 트랙 필터 요청을 설정
     environment: Array.from(activeFilters)
     .filter(el => ['온라인', '오프라인', '혼합'].includes(el.textContent.trim()))
-    .map(el => el.textContent.trim())[0] || null, // 환경 필터 요청을 설정합니다.
+    .map(el => el.textContent.trim())[0] || null, // 환경 필터 요청을 설정
     cost: Array.from(activeFilters)
     .filter(el => ['국비', '사비', '무료'].includes(el.textContent.trim()))
-    .map(el => el.textContent.trim())[0] || null // 비용 필터 요청을 설정합니다.
+    .map(el => el.textContent.trim())[0] || null // 비용 필터 요청을 설정
   };
 
   return filterRequest;
 }
 
-// 필터 옵션 선택 및 업데이트
 // 선택된 필터 옵션을 화면 상단의 선택된 필터 영역에 추가합니다.
 function updateSelectedFilters() {
   const selectedFiltersContainer = document.getElementById('selectedFilters');
-  selectedFiltersContainer.innerHTML = ''; // 기존의 선택된 필터를 지웁니다.
+  selectedFiltersContainer.innerHTML = '';
 
   const activeFilters = document.querySelectorAll('.filter-option.active');
   activeFilters.forEach(filter => {
@@ -104,13 +100,12 @@ function removeFilter(element, filterText) {
   if (filterOption) {
     filterOption.classList.remove('active'); // 필터 옵션에서 'active' 클래스를 제거합니다.
   }
-  element.parentElement.remove(); // 선택된 필터 요소를 화면에서 제거합니다.
+  element.parentElement.remove();
 }
 
-// 필터 섹션의 접기/펼치기 상태를 토글합니다.
 function toggleSection(header) {
   const section = header.closest('.filter-section');
-  section.classList.toggle('collapsed'); // 필터 섹션의 'collapsed' 클래스를 토글합니다.
+  section.classList.toggle('collapsed');
 }
 
 // 필터 적용 버튼 클릭 시 필터를 적용하는 함수를 호출합니다.
