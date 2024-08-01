@@ -32,6 +32,15 @@ public class Camp {
     @Column(nullable = false, length = 255)
     private String description;
 
+    @Column(length = 50)
+    private String track; // 필터링을 위한 필드 추가
+
+    @Column(length = 50)
+    private String environment; // 필터링을 위한 필드 추가
+
+    @Column(length = 50)
+    private String cost; // 필터링을 위한 필드 추가
+
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CampUser> campUsers = new ArrayList<>();
 
@@ -41,8 +50,11 @@ public class Camp {
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
-    public Camp(String name, String description) {
+    public Camp(String name, String description, String track, String environment, String cost) {
         this.name = name;
         this.description = description;
+        this.track = track;
+        this.environment = environment;
+        this.cost = cost;
     }
 }
