@@ -31,11 +31,16 @@
         <!-- JavaScript를 통해 동적으로 항목들이 추가될 예정입니다. -->
       </div>
       <div class="pagination">
-        <button>이전</button>
-        <button class="active">1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>다음</button>
+        <!-- 이전 페이지로 이동하는 버튼 -->
+        <button id="prevButton" onclick="changePage(-1)" disabled>Previous</button>
+
+        <!-- 페이지 번호를 동적으로 추가할 영역 -->
+        <div class="page-numbers" id="pageNumbers">
+          <!-- 페이지 번호가 여기에 동적으로 추가됩니다. -->
+        </div>
+
+        <!-- 다음 페이지로 이동하는 버튼 -->
+        <button id="nextButton" onclick="changePage(1)">Next</button>
       </div>
     </div>
   </div>
