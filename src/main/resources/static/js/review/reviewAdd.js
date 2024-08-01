@@ -8,7 +8,6 @@ document.getElementById('reviewForm').addEventListener('submit', function(e) {
     const rating = document.querySelector('input[name="rating"]:checked')?.value;
     const reviewContent = document.getElementById('review-content').value;
     const subTitle = document.getElementById('sub-title').value;
-    console.log(subTitle);
 
     // 데이터 유효성 검증
     if (!selectedCategory || !selectedTrack || !reviewTitle || !rating || !reviewContent || !subTitle) {
