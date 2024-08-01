@@ -46,8 +46,6 @@ public enum ErrorCode {
 
     //Answer
     NOTFOUND_ANSWER(HttpStatus.BAD_REQUEST, "해당 답변은 존재하지 않습니다."),
-    //NOTFOUND_CAMP_USER(HttpStatus.BAD_REQUEST, "해당 캠프에 참가한 이력이 존재하지 않습니다."),
-
 
     // recruitment
     NOTFOUND_RECRUITMENT(HttpStatus.BAD_REQUEST,"해당 모집글은 존재하지 않습니다."),
@@ -77,8 +75,6 @@ public enum ErrorCode {
     // Like
     ALREADY_LIKE(HttpStatus.BAD_REQUEST,"이미 좋아요를 눌렀습니다."),
     NOTFOUND_LIKE(HttpStatus.BAD_REQUEST,"좋아요를 누르지 않았습니다.");
-
-    // STUDY_DELETE_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "해당 스터디 모집글을 삭제할 권한이 없습니다.");
 
     private HttpStatus httpStatus;
     private String msg;

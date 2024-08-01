@@ -36,7 +36,8 @@ public class QuestionController {
      */
     @PostMapping
     public ResponseEntity<ApiResponse> createQuestion(@RequestBody QuestionRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         QuestionResponseDto responseDto = questionService.createQuestion(requestDto,
             userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
@@ -58,7 +59,8 @@ public class QuestionController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateQuestion(@PathVariable("id") Long id,
         @RequestBody QuestionRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         QuestionResponseDto responseDto = questionService.updateQuestion(id, requestDto,
             userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
@@ -78,7 +80,8 @@ public class QuestionController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteQuestion(@PathVariable("id") Long id,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         questionService.deleteQuestion(id, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("질문 삭제 성공")
@@ -94,7 +97,8 @@ public class QuestionController {
      * @return 질문 전체 목록
      */
     @GetMapping
-    public ResponseEntity<ApiResponse> getQuestions(Pageable pageable) {
+    public ResponseEntity<ApiResponse> getQuestions(Pageable pageable)
+    {
         Page<QuestionResponseDto> responseDtos = questionService.getQuestions(pageable);
         ApiResponse response = ApiResponse.builder()
             .msg("질문 전체 조회 성공")
@@ -111,7 +115,8 @@ public class QuestionController {
      * @return 해당 질문의 응답 데이터
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getQuestion(@PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponse> getQuestion(@PathVariable("id") Long id)
+    {
         QuestionResponseDto responseDto = questionService.getQuestion(id);
         ApiResponse response = ApiResponse.builder()
             .msg("리뷰 조회 성공")
