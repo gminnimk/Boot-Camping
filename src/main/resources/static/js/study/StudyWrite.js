@@ -1,20 +1,105 @@
-function goToMainPage() {
-    // 메인 페이지로 이동하는 함수 구현
-    window.location.href = 'https://studytrek.com/';
-}
+document.getElementById('studyForm').addEventListener('submit', function (e) {
+  e.preventDefault();
 
-document.getElementById('studyForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    // 여기서 폼 데이터를 서버로 전송하는 로직을 구현합니다.
-    console.log("Form submitted");
-    alert("스터디 모집글이 등록되었습니다!");
-    // 등록 후 메인 페이지로 리다이렉트
-    window.location.href = 'https://studytrek.com/';
+  // 폼 데이터 수집
+  const selectedCategory = document.querySelector('input[name="category"]:checked')?.value;
+  const studyTitle = document.getElementById('title')?.value;
+  const studyContent = document.getElementById('description')?.value;
+  const maxCount = document.getElementById('maxMembers')?.value;
+  const periodExpected = document.getElementById('duration')?.value;
+  const cycle = document.getElementById('meetingFrequency')?.value;
+
+  // 데이터 유효성 검증
+  if (!selectedCategory || !studyTitle || !studyContent || !maxCount || !periodExpected || !cycle) {
+    Swal.fire({
+      title: '입력 오류',
+      text: '모든 필드를 올바르게 입력해 주세요.',
+      icon: 'error',
+      confirmButtonText: '확인'
+    });
+    return;
+  }
+
+  // 서버로 전송할 데이터 준비
+  const studyData = {
+    category: selectedCategory,
+    title: studyTitle,
+    content: studyContent,
+    maxCount: parseInt(maxCount, 10),  // 문자열을 숫자로 변환
+    periodExpected: periodExpected,
+    cycle: cycle
+  };
+
+  // URL 가져오기
+  const submitUrl = document.querySelector('.submit-button').getAttribute('data-submit-url');
+
+  // 토큰 가져오기
+  const accessToken = localStorage.getItem('accessToken');
+  if (!accessToken) {
+    Swal.fire({
+      title: '인증 오류',
+      text: '로그인 세션이 만료되었습니다. 다시 로그인해 주세요.',
+      icon: 'error',
+      confirmButtonText: '확인'
+    }).then(() => {
+      window.location.href = '/auth';
+    });
+    return;
+  }
+
+  fetch(submitUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    },
+    body: JSON.stringify(studyData)
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    if (data.statuscode === "201") {
+      Swal.fire({
+        title: '스터디 작성 성공',
+        text: '스터디가 성공적으로 제출되었습니다!',
+        icon: 'success',
+        confirmButtonText: '확인'
+      }).then(() => {
+        if (data.data && data.data.id) {
+          const studyId = data.data.id;
+          const detailUrl = `/study/${studyId}`;
+          window.location.href = detailUrl;
+        } else {
+          console.error('스터디 ID가 반환되지 않았습니다.');
+        }
+      });
+    } else {
+      Swal.fire({
+        title: '스터디 작성 실패',
+        text: data.msg || '스터디 작성 중 오류가 발생했습니다.',
+        icon: 'error',
+        confirmButtonText: '확인'
+      });
+    }
+  })
+  .catch(error => {
+    Swal.fire({
+      title: '네트워크 오류',
+      text: error.message || '네트워크 오류가 발생했습니다.',
+      icon: 'error',
+      confirmButtonText: '확인'
+    });
+  });
 });
 
-function cancelReview() {
-    if (confirm('작성 중인 모집글을 취소하시겠습니까?')) {
-        const cancelUrl = document.querySelector('.cancel-button').getAttribute('data-cancel-url');
-        window.location.href = cancelUrl;
-    }
+function cancelStudy() {
+  if (confirm('작성 중인 모집글을 취소하시겠습니까?')) {
+    // 스터디 작성 취소 후 리디렉션
+    const cancelUrl = document.querySelector('.cancel-button').getAttribute('data-cancel-url');
+    window.location.href = cancelUrl;
+  }
 }
