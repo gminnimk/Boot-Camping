@@ -72,10 +72,10 @@
                     <input type="text" id="review-title" name="review-title" required>
                 </div>
                 <div class="form-group">
-                    <label for="sub-title">하위 제목 선택</label>
+                    <label for="sub-title">참여한 부트캠프</label>
                     <select id="sub-title" name="sub-title" required>
-                        <option value="" disabled selected>하위 제목을 선택하세요</option>
-                        <option value="소제목1">소제목1</option>
+                        <option value="" disabled selected>부트캠프를 선택하세요</option>
+                        <option value="스파르타">스파르타</option>
                         <option value="소제목2">소제목2</option>
                         <option value="소제목3">소제목3</option>
                     </select>
@@ -100,8 +100,8 @@
                     <textarea id="review-content" name="review-content" required></textarea>
                 </div>
                 <div class="button-group">
-                    <button type="button" class="cancel-button" onclick="cancelReview()" th:data-cancel-url="@{/api/review}">취소</button>
-                    <button type="submit" class="submit-button" th:data-submit-url="@{/api/review/detail}">리뷰 제출</button>
+                    <button type="button" class="cancel-button" onclick="cancelReview()" th:data-cancel-url="@{/review}">취소</button>
+                    <button type="submit" class="submit-button" th:data-submit-url="@{/api/reviews}">리뷰 제출</button>
                 </div>
             </form>
         </div>
