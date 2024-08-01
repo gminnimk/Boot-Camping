@@ -136,6 +136,7 @@ PR 작성 규칙
 - ex) [2024/06/19] feat/signup 로그인 기능 구현
 </details>
 
+<details>
 <summary>
 코드 리뷰 적용 (리뷰 1개 이상 merge 가능)
 </summary>
