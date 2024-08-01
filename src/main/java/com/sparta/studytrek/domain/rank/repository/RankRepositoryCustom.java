@@ -4,5 +4,5 @@ import com.sparta.studytrek.domain.rank.entity.Rank;
 import java.util.List;
 
 public interface RankRepositoryCustom {
-    List<Rank> findFilteredRanks(String track, String environment, String cost);
+    List<Rank> findFilteredRanks(List<String> tracks, List<String> environments, List<String> costs);
 }

@@ -33,9 +33,10 @@ function applyFilters() {
 
   // 필터 요청 객체를 쿼리 문자열로 변환합니다.
   const queryString = Object.keys(filterRequest)
-  .filter(key => filterRequest[key] !== null)
-  .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(
-      filterRequest[key])}`)
+  .filter(key => filterRequest[key].length > 0) // 빈 배열 필터링
+  .map(key => filterRequest[key].map(
+      value => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join(
+      '&'))
   .join('&');
 
   fetch(`/ranks/filter?${queryString}`, {
@@ -63,13 +64,13 @@ function getFilterRequest() {
     track: Array.from(activeFilters)
     .filter(el => ['프론트엔드', '백엔드', '풀스택', 'Android', 'iOS', '게임', 'AI', '데이터',
       'UI/UX'].includes(el.textContent.trim()))
-    .map(el => el.textContent.trim())[0] || null, // 트랙 필터 요청을 설정
+    .map(el => el.textContent.trim()), // 트랙 필터 요청을 배열로 설정
     environment: Array.from(activeFilters)
     .filter(el => ['온라인', '오프라인', '혼합'].includes(el.textContent.trim()))
-    .map(el => el.textContent.trim())[0] || null, // 환경 필터 요청을 설정
+    .map(el => el.textContent.trim()), // 환경 필터 요청을 배열로 설정
     cost: Array.from(activeFilters)
     .filter(el => ['국비', '사비', '무료'].includes(el.textContent.trim()))
-    .map(el => el.textContent.trim())[0] || null // 비용 필터 요청을 설정
+    .map(el => el.textContent.trim()) // 비용 필터 요청을 배열로 설정
   };
 
   return filterRequest;

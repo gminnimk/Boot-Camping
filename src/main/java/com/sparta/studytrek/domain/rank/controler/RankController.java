@@ -17,11 +17,10 @@ public class RankController {
 
     @GetMapping("/filter")
     public List<RankResponseDto> filterRanks(
-        @RequestParam(required = false) String track,
-        @RequestParam(required = false) String environment,
-        @RequestParam(required = false) String cost) {
+        @RequestParam(required = false) List<String> track,
+        @RequestParam(required = false) List<String> environment,
+        @RequestParam(required = false) List<String> cost) {
 
-        // filterRanks: 다양한 필터 조건 (track, environment, cost)을 받아 필터링된 랭킹 목록을 반환합니다.
         FilterRequest filterRequest = new FilterRequest(track, environment, cost);
         return rankService.getFilteredRanks(filterRequest);
     }
