@@ -79,7 +79,7 @@ public class AnswerCommentService {
     /**
      * 댓글 전체 조회
      *
-     * @param answerId 댓글 ID
+     * @param answerId 답변 ID
      * @return  댓글의 전체 목록
      */
     public List<AnswerCommentResponseDto> getAnswerComments(Long answerId) {
@@ -87,6 +87,13 @@ public class AnswerCommentService {
         return answerComments.stream().map(AnswerCommentResponseDto::new).toList();
     }
 
+    /**
+     * 댓글 단건 조회
+     *
+     * @param answerId  답변 ID
+     * @param commentId 댓글 ID
+     * @return  댓글 단건 조회 목록
+     */
     public AnswerCommentResponseDto getAnswerComment(Long answerId, Long commentId) {
         AnswerComment answerComment = answerCommentRepository.findByAnswerIdAndId(answerId, commentId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER_COMMENT));
