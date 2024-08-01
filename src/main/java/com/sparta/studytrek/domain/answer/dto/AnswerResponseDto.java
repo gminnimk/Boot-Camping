@@ -7,10 +7,12 @@ import lombok.Getter;
 @Getter
 public class AnswerResponseDto {
 
+    private Long id;
     private String content;
     private LocalDateTime createdAt;
 
     public AnswerResponseDto(Answer createAnswer) {
+        this.id = createAnswer.getId();
         this.content = createAnswer.getContent();
         this.createdAt = createAnswer.getCreatedAt();
     }
