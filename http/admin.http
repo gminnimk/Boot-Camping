@@ -30,3 +30,23 @@ Content-Type: application/json
 DELETE {{apiUrl}}/admin/users/4
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
+
+### 프로필 승인 (관리자용)
+POST {{apiUrl}}/admin/profiles/2/approve
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### 프로필 거절 (관리자용)
+POST {{apiUrl}}/admin/profiles/3/reject
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### 프로필 전체 조회 (관리자용)
+GET {{apiUrl}}/admin/profiles
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### 프로필 상태별 조회 (관리자용)
+GET {{apiUrl}}/admin/profiles/status/REJECTED
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}

@@ -19,6 +19,7 @@ public class ProfileResponseDto {
 	private final Set<String> techStack;
 	private final String certificate;
 	private final ProfileStatus status;
+	private final String name;
 
 	public ProfileResponseDto(Profile profile) {
 		this.id = profile.getId();
@@ -30,5 +31,6 @@ public class ProfileResponseDto {
 		this.techStack = profile.getTechStack();
 		this.certificate = profile.getCertificate();
 		this.status = profile.getStatus();
+		this.name = profile.getUser().getName();
 	}
 }

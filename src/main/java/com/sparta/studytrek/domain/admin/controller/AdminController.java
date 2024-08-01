@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +23,6 @@ import com.sparta.studytrek.domain.profile.dto.ProfileResponseDto;
 import com.sparta.studytrek.domain.profile.entity.ProfileStatus;
 import com.sparta.studytrek.domain.profile.service.ProfileService;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -73,13 +74,13 @@ public class AdminController {
      * @return 회원탈퇴 성공 응답 데이터
      */
     @DeleteMapping("/users/{userId}")
-    public ResponseEntity<ApiResponse> adminDelete(@PathVariable("userId") Long userId) {
+    public ResponseEntity<ApiResponse> adminDelete(@PathVariable("userId") Long userId, @AuthenticationPrincipal UserDetails userDetails) {
         adminService.adminDelete(userId);
         ApiResponse response = ApiResponse.builder()
             .msg("회원 탈퇴 성공")
-            .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
             .build();
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -89,7 +90,7 @@ public class AdminController {
      * @return 승인 성공 응답 데이터
      */
     @PostMapping("/profiles/{profileId}/approve")
-    public ResponseEntity<ApiResponse> approveProfile(@PathVariable("profileId") Long profileId) {
+    public ResponseEntity<ApiResponse> approveProfile(@PathVariable("profileId") Long profileId , @AuthenticationPrincipal UserDetails userDetails ) {
         profileService.approveProfile(profileId);
         ApiResponse response = ApiResponse.builder()
             .msg("프로필 승인 성공")
@@ -105,7 +106,7 @@ public class AdminController {
      * @return 거절 성공 응답 데이터
      */
     @PostMapping("/profiles/{profileId}/reject")
-    public ResponseEntity<ApiResponse> rejectProfile(@PathVariable("profileId") Long profileId) {
+    public ResponseEntity<ApiResponse> rejectProfile(@PathVariable("profileId") Long profileId, @AuthenticationPrincipal UserDetails userDetails) {
         profileService.rejectProfile(profileId);
         ApiResponse response = ApiResponse.builder()
             .msg("프로필 거절 성공")
@@ -120,7 +121,7 @@ public class AdminController {
      * @return 조회 성공 응답 데이터
      */
     @GetMapping("/profiles")
-    public ResponseEntity<ApiResponse> getAllProfiles() {
+    public ResponseEntity<ApiResponse> getAllProfiles(@AuthenticationPrincipal UserDetails userDetails) {
         List<ProfileResponseDto> responseDtos = profileService.getAllProfiles().getBody();
         ApiResponse response = ApiResponse.builder()
             .msg("전체 프로필 조회 성공")
@@ -137,7 +138,7 @@ public class AdminController {
      * @return 조회 성공 응답 데이터
      */
     @GetMapping("/profiles/status/{status}")
-    public ResponseEntity<ApiResponse> getProfileByStatus(@PathVariable ProfileStatus status) {
+    public ResponseEntity<ApiResponse> getProfileByStatus(@PathVariable ProfileStatus status, @AuthenticationPrincipal UserDetails userDetails) {
         List<ProfileResponseDto> responseDtos = profileService.getProfilesByStatus(status).getBody();
         ApiResponse response = ApiResponse.builder()
             .msg(status + " 상태의 프로필 조회 성공")
