@@ -131,6 +131,7 @@ async function loadQuestions(page) {
 
         if (response.ok) {
             const result = await response.json();
+            console.log(result.data.content);
             questions.length = 0;
             questions.push(...result.data.content);
             totalPages = result.data.totalPages;
@@ -164,18 +165,28 @@ function displayQuestions() {
         const questionCard = document.createElement('div');
         questionCard.className = 'question-card';
         questionCard.dataset.id = question.id;
+
+        let formattedDate = 'No Date Available';
+        if (question.createdAt) {
+            const createdAt = new Date(Date.parse(question.createdAt));
+            if (!isNaN(createdAt.getTime())) {
+                formattedDate = createdAt.toLocaleString();
+            }
+        }
+
         questionCard.innerHTML = `
-            <div class="question-header">
-                <div class="question-title">${question.title}</div>
-                <div class="question-meta">
-                    <span class="question-category">${question.category}</span>
-                    <span class="question-date">${new Date(question.created_at).toLocaleDateString()}</span>
-                </div>
+        <div class="question-header">
+            <div class="question-title">${question.title}</div>
+            <div class="question-meta">
+                <span class="question-category">${question.category}</span>
+                <span class="question-date">${formattedDate}</span>
             </div>
-            <div class="question-content">${question.content}</div>
-        `;
+        </div>
+        <div class="question-content">${question.content}</div>
+    `;
+
         questionCard.addEventListener('click', () => showQuestionDetail(question.id));
-        questionList.appendChild(questionCard);
+        document.querySelector('.question-list').appendChild(questionCard);
     });
 }
 function updatePagination() {
