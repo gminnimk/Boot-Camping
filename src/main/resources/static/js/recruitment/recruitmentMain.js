@@ -199,9 +199,14 @@ function addReview() {
         alert('로그인이 필요합니다.');
         window.location.href = '/auth';
     } else {
-        const addUrl = document.querySelector('.write-review-button').getAttribute('review-add-url');
+        const addUrl = document.querySelector('.write-review-button').getAttribute('camp-add');
         window.location.href = addUrl;
     }
+}
+
+function showCalendar() {
+    const showUrl = document.querySelector('.show-calendar-btn').getAttribute('show-calendar');
+    window.location.href = showUrl;
 }
 
 // 페이지 로드 시 코스 데이터를 가져와서 렌더링

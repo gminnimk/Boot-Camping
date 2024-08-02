@@ -94,4 +94,21 @@ public class ProfileController {
 			.build();
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
+
+	/**
+	 * 프로필 신청 API
+	 *
+	 * @param profileId 프로필 ID
+	 * @param userDetails 인증된 유저 정보
+	 * @return 프로필 상태 변경 응답 데이터
+	 */
+	@PostMapping("/{profileId}/apply")
+	public ResponseEntity<ApiResponse> applyForProfile(@PathVariable("profileId") Long profileId, @AuthenticationPrincipal UserDetails userDetails) {
+		profileService.applyForProfile(profileId, userDetails);
+		ApiResponse response = ApiResponse.builder()
+			.msg("프로필 신청 성공")
+			.statuscode(String.valueOf(HttpStatus.OK.value()))
+			.build();
+		return ResponseEntity.ok().body(response);
+	}
 }
