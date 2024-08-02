@@ -41,6 +41,7 @@ public enum ErrorCode {
 
     // Camp
     NOTFOUND_CAMP_USER(HttpStatus.BAD_REQUEST, "해당 캠프에 참가한 이력이 존재하지 않습니다."),
+    DUPLICATE_CAMP_NAME(HttpStatus.BAD_REQUEST, "이미 존재하는 캠프 이름입니다."),
 
     // Role
     ROLE_NOT_FOUND(HttpStatus.NOT_FOUND, "역할을 찾을 수 없습니다."),

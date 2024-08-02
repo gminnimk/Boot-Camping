@@ -20,6 +20,9 @@ import com.sparta.studytrek.domain.admin.dto.AdminResponseDto;
 import com.sparta.studytrek.domain.admin.service.AdminService;
 import com.sparta.studytrek.domain.auth.dto.TokenResponseDto;
 import com.sparta.studytrek.domain.auth.entity.UserRoleEnum;
+import com.sparta.studytrek.domain.camp.dto.CampRequestDto;
+import com.sparta.studytrek.domain.camp.dto.CampResponseDto;
+import com.sparta.studytrek.domain.camp.service.CampService;
 import com.sparta.studytrek.domain.profile.dto.ProfileResponseDto;
 import com.sparta.studytrek.domain.profile.entity.ProfileStatus;
 import com.sparta.studytrek.domain.profile.service.ProfileService;
@@ -33,6 +36,7 @@ public class AdminController {
 
     private final AdminService adminService;
     private final ProfileService profileService;
+    private final CampService campService;
 
     /**
      * 관리자 회원가입 API
@@ -147,5 +151,16 @@ public class AdminController {
             .data(responseDtos)
             .build();
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/camps")
+    public ResponseEntity<ApiResponse> createCamp(@RequestBody CampRequestDto campRequestDto) {
+        CampResponseDto campResponseDto = campService.createCamp(campRequestDto);
+        ApiResponse response = ApiResponse.builder()
+            .msg("캠프 생성 성공")
+            .statuscode(String.valueOf(HttpStatus.CREATED.value()))
+            .data(campResponseDto)
+            .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

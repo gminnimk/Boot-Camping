@@ -80,3 +80,13 @@ Authorization: Bearer {{accessToken}}
 GET {{apiUrl}}/admin/profiles/role/USER/status/REJECTED
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
+
+### 부트캠프 생성 (관리자용)
+POST {{apiUrl}}/admin/camps
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "name": "카카오캠프",
+  "description": "카카오에서 진행하는 부트캠프"
+}
