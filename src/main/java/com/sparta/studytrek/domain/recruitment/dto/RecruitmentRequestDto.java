@@ -17,4 +17,5 @@ public class RecruitmentRequestDto {
     private LocalDate campEnd;
     private LocalDate recruitStart;
     private LocalDate recruitEnd;
+    private String campName;
 }

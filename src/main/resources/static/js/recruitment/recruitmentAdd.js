@@ -34,14 +34,18 @@ const institutions = [
 flatpickr("#coursePeriod", {
     mode: "range",
     dateFormat: "Y-m-d",
-    disable: [
-        function(date) {
-            // 주말 선택 불가
-            return (date.getDay() === 0 || date.getDay() === 6);
-        }
-    ],
+    disable: [], // 주말 비활성화 설정 제거
     locale: {
-        firstDayOfWeek: 1 // 월요일부터 시작
+        firstDayOfWeek: 6 // 토요일부터 시작
+    }
+});
+
+flatpickr("#courseRecruitment", {
+    mode: "range",
+    dateFormat: "Y-m-d",
+    disable: [], // 주말 비활성화 설정 제거
+    locale: {
+        firstDayOfWeek: 6 // 토요일부터 시작
     }
 });
 
@@ -104,7 +108,9 @@ institutionInput.addEventListener('input', function() {
 
 // 다른 곳을 클릭하면 결과 목록 숨기기
 document.addEventListener('click', function(e) {
-    if (!institutionInput.contains(e.target) && !institutionResults.contains(e.target)) {
+    if (institutionInput && institutionResults &&
+        !institutionInput.contains(e.target) &&
+        !institutionResults.contains(e.target)) {
         institutionResults.innerHTML = '';
     }
 });
@@ -116,7 +122,8 @@ function validateForm() {
         { id: 'institution', errorId: 'institutionError', message: '운영기관을 선택해주세요.' },
         { id: 'courseIntro', errorId: 'courseIntroError', message: '과정 소개를 입력해주세요.' },
         { id: 'courseContent', errorId: 'courseContentError', message: '교육 내용을 입력해주세요.' },
-        { id: 'coursePeriod', errorId: 'coursePeriodError', message: '기간을 선택해주세요.' },
+        { id: 'coursePeriod', errorId: 'coursePeriodError', message: '참여 기간을 선택해주세요.' },
+        { id: 'courseRecruitment', errorId: 'courseRecruitmentError', message: '모집 기간을 선택해주세요.' },
         { id: 'courseTime', errorId: 'courseTimeError', message: '수업 시간을 입력해주세요.' }
     ];
 
@@ -150,38 +157,90 @@ courseForm.querySelectorAll('input, textarea, select').forEach(element => {
 
 // 폼 제출 이벤트
 courseForm.addEventListener('submit', function(e) {
-    e.preventDefault();
+    e.preventDefault(); // 기본 제출 동작 방지
 
     if (confirm('과정을 등록하시겠습니까?')) {
-        window.location.href = '/camp';
-        // 서버 처리용 코드
-        // // 폼 데이터 수집
-        // const formData = new FormData(courseForm);
-        //
-        // // 선택된 카테고리 추가
-        // for (const [key, value] of Object.entries(selectedCategoryList)) {
-        //     formData.append(key, value);
-        // }
-        //
-        // // 서버로 데이터 전송
-        // fetch('/api/courses', {  // 실제 API 엔드포인트로 수정 필요
-        //     method: 'POST',
-        //     body: formData
-        // })
-        //     .then(response => {
-        //         if (response.ok) {
-        //             alert('과정이 성공적으로 등록되었습니다.');
-        //             // 목록 페이지로 이동
-        //             window.location.href = '/api/camp';  // 실제 목록 페이지 URL로 수정 필요
-        //         } else {
-        //             throw new Error('과정 등록에 실패했습니다.');
-        //         }
-        //     })
-        //     .catch(error => {
-        //         alert(error.message);
-        //     });
+        const selectedClassType = document.getElementById('classTypeSelect').value;
+        const selectedCostType = document.getElementById('costTypeSelect').value;
+        const selectedFieldType = document.getElementById('fieldTypeSelect').value;
+        const selectedDifficulty = document.getElementById('courseDifficulty').value;
+
+        const courseTitle = document.getElementById('courseTitle').value;
+        const institution = document.getElementById('institution').value;
+        const courseIntro = document.getElementById('courseIntro').value;
+        const courseContent = document.getElementById('courseContent').value;
+        const coursePeriod = document.getElementById('coursePeriod').value; // 날짜 범위 선택기에서 문자열로 반환됨
+        const courseRecruitment = document.getElementById('courseRecruitment').value;
+        const courseTime = document.getElementById('courseTime').value;
+
+        // 날짜 범위 나누기
+        const [periodDate, periodToDate] = coursePeriod.split(' to ');
+        const [recruitDate, recruitToDate] = courseRecruitment.split(' to ');
+
+        // 서버로 전송할 데이터 준비
+        const formData = {
+            place: selectedClassType,
+            cost: selectedCostType,
+            trek: selectedFieldType,
+            level: selectedDifficulty,
+            title: courseTitle,
+            campName: institution,
+            process: courseIntro,
+            content: courseContent,
+            campStart: periodDate,
+            campEnd: periodToDate,
+            classTime: courseTime,
+            recruitStart: recruitDate,
+            recruitEnd: recruitToDate
+        };
+
+        // 서버로 데이터 전송
+        fetch('/api/camps', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            },
+            body: JSON.stringify(formData) // JSON 문자열로 변환하여 전송
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.statuscode === '201') {
+                Swal.fire({
+                    title: '등록 완료',
+                    text: '모집글이 성공적으로 등록되었습니다.',
+                    icon: 'success',
+                    confirmButtonText: '확인'
+                }).then(() => {
+                    if (data.data && data.data.id) {
+                        const campId = data.data.id;
+                        const detailUrl = `/camp/${campId}`;
+                        window.location.href = detailUrl;
+                    } else {
+                        console.error('캠프 ID가 반환되지 않았습니다.');
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: '등록 실패',
+                    text: `오류 발생: ${data.msg}`,
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('서버 오류:', error);
+            Swal.fire({
+                title: '등록 실패',
+                text: '서버와의 통신 오류가 발생했습니다.',
+                icon: 'error',
+                confirmButtonText: '확인'
+            });
+        });
     }
 });
+
 
 // 취소 버튼 이벤트
 cancelButton.addEventListener('click', function(e) {

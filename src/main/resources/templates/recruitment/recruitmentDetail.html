@@ -25,7 +25,7 @@
             <div class="course-header">
                 <div class="course-title-container">
                     <h1 class="course-title non-editable">코딩의 정석</h1>
-                    <input type="text" class="course-title editable" value="코딩의 정석">
+                    <input type="text" class="course-title editable" name="title" value="코딩의 정석">
                     <div class="like-container">
                         <button class="like-button" id="likeButton">
                             <i class="fas fa-heart"></i>
@@ -34,9 +34,9 @@
                     </div>
                 </div>
                 <p class="course-institution non-editable">코딩 아카데미</p>
-                <input type="text" class="course-institution editable" value="코딩 아카데미">
+                <input type="text" class="course-institution editable" name="campName" value="코딩 아카데미">
                 <p class="course-intro non-editable">코딩의 정석은 초보자부터 전문가까지 모두를 위한 종합 프로그래밍 과정입니다. 실무 중심의 커리큘럼과 경험 많은 강사진이 여러분의 성장을 돕습니다.</p>
-                <textarea class="course-intro editable">코딩의 정석은 초보자부터 전문가까지 모두를 위한 종합 프로그래밍 과정입니다. 실무 중심의 커리큘럼과 경험 많은 강사진이 여러분의 성장을 돕습니다.</textarea>
+                <textarea name="process" class="course-intro editable">코딩의 정석은 초보자부터 전문가까지 모두를 위한 종합 프로그래밍 과정입니다. 실무 중심의 커리큘럼과 경험 많은 강사진이 여러분의 성장을 돕습니다.</textarea>
                 <div class="course-actions">
                     <button class="action-button wishlist-button">관심 목록에 추가</button>
                     <button class="action-button edit-button" id="editButton">수정</button>
@@ -48,78 +48,60 @@
             <div class="course-details">
                 <div class="course-info">
                     <div class="info-section">
-                        <h3>과정 소개</h3>
+                        <h3>모집 내용</h3>
                         <p class="non-editable">이 과정에서는 웹 개발의 기초부터 고급 주제까지 다루며, 실제 프로젝트를 통해 실무 경험을 쌓을 수 있습니다. 최신 기술 트렌드를 반영한 커리큘럼으로 취업과 실무에 필요한 스킬을 습득할 수 있습니다.</p>
-                        <textarea class="editable editable-intro">이 과정에서는 웹 개발의 기초부터 고급 주제까지 다루며, 실제 프로젝트를 통해 실무 경험을 쌓을 수 있습니다. 최신 기술 트렌드를 반영한 커리큘럼으로 취업과 실무에 필요한 스킬을 습득할 수 있습니다.</textarea>
-                    </div>
-                    <div class="info-section">
-                        <h3>교육 내용</h3>
-                        <div class="non-editable">
-                            <p>- HTML, CSS, JavaScript 기초</p>
-                            <p>- React와 Node.js를 이용한 웹 애플리케이션 개발</p>
-                            <p>- 데이터베이스 설계 및 관리 (MySQL, MongoDB)</p>
-                            <p>- API 개발 및 통합</p>
-                            <p>- 버전 관리 및 협업 도구 (Git, GitHub)</p>
-                            <p>- 클라우드 서비스 활용 (AWS, Azure)</p>
-                        </div>
-                        <textarea class="editable editable-content">- HTML, CSS, JavaScript 기초
-                            - React와 Node.js를 이용한 웹 애플리케이션 개발
-                            - 데이터베이스 설계 및 관리 (MySQL, MongoDB)
-                            - API 개발 및 통합
-                            - 버전 관리 및 협업 도구 (Git, GitHub)
-                            - 클라우드 서비스 활용 (AWS, Azure)
-                        </textarea>
+                        <textarea name="content" class="editable editable-intro">이 과정에서는 웹 개발의 기초부터 고급 주제까지 다루며, 실제 프로젝트를 통해 실무 경험을 쌓을 수 있습니다. 최신 기술 트렌드를 반영한 커리큘럼으로 취업과 실무에 필요한 스킬을 습득할 수 있습니다.</textarea>
                     </div>
                 </div>
                 <div class="course-sidebar">
                     <div class="sidebar-section">
                         <h4>과정 정보</h4>
-                        <p class="non-editable">기간: 2024/08/26 ~ 2024/09/26 (4주)</p>
+                        <p class="non-editable recruit">모집 기간: 2024/08/26 ~ 2024/09/26</p>
+                        <input type="text" class="editable recruit date-range" value="2024-08-26 to 2024-09-26">
+                        <p class="non-editable">참여 기간: 2024/08/26 ~ 2024/09/26</p>
                         <input type="text" class="editable date-range" value="2024-08-26 to 2024-09-26">
-                        <p class="non-editable">수업 시간: 월-금 09:00-18:00</p>
-                        <input type="text" class="editable" value="월-금 09:00-18:00">
-                        <p class="non-editable">난이도: 중급</p>
+                        <p class="non-editable class-time">수업 시간: 월-금 09:00-18:00</p>
+                        <input type="text" class="editable class-time" value="월-금 09:00-18:00">
+                        <p class="non-editable level">난이도: 중급</p>
                         <select class="editable">
                             <option value="초급">초급</option>
-                            <option value="중급" selected>중급</option>
+                            <option value="중급">중급</option>
                             <option value="고급">고급</option>
                         </select>
                     </div>
                     <div class="sidebar-section">
                         <h4>카테고리</h4>
                         <div class="course-tags">
-                            <span class="tag">온라인</span>
-                            <span class="tag">국비</span>
-                            <span class="tag">풀스택</span>
+                            <span class="tag" value="온라인">온라인</span>
+                            <span class="tag" value="오프라인">오프라인</span>
                         </div>
                         <div class="category-select">
                             <div class="category-group">
                                 <h5>수업 방식</h5>
                                 <select id="classTypeSelect">
                                     <option value="">선택하세요</option>
-                                    <option value="온라인">온라인</option>
-                                    <option value="오프라인">오프라인</option>
-                                    <option value="혼합">혼합</option>
+                                    <option class="tag" value="온라인">온라인</option>
+                                    <option class="tag" value="오프라인">오프라인</option>
                                 </select>
                             </div>
                             <div class="category-group">
                                 <h5>비용</h5>
                                 <select id="costTypeSelect">
                                     <option value="">선택하세요</option>
-                                    <option value="국비">국비</option>
-                                    <option value="유료">유료</option>
-                                    <option value="무료">무료</option>
+                                    <option class="tag" value="국비">국비</option>
+                                    <option class="tag" value="유료">유료</option>
+                                    <option class="tag" value="무료">무료</option>
                                 </select>
                             </div>
                             <div class="category-group">
                                 <h5>학습 분야</h5>
                                 <select id="fieldTypeSelect">
                                     <option value="">선택하세요</option>
-                                    <option value="풀스택">풀스택</option>
-                                    <option value="프론트엔드">프론트엔드</option>
-                                    <option value="백엔드">백엔드</option>
-                                    <option value="데이터사이언스">데이터사이언스</option>
-                                    <option value="인공지능">인공지능</option>
+                                    <option class="tag" value="풀스택">풀스택</option>
+                                    <option class="tag" value="프론트엔드">프론트엔드</option>
+                                    <option class="tag" value="백엔드">백엔드</option>
+                                    <option class="tag" value="데이터사이언스">데이터사이언스</option>
+                                    <option class="tag" value="인공지능">인공지능</option>
                                 </select>
                             </div>
                             <div id="selectedCategories"></div>
@@ -128,7 +110,7 @@
                 </div>
             </div>
             <div class="back-to-list-container">
-                <a th:href="@{/api/camp}" class="back-to-list-button">목록으로 가기</a>
+                <a th:href="@{/camp}" class="back-to-list-button">목록으로 가기</a>
             </div>
         </div>
     </div>
