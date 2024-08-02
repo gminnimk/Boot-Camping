@@ -1,96 +1,13 @@
 const questionsPerPage = 9;
 let currentPage = 1;
-const questions = [
-    {
-        id: 1,
-        title: "강의 내용이 매우 유익해요",
-        category: "강의",
-        date: "2023-04-15",
-        content: "강의 내용이 정말 알찼습니다. 실무에서 바로 적용할 수 있는 내용들이 많아 좋았어요."
-    },
-    {
-        id: 2,
-        title: "강사님의 열정적인 강의",
-        category: "강사",
-        date: "2023-04-14",
-        content: "강사님의 열정이 대단했습니다. 학생들의 질문에 항상 친절하게 답변해주셔서 좋았어요."
-    },
-    {
-        id: 3,
-        title: "멋진 캠핑 여행 경험",
-        category: "캠핑여행",
-        date: "2023-04-13",
-        content: "캠핑 여행이 정말 좋았어요. 자연 속에서 동기들과 함께 시간을 보내며 많은 것을 배웠습니다."
-    },
-    {
-        id: 4,
-        title: "체계적인 커리큘럼",
-        category: "커리큘럼",
-        date: "2023-04-12",
-        content: "커리큘럼이 매우 체계적으로 구성되어 있어 단계별로 학습하기 좋았습니다."
-    },
-    {
-        id: 5,
-        title: "쾌적한 수강 환경",
-        category: "수강환경",
-        date: "2023-04-11",
-        content: "강의실 환경이 쾌적하고 시설이 잘 갖춰져 있어 공부하기 좋았습니다."
-    },
-    {
-        id: 6,
-        title: "도전적이고 유익한 과제들",
-        category: "과제",
-        date: "2023-04-10",
-        content: "과제가 도전적이면서도 실력 향상에 큰 도움이 되었습니다. 과제를 통해 많은 것을 배웠어요."
-    },
-    {
-        id: 7,
-        title: "실무와 유사한 프로젝트 경험",
-        category: "프로젝트",
-        date: "2023-04-09",
-        content: "프로젝트를 통해 실무와 유사한 경험을 할 수 있어 좋았습니다. 팀워크도 배울 수 있었어요."
-    },
-    {
-        id: 8,
-        title: "취업 연계 프로그램이 도움 돼요",
-        category: "취업연계",
-        date: "2023-04-08",
-        content: "취업 연계 프로그램을 통해 실제 취업에 많은 도움을 받았습니다. 멘토링 세션이 특히 유익했어요."
-    },
-    {
-        id: 9,
-        title: "강의 내용의 깊이가 있어요",
-        category: "강의",
-        date: "2023-04-07",
-        content: "강의 내용이 깊이가 있어 좋았습니다. 기초부터 고급 내용까지 잘 다뤄주셔서 만족스러웠어요."
-    },
-    {
-        id: 10,
-        title: "강사님의 실무 경험 공유",
-        category: "강사",
-        date: "2023-04-06",
-        content: "강사님의 풍부한 실무 경험을 바탕으로 한 강의가 매우 인상적이었습니다."
-    },
-    {
-        id: 11,
-        title: "캠핑 여행에서의 팀 빌딩",
-        category: "캠핑여행",
-        date: "2023-04-05",
-        content: "캠핑 여행을 통해 동기들과 더 가까워질 수 있었고, 팀워크를 기를 수 있어 좋았습니다."
-    },
-    {
-        id: 12,
-        title: "유연한 커리큘럼 운영",
-        category: "커리큘럼",
-        date: "2023-04-04",
-        content: "커리큘럼이 유연하게 운영되어 학생들의 요구사항을 잘 반영해주셔서 좋았습니다."
-    }
-];
-
+let totalPages = 0;
+const questions = [];
 let comments = {};
 let currentQuestionId = null;
 
 document.addEventListener('DOMContentLoaded', () => {
+    loadQuestions(currentPage);
+
     const questionModal = document.getElementById("questionModal");
     const questionDetailModal = document.getElementById("questionDetailPage");
     const startBtn = document.querySelector(".start-question-btn");
@@ -119,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentQuestionId = null;
         document.getElementById('questionForm').reset();
         document.querySelectorAll('.category-option').forEach(option => option.classList.remove('active'));
+        selectedCategory = null;
         questionModal.style.display = "block";
     });
 
@@ -127,71 +45,142 @@ document.addEventListener('DOMContentLoaded', () => {
         option.addEventListener('click', function() {
             categoryOptions.forEach(opt => opt.classList.remove('active'));
             this.classList.add('active');
-            document.getElementById('selectedCategory').value = this.dataset.category;
+            selectedCategory = this.dataset.category;
+            document.getElementById('selectedCategory').value = selectedCategory;
         });
     });
 
-    document.getElementById('questionForm').addEventListener('submit', function(e) {
+    document.getElementById('questionForm').addEventListener('submit', async function(e) {
         e.preventDefault();
-        const title = document.getElementById('questionTitle').value;
-        const category = document.getElementById('selectedCategory').value;
-        const content = document.getElementById('questionContent').value;
-        if (currentQuestionId === null) {
-            const newQuestion = {
-                id: questions.length + 1,
-                title: title,
-                category: category,
-                date: new Date().toISOString().split('T')[0],
-                content: content
-            };
-            questions.unshift(newQuestion);
-        } else {
-            const question = questions.find(r => r.id === currentQuestionId);
-            question.title = title;
-            question.category = category;
-            question.content = content;
-            question.date = new Date().toISOString().split('T')[0];
-        }
-        questionModal.style.display = "none";
-        displayQuestions(1);
-    });
 
-    displayQuestions(currentPage);
+        if (!selectedCategory) {
+            Swal.fire({
+                title: 'Error!',
+                text: '카테고리가 선택되지 않았습니다.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        const title = document.getElementById('questionTitle').value;
+        const content = document.getElementById('questionContent').value;
+
+        const requestBody = {
+            title: title,
+            category: selectedCategory,
+            content: content
+        };
+
+        try {
+            const response = await fetch('/api/questions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                },
+                body: JSON.stringify(requestBody)
+            });
+
+            if (response.ok) {
+                const newQuestion = await response.json();
+                questions.unshift(newQuestion);
+                Swal.fire({
+                    title: '질문 작성 성공',
+                    text: '질문이 성공적으로 제출되었습니다!',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    questionModal.style.display = 'none';
+                    document.getElementById('questionForm').reset();
+                    categoryOptions.forEach(opt => opt.classList.remove('active'));
+                    selectedCategory = null;
+                    loadQuestions(currentPage);
+                });
+            } else {
+                const errorData = await response.json();
+                Swal.fire({
+                    title: 'Error!',
+                    text: errorData.error || '질문을 제출하는데 문제가 생겼습니다.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                title: 'Error!',
+                text: '제출에 문제가 생겼습니다.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
     document.querySelector('.back-btn').style.display = 'none';
 });
 
-function displayQuestions(page) {
+async function loadQuestions(page) {
+    try {
+        const response = await fetch(`/api/questions?page=${page - 1}&size=${questionsPerPage}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        });
+
+
+        if (response.ok) {
+            const result = await response.json();
+            questions.length = 0;
+            questions.push(...result.data.content);
+            totalPages = result.data.totalPages;
+            displayQuestions(page);
+            updatePagination();
+        } else {
+            console.error("Failed to fetch questions:", response.statusText);
+            Swal.fire({
+                title: 'Error!',
+                text: '질문 목록을 불러오는 데 실패했습니다.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    } catch (error) {
+        console.error("An error occurred while fetching questions:", error);
+        Swal.fire({
+            title: 'Error!',
+            text: '질문 목록을 불러오는 도중 오류가 발생했습니다.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    }
+}
+
+function displayQuestions() {
     const questionList = document.querySelector('.question-list');
     questionList.innerHTML = '';
-    const start = (page - 1) * questionsPerPage;
-    const end = start + questionsPerPage;
-    const pageQuestions = questions.slice(start, end);
 
-    pageQuestions.forEach(question => {
+    questions.forEach(question => {
         const questionCard = document.createElement('div');
         questionCard.className = 'question-card';
         questionCard.dataset.id = question.id;
         questionCard.innerHTML = `
-                    <div class="question-header">
-                        <div class="question-title">${question.title}</div>
-                        <div class="question-meta">
-                            <span class="question-category">${question.category}</span>
-                            <span class="question-date">${question.date}</span>
-                        </div>
-                    </div>
-                    <div class="question-content">${question.content}</div>
-                `;
+            <div class="question-header">
+                <div class="question-title">${question.title}</div>
+                <div class="question-meta">
+                    <span class="question-category">${question.category}</span>
+                    <span class="question-date">${new Date(question.created_at).toLocaleDateString()}</span>
+                </div>
+            </div>
+            <div class="question-content">${question.content}</div>
+        `;
         questionCard.addEventListener('click', () => showQuestionDetail(question.id));
         questionList.appendChild(questionCard);
     });
-
-    updatePagination();
 }
-
 function updatePagination() {
     const pagination = document.querySelector('.pagination');
     pagination.innerHTML = '';
-    const totalPages = Math.ceil(questions.length / questionsPerPage);
 
     const prevButton = document.createElement('button');
     prevButton.textContent = 'Previous';
@@ -199,7 +188,7 @@ function updatePagination() {
     prevButton.addEventListener('click', () => {
         if (currentPage > 1) {
             currentPage--;
-            displayQuestions(currentPage);
+            loadQuestions(currentPage);
         }
     });
     pagination.appendChild(prevButton);
@@ -210,7 +199,7 @@ function updatePagination() {
         pageButton.classList.toggle('active', i === currentPage);
         pageButton.addEventListener('click', () => {
             currentPage = i;
-            displayQuestions(currentPage);
+            loadQuestions(currentPage);
         });
         pagination.appendChild(pageButton);
     }
@@ -221,7 +210,7 @@ function updatePagination() {
     nextButton.addEventListener('click', () => {
         if (currentPage < totalPages) {
             currentPage++;
-            displayQuestions(currentPage);
+            loadQuestions(currentPage);
         }
     });
     pagination.appendChild(nextButton);
@@ -410,7 +399,7 @@ function deleteQuestion() {
             questions.splice(index, 1);
             delete comments[currentQuestionId];
             showMainPage();
-            displayQuestions(currentPage);
+            loadQuestions(currentPage);
         }
     }
 }
@@ -430,7 +419,7 @@ categoryButtons.forEach(button => {
             });
         }
         currentPage = 1;
-        displayQuestions(currentPage);
+        loadQuestions(currentPage);
     });
 });
 
@@ -443,5 +432,5 @@ categoryOptions.forEach(option => {
     });
 });
 
-displayQuestions(currentPage);
+loadQuestions(currentPage);
 document.querySelector('.back-btn').style.display = 'none';
