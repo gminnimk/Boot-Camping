@@ -1,64 +1,68 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyTrek - 스터디 모집글 수정</title>
-    <link rel="stylesheet" th:href="@{/css/study/StudyModify.css}">
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script th:src="@{/js/scripts.js}" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyTrek - 스터디 모집글 수정</title>
+  <link rel="stylesheet" th:href="@{/css/study/StudyModify.css}">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script th:src="@{/js/scripts.js}" defer></script>
+  <script th:src="@{/js/study/StudyModify.js}" defer></script>
 </head>
 
 <body th:classappend="${isDarkMode} ? 'dark' : ''">
 <div th:replace="~{'fragments/topbar' :: topbar}"></div>
 <div class="container">
-    <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
-    <div class="content-wrapper">
-        <div class="content">
+  <div
+      th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
+  <div class="content-wrapper">
+    <div class="content">
 
-            <h1>스터디 모집글 수정</h1>
-            <form id="studyForm">
-                <label for="title">제목</label>
-                <input type="text" id="title" name="title" value="React 스터디원 구합니다" required>
+      <h1>스터디 모집글 수정</h1>
+      <form id="studyForm">
+        <label for="title">제목</label>
+        <input type="text" id="title" name="title" required>
 
-                <label for="category">카테고리</label>
-                <select id="category" name="category" required>
-                    <option value="frontend" selected>프론트엔드</option>
-                    <option value="backend">백엔드</option>
-                    <option value="fullstack">풀스택</option>
-                    <option value="Android">Android</option>
-                    <option value="iOS">iOS</option>
-                    <option value="ai">AI</option>
-                    <option value="data">데이터</option>
-                    <option value="data">UI/UX</option>
-                </select>
+        <label for="category">카테고리</label>
+        <select id="category" name="category" required>
+          <option value="프론트엔드" selected>프론트엔드</option>
+          <option value="백엔드">백엔드</option>
+          <option value="풀스택">풀스택</option>
+          <option value="Android">Android</option>
+          <option value="ioS">ioS</option>
+          <option value="AI">AI</option>
+          <option value="데이터">데이터</option>
+          <option value="UI/UX">UI/UX</option>
+        </select>
 
-                <label for="maxMembers">최대 인원</label>
-                <input type="number" id="maxMembers" name="maxMembers" value="5" min="2" max="20" required>
+        <label for="maxMembers">최대 인원</label>
+        <input type="number" id="maxMembers" name="maxMembers" min="2" max="20" required>
 
-                <label for="duration">예상 기간</label>
-                <input type="text" id="duration" name="duration" value="8주" required>
+        <label for="duration">예상 기간</label>
+        <input type="text" id="duration" name="duration" required>
 
-                <label for="frequency">모임 주기</label>
-                <input type="text" id="frequency" name="frequency" value="주 2회" required>
+        <label for="frequency">모임 주기</label>
+        <input type="text" id="frequency" name="frequency" required>
 
-                <label for="description">스터디 소개</label>
-                <textarea id="description" name="description" required>React와 관련 라이브러리를 깊이 있게 학습하실 분들 모집합니다. 실전 프로젝트도 진행할 예정입니다. 함께 성장하고 싶은 열정 있는 분들의 참여를 기다립니다!</textarea>
+        <label for="description">스터디 소개</label>
+        <textarea id="description" name="description" required></textarea>
 
-                <div class="button-group">
-                    <button type="button" class="cancel-button" onclick="cancelReview()" th:data-cancel-url="@{/api/study/main}">취소</button>
-                    <button type="del" class="delete-btn" onclick="deleteStudy()">삭제</button>
-                    <button type="submit" class="submit-button" th:data-submit-url="@{/api/study/detail}">수정</button>
-                </div>
-            </form>
+        <div class="button-group">
+
+          <button type="button" class="cancel-button" th:data-cancel-url="@{/study/main}">취소
+          </button>
+          <button type="del" class="delete-btn" onclick="deleteStudy()">삭제</button>
+          <button type="submit" class="submit-button" th:data-submit-url="@{/study/detail}">수정
+          </button>
         </div>
+      </form>
     </div>
+  </div>
 
-    <button class="open-sidebar-button hidden" th:onclick="|javascript:toggleSidebar()|">
-        <img th:src="@{/images/icon-show-sidebar.svg}" alt="사이드바 아이콘 보이기"/>
-    </button>
-    <script th:src="@{/js/study/StudyModify.js}"></script>
+  <button class="open-sidebar-button hidden" th:onclick="|javascript:toggleSidebar()|">
+    <img th:src="@{/images/icon-show-sidebar.svg}" alt="사이드바 아이콘 보이기"/>
+  </button>
 </body>
 </html>
