@@ -165,8 +165,20 @@ input {
     width: 800px;
     max-width: 100%;
     min-height: 550px;
+    margin-top: 80px;
 }
-
+.logo-img {
+    position: fixed;
+    top: 30px; /* 상단으로부터의 거리 조정 */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000; /* 다른 요소들 위에 표시되도록 z-index 설정 */
+    height: 120px;
+    width: 120px;
+}
+#logoLink {
+    cursor: pointer;
+}
 .form-container {
     position: absolute;
     top: 0;
@@ -457,4 +469,8 @@ input.invalid {
 
 .toggle-circle.dark {
     left: 27px;
+}
+
+.logo-img {
+    display: flex;
 }

@@ -20,6 +20,15 @@ signInButton.addEventListener('click', () => {
     container.classList.remove("right-panel-active");
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const logoLink = document.getElementById('logoLink');
+
+    logoLink.addEventListener('click', function(e) {
+        e.preventDefault(); // 기본 앵커 동작 방지
+        window.location.href = '/home'; // /home으로 페이지 이동
+    });
+});
+
 // Handle user role button clicks
 normalUserBtn.addEventListener('click', () => {
     normalUserBtn.classList.add('active');
