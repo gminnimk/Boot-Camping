@@ -69,7 +69,7 @@ function createProfileCard(profile) {
         <div class="request-details">
             <p>트랙: ${profile.track}</p>
             <p>기수: ${profile.generation}</p>
-            <p>요청일: ${new Date(profile.modifiedAt).toLocaleDateString()}</p>
+            <p>요청일: ${new Date(profile.requestedAt).toLocaleDateString()}</p>
             <p>상태: <span class="${profile.status === 'REJECTED' ? 'warning-text' : profile.status === 'APPROVED' ? 'emphasis-text' : ''}">${getStatusText(profile.status)}</span></p>
         </div>
         <div class="request-actions">
@@ -123,7 +123,8 @@ async function showDetails(e) {
         });
 
         if (response.ok) {
-            const request = await response.json();
+            const result = await response.json();
+            const request = result.data;
 
             const modalContent = document.getElementById('modalContent');
             modalContent.innerHTML = `
@@ -133,7 +134,7 @@ async function showDetails(e) {
                 <p><strong>기수:</strong> ${request.generation}</p>
                 <p><strong>시작일:</strong> ${request.startDate}</p>
                 <p><strong>종료일:</strong> ${request.endDate}</p>
-                <p><strong>요청일:</strong> ${new Date(request.modifiedAt).toLocaleDateString()}</p>
+                <p><strong>요청일:</strong> ${new Date(request.requestedAt).toLocaleDateString()}</p>
                 <p><strong>상태:</strong> <span class="${request.status === 'REJECTED' ? 'warning-text' : request.status === 'APPROVED' ? 'emphasis-text' : ''}">${getStatusText(request.status)}</span></p>
                 <p><strong>인증서:</strong></p>
                 <img src="${request.certificate}" alt="인증서" class="certificate-preview">

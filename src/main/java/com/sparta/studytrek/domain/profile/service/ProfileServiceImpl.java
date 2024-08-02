@@ -124,6 +124,14 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
+	public ResponseEntity<ProfileResponseDto> getProfileById(Long profileId) {
+		Profile profile = findProfileById(profileId);
+		ProfileResponseDto responseDto = new ProfileResponseDto(profile);
+		return ResponseEntity.ok().body(responseDto);
+	}
+
+	@Override
 	@Transactional
 	public ResponseEntity<Void> applyForProfile(Long profileId, UserDetails userDetails) {
 		Profile profile = getProfileAndCheckAuthorization(profileId, userDetails);

@@ -153,6 +153,18 @@ public class AdminController {
         return ResponseEntity.ok(response);
     }
 
+
+    @GetMapping("/profiles/{profileId}")
+    public ResponseEntity<ApiResponse> getProfileById(@PathVariable Long profileId) {
+        ProfileResponseDto profileResponseDto = profileService.getProfileById(profileId).getBody();
+        ApiResponse response = ApiResponse.builder()
+            .msg("프로필 상세 조회 성공")
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(profileResponseDto)
+            .build();
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/camps")
     public ResponseEntity<ApiResponse> createCamp(@RequestBody CampRequestDto campRequestDto) {
         CampResponseDto campResponseDto = campService.createCamp(campRequestDto);

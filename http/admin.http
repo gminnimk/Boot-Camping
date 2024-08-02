@@ -90,3 +90,8 @@ Authorization: Bearer {{accessToken}}
   "name": "카카오캠프",
   "description": "카카오에서 진행하는 부트캠프"
 }
+
+### 프로필 상세 조회 (관리자용)
+GET {{apiUrl}}/admin/profiles/2
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
