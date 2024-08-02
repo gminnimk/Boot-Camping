@@ -13,33 +13,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const startBtn = document.querySelector(".start-question-btn");
     const closeBtns = document.querySelectorAll(".close");
 
-    startBtn.onclick = function() {
-        questionModal.style.display = "block";
-    }
-
-    closeBtns.forEach(btn => {
-        btn.onclick = function() {
-            questionModal.style.display = "none";
-            questionDetailModal.style.display = "none";
+    // Modal 열기/닫기 핸들러 설정
+    startBtn.addEventListener('click', () => openModal(questionModal));
+    closeBtns.forEach(btn => btn.addEventListener('click', closeModals));
+    window.addEventListener('click', (event) => {
+        if (event.target === questionModal || event.target === questionDetailModal) {
+            closeModals();
         }
     });
 
-    window.onclick = function(event) {
-        if (event.target == questionModal) {
-            questionModal.style.display = "none";
-        } else if (event.target == questionDetailModal) {
-            questionDetailModal.style.display = "none";
-        }
-    }
+    setupCategoryOptions();
+    setupFormSubmit();
 
-    document.querySelector('.start-question-btn').addEventListener('click', () => {
-        currentQuestionId = null;
-        document.getElementById('questionForm').reset();
-        document.querySelectorAll('.category-option').forEach(option => option.classList.remove('active'));
-        selectedCategory = null;
-        questionModal.style.display = "block";
-    });
+    document.querySelector('.back-btn').style.display = 'none';
+});
 
+function openModal(modal) {
+    modal.style.display = "block";
+}
+
+function closeModals() {
+    document.getElementById("questionModal").style.display = "none";
+    document.getElementById("questionDetailPage").style.display = "none";
+    window.location.reload();
+}
+
+function setupCategoryOptions() {
     const categoryOptions = document.querySelectorAll('.category-option');
     categoryOptions.forEach(option => {
         option.addEventListener('click', function() {
@@ -49,28 +48,20 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('selectedCategory').value = selectedCategory;
         });
     });
+}
 
+function setupFormSubmit() {
     document.getElementById('questionForm').addEventListener('submit', async function(e) {
         e.preventDefault();
 
         if (!selectedCategory) {
-            Swal.fire({
-                title: 'Error!',
-                text: '카테고리가 선택되지 않았습니다.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
+            showAlert('오류!', '카테고리가 선택되지 않았습니다.', 'error');
             return;
         }
 
         const title = document.getElementById('questionTitle').value;
         const content = document.getElementById('questionContent').value;
-
-        const requestBody = {
-            title: title,
-            category: selectedCategory,
-            content: content
-        };
+        const requestBody = { title, category: selectedCategory, content };
 
         try {
             const response = await fetch('/api/questions', {
@@ -83,40 +74,39 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                const newQuestion = await response.json();
-                questions.unshift(newQuestion);
-                Swal.fire({
-                    title: '질문 작성 성공',
-                    text: '질문이 성공적으로 제출되었습니다!',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    questionModal.style.display = 'none';
-                    document.getElementById('questionForm').reset();
-                    categoryOptions.forEach(opt => opt.classList.remove('active'));
-                    selectedCategory = null;
-                    loadQuestions(currentPage);
-                });
+                closeModals();
+
+                localStorage.setItem('showSuccessMessage', 'true');
+                window.location.reload();
             } else {
                 const errorData = await response.json();
-                Swal.fire({
-                    title: 'Error!',
-                    text: errorData.error || '질문을 제출하는데 문제가 생겼습니다.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
+                showAlert('오류!', errorData.error || '질문을 제출하는데 문제가 생겼습니다.', 'error');
             }
         } catch (error) {
-            Swal.fire({
-                title: 'Error!',
-                text: '제출에 문제가 생겼습니다.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
+            showAlert('오류!', '제출에 문제가 생겼습니다.', 'error');
         }
     });
-    document.querySelector('.back-btn').style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('showSuccessMessage') === 'true') {
+        localStorage.removeItem('showSuccessMessage');
+        Swal.fire({
+            title: '성공!',
+            text: '질문이 성공적으로 제출되었습니다.',
+            icon: 'success',
+            confirmButtonText: '확인'
+        });
+    }
 });
+
+
+function resetForm() {
+    document.getElementById('questionForm').reset();
+    document.querySelectorAll('.category-option').forEach(option => option.classList.remove('active'));
+    selectedCategory = null;
+}
+
 
 async function loadQuestions(page) {
     try {
@@ -128,32 +118,18 @@ async function loadQuestions(page) {
             }
         });
 
-
         if (response.ok) {
             const result = await response.json();
-            console.log(result.data.content);
             questions.length = 0;
             questions.push(...result.data.content);
             totalPages = result.data.totalPages;
-            displayQuestions(page);
+            displayQuestions();
             updatePagination();
         } else {
-            console.error("Failed to fetch questions:", response.statusText);
-            Swal.fire({
-                title: 'Error!',
-                text: '질문 목록을 불러오는 데 실패했습니다.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
+            handleError("Failed to fetch questions", response.statusText);
         }
     } catch (error) {
-        console.error("An error occurred while fetching questions:", error);
-        Swal.fire({
-            title: 'Error!',
-            text: '질문 목록을 불러오는 도중 오류가 발생했습니다.',
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
+        handleError("An error occurred while fetching questions", error);
     }
 }
 
@@ -162,19 +138,19 @@ function displayQuestions() {
     questionList.innerHTML = '';
 
     questions.forEach(question => {
-        const questionCard = document.createElement('div');
-        questionCard.className = 'question-card';
-        questionCard.dataset.id = question.id;
+        const questionCard = createQuestionCard(question);
+        questionList.appendChild(questionCard);
+    });
+}
 
-        let formattedDate = 'No Date Available';
-        if (question.createdAt) {
-            const createdAt = new Date(Date.parse(question.createdAt));
-            if (!isNaN(createdAt.getTime())) {
-                formattedDate = createdAt.toLocaleString();
-            }
-        }
+function createQuestionCard(question) {
+    const questionCard = document.createElement('div');
+    questionCard.className = 'question-card';
+    questionCard.dataset.id = question.id;
 
-        questionCard.innerHTML = `
+    const formattedDate = question.createdAt ? new Date(Date.parse(question.createdAt)).toLocaleString() : 'No Date Available';
+
+    questionCard.innerHTML = `
         <div class="question-header">
             <div class="question-title">${question.title}</div>
             <div class="question-meta">
@@ -185,63 +161,54 @@ function displayQuestions() {
         <div class="question-content">${question.content}</div>
     `;
 
-        questionCard.addEventListener('click', () => showQuestionDetail(question.id));
-        document.querySelector('.question-list').appendChild(questionCard);
-    });
+    questionCard.addEventListener('click', () => showQuestionDetail(question.id));
+    return questionCard;
 }
+
 function updatePagination() {
     const pagination = document.querySelector('.pagination');
     pagination.innerHTML = '';
 
-    const prevButton = document.createElement('button');
-    prevButton.textContent = 'Previous';
-    prevButton.disabled = currentPage === 1;
-    prevButton.addEventListener('click', () => {
+    addPaginationButton(pagination, 'Previous', currentPage === 1, () => {
         if (currentPage > 1) {
             currentPage--;
             loadQuestions(currentPage);
         }
     });
-    pagination.appendChild(prevButton);
 
     for (let i = 1; i <= totalPages; i++) {
-        const pageButton = document.createElement('button');
-        pageButton.textContent = i;
-        pageButton.classList.toggle('active', i === currentPage);
-        pageButton.addEventListener('click', () => {
+        addPaginationButton(pagination, i, i === currentPage, () => {
             currentPage = i;
             loadQuestions(currentPage);
         });
-        pagination.appendChild(pageButton);
     }
 
-    const nextButton = document.createElement('button');
-    nextButton.textContent = 'Next';
-    nextButton.disabled = currentPage === totalPages;
-    nextButton.addEventListener('click', () => {
+    addPaginationButton(pagination, 'Next', currentPage === totalPages, () => {
         if (currentPage < totalPages) {
             currentPage++;
             loadQuestions(currentPage);
         }
     });
-    pagination.appendChild(nextButton);
+}
+
+function addPaginationButton(container, text, isDisabled, onClick) {
+    const button = document.createElement('button');
+    button.textContent = text;
+    button.disabled = isDisabled;
+    if (!isDisabled) button.addEventListener('click', onClick);
+    container.appendChild(button);
 }
 
 function showQuestionDetail(questionId) {
     currentQuestionId = questionId;
-    const question = questions.find(r => r.id === questionId);
+    const question = questions.find(q => q.id === questionId);
     const detailPage = document.getElementById('questionDetailPage');
-    detailPage.style.display = 'block';
+    openModal(detailPage);
     document.getElementById('detailTitle').textContent = question.title;
     document.getElementById('detailCategory').textContent = `Category: ${question.category}`;
-    document.getElementById('detailDate').textContent = `Date: ${question.date}`;
+    document.getElementById('detailDate').textContent = `Date: ${question.createdAt ? new Date(question.createdAt).toLocaleString() : 'No Date Available'}`;
     document.getElementById('detailContent').textContent = question.content;
     displayComments(questionId);
-}
-
-function closeDetailModal() {
-    const detailPage = document.getElementById('questionDetailPage');
-    detailPage.style.display = 'none';
 }
 
 async function displayComments(questionId) {
@@ -250,33 +217,28 @@ async function displayComments(questionId) {
 
     try {
         const response = await fetch(`/api/questions/${questionId}/answers`);
-        if (!response.ok) {
-            throw new Error('Failed to fetch answers');
-        }
+        if (!response.ok) throw new Error('Failed to fetch answers');
+
         const apiResponse = await response.json();
+        comments[questionId] = apiResponse.data.map(answer => ({
+            id: answer.id,
+            content: answer.content,
+            timestamp: new Date(answer.createdAt).getTime(),
+            replies: answer.comments || [],
+        }));
 
-        if (apiResponse.data) {
-            comments[questionId] = apiResponse.data.map(answer => ({
-                id: answer.id,
-                content: answer.content,
-                timestamp: new Date(answer.createdAt).getTime(),
-                replies: answer.comments || [], // 답변에 대한 댓글을 replies로 저장
-            }));
-
-            const sortedComments = comments[questionId].sort((a, b) => b.timestamp - a.timestamp);
-            sortedComments.forEach(comment => {
+        comments[questionId]
+            .sort((a, b) => b.timestamp - a.timestamp)
+            .forEach(comment => {
                 const commentElement = createCommentElement(comment, questionId);
                 commentList.appendChild(commentElement);
             });
-        }
+
+        updateCommentCount(questionId);
     } catch (error) {
         console.error('Error fetching answers:', error);
     }
-
-    updateCommentCount(questionId);
 }
-
-
 
 function createCommentElement(comment, questionId) {
     const commentElement = document.createElement('div');
@@ -311,6 +273,12 @@ function createCommentElement(comment, questionId) {
     }
     return commentElement;
 }
+
+function showReplyForm(button, questionId, commentId) {
+    const replyForm = button.parentElement.nextElementSibling.nextElementSibling;
+    replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
+}
+
 async function addComment() {
     const commentContent = document.getElementById('newComment').value;
     if (commentContent.trim() === '') return;
@@ -325,9 +293,7 @@ async function addComment() {
             body: JSON.stringify({ content: commentContent })
         });
 
-        if (!response.ok) {
-            throw new Error('답변 작성에 실패했습니다.');
-        }
+        if (!response.ok) throw new Error('답변 작성에 실패했습니다.');
 
         const result = await response.json();
         const newComment = {
@@ -343,14 +309,8 @@ async function addComment() {
         document.getElementById('newComment').value = '';
         displayComments(currentQuestionId);
     } catch (error) {
-        console.error('Error adding comment:', error);
-        alert('댓글 작성 중 오류가 발생했습니다.');
+        handleError('Error adding comment', error);
     }
-}
-
-function showReplyForm(button, questionId, commentId) {
-    const replyForm = button.parentElement.nextElementSibling.nextElementSibling;
-    replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
 }
 
 async function addReply(button, questionId, answerId) {
@@ -381,12 +341,10 @@ async function addReply(button, questionId, answerId) {
             displayComments(questionId); // 댓글 목록을 새로고침하여 새로운 댓글을 표시
             button.previousElementSibling.value = ''; // 입력 필드 초기화
         } else {
-            const errorData = await response.json();
-            alert("Failed to add reply: " + errorData.error || 'Failed to add reply');
+            handleError('Failed to add reply', await response.json());
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('댓글 추가 중 오류가 발생했습니다.');
+        handleError('Error adding reply', error);
     }
 }
 
@@ -402,16 +360,16 @@ function editComment(questionId, commentId) {
             },
             body: JSON.stringify({ content: newContent })
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.statuscode === "200") {
-                comment.content = newContent;
-                displayComments(questionId);
-            } else {
-                alert("Failed to update answer: " + data.msg);
-            }
-        })
-        .catch(error => console.error('Error:', error));
+            .then(response => response.json())
+            .then(data => {
+                if (data.statuscode === "200") {
+                    comment.content = newContent;
+                    displayComments(questionId);
+                } else {
+                    handleError("Failed to update answer", data);
+                }
+            })
+            .catch(error => handleError('Error updating comment', error));
     }
 }
 
@@ -423,16 +381,18 @@ function deleteComment(questionId, commentId) {
                 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
             }
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.statuscode === "200") {
-                comments[questionId] = comments[questionId].filter(c => c.id !== commentId);
-                displayComments(questionId);
-            } else {
-                alert("Failed to delete answer: " + data.msg);
-            }
-        })
-        .catch(error => console.error('Error:', error));
+            .then(response => {
+                if (response.ok) {
+                    comments[questionId] = comments[questionId].filter(c => c.id !== commentId);
+                    displayComments(questionId);
+                    showAlert("Success", "답변이 삭제되었습니다.", "success");
+                } else {
+                    return response.json().then(data => {
+                        handleError("Failed to delete answer", data);
+                    });
+                }
+            })
+            .catch(error => handleError('Error deleting comment', error));
     }
 }
 
@@ -486,8 +446,7 @@ async function editQuestion() {
         option.classList.toggle('active', option.dataset.category === question.category);
     });
 
-    const questionModal = document.getElementById("questionModal");
-    questionModal.style.display = "block";
+    openModal(document.getElementById("questionModal"));
 
     document.getElementById('questionForm').onsubmit = async function(e) {
         e.preventDefault();
@@ -515,15 +474,14 @@ async function editQuestion() {
                     questions[index] = updatedQuestionData;
                 }
                 showQuestionDetail(questionId);
-                questionModal.style.display = "none";
-                Swal.fire('Success', 'Question updated successfully', 'success');
+                closeModals();
+                showAlert('Success', 'Question updated successfully', 'success');
             } else {
                 const errorData = await response.json();
-                Swal.fire('Error', errorData.error || 'Failed to update question', 'error');
+                showAlert('Error', errorData.error || 'Failed to update question', 'error');
             }
         } catch (error) {
-            console.error('Error updating question:', error);
-            Swal.fire('Error', 'An error occurred while updating the question', 'error');
+            handleError('Error updating question', error);
         }
     };
 }
@@ -557,16 +515,31 @@ async function deleteQuestion() {
                 }
                 showMainPage();
                 loadQuestions(currentPage);
-                Swal.fire('Deleted!', 'Your question has been deleted.', 'success');
+                showAlert('Deleted!', 'Your question has been deleted.', 'success');
             } else {
                 const errorData = await response.json();
-                Swal.fire('Error', errorData.error || 'Failed to delete question', 'error');
+                showAlert('Error', errorData.error || 'Failed to delete question', 'error');
             }
         } catch (error) {
-            console.error('Error deleting question:', error);
-            Swal.fire('Error', 'An error occurred while deleting the question', 'error');
+            handleError('Error deleting question', error);
         }
     }
+}
+
+function showAlert(title, text, icon, callback = null) {
+    Swal.fire({
+        title,
+        text,
+        icon,
+        confirmButtonText: 'OK'
+    }).then(() => {
+        if (callback) callback();
+    });
+}
+
+function handleError(message, error) {
+    console.error(message, error);
+    showAlert('Error!', message, 'error');
 }
 
 const categoryButtons = document.querySelectorAll('.category-btn');
@@ -585,15 +558,6 @@ categoryButtons.forEach(button => {
         }
         currentPage = 1;
         loadQuestions(currentPage);
-    });
-});
-
-const categoryOptions = document.querySelectorAll('.category-option');
-categoryOptions.forEach(option => {
-    option.addEventListener('click', function() {
-        categoryOptions.forEach(opt => opt.classList.remove('active'));
-        this.classList.add('active');
-        document.getElementById('selectedCategory').value = this.dataset.category;
     });
 });
 
