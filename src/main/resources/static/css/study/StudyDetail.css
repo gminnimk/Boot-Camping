@@ -1,248 +1,289 @@
 body {
-    margin-top: 10px;
-    padding: 20px;
-    background-color: #f0f0f0;
+  margin-top: 10px;
+  padding: 20px;
+  background-color: #f0f0f0;
 }
 
 .container {
-    display: flex;
-    min-height: 100vh;
-    position: relative;
-    background-color: var(--body-bg);
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+  background-color: var(--body-bg);
 }
 
 .content-wrapper {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    transition: margin-left 0.3s ease;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  transition: margin-left 0.3s ease;
 }
 
 .content {
-    width: 100%;
-    max-width: 800px;
-    padding: 20px;
-    margin-top: 60px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  margin-top: 60px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .study-title {
-    font-size: 24px;
-    margin-bottom: 10px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #ddd;
-    justify-content: space-between;
+  font-size: 24px;
+  margin-bottom: 10px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.date {
+  margin-left: 250px;
 }
 
 .study-info {
-    margin-bottom: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .info-item {
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  color: var(--color);
+}
+
+.info-item {
+  background-color: var(--sidebar-bg);
+  color: var(--color);
+  border: none;
+  font-weight: bold;
+  padding: 8px 12px;
+  margin-left: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.info-item:hover, .info-item.active {
+  background-color: #5AA9E6;
+  color: var(--color);
 }
 
 .study-description {
-    margin-bottom: 20px;
-    line-height: 1.6;
+  margin-bottom: 20px;
+  line-height: 10;
 }
 
 .button-group {
-    margin-bottom: 20px;
-    display: flex;
-    gap: 10px;
-    margin-top: 2rem;
-    border-top: 1px solid #e0e0e0;
-    padding-top: 1rem;
-    justify-content: space-between;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  margin-top: 2rem;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 1rem;
+  justify-content: space-between;
 }
 
 .btn {
-    background-color: var(--sidebar-bg);
-    color: var(--color);
-    border: none;
-    font-weight: bold;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s;
+  background-color: var(--sidebar-bg);
+  color: var(--color);
+  border: none;
+  font-weight: bold;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
 }
 
 .modify-button {
-    background-color: #7FC8F8;
-    color: var(--color);
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-right: 10px;
+  background-color: #7FC8F8;
+  color: var(--color);
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-right: 10px;
 }
 
 .modify-button:hover {
-    background-color: #5AA9E6;
+  background-color: #5AA9E6;
 }
 
 .delete-btn {
-    background-color: #FF6B35;
-    color: var(--color);
-    font-weight: bold;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  background-color: #FF6B35;
+  color: var(--color);
+  font-weight: bold;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .delete-btn:hover {
-    background-color: #FF6B35;
+  background-color: #FF6B35;
 }
 
 .comments-section {
-    margin-top: 30px;
+  margin-top: 30px;
 }
 
 .comment {
-    border: 1px solid #e0e0e0;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    background-color: var(--sidebar-bg);
-    color: var(--color);
+  border: 1px solid #e0e0e0;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  background-color: var(--sidebar-bg);
+  color: var(--color);
 }
 
 .comment-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .user-info {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .comment-date {
-    font-size: 0.8em;
-    color: #777;
+  font-size: 0.8em;
+  color: #777;
 }
 
 .comment-content {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .comment-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 
 .add-comment {
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
 }
 
 .add-comment input {
-    flex-grow: 1;
-    height: 60px;
-    padding: 0 0.5rem;
-    background-color: var(--sidebar-bg);
-    color: var(--color);
-    margin-right: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: calc(100% - 120px);
+  flex-grow: 1;
+  height: 60px;
+  padding: 0 0.5rem;
+  background-color: var(--sidebar-bg);
+  color: var(--color);
+  margin-right: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: calc(100% - 120px);
 }
 
 .add-comment button {
-    background-color: #7FC8F8;
-    color: var(--color);
-    border: none;
-    height: 60px;
-    padding: 10px 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-    width: 100px;
+  background-color: #7FC8F8;
+  color: var(--color);
+  border: none;
+  height: 60px;
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  width: 100px;
 }
 
 .add-comment button:hover {
-    background-color: #5AA9E6;
+  background-color: #5AA9E6;
 }
 
 
 .reply-form {
-    margin-top: 20px;
+  margin-top: 10px;
+  display: none;
+  color: var(--color);
 }
 
-.reply-form textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    resize: vertical;
+.reply-form input {
+  background-color: var(--sidebar-bg);
+  color: var(--color);
+  width: calc(100% - 120px);
+  height: 50px;
+  padding: 0 0.5rem;
+  margin-right: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .reply-form button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-top: 10px;
-    transition: background-color 0.3s;
+  background-color: #7FC8F8;
+  color: var(--color);
+  font-weight: bold;
+  border: none;
+  height: 50px;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
 }
 
-.reply-form button:hover, .add-comment button:hover {
-    background-color: #0056b3;
+.reply-form button:hover {
+  background-color: #5AA9E6;
+}
+
+.replies {
+  margin-left: 20px;
+  border-left: 2px solid #e0e0e0;
+  padding-left: 10px;
+  margin-top: 15px;
 }
 
 
 .reply-button {
-    background-color: #7FC8F8;
+  background-color: #7FC8F8;
 }
 
 .edit-button {
-    background-color: #FFE45E;
+  background-color: #FFE45E;
 }
 
 .delete-button {
-    background-color: #FF6B35;
+  background-color: #FF6B35;
 }
 
+
 .reply-button, .edit-button, .delete-button {
-    color: var(--color);
-    border: none;
-    padding: 5px 10px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    margin-top: 10px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s;
+  color: var(--color);
+  border: none;
+  padding: 5px 10px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
 }

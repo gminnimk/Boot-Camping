@@ -155,21 +155,12 @@ body {
     display: flex;
     justify-content: center;
     margin-top: 20px;
-    gap: 10px;
 }
-
 .pagination button {
+    margin: 0 5px;
     padding: 5px 10px;
-    border: 1px solid #ddd;
-    background-color: var(--sidebar-bg);
-    cursor: pointer;
+    border: none;
 }
-
-/*.pagination button.active {*/
-/*    background-color: #007bff;*/
-/*    color: white;*/
-/*}*/
-
 
 .categories {
     display: flex;

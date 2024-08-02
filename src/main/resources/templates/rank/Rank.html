@@ -1,151 +1,52 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyTrek - 부트캠프 리뷰 랭킹</title>
-    <link rel="stylesheet" th:href="@{/css/rank/Rank.css}">
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <link rel="stylesheet" th:href="@{/css/ranktopsearch.css}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script th:src="@{/js/scripts.js}" defer></script>
-    <script th:src="@{/js/ranktopsearch.js}" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyTrek - 부트캠프 리뷰 랭킹</title>
+  <link rel="stylesheet" th:href="@{/css/rank/Rank.css}">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/css/ranktopsearch.css}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script th:src="@{/js/scripts.js}" defer></script>
+  <script th:src="@{/js/ranktopsearch.js}" defer></script>
 </head>
 
 <body th:classappend="${isDarkMode} ? 'dark' : ''">
 <div th:replace="~{'fragments/topbar' :: topbar}"></div>
 <div class="container">
-    <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
-    <div class="content-wrapper">
-        <div class="content">
+  <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
+  <div class="content-wrapper">
+    <div class="content">
+      <div th:replace="~{'fragments/ranktopsearch' :: ranktopsearch}"></div>
+      <div class="categories">
+        <input type="radio" id="category-lecture" name="category" value="최신순" class="category-radio" required>
+        <label for="category-lecture" class="category-label">최신순</label>
 
-            <!-- 헤더 -->
-            <div th:replace="~{'fragments/ranktopsearch' :: ranktopsearch}"></div>
+        <input type="radio" id="category-instructor" name="category" value="인기순" class="category-radio">
+        <label for="category-instructor" class="category-label">인기순</label>
+      </div>
+      <div class="ranking-list" id="resultsContainer">
+        <!-- JavaScript를 통해 동적으로 항목들이 추가될 예정입니다. -->
+      </div>
+      <div class="pagination">
+        <!-- 이전 페이지로 이동하는 버튼 -->
+        <button id="prevButton" onclick="changePage(-1)" disabled>Previous</button>
 
-                <div class="categories">
-                    <input type="radio" id="category-lecture" name="category" value="최신순" class="category-radio" required>
-                    <label for="category-lecture" class="category-label">최신순</label>
-
-                    <input type="radio" id="category-instructor" name="category" value="인기순" class="category-radio">
-                    <label for="category-instructor" class="category-label">인기순</label>
-                </div>
-
-                <div class="ranking-list">
-                    <div class="ranking-item">
-                        <button class="like-button">❤</button>
-                        <h3>코딩 부트캠프</h3>
-                        <div class="rating">★★★★☆</div>
-                        <div class="review-preview">
-                            "실무에 바로 적용할 수 있는 skills을 배웠습니다. 다만, 속도가 조금 빨랐어요."
-                        </div>
-                        <div class="review-meta">
-                            작성자: John D. | 날짜: 2023-05-15
-                        </div>
-                    </div>
-                    <div class="ranking-item">
-                        <button class="like-button">❤</button>
-                        <h3>웹 개발 마스터 과정</h3>
-                        <div class="rating">★★★★★</div>
-                        <div class="review-preview">
-                            "실무에 바로 적용할 수 있는 skills을 배웠습니다. 강사진들의 열정과 커리큘럼의 질이 매우 높았습니다."
-                        </div>
-                        <div class="review-meta">
-                            작성자: Sarah K. | 날짜: 2023-05-10
-                        </div>
-                    </div>
-                    <div class="ranking-item">
-                        <button class="like-button">❤</button>
-                        <h3>AI 전문가 양성 과정</h3>
-                        <div class="rating">★★★★★</div>
-                        <div class="review-preview">
-                            "최신 AI 기술을 배울 수 있어 좋았습니다. 프로젝트 경험도 풍부했어요."
-                        </div>
-                        <div class="review-meta">
-                            작성자: Mike L. | 날짜: 2023-05-05
-                        </div>
-                    </div>
-                    <div class="ranking-item">
-                        <button class="like-button">❤</button>
-                        <h3>데이터 사이언스 부트캠프</h3>
-                        <div class="rating">★★★★☆</div>
-                        <div class="review-preview">
-                            "데이터 분석부터 머신러닝까지 폭넓게 배울 수 있었습니다. 실습 위주의 수업이 좋았어요."
-                        </div>
-                        <div class="review-meta">
-                            작성자: Emily R. | 날짜: 2023-05-20
-                        </div>
-                    </div>
-                    <div class="ranking-item">
-                        <button class="like-button">❤</button>
-                        <h3>모바일 앱 개발 마스터클래스</h3>
-                        <div class="rating">★★★★★</div>
-                        <div class="review-preview">
-                            "iOS와 Android 앱 개발을 동시에 배울 수 있어서 매우 유익했습니다."
-                        </div>
-                        <div class="review-meta">
-                            작성자: Alex T. | 날짜: 2023-05-18
-                        </div>
-                    </div>
-                    <div class="ranking-item">
-                        <button class="like-button">❤</button>
-                        <h3>풀스택 개발자 양성 과정</h3>
-                        <div class="rating">★★★★☆</div>
-                        <div class="review-preview">
-                            "프론트엔드부터 백엔드까지 전반적인 웹 개발 스킬을 익힐 수 있었습니다."
-                        </div>
-                        <div class="review-meta">
-                            작성자: Lisa M. | 날짜: 2023-05-12
-                        </div>
-                    </div>
-                    <div class="ranking-item">
-                        <button class="like-button">❤</button>
-                        <h3>풀스택 개발자 양성 과정</h3>
-                        <div class="rating">★★★★☆</div>
-                        <div class="review-preview">
-                            "프론트엔드부터 백엔드까지 전반적인 웹 개발 스킬을 익힐 수 있었습니다."
-                        </div>
-                        <div class="review-meta">
-                            작성자: Lisa M. | 날짜: 2023-05-12
-                        </div>
-                    </div>
-                    <div class="ranking-item">
-                        <button class="like-button">❤</button>
-                        <h3>풀스택 개발자 양성 과정</h3>
-                        <div class="rating">★★★★☆</div>
-                        <div class="review-preview">
-                            "프론트엔드부터 백엔드까지 전반적인 웹 개발 스킬을 익힐 수 있었습니다."
-                        </div>
-                        <div class="review-meta">
-                            작성자: Lisa M. | 날짜: 2023-05-12
-                        </div>
-                    </div>
-                    <div class="ranking-item">
-                        <button class="like-button">❤</button>
-                        <h3>풀스택 개발자 양성 과정</h3>
-                        <div class="rating">★★★★☆</div>
-                        <div class="review-preview">
-                            "프론트엔드부터 백엔드까지 전반적인 웹 개발 스킬을 익힐 수 있었습니다."
-                        </div>
-                        <div class="review-meta">
-                            작성자: Lisa M. | 날짜: 2023-05-12
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pagination">
-                    <button>이전</button>
-                    <button class="active">1</button>
-                    <button>2</button>
-                    <button>3</button>
-                    <button>다음</button>
-                </div>
-            </div>
+        <!-- 페이지 번호를 동적으로 추가할 영역 -->
+        <div class="page-numbers" id="pageNumbers">
+          <!-- 페이지 번호가 여기에 동적으로 추가됩니다. -->
         </div>
+
+        <!-- 다음 페이지로 이동하는 버튼 -->
+        <button id="nextButton" onclick="changePage(1)">Next</button>
+      </div>
     </div>
+  </div>
 </div>
 <button class="open-sidebar-button hidden" th:onclick="|javascript:toggleSidebar()|">
-    <img th:src="@{/images/icon-show-sidebar.svg}" alt="사이드바 아이콘 보이기"/>
+  <img th:src="@{/images/icon-show-sidebar.svg}" alt="사이드바 아이콘 보이기"/>
 </button>
 <script th:src="@{/js/rank/Rank.js}"></script>
 </body>
