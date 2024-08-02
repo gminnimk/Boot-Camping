@@ -1,10 +1,13 @@
 const questionsPerPage = 9;
 let currentPage = 1;
+let totalPages = 0;
 const questions = [];
 let comments = {};
 let currentQuestionId = null;
 
 document.addEventListener('DOMContentLoaded', () => {
+    loadQuestions(currentPage);
+
     const questionModal = document.getElementById("questionModal");
     const questionDetailModal = document.getElementById("questionDetailPage");
     const startBtn = document.querySelector(".start-question-btn");
@@ -92,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('questionForm').reset();
                     categoryOptions.forEach(opt => opt.classList.remove('active'));
                     selectedCategory = null;
-                    displayQuestions(1);
+                    loadQuestions(currentPage);
                 });
             } else {
                 const errorData = await response.json();
@@ -112,43 +115,72 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
-
-    displayQuestions(currentPage);
     document.querySelector('.back-btn').style.display = 'none';
 });
 
-function displayQuestions(page) {
+async function loadQuestions(page) {
+    try {
+        const response = await fetch(`/api/questions?page=${page - 1}&size=${questionsPerPage}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        });
+
+
+        if (response.ok) {
+            const result = await response.json();
+            questions.length = 0;
+            questions.push(...result.data.content);
+            totalPages = result.data.totalPages;
+            displayQuestions(page);
+            updatePagination();
+        } else {
+            console.error("Failed to fetch questions:", response.statusText);
+            Swal.fire({
+                title: 'Error!',
+                text: '질문 목록을 불러오는 데 실패했습니다.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    } catch (error) {
+        console.error("An error occurred while fetching questions:", error);
+        Swal.fire({
+            title: 'Error!',
+            text: '질문 목록을 불러오는 도중 오류가 발생했습니다.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    }
+}
+
+function displayQuestions() {
     const questionList = document.querySelector('.question-list');
     questionList.innerHTML = '';
-    const start = (page - 1) * questionsPerPage;
-    const end = start + questionsPerPage;
-    const pageQuestions = questions.slice(start, end);
 
-    pageQuestions.forEach(question => {
+    questions.forEach(question => {
         const questionCard = document.createElement('div');
         questionCard.className = 'question-card';
         questionCard.dataset.id = question.id;
         questionCard.innerHTML = `
-                    <div class="question-header">
-                        <div class="question-title">${question.title}</div>
-                        <div class="question-meta">
-                            <span class="question-category">${question.category}</span>
-                            <span class="question-date">${question.date}</span>
-                        </div>
-                    </div>
-                    <div class="question-content">${question.content}</div>
-                `;
+            <div class="question-header">
+                <div class="question-title">${question.title}</div>
+                <div class="question-meta">
+                    <span class="question-category">${question.category}</span>
+                    <span class="question-date">${new Date(question.created_at).toLocaleDateString()}</span>
+                </div>
+            </div>
+            <div class="question-content">${question.content}</div>
+        `;
         questionCard.addEventListener('click', () => showQuestionDetail(question.id));
         questionList.appendChild(questionCard);
     });
-
-    updatePagination();
 }
-
 function updatePagination() {
     const pagination = document.querySelector('.pagination');
     pagination.innerHTML = '';
-    const totalPages = Math.ceil(questions.length / questionsPerPage);
 
     const prevButton = document.createElement('button');
     prevButton.textContent = 'Previous';
@@ -156,7 +188,7 @@ function updatePagination() {
     prevButton.addEventListener('click', () => {
         if (currentPage > 1) {
             currentPage--;
-            displayQuestions(currentPage);
+            loadQuestions(currentPage);
         }
     });
     pagination.appendChild(prevButton);
@@ -167,7 +199,7 @@ function updatePagination() {
         pageButton.classList.toggle('active', i === currentPage);
         pageButton.addEventListener('click', () => {
             currentPage = i;
-            displayQuestions(currentPage);
+            loadQuestions(currentPage);
         });
         pagination.appendChild(pageButton);
     }
@@ -178,7 +210,7 @@ function updatePagination() {
     nextButton.addEventListener('click', () => {
         if (currentPage < totalPages) {
             currentPage++;
-            displayQuestions(currentPage);
+            loadQuestions(currentPage);
         }
     });
     pagination.appendChild(nextButton);
@@ -367,7 +399,7 @@ function deleteQuestion() {
             questions.splice(index, 1);
             delete comments[currentQuestionId];
             showMainPage();
-            displayQuestions(currentPage);
+            loadQuestions(currentPage);
         }
     }
 }
@@ -387,7 +419,7 @@ categoryButtons.forEach(button => {
             });
         }
         currentPage = 1;
-        displayQuestions(currentPage);
+        loadQuestions(currentPage);
     });
 });
 
@@ -400,5 +432,5 @@ categoryOptions.forEach(option => {
     });
 });
 
-displayQuestions(currentPage);
+loadQuestions(currentPage);
 document.querySelector('.back-btn').style.display = 'none';
