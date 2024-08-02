@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
   const studyForm = document.getElementById('studyForm');
   const cancelButton = document.querySelector('.cancel-button');
-  const deleteButton = document.querySelector('.delete-btn');
-  const submitButton = document.querySelector('.submit-button');
 
   // 현재 스터디 ID를 URL에서 추출하는 함수
   function getCurrentStudyId() {
@@ -106,47 +104,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // 삭제 버튼 클릭 시 호출되는 함수
-  function handleDelete() {
-    const studyId = getCurrentStudyId();
-    if (confirm('정말로 이 스터디 모집글을 삭제하시겠습니까?')) {
-      fetch(`/api/studies/${studyId}`, { // 스터디 삭제 API 호출
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}` // Access Token 추가
-        }
-      })
-      .then(response => {
-        if (response.ok) {
-          Swal.fire({
-            title: '삭제 완료',
-            text: '스터디 모집글이 성공적으로 삭제되었습니다.',
-            icon: 'success',
-            confirmButtonText: '확인'
-          }).then(() => {
-            window.location.href = '/study/list'; // 삭제 후 스터디 목록 페이지로 리다이렉트
-          });
-        } else {
-          Swal.fire({
-            title: '삭제 실패',
-            text: '스터디 모집글 삭제 중 오류가 발생했습니다.',
-            icon: 'error',
-            confirmButtonText: '확인'
-          });
-        }
-      })
-      .catch(error => {
-        console.error('API 호출 중 에러 발생:', error);
-        Swal.fire({
-          title: '삭제 실패',
-          text: '네트워크 오류가 발생했습니다.',
-          icon: 'error',
-          confirmButtonText: '확인'
-        });
-      });
-    }
-  }
-
   // 취소 버튼 클릭 시 호출되는 함수
   function handleCancel() {
     const cancelUrl = cancelButton.getAttribute('data-cancel-url');
@@ -163,6 +120,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // 이벤트 리스너 추가
   studyForm.addEventListener('submit', handleSubmit);
-  deleteButton.addEventListener('click', handleDelete);
   cancelButton.addEventListener('click', handleCancel);
 });
