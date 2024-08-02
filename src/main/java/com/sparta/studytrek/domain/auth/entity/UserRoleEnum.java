@@ -25,5 +25,4 @@ public enum UserRoleEnum {
         public static final String ADMIN = "ADMIN";
         public static final String BOOTCAMP = "BOOTCAMP";
     }
-
 }

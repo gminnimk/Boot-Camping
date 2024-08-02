@@ -7,6 +7,8 @@
     --profile-card-bg: #fff;
     --profile-card-shadow: rgba(0, 0, 0, 0.1);
     --profile-email-color: #777;
+    --activity-color: #ff2500;
+    --apply-bg: #00ce23;
 }
 
 body.dark {
@@ -17,6 +19,8 @@ body.dark {
     --profile-card-bg: #3C3C3C;
     --profile-card-shadow: rgba(255, 255, 255, 0.1);
     --profile-email-color: #bbb;
+    --activity-color: #7FC8F8;
+    --apply-bg: #00ce23;
 }
 
 body {
@@ -123,10 +127,14 @@ body {
     display: flex;
     gap: 10px;
 }
-.edit-button, .delete-button {
+.apply-button {
+    background-color: var(--apply-bg);
+}
+
+.edit-button, .delete-button , .apply-button{
     border: none;
     padding: 5px 10px;
-    color: var(--color);
+    color: #000000;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -136,7 +144,7 @@ body {
     transition: background-color 0.3s;
 }
 .edit-button {
-    background-color: #FFE45E;
+    background-color: #ffd510;
 }
 .edit-button:hover {
     background-color: #dec95d;
@@ -217,7 +225,7 @@ body {
 }
 .activity-count {
     font-size: 24px;
-    color: #7FC8F8;
+    color: var(--activity-color);
 }
 .modal {
     display: none;
