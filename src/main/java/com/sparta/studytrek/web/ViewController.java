@@ -64,6 +64,11 @@ public class ViewController {
         return "study/StudyWrite";
     }
 
+    @GetMapping("/study/{id}")
+    public String showStudyDetailId() {
+        return "study/StudyDetail";
+    }
+
     @GetMapping("/camp")
     public String showCamp() { return "recruitment/recruitmentMain"; }
 
