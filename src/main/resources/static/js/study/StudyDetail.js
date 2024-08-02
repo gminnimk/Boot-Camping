@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       });
 
-  
 });
 
 // 스터디 상세 정보를 가져오는 함수
@@ -49,7 +48,8 @@ function updateStudyDetails(study) {
   document.querySelector('#title').textContent = study.title || '';
 
   // 현재 날짜 설정
-  document.querySelector('#currentDate').textContent = new Date().toLocaleDateString();
+  document.querySelector(
+      '#currentDate').textContent = new Date().toLocaleDateString();
 
   // 카테고리 설정
   document.querySelector('#category').textContent = study.category || '';
@@ -469,47 +469,53 @@ function editReply(commentId, replyId) {
 }
 
 // 대댓글 삭제 함수
-function deleteReply(replyId) {
-  Swal.fire({
-    title: '대댓글 삭제',
-    text: '정말로 이 대댓글을 삭제하시겠습니까?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: '삭제',
-    cancelButtonText: '취소'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      fetch(`/api/studies/${currentStudyId}/comments/replies/${replyId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.statuscode === "204") {
-          const replyElement = document.querySelector(`#replies${replyId}`);
-          replyElement.remove();
-          Swal.fire({
-            title: '삭제 완료',
-            text: '대댓글이 성공적으로 삭제되었습니다.',
-            icon: 'success',
-            confirmButtonText: '확인'
-          });
-        } else {
-          throw new Error(data.msg || '대댓글 삭제 중 오류가 발생했습니다.');
-        }
-      })
-      .catch(error => {
-        console.error('API 호출 중 에러 발생:', error);
+function deleteReply(commentId, replyId) {
+  if (!replyId) {
+    console.error('대댓글 ID가 제공되지 않았습니다.');
+    Swal.fire({
+      title: '대댓글 삭제 실패',
+      text: '대댓글 ID가 누락되었습니다.',
+      icon: 'error',
+      confirmButtonText: '확인'
+    });
+    return;
+  }
+
+  if (confirm('정말로 이 대댓글을 삭제하시겠습니까?')) {
+    fetch(`/api/studies/${currentStudyId}/comments/${commentId}/replies/${replyId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}` // Access Token 추가
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('서버 응답이 올바르지 않습니다.');
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.statuscode === "204") {
+        fetchReplies(currentStudyId, commentId); // 대댓글 목록 갱신
         Swal.fire({
-          title: '삭제 실패',
-          text: error.message,
-          icon: 'error',
+          title: '대댓글 삭제 완료',
+          text: '대댓글이 성공적으로 삭제되었습니다.',
+          icon: 'success',
           confirmButtonText: '확인'
         });
+      } else {
+        throw new Error(data.msg || '대댓글 삭제 중 오류가 발생했습니다.');
+      }
+    })
+    .catch(error => {
+      console.error('API 호출 중 에러 발생:', error);
+      Swal.fire({
+        title: '대댓글 삭제 실패',
+        text: error.message,
+        icon: 'error',
+        confirmButtonText: '확인'
       });
-    }
-  });
+    });
+  }
 }
