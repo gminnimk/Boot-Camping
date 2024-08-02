@@ -27,17 +27,17 @@ Content-Type: application/json
 
 
 ### 회원탈퇴 withdraw (관리자용)
-DELETE {{apiUrl}}/admin/users/4
+DELETE {{apiUrl}}/admin/users/2
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 ### 프로필 승인 (관리자용)
-POST {{apiUrl}}/admin/profiles/8/approve
+POST {{apiUrl}}/admin/profiles/4/approve
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 ### 프로필 거절 (관리자용)
-POST {{apiUrl}}/admin/profiles/9/reject
+POST {{apiUrl}}/admin/profiles/7/reject
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 

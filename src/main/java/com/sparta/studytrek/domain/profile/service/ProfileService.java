@@ -20,4 +20,5 @@ public interface ProfileService {
 	ResponseEntity<Void> rejectProfile(Long profileId);
 	ResponseEntity<List<ProfileResponseDto>> getProfilesByRole(UserRoleEnum role);
 	ResponseEntity<List<ProfileResponseDto>> getProfilesByRoleAndStatus(UserRoleEnum roleEnum, ProfileStatus status);
+	ResponseEntity<Void> applyForProfile(Long profileId, UserDetails userDetails);
 }

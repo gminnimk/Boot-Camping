@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.Set;
 
 import com.sparta.studytrek.common.Timestamped;
+import com.sparta.studytrek.common.exception.CustomException;
+import com.sparta.studytrek.common.exception.ErrorCode;
 import com.sparta.studytrek.domain.auth.entity.User;
 import com.sparta.studytrek.domain.profile.dto.ProfileRequestDto;
 
@@ -47,7 +49,7 @@ public class Profile extends Timestamped {
 	private User user;
 
 	@Enumerated(EnumType.STRING)
-	private ProfileStatus status = ProfileStatus.PENDING;
+	private ProfileStatus status = ProfileStatus.BASIC;
 
 	public Profile(String bootcampName, String track, String generation, LocalDate startDate, LocalDate endDate,
 		String certificate, User user, Set<String> techStack) {
@@ -59,7 +61,7 @@ public class Profile extends Timestamped {
 		this.certificate = certificate;
 		this.user = user;
 		this.techStack = techStack;
-		this.status = ProfileStatus.PENDING;
+		this.status = ProfileStatus.BASIC;
 	}
 
 	public void updateProfile(ProfileRequestDto requestDto) {
@@ -77,5 +79,12 @@ public class Profile extends Timestamped {
 	}
 	public void rejectProfile() {
 		this.status = ProfileStatus.REJECTED;
+	}
+	public void apply() {
+		if (this.status == ProfileStatus.BASIC) {
+			this.status = ProfileStatus.PENDING;
+		} else {
+			throw new CustomException(ErrorCode.PROFILE_STATUS_NOT_ALLOWED);
+		}
 	}
 }

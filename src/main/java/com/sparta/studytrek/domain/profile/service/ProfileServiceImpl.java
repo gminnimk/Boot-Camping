@@ -123,6 +123,16 @@ public class ProfileServiceImpl implements ProfileService {
 		return ResponseEntity.ok(responseDtos);
 	}
 
+	@Override
+	@Transactional
+	public ResponseEntity<Void> applyForProfile(Long profileId, UserDetails userDetails) {
+		Profile profile = getProfileAndCheckAuthorization(profileId, userDetails);
+		profile.apply();
+		profileRepository.save(profile);
+
+		return ResponseEntity.ok().build();
+	}
+
 	private Profile getProfileAndCheckAuthorization(Long profileId, UserDetails userDetails) {
 		Profile profile = findProfileById(profileId);
 		if (!profile.getUser().getUsername().equals(userDetails.getUsername())) {

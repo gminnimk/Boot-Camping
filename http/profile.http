@@ -37,3 +37,8 @@ Authorization: Bearer {{accessToken}}
 DELETE {{apiUrl}}/profiles/1
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
+
+### 프로필 신청
+POST {{apiUrl}}/profiles/1/apply
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}

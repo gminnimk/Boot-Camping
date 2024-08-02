@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
             toast: true,
             position: 'center',
             icon: 'success',
-            title: profileStatus === 'edited' ? '프로필이 수정되었습니다.' : '프로필이 등록되었습니다.',
+            title: profileStatus === 'edited' ? '프로필이 수정되었습니다.' : profileStatus === 'registered' ? '프로필이 등록되었습니다.' : profileStatus === 'applied' ? '신청이 완료되었습니다.' : '',
             showConfirmButton: false,
             timer: 3000,
             timerProgressBar: true,
@@ -165,9 +165,9 @@ document.addEventListener("click", function(e) {
         submitButton.textContent = "수정";
 
         bootcampNameSelect.value = e.target.dataset.bootcamp;
-        bootcampNameSelect.disabled = true;
+        bootcampNameSelect.disabled = false;
         trackSelect.value = e.target.dataset.track;
-        trackSelect.disabled = true;
+        trackSelect.disabled = false;
         document.getElementById("generation").value = e.target.dataset.generation;
         document.getElementById("startDate").value = e.target.dataset.startDate;
         document.getElementById("endDate").value = e.target.dataset.endDate;
@@ -181,7 +181,9 @@ document.addEventListener("click", function(e) {
             }
         });
 
-        certificateGroup.style.display = "none";
+        certificateGroup.style.display = "block";
+        certificatePreview.style.display = "none";
+
         modal.style.display = "block";
     }
 
@@ -233,6 +235,42 @@ document.addEventListener("click", function(e) {
             }
         });
     }
+
+    // 신청 버튼 클릭 시 프로필 상태 변경
+    if (e.target && e.target.classList.contains("apply-button")) {
+        const profileId = e.target.dataset.profileId;
+
+        Swal.fire({
+            title: '정말 신청하시겠습니까?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '예',
+            cancelButtonText: '아니오'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/api/profiles/${profileId}/apply`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + accessToken
+                    }
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            localStorage.setItem('profileStatus', 'applied');
+                            location.reload(); // 페이지 새로고침
+                        } else {
+                            throw new Error('신청 실패');
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("에러:", error);
+                    });
+            }
+        });
+    }
 });
 
 function fetchProfiles() {
@@ -263,10 +301,30 @@ function fetchProfiles() {
 function addCardToDOM(profile) {
     const newCard = document.createElement('div');
     newCard.className = 'card';
+
+    let statusText;
+    switch (profile.status) {
+        case 'BASIC':
+            statusText = '신청없음';
+            break;
+        case 'PENDING':
+            statusText = '대기중';
+            break;
+        case 'APPROVED':
+            statusText = '승인';
+            break;
+        case 'REJECTED':
+            statusText = '거절';
+            break;
+        default:
+            statusText = '알 수 없음';
+    }
+
     newCard.innerHTML = `
         <div class="card-header">
             <div class="card-title">${profile.bootcampName}</div>
             <div class="card-actions">
+                <button class="apply-button" data-profile-id="${profile.id}" ${profile.status !== 'BASIC' ? 'disabled' : ''}>신청</button> 
                 <button class="edit-button" data-profile-id="${profile.id}" data-bootcamp="${profile.bootcampName}" data-track="${profile.track}" data-generation="${profile.generation}" data-start-date="${profile.startDate}" data-end-date="${profile.endDate}" data-tech-stack="${(profile.techStack || []).join(',')}">수정</button>
                 <button class="delete-button" data-profile-id="${profile.id}">삭제</button>
             </div>
@@ -286,6 +344,10 @@ function addCardToDOM(profile) {
                         <td>참여 기간</td>
                         <td>${profile.startDate} - ${profile.endDate}</td>
                     </tr>
+                    <tr>
+                        <td>프로필 상태</td>
+                        <td>${statusText}</td> <!-- 프로필 상태 추가 -->
+                    </tr>
                 </table>
             </div>
             <div class="tech-stack-column">
@@ -299,6 +361,29 @@ function addCardToDOM(profile) {
 
     const contentContainer = document.querySelector('.content-container');
     contentContainer.appendChild(newCard);
+}
+
+function updateProfileStatusInDOM(profileId, newStatus) {
+    const card = document.querySelector(`.apply-button[data-profile-id="${profileId}"]`).closest('.card');
+    let statusText;
+    switch (newStatus) {
+        case 'BASIC':
+            statusText = '신청없음';
+            break;
+        case 'PENDING':
+            statusText = '대기중';
+            break;
+        case 'APPROVED':
+            statusText = '승인';
+            break;
+        case 'REJECTED':
+            statusText = '거절';
+            break;
+        default:
+            statusText = '알 수 없음';
+    }
+    card.querySelector('.info-table').querySelector('td:last-child').textContent = statusText;
+    card.querySelector('.apply-button').disabled = newStatus !== 'BASIC';
 }
 
 function updateCardInDOM(profileId, profileData) {
