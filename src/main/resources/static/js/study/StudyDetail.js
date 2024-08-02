@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+
   const pathSegments = window.location.pathname.split('/');
   currentStudyId = pathSegments[pathSegments.length - 1]; // URL에서 스터디 ID 추출
 
@@ -23,6 +24,8 @@ document.addEventListener('DOMContentLoaded', function () {
           });
         }
       });
+
+  
 });
 
 // 스터디 상세 정보를 가져오는 함수
@@ -41,8 +44,12 @@ function fetchStudyDetails(id) {
 
 // 스터디 상세 정보를 화면에 표시하는 함수
 function updateStudyDetails(study) {
+
   // 제목 설정
   document.querySelector('#title').textContent = study.title || '';
+
+  // 현재 날짜 설정
+  document.querySelector('#currentDate').textContent = new Date().toLocaleDateString();
 
   // 카테고리 설정
   document.querySelector('#category').textContent = study.category || '';

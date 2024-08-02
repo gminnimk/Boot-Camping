@@ -31,11 +31,11 @@ function createStudyCard(study) {
         <h3 class="card-title">${study.title}</h3>
         <span class="tag">${study.category}</span>
       </div>
-      <div class="date">${study.date}</div>
+      <span class="date">${formatDate(study.createdAt)}</span>
       <div class="card-content">
         <p>${study.content}</p>
       </div>
-      <div class="author">- ${study.author}</div>
+      <div class="author">${study.author || '익명 사용자'}</div>
       <div class="card-footer">
         <button class="heart-button">
           <i class="far fa-heart"></i>
@@ -135,6 +135,18 @@ function createPageButton(pageNumber) {
   };
   return pageButton;
 }
+
+
+// 날짜를 "2024. 7. 31." 형식으로 변환하는 함수
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1; // 월은 0부터 시작하므로 +1
+  const day = date.getDate();
+  return `${year}. ${month}. ${day}.`;
+}
+
+
 
 // 하트 버튼 클릭 이벤트 리스너 추가 함수
 function addHeartButtonListeners() {
