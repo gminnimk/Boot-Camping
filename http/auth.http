@@ -1,16 +1,17 @@
 ### 회원가입 signup (USER)
-POST {{apiUrl}}/auth/signup?userRole=USER
+POST {{apiUrl}}/auth/signup
 Content-Type: application/json
 
 {
   "username": "asdasd1",
   "password": "Password1!",
   "name": "일반사용자",
-  "userAddr" : "대한민국 어딘가"
+  "userAddr" : "대한민국 어딘가",
+  "userRole" : "USER"
 }
 
 ### 회원가입 signup (BOOTCAMP)
-POST {{apiUrl}}/auth/signup?userRole=BOOTCAMP
+POST {{apiUrl}}/auth/signup
 Content-Type: application/json
 
 {
@@ -18,7 +19,8 @@ Content-Type: application/json
   "password": "Password123!",
   "name": "부트캠프사용자",
   "userAddr" : "대한민국 어딘가",
-  "campName" : "스파르타"
+  "campName" : "스파르타",
+  "userRole" : "BOOTCAMP"
 }
 
 ### 로그인 login
@@ -26,8 +28,9 @@ POST {{apiUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "username": "asdasd1",
-  "password": "Password1!"
+  "username": "boot12",
+  "password": "Password123!",
+  "role": "BOOTCAMP"
 }
 
 > {%

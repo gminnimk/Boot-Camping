@@ -14,7 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -32,8 +35,8 @@ public class UserController {
      * @return 회원가입 응답 데이터
      */
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse> signup(@Valid @RequestBody SignUpRequestDto requestDto, @RequestParam("userRole") String userRole) {
-        SignUpResponseDto responseDto = userService.signup(requestDto, userRole);
+    public ResponseEntity<ApiResponse> signup(@Valid @RequestBody SignUpRequestDto requestDto) {
+        SignUpResponseDto responseDto = userService.signup(requestDto);
         ApiResponse response = ApiResponse.builder()
                 .msg("회원가입 성공")
                 .statuscode(String.valueOf(HttpStatus.CREATED.value()))

@@ -59,6 +59,20 @@ body.dark {
 .start-review-btn:hover {
     background-color: #5AA9E6;
 }
+.show-calendar-btn {
+    background-color: #FFE45E;
+    color: var(--color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    font-weight: bold;
+}
+.show-calendar-btn:hover {
+    background-color: #dec95d;
+}
 .search-bar {
     display: flex;
     align-items: center;

@@ -64,6 +64,11 @@ public class ViewController {
         return "study/StudyWrite";
     }
 
+    @GetMapping("/study/detail/{id}")
+    public String showStudyDetailIds() {
+        return "study/StudyDetail";
+    }
+
     @GetMapping("/camp")
     public String showCamp() { return "recruitment/recruitmentMain"; }
 
@@ -72,5 +77,8 @@ public class ViewController {
 
     @GetMapping("/camp/{campId}")
     public String showCampDetail() { return "recruitment/recruitmentDetail"; }
+
+    @GetMapping("/calendar")
+    public String showCalendar() { return "calendar/multimonth-view"; }
 
 }
