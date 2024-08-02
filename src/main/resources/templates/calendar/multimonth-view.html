@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+
+<!-- FullCalendar CSS -->
+<link href="https://unpkg.com/fullcalendar@6.1.15/main.min.css" rel="stylesheet" />
+
+<!-- FullCalendar JavaScript -->
+<script src="https://unpkg.com/fullcalendar@6.1.15/main.min.js"></script>
+
+<!-- FullCalendar 한글 로케일 -->
+<script src="https://unpkg.com/fullcalendar@6.1.15/locales/ko.js"></script>
+
+<script th:src="@{/js/calendar/dist/index.global.js}" defer></script>
+<script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    // 현재 날짜를 YYYY-MM-DD 형식으로 반환하는 함수
+    function getCurrentDate() {
+      var now = new Date();
+      var year = now.getFullYear();
+      var month = String(now.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+      var day = String(now.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'multiMonthYear,dayGridMonth,timeGridWeek'
+      },
+      titleFormat: function(date) {
+        // 캘린더 헤더의 제목 형식을 "년 월"로 설정
+        return date.date.year + '년 ' + (parseInt(date.date.month) + 1) + '월';
+      },
+      dayCellContent: function(info) {
+        // "일"을 제거하고 날짜만 표시
+        var number = document.createElement("a");
+        number.classList.add("fc-daygrid-day-number");
+        number.innerHTML = info.dayNumberText.replace('일', ''); // "일"을 제거한 날짜 숫자 설정
+
+        if (info.view.type === "dayGridMonth") {
+          return {
+            html: number.outerHTML // HTML로 반환
+          };
+        }
+        return {
+          domNodes: [] // 다른 뷰에서는 빈 배열 반환
+        };
+      },
+      initialView: 'dayGridMonth',  // 디폴트 화면
+      initialDate: getCurrentDate(), // 현재 날짜 설정
+      editable: false,
+      selectable: true,
+      locale: 'ko',
+      dayMaxEvents: true, // allow "more" link when too many events
+      events: function(fetchInfo, successCallback, failureCallback) {
+        Promise.all([
+          fetch('/api/calendar/recruit').then(response => response.json()),
+          fetch('/api/calendar/participate').then(response => response.json())
+        ])
+        .then(([recruitData, participateData]) => {
+          const recruitEvents = recruitData.data.map(event => ({
+            title: `모집기간 : ${event.title}`,
+            backgroundColor: "#FFE45E",
+            textColor: "#000",
+            start: event.recruitStart,
+            end: event.recruitEnd,
+            url: `/camp/${event.id}`  // 상세 페이지 URL
+          }));
+          const participateEvents = participateData.data.map(event => ({
+            title: `참여기간 : ${event.title}`,
+            backgroundColor: "#7FC8F8",
+            textColor: "#000",
+            start: event.campStart,
+            end: event.campEnd,
+            url: `/camp/${event.id}`  // 상세 페이지 URL
+          }));
+          const allEvents = [...recruitEvents, ...participateEvents];
+          successCallback(allEvents);
+        })
+        .catch(error => {
+          console.error('Error fetching events:', error);
+          failureCallback(error);
+        });
+      },
+      eventClick: function(info) {
+        window.open(info.event.url, '_blank'); // 상세 페이지를 새 탭에서 열기
+        info.jsEvent.preventDefault(); // 기본 동작 방지
+      }
+    });
+
+    calendar.render();
+  });
+
+</script>
+<style>
+
+  body {
+    margin: 40px 10px;
+    padding: 0;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+  }
+
+  #calendar {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .fc-day-sun a{
+    color: red;
+  }
+  .fc-day-sat a{
+    color: blue;
+  }
+
+</style>
+</head>
+<body>
+
+  <div id='calendar'></div>
+
+</body>
+</html>
