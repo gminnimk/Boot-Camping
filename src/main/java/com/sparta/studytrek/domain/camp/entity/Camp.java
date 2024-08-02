@@ -1,7 +1,6 @@
 package com.sparta.studytrek.domain.camp.entity;
 
 import com.sparta.studytrek.domain.auth.entity.match.CampUser;
-import com.sparta.studytrek.domain.rank.entity.Rank;
 import com.sparta.studytrek.domain.review.entity.Review;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -32,29 +31,29 @@ public class Camp {
     @Column(nullable = false, length = 255)
     private String description;
 
-    @Column(length = 50)
-    private String track; // 필터링을 위한 필드 추가
-
-    @Column(length = 50)
-    private String environment; // 필터링을 위한 필드 추가
-
-    @Column(length = 50)
-    private String cost; // 필터링을 위한 필드 추가
+//    @Column(length = 50)
+//    private String track; // 필터링을 위한 필드 추가
+//
+//    @Column(length = 50)
+//    private String environment; // 필터링을 위한 필드 추가
+//
+//    @Column(length = 50)
+//    private String cost; // 필터링을 위한 필드 추가
 
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CampUser> campUsers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Rank> ranks = new ArrayList<>();
+//    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Rank> ranks = new ArrayList<>();
 
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
-    public Camp(String name, String description, String track, String environment, String cost) {
+    public Camp(String name, String description) {
         this.name = name;
         this.description = description;
-        this.track = track;
-        this.environment = environment;
-        this.cost = cost;
+//        this.track = track;
+//        this.environment = environment;
+//        this.cost = cost;
     }
 }
