@@ -1,6 +1,7 @@
 package com.sparta.studytrek.domain.like.controller;
 
 import com.sparta.studytrek.common.ApiResponse;
+import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.domain.like.entity.RecruitmentLike;
 import com.sparta.studytrek.domain.like.service.RecruitmentLikeService;
 import com.sparta.studytrek.security.UserDetailsImpl;
@@ -34,7 +35,7 @@ public class RecruitmentLikeController {
     {
         int recruitAllLike = recruitmentLikeService.recruitLike(recruitmentId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("해당 부트캠프 모집글에 좋아요 성공 : "  + recruitAllLike)
+            .msg(ResponseText.LIKE_RECRUIT_SUCCESS.format(recruitAllLike))
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -53,7 +54,7 @@ public class RecruitmentLikeController {
     {
         int recruitAllLike = recruitmentLikeService.recruitUnlike(recruitmentId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("해당 부트캠프 모집글에 좋아요 취소 성공 : "  + recruitAllLike)
+            .msg(ResponseText.LIKE_CALL_OFF_SUCCESS.format(recruitAllLike))
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);

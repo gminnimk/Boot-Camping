@@ -1,6 +1,7 @@
 package com.sparta.studytrek.domain.review.controller;
 
 import com.sparta.studytrek.common.ApiResponse;
+import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.domain.review.dto.ReviewRequestDto;
 import com.sparta.studytrek.domain.review.dto.ReviewResponseDto;
 import com.sparta.studytrek.domain.review.service.ReviewService;
@@ -36,11 +37,12 @@ public class ReviewController {
      */
     @PostMapping
     public ResponseEntity<ApiResponse> createReview(@RequestBody ReviewRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         ReviewResponseDto responseDto = reviewService.createReview(requestDto,
             userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("리뷰 작성 성공")
+            .msg(ResponseText.REVIEW_CREATE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.CREATED.value()))
             .data(responseDto)
             .build();
@@ -56,13 +58,14 @@ public class ReviewController {
      * @return 리뷰 수정 응답 데이터
      */
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateReview(@PathVariable("id") Long id,
+    public ResponseEntity<ApiResponse> updateReview(@PathVariable Long id,
         @RequestBody ReviewRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         ReviewResponseDto responseDto = reviewService.updateReview(id, requestDto,
             userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("리뷰 수정 성공")
+            .msg(ResponseText.REVIEW_UPDATE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();
@@ -77,11 +80,12 @@ public class ReviewController {
      * @return 리뷰 삭제 응답 데이터
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> deleteReview(@PathVariable("id") Long id,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ApiResponse> deleteReview(@PathVariable Long id,
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         reviewService.deleteReview(id, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("리뷰 삭제 성공")
+            .msg(ResponseText.REVIEW_DELETE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -94,10 +98,11 @@ public class ReviewController {
      * @return 리뷰 전체 목록
      */
     @GetMapping
-    public ResponseEntity<ApiResponse> getAllReviews(Pageable pageable) {
+    public ResponseEntity<ApiResponse> getAllReviews(Pageable pageable)
+    {
         Page<ReviewResponseDto> responseDtos = reviewService.getAllReviews(pageable);
         ApiResponse response = ApiResponse.builder()
-            .msg("리뷰 전체 조회 성공")
+            .msg(ResponseText.REVIEW_GET_ALL_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDtos)
             .build();
@@ -111,10 +116,11 @@ public class ReviewController {
      * @return 해당 리뷰의 응답 데이터
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getReview(@PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponse> getReview(@PathVariable Long id)
+    {
         ReviewResponseDto responseDto = reviewService.getReview(id);
         ApiResponse response = ApiResponse.builder()
-            .msg("리뷰 단건 조회 성공")
+            .msg(ResponseText.REVIEW_GET_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();

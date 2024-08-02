@@ -1,6 +1,7 @@
 package com.sparta.studytrek.domain.recruitment.controller;
 
 import com.sparta.studytrek.common.ApiResponse;
+import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.domain.recruitment.dto.ParticipatePeriodResponseDto;
 import com.sparta.studytrek.domain.recruitment.dto.RecruitPeriodResponseDto;
 import com.sparta.studytrek.domain.recruitment.entity.Recruitment;
@@ -28,10 +29,11 @@ public class PeriodController {
      * @return 해당 부트캠프의 모집 기간 데이터
      */
     @GetMapping("/recruit")
-    public ResponseEntity<ApiResponse> getRecruitments() {
+    public ResponseEntity<ApiResponse> getRecruitments()
+    {
         List<RecruitPeriodResponseDto> responseDto = periodService.getRecruitments();
         ApiResponse response = ApiResponse.builder()
-            .msg("부트캠프 모집기간 조회")
+            .msg(ResponseText.GET_RECRUITMENT_PERIOD.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();
@@ -44,10 +46,11 @@ public class PeriodController {
      * @return 해당 부트캠프의 참여 기간 데이터
      */
     @GetMapping("/participate")
-    public ResponseEntity<ApiResponse> getParticipates() {
+    public ResponseEntity<ApiResponse> getParticipates()
+    {
         List<ParticipatePeriodResponseDto> responseDto = periodService.getParticipates();
         ApiResponse response = ApiResponse.builder()
-            .msg("부트캠프 참여기간 조회")
+            .msg(ResponseText.GET_PARTICIPATE_PERIOD.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();
