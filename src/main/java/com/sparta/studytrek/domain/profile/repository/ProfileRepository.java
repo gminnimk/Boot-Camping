@@ -13,7 +13,6 @@ import com.sparta.studytrek.domain.profile.entity.ProfileStatus;
 @Repository
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
 	List<Profile> findAllByUserId(Long userId);
-	List<Profile> findAllByStatus(ProfileStatus status);
-	List<Profile> findAllByUser_Role(Role role);
+	List<Profile> findAllByUser_RoleAndStatusNot(Role role, ProfileStatus status);
 	List<Profile> findAllByUser_RoleAndStatus(Role role, ProfileStatus status);
 }

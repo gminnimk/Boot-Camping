@@ -104,7 +104,7 @@ public class ProfileServiceImpl implements ProfileService {
 	public ResponseEntity<List<ProfileResponseDto>> getProfilesByRole(UserRoleEnum roleEnum) {
 		Role role = userService.findRoleByName(roleEnum);
 
-		List<Profile> profiles = profileRepository.findAllByUser_Role(role);
+		List<Profile> profiles = profileRepository.findAllByUser_RoleAndStatusNot(role, ProfileStatus.BASIC);
 		List<ProfileResponseDto> responseDtos = profiles.stream()
 			.map(ProfileResponseDto::new)
 			.collect(Collectors.toList());
