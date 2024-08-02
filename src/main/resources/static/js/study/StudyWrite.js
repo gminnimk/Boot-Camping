@@ -71,8 +71,7 @@ document.getElementById('studyForm').addEventListener('submit', function (e) {
       }).then(() => {
         if (data.data && data.data.id) {
           const studyId = data.data.id;
-          const detailUrl = `/study/${studyId}`;
-          window.location.href = detailUrl;
+          window.location.href = `/study/detail/${studyId}`;
         } else {
           console.error('스터디 ID가 반환되지 않았습니다.');
         }

@@ -9,7 +9,20 @@ document.addEventListener('DOMContentLoaded', function () {
     console.error('스터디 ID가 제공되지 않았습니다.');
   }
 
-  addHeartButtonListeners();
+  // 수정 버튼 클릭 시 수정 페이지로 이동
+  document.querySelector('.modify-button').addEventListener('click',
+      function () {
+        if (currentStudyId) {
+          window.location.href = `/study/modify?studyId=${currentStudyId}`;
+        } else {
+          Swal.fire({
+            title: '오류',
+            text: '스터디 ID를 찾을 수 없습니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          });
+        }
+      });
 });
 
 // 스터디 상세 정보를 가져오는 함수
@@ -191,7 +204,7 @@ function editComment(commentId) {
 
 // 대댓글을 가져오는 함수
 function fetchReplies(studyId, commentId) {
-  fetch(`/api/studies/${studyId}/comments/${commentId}/reply`)
+  fetch(`/api/studies/${studyId}/comments/${commentId}/replies`)
   .then(response => response.json())
   .then(data => {
     if (data.statuscode === "200") {
@@ -407,7 +420,7 @@ function editReply(commentId, replyId) {
 
   if (content !== null) {
     fetch(
-        `/api/studies/${currentStudyId}/comments/${commentId}/reply/${replyId}`,
+        `/api/studies/${currentStudyId}/comments/${commentId}/replies/${replyId}`,
         {
           method: 'PUT',
           headers: {
@@ -469,7 +482,7 @@ function deleteReply(replyId) {
       .then(response => response.json())
       .then(data => {
         if (data.statuscode === "204") {
-          const replyElement = document.querySelector(`#reply${replyId}`);
+          const replyElement = document.querySelector(`#replies${replyId}`);
           replyElement.remove();
           Swal.fire({
             title: '삭제 완료',
