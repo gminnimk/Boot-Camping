@@ -64,8 +64,8 @@ public class ViewController {
         return "study/StudyWrite";
     }
 
-    @GetMapping("/study/{id}")
-    public String showStudyDetailId() {
+    @GetMapping("/study/detail/{id}")
+    public String showStudyDetailIds() {
         return "study/StudyDetail";
     }
 
