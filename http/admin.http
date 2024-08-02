@@ -2,13 +2,91 @@
 POST {{apiUrl}}/admin/auth/signup
 Content-Type: application/json
 
+{
+  "username": "adminuser1",
+  "password": "Password1!",
+  "name" : "관리자1"
+}
 
 ### 관리자용 로그인
 POST {{apiUrl}}/admin/auth/login
 Content-Type: application/json
 
+{
+  "username": "adminuser1",
+  "password": "Password1!"
+}
+
+> {%
+    client.global.set("accessToken", response.body.data.accessToken)
+    client.global.set("refreshToken", response.body.data.refreshToken)
+
+    console.log('Response Status:', response.body.data.accessToken);
+    console.log('Response Data:', response.body.data.refreshToken);
+%}
+
 
 ### 회원탈퇴 withdraw (관리자용)
-PUT {{apiUrl}}/admin/auth/withdraw?username=user10
+DELETE {{apiUrl}}/admin/users/2
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
+
+### 프로필 승인 (관리자용)
+POST {{apiUrl}}/admin/profiles/4/approve
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### 프로필 거절 (관리자용)
+POST {{apiUrl}}/admin/profiles/7/reject
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### Role 별 프로필 전체 조회 (관리자용) BOOTCAMP
+GET {{apiUrl}}/admin/profiles/role/BOOTCAMP
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### Role 별 프로필 전체 조회 (관리자용) USER
+GET {{apiUrl}}/admin/profiles/role/USER
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### Role 별 Status 별 프로필 조회 (관리자용) BOOTCAMP, PENDING
+GET {{apiUrl}}/admin/profiles/role/BOOTCAMP/status/PENDING
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### Role 별 Status 별 프로필 조회 (관리자용) BOOTCAMP, APPROVED
+GET {{apiUrl}}/admin/profiles/role/BOOTCAMP/status/APPROVED
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### Role 별 Status 별 프로필 조회 (관리자용) BOOTCAMP, REJECTD
+GET {{apiUrl}}/admin/profiles/role/BOOTCAMP/status/REJECTED
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### Role 별 Status 별 프로필 조회 (관리자용) USER, PENDING
+GET {{apiUrl}}/admin/profiles/role/USER/status/PENDING
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### Role 별 Status 별 프로필 조회 (관리자용) USER, APPROVED
+GET {{apiUrl}}/admin/profiles/role/USER/status/APPROVED
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### Role 별 Status 별 프로필 조회 (관리자용) USER, REJECTD
+GET {{apiUrl}}/admin/profiles/role/USER/status/REJECTED
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### 부트캠프 생성 (관리자용)
+POST {{apiUrl}}/admin/camps
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "name": "카카오캠프",
+  "description": "카카오에서 진행하는 부트캠프"
+}

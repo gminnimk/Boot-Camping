@@ -3,8 +3,8 @@ POST {{apiUrl}}/auth/signup?userRole=USER
 Content-Type: application/json
 
 {
-  "username": "user77",
-  "password": "Password123!",
+  "username": "asdasd1",
+  "password": "Password1!",
   "name": "일반사용자",
   "userAddr" : "대한민국 어딘가"
 }
@@ -26,8 +26,8 @@ POST {{apiUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "username": "boot99",
-  "password": "Password123!"
+  "username": "asdasd1",
+  "password": "Password1!"
 }
 
 > {%

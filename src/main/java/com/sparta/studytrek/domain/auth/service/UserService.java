@@ -154,6 +154,18 @@ public class UserService {
             .orElseThrow(() -> new CustomException(ErrorCode.STATUS_NOT_FOUND));
     }
 
+    public Role findRoleByName(UserRoleEnum roleEnum) {
+        return roleRepository.findByRole(roleEnum).orElseThrow(
+            () -> new CustomException(ErrorCode.ROLE_NOT_FOUND)
+        );
+    }
+
+    public User findById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(
+            () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+    }
+
     public void saveUser(User user) {
         userRepository.save(user);
     }
@@ -168,4 +180,6 @@ public class UserService {
     public List<String> getUserCampNames(Long userId) {
         return userRepository.findCampNamesById(userId);
     }
+
+
 }

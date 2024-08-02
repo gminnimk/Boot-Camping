@@ -15,3 +15,6 @@
 //    private String environment;   // 추가된 필드
 //    private String cost;          // 추가된 필드
 //}
+package com.sparta.studytrek.domain.camp.dto;
+
+public record CampResponseDto(Long id, String name, String description) {}
