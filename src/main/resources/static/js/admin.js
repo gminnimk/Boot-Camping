@@ -243,9 +243,6 @@ document.querySelectorAll('.approval-type-tab').forEach(tab => {
     });
 });
 
-// 초기 요청 목록 표시 (전체 요청 표시)
-displayRequests('all', 'newest');
-
 // 모달 배경 클릭 이벤트 추가
 document.querySelectorAll('.modal').forEach(modal => {
     modal.addEventListener('click', (event) => {
