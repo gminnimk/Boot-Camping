@@ -220,11 +220,16 @@ async function displayComments(questionId) {
         if (!response.ok) throw new Error('Failed to fetch answers');
 
         const apiResponse = await response.json();
-        comments[questionId] = apiResponse.data.map(answer => ({
-            id: answer.id,
-            content: answer.content,
-            timestamp: new Date(answer.createdAt).getTime(),
-            replies: answer.comments || [],
+        comments[questionId] = await Promise.all(apiResponse.data.map(async answer => {
+            const commentResponse = await fetch(`/api/questions/${questionId}/answers/${answer.id}/comments`);
+            const commentData = await commentResponse.json();
+
+            return {
+                id: answer.id,
+                content: answer.content,
+                timestamp: new Date(answer.createdAt).getTime(),
+                replies: commentData.data || []
+            };
         }));
 
         comments[questionId]
@@ -256,7 +261,7 @@ function createCommentElement(comment, questionId) {
             <button class="reply-button" onclick="addReply(this, ${questionId}, ${comment.id})">Post Reply</button>
         </div>
     `;
-    if (comment.replies) {
+    if (comment.replies && comment.replies.length > 0) {
         const replyList = commentElement.querySelector('.reply-list');
         comment.replies.forEach(reply => {
             const replyElement = document.createElement('div');
@@ -271,7 +276,6 @@ function createCommentElement(comment, questionId) {
             replyList.appendChild(replyElement);
         });
     }
-
     return commentElement;
 }
 
@@ -314,12 +318,12 @@ async function addComment() {
     }
 }
 
-async function addReply(button, questionId, answerId) {
+async function addReply(button, questionId, commentId) {
     const replyContent = button.previousElementSibling.value;
     if (replyContent.trim() === '') return;
 
     try {
-        const response = await fetch(`/api/questions/${questionId}/answers/${answerId}/comments`, {
+        const response = await fetch(`/api/questions/${questionId}/answers/${commentId}/comments`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -335,12 +339,12 @@ async function addReply(button, questionId, answerId) {
                 content: data.data.content
             };
 
-            const comment = comments[questionId].find(c => c.id === answerId);
+            const comment = comments[questionId].find(c => c.id === commentId);
             if (!comment.replies) comment.replies = [];
             comment.replies.push(newReply);
 
-            displayComments(questionId); // 댓글 목록을 새로고침하여 새로운 댓글을 표시
-            button.previousElementSibling.value = ''; // 입력 필드 초기화
+            displayComments(questionId);
+            button.previousElementSibling.value = '';
         } else {
             handleError('Failed to add reply', await response.json());
         }
