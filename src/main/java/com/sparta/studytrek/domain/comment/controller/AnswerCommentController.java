@@ -89,12 +89,12 @@ public class AnswerCommentController {
      * @return  댓글 삭제 응답 데이터
      */
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<ApiResponse> updateAnswerComment(@PathVariable("questionId") Long questionId,
+    public ResponseEntity<ApiResponse> deleteAnswerComment(@PathVariable("questionId") Long questionId,
         @PathVariable("answerId") Long answerId,
         @PathVariable("commentId") Long commentId,
         @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
-        answerCommentService.deleteAnswer(questionId, answerId, commentId, userDetails.getUser());
+        answerCommentService.deleteAnswerComment(questionId, answerId, commentId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg("댓글 삭제 성공")
             .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))

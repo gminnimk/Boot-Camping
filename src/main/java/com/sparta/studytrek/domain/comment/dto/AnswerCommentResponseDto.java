@@ -6,11 +6,12 @@ import lombok.Getter;
 
 @Getter
 public class AnswerCommentResponseDto {
-
+    private Long id;
     private String content;
     private LocalDateTime createdAt;
 
     public AnswerCommentResponseDto(AnswerComment createAnswerComment) {
+        this.id = createAnswerComment.getId();
         this.content = createAnswerComment.getContent();
         this.createdAt = createAnswerComment.getCreatedAt();
     }

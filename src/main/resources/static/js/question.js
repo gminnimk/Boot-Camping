@@ -228,7 +228,11 @@ async function displayComments(questionId) {
                 id: answer.id,
                 content: answer.content,
                 timestamp: new Date(answer.createdAt).getTime(),
-                replies: commentData.data || []
+                replies: commentData.data.map(reply => ({
+                    id: reply.id,
+                    content: reply.content,
+                    createdAt: reply.createdAt
+                })) || []
             };
         }));
 
@@ -335,7 +339,7 @@ async function addReply(button, questionId, commentId) {
         if (response.ok) {
             const data = await response.json();
             const newReply = {
-                id: data.data.id,
+                id: data.data.commentId,
                 content: data.data.content
             };
 
@@ -401,44 +405,63 @@ function deleteComment(questionId, commentId) {
     }
 }
 
-function editReply(questionId, answerId, commentId) {
-    const comment = comments[answerId]?.find(c => c.id === commentId);
+async function editReply(questionId, answerId, commentId) {
+    const comment = comments[answerId]?.find(c =>
+        c.replies.find(reply => reply.id === commentId)
+    );
+
     if (!comment) {
-        console.error('Comment not found');
+        console.error('Comment not found for commentId:', commentId);
         return;
     }
 
-    const newContent = prompt("Edit your reply:", comment.content);
+    // `replies` 배열에서 해당 `commentId`를 가진 대댓글을 찾음
+    const reply = comment.replies.find(reply => reply.id === commentId);
+
+    if (!reply) {
+        console.error('Reply not found for commentId:', commentId);
+        return;
+    }
+
+    const newContent = prompt("Edit your reply:", reply.content);
     if (newContent !== null && newContent.trim() !== '') {
-        fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${commentId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-            },
-            body: JSON.stringify({ content: newContent })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.statuscode === "200") {
-                comment.content = newContent;
-                displayComments(answerId);
+        try {
+            const response = await fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${commentId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                },
+                body: JSON.stringify({ content: newContent })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                reply.content = data.data.content;
+                displayComments(questionId);
+                showAlert('Success', 'Reply updated successfully', 'success');
             } else {
-                handleError("Failed to update reply", data);
+                const errorData = await response.json();
+                handleError("Failed to update reply", errorData);
             }
-        })
-        .catch(error => handleError('Error updating reply', error));
+        } catch (error) {
+            handleError('Error updating reply', error);
+        }
     }
 }
 
 function deleteReply(questionId, answerId, commentId) {
-    if (confirm("Are you sure you want to delete this reply?")) {
-        fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${commentId}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-            }
-        })
+    if (!commentId) {
+        console.error("Comment ID is undefined!");
+        showAlert('Error', 'Comment ID is missing', 'error');
+        return;
+    }
+    fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${commentId}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+        }
+    })
         .then(response => {
             if (response.ok) {
                 comments[answerId] = comments[answerId].filter(c => c.id !== commentId);
@@ -451,7 +474,6 @@ function deleteReply(questionId, answerId, commentId) {
             }
         })
         .catch(error => handleError('Error deleting reply', error));
-    }
 }
 
 
