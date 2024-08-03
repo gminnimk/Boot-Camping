@@ -1,6 +1,7 @@
 package com.sparta.studytrek.domain.question.controller;
 
 import com.sparta.studytrek.common.ApiResponse;
+import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.domain.question.dto.QuestionRequestDto;
 import com.sparta.studytrek.domain.question.dto.QuestionResponseDto;
 import com.sparta.studytrek.domain.question.service.QuestionService;
@@ -41,7 +42,7 @@ public class QuestionController {
         QuestionResponseDto responseDto = questionService.createQuestion(requestDto,
             userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("질문 작성 성공")
+            .msg(ResponseText.QUESTION_CREATE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.CREATED.value()))
             .data(responseDto)
             .build();
@@ -57,14 +58,14 @@ public class QuestionController {
      * @return 질문 수정 응답 데이터
      */
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateQuestion(@PathVariable("id") Long id,
+    public ResponseEntity<ApiResponse> updateQuestion(@PathVariable Long id,
         @RequestBody QuestionRequestDto requestDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
         QuestionResponseDto responseDto = questionService.updateQuestion(id, requestDto,
             userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("질문 수정 성공")
+            .msg(ResponseText.QUESTION_UPDATE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();
@@ -79,12 +80,12 @@ public class QuestionController {
      * @return 질문 삭제 응답 데이터
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> deleteQuestion(@PathVariable("id") Long id,
+    public ResponseEntity<ApiResponse> deleteQuestion(@PathVariable Long id,
         @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
         questionService.deleteQuestion(id, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("질문 삭제 성공")
+            .msg(ResponseText.QUESTION_DELETE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -97,11 +98,11 @@ public class QuestionController {
      * @return 질문 전체 목록
      */
     @GetMapping
-    public ResponseEntity<ApiResponse> getQuestions(Pageable pageable)
+    public ResponseEntity<ApiResponse> getAllQuestions(Pageable pageable)
     {
         Page<QuestionResponseDto> responseDtos = questionService.getQuestions(pageable);
         ApiResponse response = ApiResponse.builder()
-            .msg("질문 전체 조회 성공")
+            .msg(ResponseText.QUESTION_GET_ALL_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDtos)
             .build();
@@ -109,17 +110,17 @@ public class QuestionController {
     }
 
     /**
-     * 리뷰 단건 조회
+     * 질문 단건 조회
      *
      * @param id 질문 ID
      * @return 해당 질문의 응답 데이터
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getQuestion(@PathVariable("id") Long id)
+    public ResponseEntity<ApiResponse> getQuestion(@PathVariable Long id)
     {
         QuestionResponseDto responseDto = questionService.getQuestion(id);
         ApiResponse response = ApiResponse.builder()
-            .msg("리뷰 조회 성공")
+            .msg(ResponseText.QUESTION_GET_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();
