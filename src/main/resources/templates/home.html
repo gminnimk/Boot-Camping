@@ -11,10 +11,10 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- FullCalendar CSS -->
     <link href="https://unpkg.com/fullcalendar@6.1.15/main.min.css" rel="stylesheet" />
-
+    <!--  Font Awesome Icons  -->
+    <script src="https://kit.fontawesome.com/49be96d31f.js" crossorigin="anonymous"></script>
     <!-- FullCalendar JavaScript -->
     <script src="https://unpkg.com/fullcalendar@6.1.15/main.min.js"></script>
-
     <!-- FullCalendar 한글 로케일 -->
     <script src="https://unpkg.com/fullcalendar@6.1.15/locales/ko.js"></script>
 
@@ -52,7 +52,7 @@
 <div class="main-container">
     <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
     <div class="content">
-        <h1><< 부트캠프 모집&참여 기간 캘린더 >></h1>
+        <h1><i class="fa-solid fa-angles-left" style="color: #5aa9e6;"></i>  부트캠프 모집&참여 기간 캘린더  <i class="fa-solid fa-angles-right" style="color: #5aa9e6;"></i></h1>
         <div th:replace="~{'calendar/multimonth-view' :: multimonth-view}"></div>
     </div>
 </div>
