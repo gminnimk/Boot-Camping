@@ -1,6 +1,7 @@
 package com.sparta.studytrek.domain.recruitment.controller;
 
 import com.sparta.studytrek.common.ApiResponse;
+import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.domain.recruitment.dto.RecruitmentRequestDto;
 import com.sparta.studytrek.domain.recruitment.dto.RecruitmentResponseDto;
 import com.sparta.studytrek.domain.recruitment.service.RecruitmentService;
@@ -37,11 +38,12 @@ public class RecruitmentController {
     @PostMapping
     public ResponseEntity<ApiResponse> createRecruitment(
         @RequestBody RecruitmentRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         RecruitmentResponseDto responseDto = recruitmentService.createRecruitment(requestDto,
             userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("모집글 작성 성공")
+            .msg(ResponseText.RECRUITMENT_CREATE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.CREATED.value()))
             .data(responseDto)
             .build();
@@ -59,11 +61,12 @@ public class RecruitmentController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateRecruitment(@PathVariable Long id,
         @RequestBody RecruitmentRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         RecruitmentResponseDto responseDto = recruitmentService.updateRecruitment(id, requestDto,
             userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("모집글 수정 성공")
+            .msg(ResponseText.RECRUITMENT_UPDATE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();
@@ -78,10 +81,11 @@ public class RecruitmentController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteRecruitment(@PathVariable Long id,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         recruitmentService.deleteRecruitment(id, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("모집글 삭제 성공")
+            .msg(ResponseText.RECRUITMENT_DELETE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -94,10 +98,11 @@ public class RecruitmentController {
      * @return 모집글 전체 목록
      */
     @GetMapping
-    public ResponseEntity<ApiResponse> getAllRecruitments(Pageable pageable) {
+    public ResponseEntity<ApiResponse> getAllRecruitments(Pageable pageable)
+    {
         Page<RecruitmentResponseDto> responseDtos = recruitmentService.getAllRecruitments(pageable);
         ApiResponse response = ApiResponse.builder()
-            .msg("모집글 전체 조회 성공")
+            .msg(ResponseText.RECRUITMENT_GET_ALL_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDtos)
             .build();
@@ -111,10 +116,11 @@ public class RecruitmentController {
      * @return 해당 모집글의 응답 데이터
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getRecruitment(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse> getRecruitment(@PathVariable Long id)
+    {
         RecruitmentResponseDto responseDto = recruitmentService.getRecruitment(id);
         ApiResponse response = ApiResponse.builder()
-            .msg("모집글 단건 조회 성공")
+            .msg(ResponseText.RECRUITMENT_GET_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();
