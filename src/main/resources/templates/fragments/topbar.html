@@ -8,7 +8,7 @@
 <div th:fragment="topbar">
     <div class="topbar">
         <div class="logo">
-            <span>Study Trek</span>
+            <a th:href="@{/home}" id="logoLink"><img class="logo-img" th:src="@{/images/logo.png}" height="60" width="60"/></a>
         </div>
         <nav class="topbar-menu">
             <a class="topbar-link" href="#" onclick="refreshPage()"><span>Welcome</span></a>

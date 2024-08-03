@@ -1,6 +1,7 @@
 package com.sparta.studytrek.domain.comment.controller;
 
 import com.sparta.studytrek.common.ApiResponse;
+import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.domain.comment.dto.StudyCommentRequestDto;
 import com.sparta.studytrek.domain.comment.dto.StudyCommentResponseDto;
 import com.sparta.studytrek.domain.comment.service.StudyCommentService;
@@ -31,13 +32,13 @@ public class StudyCommentController {
      */
     @PostMapping
     public ResponseEntity<ApiResponse<StudyCommentResponseDto>> createComment(
-        @PathVariable Long studyId,
-        @Valid @RequestBody StudyCommentRequestDto request,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @PathVariable Long studyId, @Valid @RequestBody StudyCommentRequestDto request,
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         StudyCommentResponseDto responseDto = studyCommentService.createComment(studyId, request,
             userDetails.getUser());
         ApiResponse<StudyCommentResponseDto> apiResponse = ApiResponse.<StudyCommentResponseDto>builder()
-            .msg("댓글 작성 성공")
+            .msg(ResponseText.COMMENT_CREATE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.CREATED.value()))
             .data(responseDto)
             .build();
@@ -51,11 +52,12 @@ public class StudyCommentController {
      * @return 스터디 모집글의 댓글 전체 조회 데이터
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<List<StudyCommentResponseDto>>> getComments(
-        @PathVariable Long studyId) {
+    public ResponseEntity<ApiResponse<List<StudyCommentResponseDto>>> getAllComments(
+        @PathVariable Long studyId)
+    {
         List<StudyCommentResponseDto> response = studyCommentService.getComments(studyId);
         ApiResponse<List<StudyCommentResponseDto>> apiResponse = ApiResponse.<List<StudyCommentResponseDto>>builder()
-            .msg("댓글 전체 조회 성공")
+            .msg(ResponseText.COMMENT_GET_ALL_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(response)
             .build();
@@ -71,11 +73,11 @@ public class StudyCommentController {
      */
     @GetMapping("/{commentId}")
     public ResponseEntity<ApiResponse<StudyCommentResponseDto>> getComment(
-        @PathVariable Long studyId,
-        @PathVariable Long commentId) {
+        @PathVariable Long studyId, @PathVariable Long commentId)
+    {
         StudyCommentResponseDto responseDto = studyCommentService.getComment(studyId, commentId);
         ApiResponse<StudyCommentResponseDto> apiResponse = ApiResponse.<StudyCommentResponseDto>builder()
-            .msg("댓글 조회 성공")
+            .msg(ResponseText.COMMENT_GET_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();
@@ -93,14 +95,14 @@ public class StudyCommentController {
      */
     @PutMapping("/{commentId}")
     public ResponseEntity<ApiResponse<StudyCommentResponseDto>> updateComment(
-        @PathVariable Long studyId,
-        @PathVariable Long commentId,
+        @PathVariable Long studyId, @PathVariable Long commentId,
         @Valid @RequestBody StudyCommentRequestDto request,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         StudyCommentResponseDto updatedComment = studyCommentService.updateComment(studyId,
             commentId, request, userDetails.getUser());
         ApiResponse<StudyCommentResponseDto> apiResponse = ApiResponse.<StudyCommentResponseDto>builder()
-            .msg("댓글 수정 성공")
+            .msg(ResponseText.COMMENT_UPDATE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(updatedComment)
             .build();
@@ -116,13 +118,12 @@ public class StudyCommentController {
      * @return 삭제 결과 응답 데이터
      */
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<ApiResponse<Void>> deleteComment(
-        @PathVariable Long studyId,
-        @PathVariable Long commentId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ApiResponse<Void>> deleteComment(@PathVariable Long studyId,
+        @PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         studyCommentService.deleteComment(studyId, commentId, userDetails.getUser());
         ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
-            .msg("댓글 삭제 성공")
+            .msg(ResponseText.COMMENT_DELETE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);

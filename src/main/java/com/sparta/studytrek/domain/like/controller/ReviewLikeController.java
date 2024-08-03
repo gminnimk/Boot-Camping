@@ -1,6 +1,7 @@
 package com.sparta.studytrek.domain.like.controller;
 
 import com.sparta.studytrek.common.ApiResponse;
+import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.domain.like.service.ReviewLikeService;
 import com.sparta.studytrek.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class ReviewLikeController {
     {
         int reviewAllLike = reviewLikeService.reviewLike(reviewId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("해당 리뷰에 좋아요 성공 : "  + reviewAllLike)
+            .msg(ResponseText.LIKE_RECRUIT_SUCCESS.format(reviewAllLike))
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -52,7 +53,7 @@ public class ReviewLikeController {
     {
         int reviewAllLike = reviewLikeService.reviewUnlike(reviewId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("해당 리뷰에 좋아요 취소 성공 : "  + reviewAllLike)
+            .msg(ResponseText.LIKE_CALL_OFF_SUCCESS.format(reviewAllLike))
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
