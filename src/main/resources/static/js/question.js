@@ -271,6 +271,7 @@ function createCommentElement(comment, questionId) {
             replyList.appendChild(replyElement);
         });
     }
+
     return commentElement;
 }
 
@@ -396,23 +397,59 @@ function deleteComment(questionId, commentId) {
     }
 }
 
-function editReply(questionId, commentId, replyId) {
-    const comment = comments[questionId].find(c => c.id === commentId);
-    const reply = comment.replies.find(r => r.id === replyId);
-    const newContent = prompt("Edit your reply:", reply.content);
+function editReply(questionId, answerId, commentId) {
+    const comment = comments[answerId]?.find(c => c.id === commentId);
+    if (!comment) {
+        console.error('Comment not found');
+        return;
+    }
+
+    const newContent = prompt("Edit your reply:", comment.content);
     if (newContent !== null && newContent.trim() !== '') {
-        reply.content = newContent;
-        displayComments(questionId);
+        fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${commentId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            },
+            body: JSON.stringify({ content: newContent })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.statuscode === "200") {
+                comment.content = newContent;
+                displayComments(answerId);
+            } else {
+                handleError("Failed to update reply", data);
+            }
+        })
+        .catch(error => handleError('Error updating reply', error));
     }
 }
 
-function deleteReply(questionId, commentId, replyId) {
+function deleteReply(questionId, answerId, commentId) {
     if (confirm("Are you sure you want to delete this reply?")) {
-        const comment = comments[questionId].find(c => c.id === commentId);
-        comment.replies = comment.replies.filter(r => r.id !== replyId);
-        displayComments(questionId);
+        fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${commentId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                comments[answerId] = comments[answerId].filter(c => c.id !== commentId);
+                displayComments(answerId);
+                showAlert("Success", "답글이 삭제되었습니다.", "success");
+            } else {
+                return response.json().then(data => {
+                    handleError("Failed to delete reply", data);
+                });
+            }
+        })
+        .catch(error => handleError('Error deleting reply', error));
     }
 }
+
 
 function updateCommentCount(questionId) {
     const commentCountElement = document.getElementById('commentCount');

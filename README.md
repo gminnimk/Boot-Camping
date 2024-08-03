@@ -1,5 +1,5 @@
-# 🖥️ study Trek
-- 프로젝트명 : study Trek
+# 🖥️ Boot Camping
+- 프로젝트명 : Boot Camping
 - 한 줄 정리 :  부트캠프 리뷰 및 Q&A 플랫폼
 - 내용 : 다양한 부트캠프에 대한 수료자 리뷰 제공 및 예비 수강생과 현재 수강생의 질문에 대한 수료자의 답변을 통해 부트캠프 선택 및 학습 과정 지원
   
@@ -33,7 +33,7 @@
     </div>
   
 # 👍 팀원 소개
-### 팀명 : ???<br>
+### 팀명 : StUdY TrEk<br>
 - 팀장  : ${\textsf{\color{coral}박민영}}$
 - 부팀장 :  ${\textsf{\color{orange}조성훈A}}$
 - 팀원 
