@@ -204,11 +204,6 @@ function addReview() {
     }
 }
 
-function showCalendar() {
-    const showUrl = document.querySelector('.show-calendar-btn').getAttribute('show-calendar');
-    window.location.href = showUrl;
-}
-
 // 페이지 로드 시 코스 데이터를 가져와서 렌더링
 document.addEventListener('DOMContentLoaded', function() {
     renderPage();
