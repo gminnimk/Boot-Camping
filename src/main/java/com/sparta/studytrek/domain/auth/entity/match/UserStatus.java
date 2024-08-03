@@ -3,7 +3,13 @@ package com.sparta.studytrek.domain.auth.entity.match;
 import com.sparta.studytrek.domain.auth.entity.Status;
 import com.sparta.studytrek.domain.auth.entity.User;
 import com.sparta.studytrek.domain.camp.entity.Camp;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

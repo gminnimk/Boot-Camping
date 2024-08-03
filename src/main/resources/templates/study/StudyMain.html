@@ -1,149 +1,89 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyTrek - 스터디 모집 플랫폼</title>
-    <link rel="stylesheet" th:href="@{/css/study/StudyMain.css}">
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <link rel="stylesheet" th:href="@{/css/studyMaintopsearch.css}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script th:src="@{/js/scripts.js}" defer></script>
-    <script th:src="@{/js/studyMaintopsearch.js}" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyTrek - 스터디 모집 플랫폼</title>
+  <link rel="stylesheet" th:href="@{/css/study/StudyMain.css}">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/css/studyMaintopsearch.css}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script th:src="@{/js/scripts.js}" defer></script>
+  <script th:src="@{/js/studyMaintopsearch.js}" defer></script>
+  <script th:src="@{/js/study/StudyMain.js}" defer></script>
 </head>
-
 <body th:classappend="${isDarkMode} ? 'dark' : ''">
 <div th:replace="~{'fragments/topbar' :: topbar}"></div>
 <div class="container">
-    <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
-    <div class="content-wrapper">
-        <div class="content">
-            <!-- 헤더 -->
-            <div th:replace="~{'fragments/studyMaintopsearch' :: studyMaintopsearch}"></div>
+  <div
+      th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
+  <div class="content-wrapper">
+    <div class="content">
+      <!-- 헤더 -->
+      <div th:replace="~{'fragments/studyMaintopsearch' :: studyMaintopsearch}"></div>
 
-            <!-- 스터디 작성 바로가기 베너 -->
-            <div class="write-review-section write-text">
-                <div class="content-wrapper">
-                    <div class="write-review-content">
-                        <div class="write-review-text write-text">
-                            <h2>모집글 작성하기</h2>
-                            <p>Share your experience with others</p>
-                        </div>
-                        <button class="write-review-button learn-more" onclick="addReview()" th:review-add-url="@{/api/study/write}">Start a Write</button>
-                    </div>
-                </div>
+      <!-- 스터디 작성 바로가기 베너 -->
+      <div class="write-review-section write-text">
+        <div class="content-wrapper">
+          <div class="write-review-content">
+            <div class="write-review-text write-text">
+              <h2>모집글 작성하기</h2>
+              <p>Share your experience with others</p>
             </div>
-
-            <div class="grid">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Python 스터디 모집</h3>
-                        <span class="tag">AI</span>
-                    </div>
-                    <div class="rating">★★★★★</div>
-                    <div class="date">2023-05-15</div>
-                    <div class="card-content">
-                        <p>AI 트랙을 위한 Python 기초부터 고급까지 함께 공부할 분들을 모집합니다. 주 2회 온라인 미팅 예정.</p>
-                    </div>
-                    <div class="author">- Sarah M.</div>
-                    <div class="card-footer">
-                        <span class="heart-icon">♡</span>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">React 스터디원 구합니다</h3>
-                        <span class="tag">프론트엔드</span>
-                    </div>
-                    <div class="rating">★★★★★</div>
-                    <div class="date">2023-05-14</div>
-                    <div class="card-content">
-                        <p>React와 관련 라이브러리를 깊이 있게 학습하실 분들 모집합니다. 실전 프로젝트도 진행할 예정입니다.</p>
-                    </div>
-                    <div class="author">- Mike T.</div>
-                    <div class="card-footer">
-                        <span class="heart-icon">♡</span>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">데이터 분석 스터디</h3>
-                        <span class="tag">데이터</span>
-                    </div>
-                    <div class="rating">★★★★☆</div>
-                    <div class="date">2023-05-13</div>
-                    <div class="card-content">
-                        <p>R과 Python을 이용한 데이터 분석 스터디입니다. 기초 통계부터 머신러닝까지 다룰 예정입니다.</p>
-                    </div>
-                    <div class="author">- Emily L.</div>
-                    <div class="card-footer">
-                        <span class="heart-icon">♡</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Python 스터디 모집</h3>
-                        <span class="tag">AI</span>
-                    </div>
-                    <div class="rating">★★★★★</div>
-                    <div class="date">2023-05-15</div>
-                    <div class="card-content">
-                        <p>AI 트랙을 위한 Python 기초부터 고급까지 함께 공부할 분들을 모집합니다. 주 2회 온라인 미팅 예정.</p>
-                    </div>
-                    <div class="author">- Sarah M.</div>
-                    <div class="card-footer">
-                        <span class="heart-icon">♡</span>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">React 스터디원 구합니다</h3>
-                        <span class="tag">프론트엔드</span>
-                    </div>
-                    <div class="rating">★★★★★</div>
-                    <div class="date">2023-05-14</div>
-                    <div class="card-content">
-                        <p>React와 관련 라이브러리를 깊이 있게 학습하실 분들 모집합니다. 실전 프로젝트도 진행할 예정입니다.</p>
-                    </div>
-                    <div class="author">- Mike T.</div>
-                    <div class="card-footer">
-                        <span class="heart-icon">♡</span>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">데이터 분석 스터디</h3>
-                        <span class="tag">데이터</span>
-                    </div>
-                    <div class="rating">★★★★☆</div>
-                    <div class="date">2023-05-13</div>
-                    <div class="card-content">
-                        <p>R과 Python을 이용한 데이터 분석 스터디입니다. 기초 통계부터 머신러닝까지 다룰 예정입니다.</p>
-                    </div>
-                    <div class="author">- Emily L.</div>
-                    <div class="card-footer">
-                        <span class="heart-icon">♡</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pagination">
-                <button>Previous</button>
-                <button>1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>Next</button>
-            </div>
+            <button class="write-review-button learn-more" data-url="/study/write">Start a Write
+            </button>
+          </div>
         </div>
+      </div>
+
+      <!-- 조회 정렬 -->
+      <div class="sort-buttons">
+        <button class="sort-button" data-sort="views">조회순</button>
+        <button class="sort-button" data-sort="latest">최신순</button>
+        <button class="sort-button" data-sort="likes">좋아요순</button>
+        <button class="sort-button" data-sort="deadline">마감임박</button>
+      </div>
+
+      <div class="grid" id="study-card-container">
+        <!-- Study cards will be inserted here -->
+      </div>
+      <div class="pagination">
+        <!-- 이전 페이지로 이동하는 버튼 -->
+        <button id="prevButton" onclick="changePage(-1)" disabled>Previous</button>
+
+        <!-- 페이지 번호를 동적으로 추가할 영역 -->
+        <div class="page-numbers" id="pageNumbers">
+          <!-- 페이지 번호가 여기에 동적으로 추가됩니다. -->
+        </div>
+
+        <!-- 다음 페이지로 이동하는 버튼 -->
+        <button id="nextButton" onclick="changePage(1)">Next</button>
+      </div>
     </div>
+  </div>
 </div>
 <button class="open-sidebar-button hidden" th:onclick="|javascript:toggleSidebar()|">
-    <img th:src="@{/images/icon-show-sidebar.svg}" alt="사이드바 아이콘 보이기"/>
+  <img th:src="@{/images/icon-show-sidebar.svg}" alt="사이드바 아이콘 보이기"/>
 </button>
-<script th:src="@{/js/study/StudyMain.js}"></script>
 </body>
+<script>
+  window.addEventListener('load', function () {
+    var allElements = document.getElementsByTagName('*');
+    Array.prototype.forEach.call(allElements, function (el) {
+      var includePath = el.dataset.includePath;
+      if (includePath) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            el.outerHTML = this.responseText;
+          }
+        };
+        xhttp.open('GET', includePath, true);
+        xhttp.send();
+      }
+    });
+  });
+</script>
 </html>
+

@@ -41,11 +41,10 @@ public class UserService {
      * 회원가입 로직
      *
      * @param requestDto 회원가입 요청 데이터
-     * @param userRole   파라미터로 받은 권한 구분
      * @return 유저 회원가입 정보 반환
      */
     @Transactional
-    public SignUpResponseDto signup(SignUpRequestDto requestDto, String userRole) {
+    public SignUpResponseDto signup(SignUpRequestDto requestDto) {
         String username = requestDto.getUsername();
         String password = passwordEncoder.encode(requestDto.getPassword());
 
@@ -56,7 +55,7 @@ public class UserService {
         }
 
         // ROLE 확인
-        UserRoleEnum roleEnum = UserRoleEnum.valueOf(userRole);
+        UserRoleEnum roleEnum = UserRoleEnum.valueOf(requestDto.getUserRole());
         Role role = roleRepository.findByRole(roleEnum)
                 .orElseThrow(() -> new IllegalArgumentException("Role not found"));
 
@@ -93,23 +92,25 @@ public class UserService {
      * @return
      */
     public TokenResponseDto login(LoginRequestDto requestDto) {
-
         User user = userRepository.findByUsername(requestDto.getUsername())
-            .orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         if (user.isWithdrawn()) {
-            throw new IllegalArgumentException("탈퇴한 회원입니다.");
+            throw new CustomException(ErrorCode.WITHDRAW_USER);
         } else if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+            throw new CustomException(ErrorCode.INCORRECT_PASSWORD);
         }
 
-        // 토큰 생성
+        UserRoleEnum roleEnum = UserRoleEnum.valueOf(requestDto.getRole());
+        if (!user.getRole().getRole().equals(roleEnum)) {
+            throw new CustomException(ErrorCode.NOT_AUTHENTICATED_LOGIN);
+        }
+
         String accessToken = jwtUtil.createAccessToken(user.getUsername(),
             user.getRole().toString());
         String refreshToken = jwtUtil.createRefreshToken(user.getUsername(),
             user.getRole().toString());
 
-        // Refresh 토큰 저장
         refreshTokenService.saveRefreshToken(user.getId(), refreshToken);
 
         return new TokenResponseDto(accessToken, refreshToken);
@@ -154,6 +155,18 @@ public class UserService {
             .orElseThrow(() -> new CustomException(ErrorCode.STATUS_NOT_FOUND));
     }
 
+    public Role findRoleByName(UserRoleEnum roleEnum) {
+        return roleRepository.findByRole(roleEnum).orElseThrow(
+            () -> new CustomException(ErrorCode.ROLE_NOT_FOUND)
+        );
+    }
+
+    public User findById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(
+            () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+    }
+
     public void saveUser(User user) {
         userRepository.save(user);
     }
@@ -168,4 +181,6 @@ public class UserService {
     public List<String> getUserCampNames(Long userId) {
         return userRepository.findCampNamesById(userId);
     }
+
+
 }

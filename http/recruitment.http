@@ -68,3 +68,11 @@ Content-Type: application/json
 ### 모집글 단건 조회
 GET {{apiUrl}}/camps/3
 Content-Type: application/json
+
+### 모집기간 조회
+GET {{apiUrl}}/calendar/recruit
+Content-Type: application/json
+
+### 참여기간 조회
+GET {{apiUrl}}/calendar/participate
+Content-Type: application/json

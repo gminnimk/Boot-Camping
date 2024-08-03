@@ -4,7 +4,7 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "bootcampName": "Sparta Coding Club",
+  "bootcampName": "Sparta Coding Club222",
   "track": "Web Development",
   "generation": "3rd",
   "startDate": "2024-01-01",
@@ -19,7 +19,7 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 ### 프로필 수정
-PUT {{apiUrl}}/profiles/38
+PUT {{apiUrl}}/profiles/1
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
@@ -34,6 +34,11 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### 프로필 삭제
-DELETE {{apiUrl}}/profiles/38
+DELETE {{apiUrl}}/profiles/1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### 프로필 신청
+POST {{apiUrl}}/profiles/1/apply
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
