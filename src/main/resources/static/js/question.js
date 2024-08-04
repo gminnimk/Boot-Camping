@@ -414,6 +414,7 @@ function deleteComment(questionId, commentId) {
 }
 
 function editReply(questionId, answerId, commentId) {
+    console.log('Edit reply:', questionId, answerId, commentId);
     const comment = comments[answerId]?.find(c => c.id === commentId);
     if (!comment) {
         console.error('Comment not found');
@@ -444,6 +445,7 @@ function editReply(questionId, answerId, commentId) {
 }
 
 function deleteReply(questionId, answerId, commentId) {
+    console.log('Delete reply:', questionId, answerId, commentId);
     if (confirm("Are you sure you want to delete this reply?")) {
         fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${commentId}`, {
             method: 'DELETE',
