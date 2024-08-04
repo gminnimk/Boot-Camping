@@ -153,7 +153,12 @@ public class AdminController {
         return ResponseEntity.ok(response);
     }
 
-
+    /**
+     * 프로필 상세 조회 성공(관리자용)
+     *
+     * @param profileId 상세를 조회할 프로필을 선택
+     * @return 상세 조회 성공 응답 데이터
+     */
     @GetMapping("/profiles/{profileId}")
     public ResponseEntity<ApiResponse> getProfileById(@PathVariable Long profileId) {
         ProfileResponseDto profileResponseDto = profileService.getProfileById(profileId).getBody();
@@ -165,6 +170,12 @@ public class AdminController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * 부트캠프 등록(관리자용)
+     *
+     * @param campRequestDto 등록할 부트캠프 이름, 상세내용
+     * @return 부트캠프 등록 성공 데이터
+     */
     @PostMapping("/camps")
     public ResponseEntity<ApiResponse> createCamp(@RequestBody CampRequestDto campRequestDto) {
         CampResponseDto campResponseDto = campService.createCamp(campRequestDto);
