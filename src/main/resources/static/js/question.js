@@ -217,34 +217,36 @@ async function displayComments(questionId) {
 
     try {
         const response = await fetch(`/api/questions/${questionId}/answers`);
-        if (!response.ok) {
-            throw new Error('Failed to fetch answers');
-        }
+        if (!response.ok) throw new Error('Failed to fetch answers');
+
         const apiResponse = await response.json();
+        comments[questionId] = await Promise.all(apiResponse.data.map(async answer => {
+            const commentResponse = await fetch(`/api/questions/${questionId}/answers/${answer.id}/comments`);
+            const commentData = await commentResponse.json();
 
-        if (apiResponse.data) {
-            comments[questionId] = await Promise.all(apiResponse.data.map(async answer => {
-                const commentResponse = await fetch(`/api/questions/${questionId}/answers/${answer.id}/comments`);
-                const commentData = await commentResponse.json();
-                return {
-                    id: answer.id,
-                    content: answer.content,
-                    timestamp: new Date(answer.createdAt).getTime(),
-                    replies: commentData.data || []
-                };
-            }));
+            return {
+                id: answer.id,
+                content: answer.content,
+                timestamp: new Date(answer.createdAt).getTime(),
+                replies: commentData.data.map(reply => ({
+                    id: reply.id,
+                    content: reply.content,
+                    createdAt: reply.createdAt
+                })) || []
+            };
+        }));
 
-            const sortedComments = comments[questionId].sort((a, b) => b.timestamp - a.timestamp);
-            sortedComments.forEach(comment => {
+        comments[questionId]
+            .sort((a, b) => b.timestamp - a.timestamp)
+            .forEach(comment => {
                 const commentElement = createCommentElement(comment, questionId);
                 commentList.appendChild(commentElement);
             });
-        }
-    } catch (error) {
-        console.error('Error fetching answers and comments:', error);
-    }
 
-    updateCommentCount(questionId);
+        updateCommentCount(questionId);
+    } catch (error) {
+        console.error('Error fetching answers:', error);
+    }
 }
 
 function createCommentElement(comment, questionId) {
@@ -263,33 +265,23 @@ function createCommentElement(comment, questionId) {
             <button class="reply-button" onclick="addReply(this, ${questionId}, ${comment.id})">Post Reply</button>
         </div>
     `;
-
-    const replyList = commentElement.querySelector('.reply-list');
-    if (comment.replies) {
+    if (comment.replies && comment.replies.length > 0) {
+        const replyList = commentElement.querySelector('.reply-list');
         comment.replies.forEach(reply => {
             const replyElement = document.createElement('div');
             replyElement.className = 'reply';
             replyElement.innerHTML = `
-            <p>${reply.content}</p>
-            <div class="reply-actions">
-                <button class="edit-btn">Edit</button>
-                <button class="delete-btn">Delete</button>
-            </div>
-        `;
-
-            const editBtn = replyElement.querySelector('.edit-btn');
-            const deleteBtn = replyElement.querySelector('.delete-btn');
-
-            editBtn.addEventListener('click', () => editReply(questionId, comment.id, reply.id));
-            deleteBtn.addEventListener('click', () => deleteReply(questionId, comment.id, reply.id));
-
+                <p>${reply.content}</p>
+                <div class="reply-actions">
+                    <button class="edit-btn" onclick="editReply(${questionId}, ${comment.id}, ${reply.id})">Edit</button>
+                    <button class="delete-btn" onclick="deleteReply(${questionId}, ${comment.id}, ${reply.id})">Delete</button>
+                </div>
+            `;
             replyList.appendChild(replyElement);
         });
     }
-
     return commentElement;
 }
-
 
 function showReplyForm(button, questionId, commentId) {
     const replyForm = button.parentElement.nextElementSibling.nextElementSibling;
@@ -330,12 +322,12 @@ async function addComment() {
     }
 }
 
-async function addReply(button, questionId, answerId) {
+async function addReply(button, questionId, commentId) {
     const replyContent = button.previousElementSibling.value;
     if (replyContent.trim() === '') return;
 
     try {
-        const response = await fetch(`/api/questions/${questionId}/answers/${answerId}/comments`, {
+        const response = await fetch(`/api/questions/${questionId}/answers/${commentId}/comments`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -347,16 +339,16 @@ async function addReply(button, questionId, answerId) {
         if (response.ok) {
             const data = await response.json();
             const newReply = {
-                id: data.data.id,
+                id: data.data.commentId,
                 content: data.data.content
             };
 
-            const comment = comments[questionId].find(c => c.id === answerId);
+            const comment = comments[questionId].find(c => c.id === commentId);
             if (!comment.replies) comment.replies = [];
             comment.replies.push(newReply);
 
-            displayComments(questionId); // 댓글 목록을 새로고침하여 새로운 댓글을 표시
-            button.previousElementSibling.value = ''; // 입력 필드 초기화
+            displayComments(questionId);
+            button.previousElementSibling.value = '';
         } else {
             handleError('Failed to add reply', await response.json());
         }
@@ -377,16 +369,16 @@ function editComment(questionId, commentId) {
             },
             body: JSON.stringify({ content: newContent })
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.statuscode === "200") {
-                comment.content = newContent;
-                displayComments(questionId);
-            } else {
-                handleError("Failed to update answer", data);
-            }
-        })
-        .catch(error => handleError('Error updating comment', error));
+            .then(response => response.json())
+            .then(data => {
+                if (data.statuscode === "200") {
+                    comment.content = newContent;
+                    displayComments(questionId);
+                } else {
+                    handleError("Failed to update answer", data);
+                }
+            })
+            .catch(error => handleError('Error updating comment', error));
     }
 }
 
@@ -398,61 +390,78 @@ function deleteComment(questionId, commentId) {
                 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
             }
         })
-        .then(response => {
-            if (response.ok) {
-                comments[questionId] = comments[questionId].filter(c => c.id !== commentId);
-                displayComments(questionId);
-                showAlert("Success", "답변이 삭제되었습니다.", "success");
-            } else {
-                return response.json().then(data => {
-                    handleError("Failed to delete answer", data);
-                });
-            }
-        })
-        .catch(error => handleError('Error deleting comment', error));
+            .then(response => {
+                if (response.ok) {
+                    comments[questionId] = comments[questionId].filter(c => c.id !== commentId);
+                    displayComments(questionId);
+                    showAlert("Success", "답변이 삭제되었습니다.", "success");
+                } else {
+                    return response.json().then(data => {
+                        handleError("Failed to delete answer", data);
+                    });
+                }
+            })
+            .catch(error => handleError('Error deleting comment', error));
     }
 }
 
-function editReply(questionId, answerId, commentId) {
-    console.log('Edit reply:', questionId, answerId, commentId);
-    const comment = comments[answerId]?.find(c => c.id === commentId);
+async function editReply(questionId, answerId, commentId) {
+    const comment = comments[answerId]?.find(c =>
+        c.replies.find(reply => reply.id === commentId)
+    );
+
     if (!comment) {
-        console.error('Comment not found');
+        console.error('Comment not found for commentId:', commentId);
         return;
     }
 
-    const newContent = prompt("Edit your reply:", comment.content);
+    // `replies` 배열에서 해당 `commentId`를 가진 대댓글을 찾음
+    const reply = comment.replies.find(reply => reply.id === commentId);
+
+    if (!reply) {
+        console.error('Reply not found for commentId:', commentId);
+        return;
+    }
+
+    const newContent = prompt("Edit your reply:", reply.content);
     if (newContent !== null && newContent.trim() !== '') {
-        fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${commentId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-            },
-            body: JSON.stringify({ content: newContent })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.statuscode === "200") {
-                comment.content = newContent;
-                displayComments(answerId);
+        try {
+            const response = await fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${commentId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                },
+                body: JSON.stringify({ content: newContent })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                reply.content = data.data.content;
+                displayComments(questionId);
+                showAlert('Success', 'Reply updated successfully', 'success');
             } else {
-                handleError("Failed to update reply", data);
+                const errorData = await response.json();
+                handleError("Failed to update reply", errorData);
             }
-        })
-        .catch(error => handleError('Error updating reply', error));
+        } catch (error) {
+            handleError('Error updating reply', error);
+        }
     }
 }
 
 function deleteReply(questionId, answerId, commentId) {
-    console.log('Delete reply:', questionId, answerId, commentId);
-    if (confirm("Are you sure you want to delete this reply?")) {
-        fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${commentId}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-            }
-        })
+    if (!commentId) {
+        console.error("Comment ID is undefined!");
+        showAlert('Error', 'Comment ID is missing', 'error');
+        return;
+    }
+    fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${commentId}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+        }
+    })
         .then(response => {
             if (response.ok) {
                 comments[answerId] = comments[answerId].filter(c => c.id !== commentId);
@@ -465,7 +474,6 @@ function deleteReply(questionId, answerId, commentId) {
             }
         })
         .catch(error => handleError('Error deleting reply', error));
-    }
 }
 
 
