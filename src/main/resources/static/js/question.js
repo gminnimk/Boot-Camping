@@ -28,7 +28,7 @@ function openModal(modal) {
 function closeModals() {
     document.getElementById("questionModal").style.display = "none";
     document.getElementById("questionDetailPage").style.display = "none";
-    window.location.reload();
+    showMainPage();
 }
 
 function setupCategoryOptions() {
@@ -82,6 +82,8 @@ function setupFormSubmit() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    const closeBtns = document.querySelectorAll(".close");
+    closeBtns.forEach(btn => btn.addEventListener('click', closeModals));
     if (localStorage.getItem('showSuccessMessage') === 'true') {
         localStorage.removeItem('showSuccessMessage');
         Swal.fire({
@@ -515,6 +517,7 @@ async function editQuestion() {
                 showQuestionDetail(questionId);
                 closeModals();
                 showAlert('Success', 'Question updated successfully', 'success');
+                loadQuestions(currentPage);
             } else {
                 const errorData = await response.json();
                 showAlert('Error', errorData.error || 'Failed to update question', 'error');
