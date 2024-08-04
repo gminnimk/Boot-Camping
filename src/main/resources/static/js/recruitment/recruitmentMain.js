@@ -199,7 +199,7 @@ function addReview() {
         alert('로그인이 필요합니다.');
         window.location.href = '/auth';
     } else {
-        const addUrl = document.querySelector('.write-review-button').getAttribute('review-add-url');
+        const addUrl = document.querySelector('.write-review-button').getAttribute('camp-add');
         window.location.href = addUrl;
     }
 }

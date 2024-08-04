@@ -1,6 +1,7 @@
 package com.sparta.studytrek.domain.comment.controller;
 
 import com.sparta.studytrek.common.ApiResponse;
+import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.domain.comment.dto.CommentRequestDto;
 import com.sparta.studytrek.domain.comment.dto.CommentResponseDto;
 import com.sparta.studytrek.domain.comment.entity.ReviewComment;
@@ -38,11 +39,12 @@ public class ReviewCommentController {
     @PostMapping
     public ResponseEntity<ApiResponse> createReviewComment(@PathVariable Long reviewId,
         @RequestBody CommentRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         CommentResponseDto responseDto = reviewCommentService.createReviewComment(reviewId,
             requestDto, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("댓글 등록 성공")
+            .msg(ResponseText.COMMENT_CREATE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.CREATED.value()))
             .data(responseDto)
             .build();
@@ -60,13 +62,13 @@ public class ReviewCommentController {
      */
     @PutMapping("/{commentId}")
     public ResponseEntity<ApiResponse> updateReviewComment(@PathVariable Long reviewId,
-        @PathVariable Long commentId,
-        @RequestBody CommentRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @PathVariable Long commentId, @RequestBody CommentRequestDto requestDto,
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         CommentResponseDto responseDto = reviewCommentService.updateReviewComment(reviewId,
             commentId, requestDto, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("댓글 수정 성공")
+            .msg(ResponseText.COMMENT_UPDATE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();
@@ -83,11 +85,11 @@ public class ReviewCommentController {
      */
     @DeleteMapping("/{commentId}")
     public ResponseEntity<ApiResponse> deleteReviewComment(@PathVariable Long reviewId,
-        @PathVariable Long commentId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         reviewCommentService.deleteReviewComment(reviewId, commentId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("댓글 삭제 성공")
+            .msg(ResponseText.COMMENT_DELETE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -100,10 +102,11 @@ public class ReviewCommentController {
      * @return 리뷰 댓글 전체 목록
      */
     @GetMapping
-    public ResponseEntity<ApiResponse> getAllReviewComments(@PathVariable Long reviewId) {
+    public ResponseEntity<ApiResponse> getAllReviewComments(@PathVariable Long reviewId)
+    {
         List<CommentResponseDto> comments = reviewCommentService.getAllReviewComments(reviewId);
         ApiResponse response = ApiResponse.builder()
-            .msg("댓글 전체 조회 성공")
+            .msg(ResponseText.COMMENT_GET_ALL_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(comments)
             .build();
@@ -119,10 +122,11 @@ public class ReviewCommentController {
      */
     @GetMapping("/{commentId}")
     public ResponseEntity<ApiResponse> getReviewComment(@PathVariable Long reviewId,
-        @PathVariable Long commentId) {
+        @PathVariable Long commentId)
+    {
         CommentResponseDto responseDto = reviewCommentService.getReviewComment(reviewId, commentId);
         ApiResponse response = ApiResponse.builder()
-            .msg("댓글 단건 조회 성공")
+            .msg(ResponseText.COMMENT_GET_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();

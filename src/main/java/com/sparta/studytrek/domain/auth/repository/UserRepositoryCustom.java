@@ -5,6 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepositoryCustom {
-
     List<String> findCampNamesById(Long id);
 }

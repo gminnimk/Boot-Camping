@@ -1,7 +1,7 @@
 package com.sparta.studytrek.domain.comment.controller;
 
 import com.sparta.studytrek.common.ApiResponse;
-import com.sparta.studytrek.domain.answer.dto.AnswerRequestDto;
+import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.domain.comment.dto.AnswerCommentRequestDto;
 import com.sparta.studytrek.domain.comment.dto.AnswerCommentResponseDto;
 import com.sparta.studytrek.domain.comment.service.AnswerCommentService;
@@ -31,21 +31,22 @@ public class AnswerCommentController {
     /**
      * 질문에 대한 답변의 댓글 작성 API
      *
-     * @param questionId    질문 ID
-     * @param answerId      답변 ID
-     * @param requestDto    댓글 작성 데이터
-     * @param userDetails   인증된 유저 정보
-     * @return  댓글 작성 응답 데이터
+     * @param questionId  질문 ID
+     * @param answerId    답변 ID
+     * @param requestDto  댓글 작성 데이터
+     * @param userDetails 인증된 유저 정보
+     * @return 댓글 작성 응답 데이터
      */
     @PostMapping
-    public ResponseEntity<ApiResponse> createAnswerComment(@PathVariable("questionId") Long questionId,
-        @PathVariable("answerId") Long answerId,
+    public ResponseEntity<ApiResponse> createAnswerComment(
+        @PathVariable Long questionId, @PathVariable Long answerId,
         @RequestBody AnswerCommentRequestDto requestDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
-        AnswerCommentResponseDto responseDto = answerCommentService.createAnswerComment(questionId, answerId, requestDto, userDetails.getUser());
+        AnswerCommentResponseDto responseDto = answerCommentService.createAnswerComment(questionId,
+            answerId, requestDto, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("댓글 작성 성공")
+            .msg(ResponseText.COMMENT_CREATE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.CREATED.value()))
             .data(responseDto)
             .build();
@@ -55,24 +56,24 @@ public class AnswerCommentController {
     /**
      * 질문에 대한 답변의 댓글 수정 API
      *
-     * @param questionId    질문 ID
-     * @param answerId      답변 ID
-     * @param commentId     댓글 ID
-     * @param requestDto    댓글 수정 데이터
-     * @param userDetails   인증된 유저 정보
-     * @return  댓글 수정 응답 데이터
+     * @param questionId  질문 ID
+     * @param answerId    답변 ID
+     * @param commentId   댓글 ID
+     * @param requestDto  댓글 수정 데이터
+     * @param userDetails 인증된 유저 정보
+     * @return 댓글 수정 응답 데이터
      */
     @Transactional
     @PutMapping("/{commentId}")
-    public ResponseEntity<ApiResponse> updateAnswerComment(@PathVariable("questionId") Long questionId,
-        @PathVariable("answerId") Long answerId,
-        @PathVariable("commentId") Long commentId,
-        @RequestBody AnswerCommentRequestDto requestDto,
+    public ResponseEntity<ApiResponse> updateAnswerComment(
+        @PathVariable Long questionId, @PathVariable Long answerId,
+        @PathVariable Long commentId, @RequestBody AnswerCommentRequestDto requestDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
-        AnswerCommentResponseDto responseDto = answerCommentService.updateAnswerComment(questionId, answerId, commentId, requestDto, userDetails.getUser());
+        AnswerCommentResponseDto responseDto = answerCommentService.updateAnswerComment(questionId,
+            answerId, commentId, requestDto, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("답변 수정 성공")
+            .msg(ResponseText.COMMENT_UPDATE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();
@@ -82,13 +83,15 @@ public class AnswerCommentController {
     /**
      * 질문에 대한 답변의 댓글 삭제 API
      *
-     * @param questionId    질문 ID
-     * @param answerId      답변 ID
-     * @param commentId     댓글 ID
-     * @param userDetails   인증된 유저 정보
-     * @return  댓글 삭제 응답 데이터
+     * @param questionId  질문 ID
+     * @param answerId    답변 ID
+     * @param commentId   댓글 ID
+     * @param userDetails 인증된 유저 정보
+     * @return 댓글 삭제 응답 데이터
      */
     @DeleteMapping("/{commentId}")
+    public ResponseEntity<ApiResponse> deleteAnswerComment(@PathVariable Long questionId,
+        @PathVariable Long answerId, @PathVariable Long commentId,
     public ResponseEntity<ApiResponse> deleteAnswerComment(@PathVariable("questionId") Long questionId,
         @PathVariable("answerId") Long answerId,
         @PathVariable("commentId") Long commentId,
@@ -96,7 +99,7 @@ public class AnswerCommentController {
     {
         answerCommentService.deleteAnswerComment(questionId, answerId, commentId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("댓글 삭제 성공")
+            .msg(ResponseText.COMMENT_DELETE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -106,14 +109,14 @@ public class AnswerCommentController {
      * 질문에 대한 답변의 댓글 전체 조회 API
      *
      * @param answerId 답변 ID
-     * @return  댓글의 전체 목록
+     * @return 댓글의 전체 목록
      */
     @GetMapping
-    public ResponseEntity<ApiResponse> getAnswerComments(@PathVariable Long answerId)
+    public ResponseEntity<ApiResponse> getAllAnswerComments(@PathVariable Long answerId)
     {
         List<AnswerCommentResponseDto> comments = answerCommentService.getAnswerComments(answerId);
         ApiResponse response = ApiResponse.builder()
-            .msg("댓글 전체 조회 성공")
+            .msg(ResponseText.COMMENT_GET_ALL_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(comments)
             .build();
@@ -125,15 +128,16 @@ public class AnswerCommentController {
      *
      * @param answerId  답변 ID
      * @param commentId 댓글 ID
-     * @return  댓글 단건 조회
+     * @return 댓글 단건 조회
      */
     @GetMapping("/{commentId}")
     public ResponseEntity<ApiResponse> getAnswerComment(@PathVariable Long answerId,
         @PathVariable Long commentId)
     {
-        AnswerCommentResponseDto responseDto = answerCommentService.getAnswerComment(answerId, commentId);
+        AnswerCommentResponseDto responseDto = answerCommentService.getAnswerComment(answerId,
+            commentId);
         ApiResponse response = ApiResponse.builder()
-            .msg("댓글 단건 조회 성공")
+            .msg(ResponseText.COMMENT_GET_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();

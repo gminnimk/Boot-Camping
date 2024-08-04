@@ -29,4 +29,6 @@ public class SignUpRequestDto {
     private String userAddr;
 
     private String campName;
+
+    private String userRole;
 }

@@ -1,6 +1,7 @@
 package com.sparta.studytrek.domain.auth.controller;
 
 import com.sparta.studytrek.common.ApiResponse;
+import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.domain.auth.dto.LoginRequestDto;
 import com.sparta.studytrek.domain.auth.dto.SignUpRequestDto;
 import com.sparta.studytrek.domain.auth.dto.SignUpResponseDto;
@@ -14,7 +15,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -32,13 +36,14 @@ public class UserController {
      * @return 회원가입 응답 데이터
      */
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse> signup(@Valid @RequestBody SignUpRequestDto requestDto, @RequestParam("userRole") String userRole) {
-        SignUpResponseDto responseDto = userService.signup(requestDto, userRole);
+    public ResponseEntity<ApiResponse> signup(@Valid @RequestBody SignUpRequestDto requestDto)
+    {
+        SignUpResponseDto responseDto = userService.signup(requestDto);
         ApiResponse response = ApiResponse.builder()
-                .msg("회원가입 성공")
-                .statuscode(String.valueOf(HttpStatus.CREATED.value()))
-                .data(responseDto)
-                .build();
+            .msg(ResponseText.AUTH_SIGNUP_SUCCESS.getMsg())
+            .statuscode(String.valueOf(HttpStatus.CREATED.value()))
+            .data(responseDto)
+            .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -49,13 +54,14 @@ public class UserController {
      * @return 발급된 토큰 응답 데이터
      */
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequestDto requestDto) {
+    public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequestDto requestDto)
+    {
         TokenResponseDto responseDto = userService.login(requestDto);
         ApiResponse response = ApiResponse.builder()
-                .msg("로그인 성공")
-                .statuscode(String.valueOf(HttpStatus.OK.value()))
-                .data(responseDto)
-                .build();
+            .msg(ResponseText.AUTH_LOGIN_SUCCESS.getMsg())
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(responseDto)
+            .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -66,12 +72,13 @@ public class UserController {
      * @return 로그아웃 성공 응답
      */
     @PostMapping("/logout")
-    public ResponseEntity<ApiResponse> logout(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ApiResponse> logout(@AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         userService.logout(userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-                .msg("로그아웃 성공")
-                .statuscode(String.valueOf(HttpStatus.OK.value()))
-                .build();
+            .msg(ResponseText.AUTH_LOGOUT_SUCCESS.getMsg())
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -82,12 +89,13 @@ public class UserController {
      * @return 회원탈퇴 성공 응답
      */
     @PostMapping("/resign")
-    public ResponseEntity<ApiResponse> withdraw(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ApiResponse> withdraw(@AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         userService.withdraw(userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-                .msg("회원탈퇴 성공")
-                .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
-                .build();
+            .msg(ResponseText.AUTH_RESIGN_SUCCESS.getMsg())
+            .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
+            .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -98,13 +106,14 @@ public class UserController {
      * @return 재발급된 토큰 응답 데이터
      */
     @PostMapping("/token/reissue")
-    public ResponseEntity<ApiResponse> refreshToken(HttpServletRequest request) {
+    public ResponseEntity<ApiResponse> refreshToken(HttpServletRequest request)
+    {
         TokenResponseDto responseDto = refreshTokenService.reissueToken(request);
         ApiResponse response = ApiResponse.builder()
-                .msg("토큰 재발급 성공")
-                .statuscode(String.valueOf(HttpStatus.OK.value()))
-                .data(responseDto)
-                .build();
+            .msg(ResponseText.AUTH_TOKEN_REISSUE_SUCCESS.getMsg())
+            .statuscode(String.valueOf(HttpStatus.OK.value()))
+            .data(responseDto)
+            .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

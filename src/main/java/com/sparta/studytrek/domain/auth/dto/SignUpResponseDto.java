@@ -1,10 +1,9 @@
 package com.sparta.studytrek.domain.auth.dto;
 
 import com.sparta.studytrek.domain.auth.entity.User;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 public class SignUpResponseDto {

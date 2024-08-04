@@ -1,12 +1,12 @@
 package com.sparta.studytrek.domain.reply.controller;
 
 import com.sparta.studytrek.common.ApiResponse;
+import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.domain.reply.dto.ReplyRequestDto;
 import com.sparta.studytrek.domain.reply.dto.ReplyResponseDto;
 import com.sparta.studytrek.domain.reply.service.ReviewReplyService;
 import com.sparta.studytrek.security.UserDetailsImpl;
 import java.util.List;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,11 +39,12 @@ public class ReviewReplyController {
     @PostMapping
     public ResponseEntity<ApiResponse> createReviewReply(@PathVariable Long reviewId,
         @PathVariable Long commentId, @RequestBody ReplyRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         ReplyResponseDto responseDto = reviewReplyService.createReviewReply(reviewId, commentId,
             requestDto, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("대댓글 등록 성공")
+            .msg(ResponseText.REPLY_CREATE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.CREATED.value()))
             .data(responseDto)
             .build();
@@ -64,11 +65,12 @@ public class ReviewReplyController {
     public ResponseEntity<ApiResponse> updateReviewReply(@PathVariable Long reviewId,
         @PathVariable Long commentId, @PathVariable Long replyId,
         @RequestBody ReplyRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         ReplyResponseDto responseDto = reviewReplyService.updateReviewReply(reviewId, commentId,
             replyId, requestDto, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("대댓글 수정 성공")
+            .msg(ResponseText.REPLY_UPDATE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();
@@ -87,10 +89,11 @@ public class ReviewReplyController {
     @DeleteMapping("/{replyId}")
     public ResponseEntity<ApiResponse> deleteReviewReply(@PathVariable Long reviewId,
         @PathVariable Long commentId, @PathVariable Long replyId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
         reviewReplyService.deleteReviewReply(reviewId, commentId, replyId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("대댓글 삭제 성공")
+            .msg(ResponseText.REPLY_DELETE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -103,10 +106,11 @@ public class ReviewReplyController {
      * @return 리뷰 댓글의 대댓글 전체 목록
      */
     @GetMapping
-    public ResponseEntity<ApiResponse> getAllReviewReply(@PathVariable Long commentId) {
+    public ResponseEntity<ApiResponse> getAllReviewReply(@PathVariable Long commentId)
+    {
         List<ReplyResponseDto> replys = reviewReplyService.getAllReviewReply(commentId);
         ApiResponse response = ApiResponse.builder()
-            .msg("대댓글 전체 조회 성공")
+            .msg(ResponseText.REPLY_GET_ALL_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(replys)
             .build();
@@ -116,16 +120,17 @@ public class ReviewReplyController {
     /**
      * 리뷰 댓글의 대댓글 단건 조회 API
      *
-     * @param commentId
-     * @param replyId
-     * @return
+     * @param commentId 댓글 ID
+     * @param replyId   대댓글 ID
+     * @return 해당 대댓글의 응답 데이터
      */
     @GetMapping("/{replyId}")
     public ResponseEntity<ApiResponse> getReviewReply(@PathVariable Long commentId,
-        @PathVariable Long replyId) {
+        @PathVariable Long replyId)
+    {
         ReplyResponseDto responseDto = reviewReplyService.getReviewReply(commentId, replyId);
         ApiResponse response = ApiResponse.builder()
-            .msg("대댓글 단건 조회 성공")
+            .msg(ResponseText.REPLY_GET_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();

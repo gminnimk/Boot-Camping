@@ -7,6 +7,8 @@ const adminUserBtn = document.getElementById('adminUserBtn');
 const adminNameContainer = document.getElementById('adminNameContainer');
 const nameSearch = document.getElementById('nameSearch');
 const nameList = document.getElementById('nameList');
+const loginForm = document.getElementById('loginForm');
+const signupForm = document.getElementById('signupForm');
 const names = ['스파르타', 'Name2', 'Name3', 'Name4', 'Name5']; // Your list of names
 
 // Handle sign-up and sign-in button clicks
@@ -16,6 +18,15 @@ signUpButton.addEventListener('click', () => {
 
 signInButton.addEventListener('click', () => {
     container.classList.remove("right-panel-active");
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const logoLink = document.getElementById('logoLink');
+
+    logoLink.addEventListener('click', function(e) {
+        e.preventDefault(); // 기본 앵커 동작 방지
+        window.location.href = '/home'; // /home으로 페이지 이동
+    });
 });
 
 // Handle user role button clicks
@@ -109,6 +120,8 @@ document.getElementById('signupPassword').addEventListener('blur', validatePassw
 document.getElementById('signupName').addEventListener('blur', validateName);
 document.getElementById('userAddress').addEventListener('blur', validateAddress);
 
+
+let userDistinction = '';
 // Update content based on user type
 function updateContent(userType) {
     const signUpTitle = document.getElementById('signUpTitle');
@@ -143,6 +156,8 @@ function updateContent(userType) {
             helloTitle.textContent = '어서오세요!';
             helloText.textContent = '여러분의 부트캠프를 소개해주세요';
 
+            userDistinction = 'BOOTCAMP';
+
             // Hide the user address input
             userAddress.style.display = 'none';
 
@@ -164,6 +179,8 @@ function updateContent(userType) {
             welcomeBackText.textContent = '개인 정보로 입력해주세요';
             helloTitle.textContent = '안녕하세요!';
             helloText.textContent = '여러분의 의견을 들려주세요';
+
+            userDistinction = 'USER';
 
             // Show the user address input
             userAddress.style.display = 'block';
@@ -277,31 +294,46 @@ document.getElementById('signUpButton').addEventListener('click', async (event) 
             password: password.value,
             name: name.value,
             userAddr: adminUserBtn.classList.contains('active') ? null : userAddr.value, // 부트캠프 사용자일 경우 null
-            campName: adminUserBtn.classList.contains('active') ? campName.value : null // 부트캠프 사용자일 경우 campName 포함
+            campName: adminUserBtn.classList.contains('active') ? campName.value : null, // 부트캠프 사용자일 경우 campName 포함
+            userRole: userDistinction
         };
 
-        const userRole = adminUserBtn.classList.contains('active') ? 'BOOTCAMP' : 'USER';
-
-        try {
-            const response = await fetch(`/api/auth/signup?userRole=${userRole}`, {
+        fetch(`/api/auth/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                alert('회원가입 성공');
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.statuscode === '201') {
+                Swal.fire({
+                    title: '회원가입 완료',
+                    text: '회원가입이 완료되었습니다.',
+                    icon: 'success',
+                    confirmButtonText: '확인'
+                }).then(() => {
+                    window.location.reload();
+                });
             } else {
-                const result = await response.json();
-                console.error('회원가입 실패:', result); // 자세한 오류 메시지 로그
-                alert('회원가입 실패: ' + result.message);
+                Swal.fire({
+                    title: '회원가입 실패',
+                    text: `오류 발생: ${data.msg}`,
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
             }
-        } catch (error) {
-            console.error('회원가입 중 오류 발생:', error); // 자세한 오류 메시지 로그
-            alert('회원가입 중 오류 발생: ' + error.message);
-        }
+        })
+        .catch(error => {
+            console.error('서버 오류:', error);
+            Swal.fire({
+                title: '회원가입 실패',
+                text: '서버와의 통신 오류가 발생했습니다.',
+                icon: 'error',
+                confirmButtonText: '확인'
+            });
+        });
     }
 });
 
@@ -309,12 +341,13 @@ document.getElementById('signUpButton').addEventListener('click', async (event) 
 document.getElementById('signInButton').addEventListener('click', async (event) => {
     event.preventDefault();
 
-    const username = document.getElementById('loginId');
-    const password = document.getElementById('loginPassword');
+    const username = document.getElementById('loginId').value;
+    const password = document.getElementById('loginPassword').value;
 
     const data = {
-        username: username.value,
-        password: password.value
+        username: username,
+        password: password,
+        role: userDistinction
     };
 
     try {
@@ -326,26 +359,30 @@ document.getElementById('signInButton').addEventListener('click', async (event) 
             body: JSON.stringify(data)
         });
 
+        const result = await response.json();
+
         if (response.ok) {
-            const result = await response.json();
-            alert('로그인 성공');
             localStorage.setItem('accessToken', result.data.accessToken);
             localStorage.setItem('refreshToken', result.data.refreshToken);
             window.location.href = '/home';
         } else {
-            const result = await response.json();
-            alert('로그인 실패: ' + result.message);
+            Swal.fire({
+                title: '로그인 실패',
+                text: result.message || '알 수 없는 오류가 발생했습니다.',
+                icon: 'error',
+                confirmButtonText: '확인'
+            });
         }
     } catch (error) {
-        alert('로그인 중 오류 발생: ' + error.message);
+        console.error('서버 오류:', error);
+        Swal.fire({
+            title: '로그인 실패',
+            text: '서버와의 통신 오류가 발생했습니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+        });
     }
 });
-
-function onLoginSuccess() {
-    const loginButton = document.querySelector('.add-task-button');
-    loginButton.textContent = 'Logout';
-    loginButton.onclick = onLogout;
-}
 
 function onLogoutSuccess() {
     const loginButton = document.querySelector('.add-task-button');
