@@ -5,27 +5,20 @@ const questions = [];
 let comments = {};
 let currentQuestionId = null;
 
-document.addEventListener('DOMContentLoaded', () => {
-    loadQuestions(currentPage);
-
-    const questionModal = document.getElementById("questionModal");
-    const questionDetailModal = document.getElementById("questionDetailPage");
-    const startBtn = document.querySelector(".start-question-btn");
-    const closeBtns = document.querySelectorAll(".close");
-
-    // Modal 열기/닫기 핸들러 설정
-    startBtn.addEventListener('click', () => openModal(questionModal));
-    closeBtns.forEach(btn => btn.addEventListener('click', closeModals));
-    window.addEventListener('click', (event) => {
-        if (event.target === questionModal || event.target === questionDetailModal) {
-            closeModals();
-        }
-    });
-
-    setupCategoryOptions();
-    setupFormSubmit();
-
-    document.querySelector('.back-btn').style.display = 'none';
+document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('edit-btn')) {
+        const replyElement = event.target.closest('.reply');
+        const questionId = replyElement.dataset.questionId;
+        const answerId = replyElement.dataset.answerId;
+        const replyId = replyElement.dataset.replyId;
+        editReply(questionId, answerId, replyId);
+    } else if (event.target.classList.contains('delete-btn')) {
+        const replyElement = event.target.closest('.reply');
+        const questionId = replyElement.dataset.questionId;
+        const answerId = replyElement.dataset.answerId;
+        const replyId = replyElement.dataset.replyId;
+        deleteReply(questionId, answerId, replyId);
+    }
 });
 
 function openModal(modal) {
@@ -405,77 +398,60 @@ function deleteComment(questionId, commentId) {
     }
 }
 
-async function editReply(questionId, answerId, commentId) {
-    const comment = comments[answerId]?.find(c =>
-        c.replies.find(reply => reply.id === commentId)
-    );
-
-    if (!comment) {
-        console.error('Comment not found for commentId:', commentId);
-        return;
-    }
-
-    // `replies` 배열에서 해당 `commentId`를 가진 대댓글을 찾음
-    const reply = comment.replies.find(reply => reply.id === commentId);
-
-    if (!reply) {
-        console.error('Reply not found for commentId:', commentId);
-        return;
-    }
-
+function editReply(questionId, answerId, replyId) {
+    const answer = comments[questionId].find(c => c.id === answerId);
+    const reply = answer.replies.find(r => r.id === replyId);
     const newContent = prompt("Edit your reply:", reply.content);
     if (newContent !== null && newContent.trim() !== '') {
-        try {
-            const response = await fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${commentId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-                },
-                body: JSON.stringify({ content: newContent })
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                reply.content = data.data.content;
+        fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${replyId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            },
+            body: JSON.stringify({ content: newContent })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.statuscode === "200") {
+                reply.content = newContent;
                 displayComments(questionId);
-                showAlert('Success', 'Reply updated successfully', 'success');
             } else {
-                const errorData = await response.json();
-                handleError("Failed to update reply", errorData);
+                handleError("Failed to update reply", data);
             }
-        } catch (error) {
-            handleError('Error updating reply', error);
-        }
+        })
+        .catch(error => handleError('Error updating reply', error));
     }
 }
 
-function deleteReply(questionId, answerId, commentId) {
-    if (!commentId) {
-        console.error("Comment ID is undefined!");
-        showAlert('Error', 'Comment ID is missing', 'error');
+function deleteReply(questionId, answerId, replyId) {
+    if (!replyId) {
+        console.error("Reply ID is undefined!");
+        showAlert('Error', 'Reply ID is missing', 'error');
         return;
     }
-    fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${commentId}`, {
+    fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${replyId}`, {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
         }
     })
-        .then(response => {
-            if (response.ok) {
-                comments[answerId] = comments[answerId].filter(c => c.id !== commentId);
-                displayComments(answerId);
-                showAlert("Success", "답글이 삭제되었습니다.", "success");
-            } else {
-                return response.json().then(data => {
-                    handleError("Failed to delete reply", data);
-                });
+    .then(response => {
+        if (response.ok) {
+            const answer = comments[questionId].find(a => a.id === answerId);
+            if (answer) {
+                answer.replies = answer.replies.filter(r => r.id !== replyId);
             }
-        })
-        .catch(error => handleError('Error deleting reply', error));
+            displayComments(questionId);
+            showAlert("Success", "답글이 삭제되었습니다.", "success");
+        } else {
+            return response.json().then(data => {
+                handleError("Failed to delete reply", data);
+            });
+        }
+    })
+    .catch(error => handleError('Error deleting reply', error));
 }
-
 
 function updateCommentCount(questionId) {
     const commentCountElement = document.getElementById('commentCount');
