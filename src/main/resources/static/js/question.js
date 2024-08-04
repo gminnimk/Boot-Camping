@@ -76,7 +76,7 @@ function setupFormSubmit() {
                 showAlert('오류!', errorData.error || '질문을 제출하는데 문제가 생겼습니다.', 'error');
             }
         } catch (error) {
-            showAlert('오류!', '제출에 문제가 생겼습니다.', 'error');
+            showAlert('오류!', '질문 제출에 문제가 생겼습니다.', 'error');
         }
     });
 }
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (localStorage.getItem('showSuccessMessage') === 'true') {
         localStorage.removeItem('showSuccessMessage');
         Swal.fire({
-            title: '성공!',
+            title: '질문 작성 성공',
             text: '질문이 성공적으로 제출되었습니다.',
             icon: 'success',
             confirmButtonText: '확인'
@@ -121,10 +121,10 @@ async function loadQuestions(page) {
             displayQuestions();
             updatePagination();
         } else {
-            handleError("Failed to fetch questions", response.statusText);
+            handleError("질문을 가져오는데 싪했습니다.", response.statusText);
         }
     } catch (error) {
-        handleError("An error occurred while fetching questions", error);
+        handleError("질문을 가져오는 중 오류가 발생했습니다.", error);
     }
 }
 
@@ -212,7 +212,7 @@ async function displayComments(questionId) {
 
     try {
         const response = await fetch(`/api/questions/${questionId}/answers`);
-        if (!response.ok) throw new Error('Failed to fetch answers');
+        if (!response.ok) throw new Error('답변을 가져오는데 실패했습니다.');
 
         const apiResponse = await response.json();
         comments[questionId] = await Promise.all(apiResponse.data.map(async answer => {
@@ -240,7 +240,7 @@ async function displayComments(questionId) {
 
         updateCommentCount(questionId);
     } catch (error) {
-        console.error('Error fetching answers:', error);
+        console.error('답변을 가져오는 중 오류 발생:', error);
     }
 }
 
@@ -313,7 +313,7 @@ async function addComment() {
         document.getElementById('newComment').value = '';
         displayComments(currentQuestionId);
     } catch (error) {
-        handleError('Error adding comment', error);
+        handleError('답변 추가 중 오류 발생', error);
     }
 }
 
@@ -345,16 +345,16 @@ async function addReply(button, questionId, commentId) {
             displayComments(questionId);
             button.previousElementSibling.value = '';
         } else {
-            handleError('Failed to add reply', await response.json());
+            handleError('댓글 생성을 실패했습니다.', await response.json());
         }
     } catch (error) {
-        handleError('Error adding reply', error);
+        handleError('댓글 추가 중 오류 발생', error);
     }
 }
 
 function editComment(questionId, commentId) {
     const comment = comments[questionId].find(c => c.id === commentId);
-    const newContent = prompt("Edit your answer:", comment.content);
+    const newContent = prompt("답변을 수정해주세요:", comment.content);
     if (newContent !== null && newContent.trim() !== '') {
         fetch(`/api/questions/${questionId}/answers/${commentId}`, {
             method: 'PUT',
@@ -370,15 +370,15 @@ function editComment(questionId, commentId) {
                     comment.content = newContent;
                     displayComments(questionId);
                 } else {
-                    handleError("Failed to update answer", data);
+                    handleError("답변 업데이트에 실패했습니다.", data);
                 }
             })
-            .catch(error => handleError('Error updating comment', error));
+            .catch(error => handleError('답변 업데이트에 실패했습니다.', error));
     }
 }
 
 function deleteComment(questionId, commentId) {
-    if (confirm("Are you sure you want to delete this answer?")) {
+    if (confirm("답변을 정말로 삭제하시겠습니까?")) {
         fetch(`/api/questions/${questionId}/answers/${commentId}`, {
             method: 'DELETE',
             headers: {
@@ -389,14 +389,14 @@ function deleteComment(questionId, commentId) {
                 if (response.ok) {
                     comments[questionId] = comments[questionId].filter(c => c.id !== commentId);
                     displayComments(questionId);
-                    showAlert("Success", "답변이 삭제되었습니다.", "success");
+                    showAlert("답변 삭제 성공", "답변이 삭제되었습니다.", "success");
                 } else {
                     return response.json().then(data => {
-                        handleError("Failed to delete answer", data);
+                        handleError("답변 삭제에 실패했습니다.", data);
                     });
                 }
             })
-            .catch(error => handleError('Error deleting comment', error));
+            .catch(error => handleError('다변 삭제 중 오류 발생', error));
     }
 }
 
@@ -419,17 +419,17 @@ function editReply(questionId, answerId, replyId) {
                 reply.content = newContent;
                 displayComments(questionId);
             } else {
-                handleError("Failed to update reply", data);
+                handleError("댓글 업데이트에 실패했습니다.", data);
             }
         })
-        .catch(error => handleError('Error updating reply', error));
+        .catch(error => handleError('댓글 업데이트 중 오류 발생', error));
     }
 }
 
 function deleteReply(questionId, answerId, replyId) {
     if (!replyId) {
-        console.error("Reply ID is undefined!");
-        showAlert('Error', 'Reply ID is missing', 'error');
+        console.error("댓글 ID가 정의되지 않았습니다.");
+        showAlert('오류', '댓글ID가 누락되었습니다.', 'error');
         return;
     }
     fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${replyId}`, {
@@ -445,14 +445,14 @@ function deleteReply(questionId, answerId, replyId) {
                 answer.replies = answer.replies.filter(r => r.id !== replyId);
             }
             displayComments(questionId);
-            showAlert("Success", "답글이 삭제되었습니다.", "success");
+            showAlert("답글 삭제 성공", "답글이 삭제되었습니다.", "success");
         } else {
             return response.json().then(data => {
-                handleError("Failed to delete reply", data);
+                handleError("댓글 삭제에 실패했습니다.", data);
             });
         }
     })
-    .catch(error => handleError('Error deleting reply', error));
+    .catch(error => handleError('댓글 삭제 중 오류 발생', error));
 }
 
 function updateCommentCount(questionId) {
@@ -516,14 +516,14 @@ async function editQuestion() {
                 }
                 showQuestionDetail(questionId);
                 closeModals();
-                showAlert('Success', 'Question updated successfully', 'success');
+                showAlert('답변 생성 성공', '질문이 성공적으로 덥데이트되었습니다.', 'success');
                 loadQuestions(currentPage);
             } else {
                 const errorData = await response.json();
-                showAlert('Error', errorData.error || 'Failed to update question', 'error');
+                showAlert('오류', errorData.error || '질문 업데이트에 실패했습니다.', 'error');
             }
         } catch (error) {
-            handleError('Error updating question', error);
+            handleError('질문 삭제 중 오류 발생', error);
         }
     };
 }
@@ -532,13 +532,14 @@ async function deleteQuestion() {
     const questionId = currentQuestionId;
 
     const result = await Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: '정말로 삭제하시겠습니까?',
+        text: "삭제하면 되돌릴 수 없습니다.",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: '확인',
+        cancelButtonText: '취소'
     });
 
     if (result.isConfirmed) {
@@ -557,13 +558,13 @@ async function deleteQuestion() {
                 }
                 showMainPage();
                 loadQuestions(currentPage);
-                showAlert('Deleted!', 'Your question has been deleted.', 'success');
+                showAlert('삭제 성공', '질문이 삭제되었습니다.', 'success');
             } else {
                 const errorData = await response.json();
-                showAlert('Error', errorData.error || 'Failed to delete question', 'error');
+                showAlert('오류', errorData.error || '질문 삭제에 실패했습니다.', 'error');
             }
         } catch (error) {
-            handleError('Error deleting question', error);
+            handleError('질문 삭제 중 오류 발생', error);
         }
     }
 }
