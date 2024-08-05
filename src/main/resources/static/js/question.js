@@ -108,54 +108,6 @@ function setupFormSubmit() {
         }
     });
 }
-function setupFormSubmit() {
-    document.getElementById('questionForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        if (!selectedCategory) {
-            showAlert('오류!', '카테고리가 선택되지 않았습니다.', 'error');
-            return;
-        }
-
-        const title = document.getElementById('questionTitle').value;
-        const content = document.getElementById('questionContent').value;
-        const requestBody = { title, category: selectedCategory, content };
-        let response;
-
-        try {
-            if (mode === 'create') {
-                response = await fetch('/api/questions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-                    },
-                    body: JSON.stringify(requestBody)
-                });
-            } else if (mode === 'edit' && currentQuestionId) {
-                response = await fetch(`/api/questions/${currentQuestionId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-                    },
-                    body: JSON.stringify(requestBody)
-                });
-            }
-
-            if (response.ok) {
-                closeModals();
-                localStorage.setItem('showSuccessMessage', 'true');
-                window.location.reload();
-            } else {
-                const errorData = await response.json();
-                showAlert('오류!', errorData.error || '질문을 제출하는데 문제가 생겼습니다.', 'error');
-            }
-        } catch (error) {
-            showAlert('오류!', '질문 제출에 문제가 생겼습니다.', 'error');
-        }
-    });
-}
 
 
 document.addEventListener('DOMContentLoaded', () => {
