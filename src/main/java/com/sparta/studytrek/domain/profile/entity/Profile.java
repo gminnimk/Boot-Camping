@@ -1,6 +1,7 @@
 package com.sparta.studytrek.domain.profile.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import com.sparta.studytrek.common.Timestamped;
@@ -27,6 +28,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class Profile extends Timestamped {
+
+	private LocalDateTime requestedAt;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -80,9 +84,11 @@ public class Profile extends Timestamped {
 	public void rejectProfile() {
 		this.status = ProfileStatus.REJECTED;
 	}
+	
 	public void apply() {
 		if (this.status == ProfileStatus.BASIC) {
 			this.status = ProfileStatus.PENDING;
+			this.requestedAt = LocalDateTime.now();
 		} else {
 			throw new CustomException(ErrorCode.PROFILE_STATUS_NOT_ALLOWED);
 		}
