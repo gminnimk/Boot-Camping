@@ -9,27 +9,27 @@ let mode = 'create';
 document.addEventListener('click', function(event) {
     if (event.target.classList.contains('edit-btn')) {
         const replyElement = event.target.closest('.reply');
-        const questionId = replyElement.dataset.questionId;
-        const answerId = replyElement.dataset.answerId;
-        const replyId = replyElement.dataset.replyId;
-        editReply(questionId, answerId, replyId);
+        if (replyElement) {
+            const questionId = replyElement.dataset.questionId;
+            const answerId = replyElement.dataset.answerId;
+            const replyId = replyElement.dataset.replyId;
+            editReply(questionId, answerId, replyId);
+        }
     } else if (event.target.classList.contains('delete-btn')) {
         const replyElement = event.target.closest('.reply');
-        const questionId = replyElement.dataset.questionId;
-        const answerId = replyElement.dataset.answerId;
-        const replyId = replyElement.dataset.replyId;
-        deleteReply(questionId, answerId, replyId);
+        if (replyElement) {
+            const questionId = replyElement.dataset.questionId;
+            const answerId = replyElement.dataset.answerId;
+            const replyId = replyElement.dataset.replyId;
+            deleteReply(questionId, answerId, replyId);
+        }
     }
 });
 
-function openModal(modal, question = null, modalType = 'question') {
-    if (modalType === 'question' && modal.style.display === "block") {
-        return;
-    }
-
+function openModal(modal, question = null) {
     modal.style.display = "block";
 
-    if (question && modalType === 'question') {
+    if (question) {
         mode = 'edit';
         currentQuestionId = question.id;
         document.getElementById('questionTitle').value = question.title;
@@ -39,7 +39,7 @@ function openModal(modal, question = null, modalType = 'question') {
         document.querySelectorAll('.category-option').forEach(option => {
             option.classList.toggle('active', option.dataset.category === question.category);
         });
-    } else if (modalType === 'question') {
+    } else {
         mode = 'create';
         resetForm();
     }
