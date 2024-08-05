@@ -6,30 +6,10 @@ let comments = {};
 let currentQuestionId = null;
 let mode = 'create';
 
-document.addEventListener('click', function(event) {
-    if (event.target.classList.contains('edit-btn')) {
-        const replyElement = event.target.closest('.reply');
-        const questionId = replyElement.dataset.questionId;
-        const answerId = replyElement.dataset.answerId;
-        const replyId = replyElement.dataset.replyId;
-        editReply(questionId, answerId, replyId);
-    } else if (event.target.classList.contains('delete-btn')) {
-        const replyElement = event.target.closest('.reply');
-        const questionId = replyElement.dataset.questionId;
-        const answerId = replyElement.dataset.answerId;
-        const replyId = replyElement.dataset.replyId;
-        deleteReply(questionId, answerId, replyId);
-    }
-});
-
-function openModal(modal, question = null, modalType = 'question') {
-    if (modalType === 'question' && modal.style.display === "block") {
-        return;
-    }
-
+function openModal(modal, question = null) {
     modal.style.display = "block";
 
-    if (question && modalType === 'question') {
+    if (question) {
         mode = 'edit';
         currentQuestionId = question.id;
         document.getElementById('questionTitle').value = question.title;
@@ -39,7 +19,7 @@ function openModal(modal, question = null, modalType = 'question') {
         document.querySelectorAll('.category-option').forEach(option => {
             option.classList.toggle('active', option.dataset.category === question.category);
         });
-    } else if (modalType === 'question') {
+    } else {
         mode = 'create';
         resetForm();
     }
@@ -51,6 +31,7 @@ function closeModals() {
     showMainPage();
 }
 
+let selectedCategory = '';
 function setupCategoryOptions() {
     const categoryOptions = document.querySelectorAll('.category-option');
     categoryOptions.forEach(option => {
@@ -92,6 +73,7 @@ async function formSubmitHandler(e) {
                 },
                 body: JSON.stringify(requestBody)
             });
+            window.location.reload();
         } else if (mode === 'edit' && currentQuestionId) {
             response = await fetch(`/api/questions/${currentQuestionId}`, {
                 method: 'PUT',
@@ -106,7 +88,6 @@ async function formSubmitHandler(e) {
         if (response.ok) {
             closeModals();
             localStorage.setItem('showSuccessMessage', 'true');
-            window.location.reload();
         } else {
             const errorData = await response.json();
             showAlert('오류!', errorData.error || '질문을 제출하는데 문제가 생겼습니다.', 'error');
@@ -558,7 +539,9 @@ async function editQuestion() {
     const questionId = currentQuestionId;
     const question = questions.find(q => q.id === questionId);
 
-    openModal(document.getElementById("questionModal"), question);
+    if (question) {
+        openModal(document.getElementById("questionModal"), question);
+    }
 
     document.getElementById('questionForm').onsubmit = async function(e) {
         e.preventDefault();
@@ -594,7 +577,7 @@ async function editQuestion() {
                 showAlert('오류', errorData.error || '질문 업데이트에 실패했습니다.', 'error');
             }
         } catch (error) {
-            handleError('질문 삭제 중 오류 발생', error);
+            handleError('질문 수정 중 오류 발생', error);
         }
     };
 }
