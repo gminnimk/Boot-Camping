@@ -278,3 +278,11 @@ body.dark {
     --color: #FFFFFF;
     --hover-bg: #3A3B47;
 }
+
+.logo-img {
+    margin-left: 70px;
+    margin-top: 15px;
+}
+#logoLink {
+    cursor: pointer;
+}

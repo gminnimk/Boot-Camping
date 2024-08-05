@@ -2,6 +2,7 @@ package com.sparta.studytrek.domain.like.controller;
 
 
 import com.sparta.studytrek.common.ApiResponse;
+import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.domain.like.service.StudyLikeService;
 import com.sparta.studytrek.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class StudyLikeController {
     {
         int studyAllLike = studyLikeService.studyLike(studyId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("해당 스터디 모집글에 좋아요 성공 : "  + studyAllLike)
+            .msg(ResponseText.LIKE_RECRUIT_SUCCESS.format(studyAllLike))
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -53,7 +54,7 @@ public class StudyLikeController {
     {
         int studyAllLike = studyLikeService.studyUnlike(studyId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
-            .msg("해당 스터디 모집글에 좋아요 취소 성공 : "  + studyAllLike)
+            .msg(ResponseText.LIKE_CALL_OFF_SUCCESS.format(studyAllLike))
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
