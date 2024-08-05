@@ -4,6 +4,7 @@ let totalPages = 0;
 const questions = [];
 let comments = {};
 let currentQuestionId = null;
+let mode = 'create';
 
 
 document.addEventListener('click', function(event) {
@@ -22,10 +23,23 @@ document.addEventListener('click', function(event) {
     }
 });
 
-function openModal(modal) {
-    console.log('Opening modal:', modal);
+function openModal(modal, question = null) {
     modal.style.display = "block";
-    console.log('Modal display style:', modal.style.display);
+
+    if (question) {
+        mode = 'edit';
+        currentQuestionId = question.id;
+        document.getElementById('questionTitle').value = question.title;
+        document.getElementById('questionContent').value = question.content;
+        document.getElementById('selectedCategory').value = question.category;
+
+        document.querySelectorAll('.category-option').forEach(option => {
+            option.classList.toggle('active', option.dataset.category === question.category);
+        });
+    } else {
+        mode = 'create';
+        resetForm();
+    }
 }
 
 function closeModals() {
@@ -58,20 +72,79 @@ function setupFormSubmit() {
         const title = document.getElementById('questionTitle').value;
         const content = document.getElementById('questionContent').value;
         const requestBody = { title, category: selectedCategory, content };
+        let response;
 
         try {
-            const response = await fetch('/api/questions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-                },
-                body: JSON.stringify(requestBody)
-            });
+            if (mode === 'create') {
+                response = await fetch('/api/questions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+            } else if (mode === 'edit' && currentQuestionId) {
+                response = await fetch(`/api/questions/${currentQuestionId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+            }
 
             if (response.ok) {
                 closeModals();
+                localStorage.setItem('showSuccessMessage', 'true');
+                window.location.reload();
+            } else {
+                const errorData = await response.json();
+                showAlert('오류!', errorData.error || '질문을 제출하는데 문제가 생겼습니다.', 'error');
+            }
+        } catch (error) {
+            showAlert('오류!', '질문 제출에 문제가 생겼습니다.', 'error');
+        }
+    });
+}
+function setupFormSubmit() {
+    document.getElementById('questionForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
 
+        if (!selectedCategory) {
+            showAlert('오류!', '카테고리가 선택되지 않았습니다.', 'error');
+            return;
+        }
+
+        const title = document.getElementById('questionTitle').value;
+        const content = document.getElementById('questionContent').value;
+        const requestBody = { title, category: selectedCategory, content };
+        let response;
+
+        try {
+            if (mode === 'create') {
+                response = await fetch('/api/questions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+            } else if (mode === 'edit' && currentQuestionId) {
+                response = await fetch(`/api/questions/${currentQuestionId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+            }
+
+            if (response.ok) {
+                closeModals();
                 localStorage.setItem('showSuccessMessage', 'true');
                 window.location.reload();
             } else {
@@ -84,35 +157,28 @@ function setupFormSubmit() {
     });
 }
 
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed');
 
-    // 모달 관련 요소 및 이벤트 설정
     const closeBtns = document.querySelectorAll(".close");
-    const startQuestionBtn = document.querySelector('.start-question-btn');  // 클래스 선택자로 변경
+    const startQuestionBtn = document.querySelector('.start-question-btn');
     const questionModal = document.getElementById('questionModal');
 
     closeBtns.forEach(btn => btn.addEventListener('click', closeModals));
 
-    console.log('startQuestionBtn:', startQuestionBtn);
-    console.log('questionModal:', questionModal);
-
     if (startQuestionBtn && questionModal) {
         startQuestionBtn.addEventListener('click', function(event) {
             event.preventDefault();
-            console.log('Button clicked');
             openModal(questionModal);
-            resetForm();
         });
     } else {
         console.error('Button or modal not found');
     }
 
-    // 카테고리 및 폼 설정
     setupCategoryOptions();
     setupFormSubmit();
 
-    // 성공 메시지 표시
     if (localStorage.getItem('showSuccessMessage') === 'true') {
         localStorage.removeItem('showSuccessMessage');
         Swal.fire({
@@ -123,7 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 카테고리 버튼 이벤트 설정
     const categoryButtons = document.querySelectorAll('.category-btn');
     categoryButtons.forEach(button => {
         button.addEventListener('click', function() {
@@ -135,7 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 초기 질문 로드 및 뒤로가기 버튼 숨김
     loadQuestions(currentPage);
     document.querySelector('.back-btn').style.display = 'none';
 });
@@ -256,7 +320,7 @@ function showQuestionDetail(questionId) {
     currentQuestionId = questionId;
     const question = questions.find(q => q.id === questionId);
     const detailPage = document.getElementById('questionDetailPage');
-    openModal(detailPage);
+    openModal(detailPage, question);
     document.getElementById('detailTitle').textContent = question.title;
     document.getElementById('detailCategory').textContent = `Category: ${question.category}`;
     document.getElementById('detailDate').textContent = `Date: ${question.createdAt ? new Date(question.createdAt).toLocaleString() : 'No Date Available'}`;
@@ -537,15 +601,7 @@ async function editQuestion() {
     const questionId = currentQuestionId;
     const question = questions.find(q => q.id === questionId);
 
-    document.getElementById('questionTitle').value = question.title;
-    document.getElementById('selectedCategory').value = question.category;
-    document.getElementById('questionContent').value = question.content;
-
-    document.querySelectorAll('.category-option').forEach(option => {
-        option.classList.toggle('active', option.dataset.category === question.category);
-    });
-
-    openModal(document.getElementById("questionModal"));
+    openModal(document.getElementById("questionModal"), question);
 
     document.getElementById('questionForm').onsubmit = async function(e) {
         e.preventDefault();
@@ -574,7 +630,7 @@ async function editQuestion() {
                 }
                 showQuestionDetail(questionId);
                 closeModals();
-                showAlert('질문 수정 성공', '질문이 성공적으로 덥데이트되었습니다.', 'success');
+                showAlert('질문 수정 성공', '질문이 성공적으로 업데이트되었습니다.', 'success');
                 loadQuestions(currentPage);
             } else {
                 const errorData = await response.json();
