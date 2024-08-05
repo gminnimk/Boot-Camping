@@ -61,7 +61,7 @@ GET {{apiUrl}}/admin/profiles/role/BOOTCAMP/status/APPROVED
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
-### Role 별 Status 별 프로필 조회 (관리자용) BOOTCAMP, REJECTD
+### Role 별 Status 별 프로필 조회 (관리자용) BOOTCAMP, REJECTED
 GET {{apiUrl}}/admin/profiles/role/BOOTCAMP/status/REJECTED
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}

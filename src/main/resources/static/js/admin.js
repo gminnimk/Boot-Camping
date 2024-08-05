@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // API로부터 프로필 요청 데이터를 가져오는 함수
 async function loadRequests() {
-    let apiUrl = '/api/admin/profiles/role/USER';
+    let apiUrl = `/api/admin/profiles/role/${currentRequestType.toUpperCase()}`;
 
     try {
         const response = await fetch(apiUrl, {
@@ -19,7 +19,8 @@ async function loadRequests() {
 
         if (response.ok) {
             const result = await response.json();
-            return result.data;
+            // 상태가 PENDING, APPROVED, REJECTED인 경우만 반환
+            return result.data.filter(req => ['PENDING', 'APPROVED', 'REJECTED'].includes(req.status));
         } else {
             console.error('Failed to fetch profiles');
             return [];
@@ -65,10 +66,10 @@ function createProfileCard(profile) {
     profileElement.className = 'request';
 
     profileElement.innerHTML = `
-        <h3>${profile.name} - ${profile.bootcampName}</h3>
+        <h3>${profile.bootcampName || profile.name}</h3>
         <div class="request-details">
-            <p>트랙: ${profile.track}</p>
-            <p>기수: ${profile.generation}</p>
+            <p>${currentRequestType === 'user' ? `트랙: ${profile.track}` : `관계자 이름: ${profile.name}`}</p>
+            ${currentRequestType === 'user' ? `<p>기수: ${profile.generation}</p>` : ''}
             <p>요청일: ${new Date(profile.requestedAt).toLocaleDateString()}</p>
             <p>상태: <span class="${profile.status === 'REJECTED' ? 'warning-text' : profile.status === 'APPROVED' ? 'emphasis-text' : ''}">${getStatusText(profile.status)}</span></p>
         </div>
@@ -127,18 +128,30 @@ async function showDetails(e) {
             const request = result.data;
 
             const modalContent = document.getElementById('modalContent');
-            modalContent.innerHTML = `
-                <p><strong>이름:</strong> ${request.name}</p>
-                <p><strong>부트캠프:</strong> ${request.bootcampName}</p>
-                <p><strong>트랙:</strong> ${request.track}</p>
-                <p><strong>기수:</strong> ${request.generation}</p>
-                <p><strong>시작일:</strong> ${request.startDate}</p>
-                <p><strong>종료일:</strong> ${request.endDate}</p>
-                <p><strong>요청일:</strong> ${new Date(request.requestedAt).toLocaleDateString()}</p>
-                <p><strong>상태:</strong> <span class="${request.status === 'REJECTED' ? 'warning-text' : request.status === 'APPROVED' ? 'emphasis-text' : ''}">${getStatusText(request.status)}</span></p>
-                <p><strong>인증서:</strong></p>
-                <img src="${request.certificate}" alt="인증서" class="certificate-preview">
-            `;
+
+            if (currentRequestType === 'user') {
+                modalContent.innerHTML = `
+                    <p><strong>이름:</strong> ${request.name}</p>
+                    <p><strong>부트캠프:</strong> ${request.bootcampName}</p>
+                    <p><strong>트랙:</strong> ${request.track}</p>
+                    <p><strong>기수:</strong> ${request.generation}</p>
+                    <p><strong>시작일:</strong> ${request.startDate}</p>
+                    <p><strong>종료일:</strong> ${request.endDate}</p>
+                    <p><strong>요청일:</strong> ${new Date(request.requestedAt).toLocaleDateString()}</p>
+                    <p><strong>상태:</strong> <span class="${request.status === 'REJECTED' ? 'warning-text' : request.status === 'APPROVED' ? 'emphasis-text' : ''}">${getStatusText(request.status)}</span></p>
+                    <p><strong>인증서:</strong></p>
+                    <img src="${request.certificate}" alt="인증서" class="certificate-preview">
+                `;
+            } else if (currentRequestType === 'bootcamp') {
+                modalContent.innerHTML = `
+                    <p><strong>관계자 이름:</strong> ${request.name}</p>
+                    <p><strong>부트캠프명:</strong> ${request.bootcampName}</p>
+                    <p><strong>요청일:</strong> ${new Date(request.requestedAt).toLocaleDateString()}</p>
+                    <p><strong>상태:</strong> ${getStatusText(request.status)}</p>
+                    <p><strong>사업자 등록증:</strong></p>
+                    <img src="${request.certificate}" alt="사업자 등록증" class="certificate-preview">
+                `;
+            }
 
             openModal('detailModal');
         } else {
