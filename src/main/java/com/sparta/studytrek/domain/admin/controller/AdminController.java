@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.sparta.studytrek.common.ApiResponse;
+import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.domain.admin.dto.AdminRequestDto;
 import com.sparta.studytrek.domain.admin.dto.AdminResponseDto;
 import com.sparta.studytrek.domain.admin.service.AdminService;
