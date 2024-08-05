@@ -170,7 +170,7 @@ public class AdminController {
     public ResponseEntity<ApiResponse> getProfileById(@PathVariable Long profileId) {
         ProfileResponseDto profileResponseDto = profileService.getProfileById(profileId).getBody();
         ApiResponse response = ApiResponse.builder()
-            .msg("프로필 상세 조회 성공")
+            .msg(ResponseText.PROFILE_DETAIL_GET_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(profileResponseDto)
             .build();
