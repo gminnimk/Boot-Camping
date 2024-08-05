@@ -92,9 +92,6 @@ public class AnswerCommentController {
     @DeleteMapping("/{commentId}")
     public ResponseEntity<ApiResponse> deleteAnswerComment(@PathVariable Long questionId,
         @PathVariable Long answerId, @PathVariable Long commentId,
-    public ResponseEntity<ApiResponse> deleteAnswerComment(@PathVariable("questionId") Long questionId,
-        @PathVariable("answerId") Long answerId,
-        @PathVariable("commentId") Long commentId,
         @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
         answerCommentService.deleteAnswerComment(questionId, answerId, commentId, userDetails.getUser());

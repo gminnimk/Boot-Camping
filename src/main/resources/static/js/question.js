@@ -5,6 +5,7 @@ const questions = [];
 let comments = {};
 let currentQuestionId = null;
 
+
 document.addEventListener('click', function(event) {
     if (event.target.classList.contains('edit-btn')) {
         const replyElement = event.target.closest('.reply');
@@ -22,7 +23,9 @@ document.addEventListener('click', function(event) {
 });
 
 function openModal(modal) {
+    console.log('Opening modal:', modal);
     modal.style.display = "block";
+    console.log('Modal display style:', modal.style.display);
 }
 
 function closeModals() {
@@ -82,8 +85,34 @@ function setupFormSubmit() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM fully loaded and parsed');
+
+    // 모달 관련 요소 및 이벤트 설정
     const closeBtns = document.querySelectorAll(".close");
+    const startQuestionBtn = document.querySelector('.start-question-btn');  // 클래스 선택자로 변경
+    const questionModal = document.getElementById('questionModal');
+
     closeBtns.forEach(btn => btn.addEventListener('click', closeModals));
+
+    console.log('startQuestionBtn:', startQuestionBtn);
+    console.log('questionModal:', questionModal);
+
+    if (startQuestionBtn && questionModal) {
+        startQuestionBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            console.log('Button clicked');
+            openModal(questionModal);
+            resetForm();
+        });
+    } else {
+        console.error('Button or modal not found');
+    }
+
+    // 카테고리 및 폼 설정
+    setupCategoryOptions();
+    setupFormSubmit();
+
+    // 성공 메시지 표시
     if (localStorage.getItem('showSuccessMessage') === 'true') {
         localStorage.removeItem('showSuccessMessage');
         Swal.fire({
@@ -93,7 +122,36 @@ document.addEventListener('DOMContentLoaded', () => {
             confirmButtonText: '확인'
         });
     }
+
+    // 카테고리 버튼 이벤트 설정
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            categoryButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            sortQuestions(this.textContent);
+            currentPage = 1;
+            loadQuestions(currentPage);
+        });
+    });
+
+    // 초기 질문 로드 및 뒤로가기 버튼 숨김
+    loadQuestions(currentPage);
+    document.querySelector('.back-btn').style.display = 'none';
 });
+
+// 질문 정렬 함수
+function sortQuestions(sortType) {
+    if (sortType === '최신순') {
+        questions.sort((a, b) => new Date(b.date) - new Date(a.date));
+    } else if (sortType === '답변 많은 순') {
+        questions.sort((a, b) => {
+            const commentsA = comments[a.id] ? comments[a.id].length : 0;
+            const commentsB = comments[b.id] ? comments[b.id].length : 0;
+            return commentsB - commentsA;
+        });
+    }
+}
 
 
 function resetForm() {
@@ -516,7 +574,7 @@ async function editQuestion() {
                 }
                 showQuestionDetail(questionId);
                 closeModals();
-                showAlert('답변 생성 성공', '질문이 성공적으로 덥데이트되었습니다.', 'success');
+                showAlert('질문 수정 성공', '질문이 성공적으로 덥데이트되었습니다.', 'success');
                 loadQuestions(currentPage);
             } else {
                 const errorData = await response.json();
