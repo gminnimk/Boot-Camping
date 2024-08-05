@@ -251,3 +251,67 @@ document.querySelectorAll('.modal').forEach(modal => {
         }
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    // 부트캠프 등록 버튼 클릭 시 모달 열기
+    document.getElementById('btnBootcampRegister').addEventListener('click', function() {
+        openModal('registerModal');
+    });
+
+    // 모달 내의 등록하기 버튼 클릭 시 부트캠프 등록 처리
+    document.getElementById('btnRegister').addEventListener('click', async () => {
+        const bootcampName = document.getElementById('bootcampName').value;
+        const description = document.getElementById('description').value;
+
+        // 입력값 검증
+        if (!bootcampName || !description) {
+            Swal.fire({
+                icon: 'warning',
+                title: '필수 입력 사항',
+                text: '부트캠프 이름과 설명을 입력해주세요.'
+            });
+            return;
+        }
+
+        // 요청 데이터 생성
+        const requestData = {
+            name: bootcampName,
+            description: description
+        };
+
+        try {
+            // 부트캠프 생성 API 호출
+            const response = await fetch('/api/admin/camps', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                },
+                body: JSON.stringify(requestData)
+            });
+
+            if (response.ok) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '부트캠프 등록 완료',
+                    text: '부트캠프가 성공적으로 등록되었습니다.'
+                });
+                closeModal('registerModal');
+            } else {
+                const errorData = await response.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: '등록 실패',
+                    text: errorData.message || '부트캠프 등록에 실패했습니다.'
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: '오류 발생',
+                text: '부트캠프 등록 중 오류가 발생했습니다.'
+            });
+            console.error('Error registering bootcamp:', error);
+        }
+    });
+});
