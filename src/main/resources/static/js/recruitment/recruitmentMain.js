@@ -5,25 +5,6 @@ let totalPages = 0;
 const accessToken = localStorage.getItem('accessToken');
 const ITEMS_PER_PAGE = 9;
 
-// API에서 코스 데이터를 가져오는 함수
-function fetchCourses() {
-    return fetch(`/api/camps?page=${currentPage - 1}&size=${coursesPerPage}`)
-    .then(response => response.json())
-    .then(data => {
-        if (data.statuscode === "200") {
-            totalCourses = data.data.totalElements;
-            totalPages = data.data.totalPages;
-            return data.data.content;
-        } else {
-            console.error('에러:', data.msg);
-            return [];
-        }
-    })
-    .catch(error => {
-        console.error('API 호출 중 에러 발생:', error);
-        return [];
-    });
-}
 
 // 날짜를 "2024. 7. 31." 형식으로 변환하는 함수
 function formatDate(dateString) {
@@ -82,6 +63,7 @@ function renderPage() {
         addHeartButtonListeners();
     });
 }
+
 
 // 페이지 변경 함수
 function changePage(direction) {

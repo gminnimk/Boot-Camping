@@ -200,16 +200,19 @@ body.dark {
     background-color: #5AA9E6;
     color: var(--color);
 }
+
 .courses {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
+
 .course {
     width: calc(33.33% - 20px);
     border: 1px solid #ddd;
     border-radius: 4px;
     margin-bottom: 20px;
+    margin-left: 15px;
     box-sizing: border-box;
     overflow: hidden;
     cursor: pointer;
