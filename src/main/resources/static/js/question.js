@@ -1,309 +1,340 @@
 const questionsPerPage = 9;
 let currentPage = 1;
-const questions = [
-    {
-        id: 1,
-        title: "강의 내용이 매우 유익해요",
-        category: "강의",
-        date: "2023-04-15",
-        content: "강의 내용이 정말 알찼습니다. 실무에서 바로 적용할 수 있는 내용들이 많아 좋았어요."
-    },
-    {
-        id: 2,
-        title: "강사님의 열정적인 강의",
-        category: "강사",
-        date: "2023-04-14",
-        content: "강사님의 열정이 대단했습니다. 학생들의 질문에 항상 친절하게 답변해주셔서 좋았어요."
-    },
-    {
-        id: 3,
-        title: "멋진 캠핑 여행 경험",
-        category: "캠핑여행",
-        date: "2023-04-13",
-        content: "캠핑 여행이 정말 좋았어요. 자연 속에서 동기들과 함께 시간을 보내며 많은 것을 배웠습니다."
-    },
-    {
-        id: 4,
-        title: "체계적인 커리큘럼",
-        category: "커리큘럼",
-        date: "2023-04-12",
-        content: "커리큘럼이 매우 체계적으로 구성되어 있어 단계별로 학습하기 좋았습니다."
-    },
-    {
-        id: 5,
-        title: "쾌적한 수강 환경",
-        category: "수강환경",
-        date: "2023-04-11",
-        content: "강의실 환경이 쾌적하고 시설이 잘 갖춰져 있어 공부하기 좋았습니다."
-    },
-    {
-        id: 6,
-        title: "도전적이고 유익한 과제들",
-        category: "과제",
-        date: "2023-04-10",
-        content: "과제가 도전적이면서도 실력 향상에 큰 도움이 되었습니다. 과제를 통해 많은 것을 배웠어요."
-    },
-    {
-        id: 7,
-        title: "실무와 유사한 프로젝트 경험",
-        category: "프로젝트",
-        date: "2023-04-09",
-        content: "프로젝트를 통해 실무와 유사한 경험을 할 수 있어 좋았습니다. 팀워크도 배울 수 있었어요."
-    },
-    {
-        id: 8,
-        title: "취업 연계 프로그램이 도움 돼요",
-        category: "취업연계",
-        date: "2023-04-08",
-        content: "취업 연계 프로그램을 통해 실제 취업에 많은 도움을 받았습니다. 멘토링 세션이 특히 유익했어요."
-    },
-    {
-        id: 9,
-        title: "강의 내용의 깊이가 있어요",
-        category: "강의",
-        date: "2023-04-07",
-        content: "강의 내용이 깊이가 있어 좋았습니다. 기초부터 고급 내용까지 잘 다뤄주셔서 만족스러웠어요."
-    },
-    {
-        id: 10,
-        title: "강사님의 실무 경험 공유",
-        category: "강사",
-        date: "2023-04-06",
-        content: "강사님의 풍부한 실무 경험을 바탕으로 한 강의가 매우 인상적이었습니다."
-    },
-    {
-        id: 11,
-        title: "캠핑 여행에서의 팀 빌딩",
-        category: "캠핑여행",
-        date: "2023-04-05",
-        content: "캠핑 여행을 통해 동기들과 더 가까워질 수 있었고, 팀워크를 기를 수 있어 좋았습니다."
-    },
-    {
-        id: 12,
-        title: "유연한 커리큘럼 운영",
-        category: "커리큘럼",
-        date: "2023-04-04",
-        content: "커리큘럼이 유연하게 운영되어 학생들의 요구사항을 잘 반영해주셔서 좋았습니다."
-    }
-];
-
+let totalPages = 0;
+const questions = [];
 let comments = {};
 let currentQuestionId = null;
+let mode = 'create';
 
-document.addEventListener('DOMContentLoaded', () => {
-    const questionModal = document.getElementById("questionModal");
-    const questionDetailModal = document.getElementById("questionDetailPage");
-    const startBtn = document.querySelector(".start-question-btn");
-    const closeBtns = document.querySelectorAll(".close");
+function openModal(modal, question = null) {
+    modal.style.display = "block";
 
-    startBtn.onclick = function() {
-        questionModal.style.display = "block";
+    if (question) {
+        mode = 'edit';
+        currentQuestionId = question.id;
+        document.getElementById('questionTitle').value = question.title;
+        document.getElementById('questionContent').value = question.content;
+        document.getElementById('selectedCategory').value = question.category;
+
+        document.querySelectorAll('.category-option').forEach(option => {
+            option.classList.toggle('active', option.dataset.category === question.category);
+        });
+    } else {
+        mode = 'create';
+        resetForm();
     }
+}
 
-    closeBtns.forEach(btn => {
-        btn.onclick = function() {
-            questionModal.style.display = "none";
-            questionDetailModal.style.display = "none";
-        }
-    });
+function closeModals() {
+    document.getElementById("questionModal").style.display = "none";
+    document.getElementById("questionDetailPage").style.display = "none";
+    showMainPage();
+}
 
-    window.onclick = function(event) {
-        if (event.target == questionModal) {
-            questionModal.style.display = "none";
-        } else if (event.target == questionDetailModal) {
-            questionDetailModal.style.display = "none";
-        }
-    }
-
-    document.querySelector('.start-question-btn').addEventListener('click', () => {
-        currentQuestionId = null;
-        document.getElementById('questionForm').reset();
-        document.querySelectorAll('.category-option').forEach(option => option.classList.remove('active'));
-        questionModal.style.display = "block";
-    });
-
+let selectedCategory = '';
+function setupCategoryOptions() {
     const categoryOptions = document.querySelectorAll('.category-option');
     categoryOptions.forEach(option => {
         option.addEventListener('click', function() {
             categoryOptions.forEach(opt => opt.classList.remove('active'));
             this.classList.add('active');
-            document.getElementById('selectedCategory').value = this.dataset.category;
+            selectedCategory = this.dataset.category;
+            document.getElementById('selectedCategory').value = selectedCategory;
+        });
+    });
+}
+
+function setupFormSubmit() {
+    const formElement = document.getElementById('questionForm');
+    formElement.removeEventListener('submit', formSubmitHandler);
+    formElement.addEventListener('submit', formSubmitHandler);
+}
+
+async function formSubmitHandler(e) {
+    e.preventDefault();
+
+    if (!selectedCategory) {
+        showAlert('오류!', '카테고리가 선택되지 않았습니다.', 'error');
+        return;
+    }
+
+    const title = document.getElementById('questionTitle').value;
+    const content = document.getElementById('questionContent').value;
+    const requestBody = { title, category: selectedCategory, content };
+    let response;
+
+    try {
+        if (mode === 'create') {
+            response = await fetch('/api/questions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                },
+                body: JSON.stringify(requestBody)
+            });
+            window.location.reload();
+        } else if (mode === 'edit' && currentQuestionId) {
+            response = await fetch(`/api/questions/${currentQuestionId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                },
+                body: JSON.stringify(requestBody)
+            });
+        }
+
+        if (response.ok) {
+            closeModals();
+            localStorage.setItem('showSuccessMessage', 'true');
+        } else {
+            const errorData = await response.json();
+            showAlert('오류!', errorData.error || '질문을 제출하는데 문제가 생겼습니다.', 'error');
+        }
+    } catch (error) {
+        showAlert('오류!', '질문 제출에 문제가 생겼습니다.', 'error');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM fully loaded and parsed');
+
+    const closeBtns = document.querySelectorAll(".close");
+    const startQuestionBtn = document.querySelector('.start-question-btn');
+    const questionModal = document.getElementById('questionModal');
+
+    closeBtns.forEach(btn => btn.addEventListener('click', closeModals));
+
+    if (startQuestionBtn && questionModal) {
+        startQuestionBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            openModal(questionModal);
+        });
+    } else {
+        console.error('Button or modal not found');
+    }
+
+    setupCategoryOptions();
+    setupFormSubmit();
+
+    if (localStorage.getItem('showSuccessMessage') === 'true') {
+        localStorage.removeItem('showSuccessMessage');
+        Swal.fire({
+            title: '질문 작성 성공',
+            text: '질문이 성공적으로 제출되었습니다.',
+            icon: 'success',
+            confirmButtonText: '확인'
+        });
+    }
+
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            categoryButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            sortQuestions(this.textContent);
+            currentPage = 1;
+            loadQuestions(currentPage);
         });
     });
 
-    document.getElementById('questionForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const title = document.getElementById('questionTitle').value;
-        const category = document.getElementById('selectedCategory').value;
-        const content = document.getElementById('questionContent').value;
-        if (currentQuestionId === null) {
-            const newQuestion = {
-                id: questions.length + 1,
-                title: title,
-                category: category,
-                date: new Date().toISOString().split('T')[0],
-                content: content
-            };
-            questions.unshift(newQuestion);
-        } else {
-            const question = questions.find(r => r.id === currentQuestionId);
-            question.title = title;
-            question.category = category;
-            question.content = content;
-            question.date = new Date().toISOString().split('T')[0];
-        }
-        questionModal.style.display = "none";
-        displayQuestions(1);
-    });
-
-    displayQuestions(currentPage);
+    loadQuestions(currentPage);
     document.querySelector('.back-btn').style.display = 'none';
 });
 
-function displayQuestions(page) {
+// 질문 정렬 함수
+function sortQuestions(sortType) {
+    if (sortType === '최신순') {
+        questions.sort((a, b) => new Date(b.date) - new Date(a.date));
+    } else if (sortType === '답변 많은 순') {
+        questions.sort((a, b) => {
+            const commentsA = comments[a.id] ? comments[a.id].length : 0;
+            const commentsB = comments[b.id] ? comments[b.id].length : 0;
+            return commentsB - commentsA;
+        });
+    }
+}
+
+function resetForm() {
+    document.getElementById('questionForm').reset();
+    document.querySelectorAll('.category-option').forEach(option => option.classList.remove('active'));
+    selectedCategory = null;
+}
+
+
+async function loadQuestions(page) {
+    try {
+        const response = await fetch(`/api/questions?page=${page - 1}&size=${questionsPerPage}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            questions.length = 0;
+            questions.push(...result.data.content);
+            totalPages = result.data.totalPages;
+            displayQuestions();
+            updatePagination();
+        } else {
+            handleError("질문을 가져오는데 싪했습니다.", response.statusText);
+        }
+    } catch (error) {
+        handleError("질문을 가져오는 중 오류가 발생했습니다.", error);
+    }
+}
+
+function displayQuestions() {
     const questionList = document.querySelector('.question-list');
     questionList.innerHTML = '';
-    const start = (page - 1) * questionsPerPage;
-    const end = start + questionsPerPage;
-    const pageQuestions = questions.slice(start, end);
 
-    pageQuestions.forEach(question => {
-        const questionCard = document.createElement('div');
-        questionCard.className = 'question-card';
-        questionCard.dataset.id = question.id;
-        questionCard.innerHTML = `
-                    <div class="question-header">
-                        <div class="question-title">${question.title}</div>
-                        <div class="question-meta">
-                            <span class="question-category">${question.category}</span>
-                            <span class="question-date">${question.date}</span>
-                        </div>
-                    </div>
-                    <div class="question-content">${question.content}</div>
-                `;
-        questionCard.addEventListener('click', () => showQuestionDetail(question.id));
+    questions.forEach(question => {
+        const questionCard = createQuestionCard(question);
         questionList.appendChild(questionCard);
     });
+}
 
-    updatePagination();
+function createQuestionCard(question) {
+    const questionCard = document.createElement('div');
+    questionCard.className = 'question-card';
+    questionCard.dataset.id = question.id;
+
+    const formattedDate = question.createdAt ? new Date(Date.parse(question.createdAt)).toLocaleString() : 'No Date Available';
+
+    questionCard.innerHTML = `
+        <div class="question-header">
+            <div class="question-title">${question.title}</div>
+            <div class="question-meta">
+                <span class="question-category">${question.category}</span>
+                <span class="question-date">${formattedDate}</span>
+            </div>
+        </div>
+        <div class="question-content">${question.content}</div>
+    `;
+
+    questionCard.addEventListener('click', () => showQuestionDetail(question.id));
+    return questionCard;
 }
 
 function updatePagination() {
     const pagination = document.querySelector('.pagination');
     pagination.innerHTML = '';
-    const totalPages = Math.ceil(questions.length / questionsPerPage);
 
-    const prevButton = document.createElement('button');
-    prevButton.textContent = 'Previous';
-    prevButton.disabled = currentPage === 1;
-    prevButton.addEventListener('click', () => {
+    addPaginationButton(pagination, 'Previous', currentPage === 1, () => {
         if (currentPage > 1) {
             currentPage--;
-            displayQuestions(currentPage);
+            loadQuestions(currentPage);
         }
     });
-    pagination.appendChild(prevButton);
 
     for (let i = 1; i <= totalPages; i++) {
-        const pageButton = document.createElement('button');
-        pageButton.textContent = i;
-        pageButton.classList.toggle('active', i === currentPage);
-        pageButton.addEventListener('click', () => {
+        addPaginationButton(pagination, i, i === currentPage, () => {
             currentPage = i;
-            displayQuestions(currentPage);
+            loadQuestions(currentPage);
         });
-        pagination.appendChild(pageButton);
     }
 
-    const nextButton = document.createElement('button');
-    nextButton.textContent = 'Next';
-    nextButton.disabled = currentPage === totalPages;
-    nextButton.addEventListener('click', () => {
+    addPaginationButton(pagination, 'Next', currentPage === totalPages, () => {
         if (currentPage < totalPages) {
             currentPage++;
-            displayQuestions(currentPage);
+            loadQuestions(currentPage);
         }
     });
-    pagination.appendChild(nextButton);
+}
+
+function addPaginationButton(container, text, isDisabled, onClick) {
+    const button = document.createElement('button');
+    button.textContent = text;
+    button.disabled = isDisabled;
+    if (!isDisabled) button.addEventListener('click', onClick);
+    container.appendChild(button);
 }
 
 function showQuestionDetail(questionId) {
     currentQuestionId = questionId;
-    const question = questions.find(r => r.id === questionId);
+    const question = questions.find(q => q.id === questionId);
     const detailPage = document.getElementById('questionDetailPage');
-    detailPage.style.display = 'block';
+    openModal(detailPage, question);
     document.getElementById('detailTitle').textContent = question.title;
     document.getElementById('detailCategory').textContent = `Category: ${question.category}`;
-    document.getElementById('detailDate').textContent = `Date: ${question.date}`;
+    document.getElementById('detailDate').textContent = `Date: ${question.createdAt ? new Date(question.createdAt).toLocaleString() : 'No Date Available'}`;
     document.getElementById('detailContent').textContent = question.content;
     displayComments(questionId);
 }
 
-function closeDetailModal() {
-    const detailPage = document.getElementById('questionDetailPage');
-    detailPage.style.display = 'none';
-}
-
-function displayComments(questionId) {
+async function displayComments(questionId) {
     const commentList = document.getElementById('commentList');
     commentList.innerHTML = '';
-    if (comments[questionId]) {
-        const sortedComments = comments[questionId].sort((a, b) => b.timestamp - a.timestamp);
-        sortedComments.forEach(comment => {
-            const commentElement = createCommentElement(comment, questionId);
-            commentList.appendChild(commentElement);
-        });
+
+    try {
+        const response = await fetch(`/api/questions/${questionId}/answers`);
+        if (!response.ok) throw new Error('답변을 가져오는데 실패했습니다.');
+
+        const apiResponse = await response.json();
+        comments[questionId] = await Promise.all(apiResponse.data.map(async answer => {
+            const commentResponse = await fetch(`/api/questions/${questionId}/answers/${answer.id}/comments`);
+            const commentData = await commentResponse.json();
+
+            return {
+                id: answer.id,
+                content: answer.content,
+                timestamp: new Date(answer.createdAt).getTime(),
+                replies: commentData.data.map(reply => ({
+                    id: reply.id,
+                    content: reply.content,
+                    createdAt: reply.createdAt
+                })) || []
+            };
+        }));
+
+        comments[questionId]
+            .sort((a, b) => b.timestamp - a.timestamp)
+            .forEach(comment => {
+                const commentElement = createCommentElement(comment, questionId);
+                commentList.appendChild(commentElement);
+            });
+
+        updateCommentCount(questionId);
+    } catch (error) {
+        console.error('답변을 가져오는 중 오류 발생:', error);
     }
-    updateCommentCount(questionId);
 }
 
 function createCommentElement(comment, questionId) {
     const commentElement = document.createElement('div');
     commentElement.className = 'comment';
     commentElement.innerHTML = `
-                <p>${comment.content}</p>
-                <div class="comment-actions">
-                    <button class="edit-btn" onclick="editComment(${questionId}, ${comment.id})">Edit</button>
-                    <button class="delete-btn" onclick="deleteComment(${questionId}, ${comment.id})">Delete</button>
-                    <button class="reply-button" onclick="showReplyForm(this, ${questionId}, ${comment.id})">Reply</button>
-                </div>
-                <div class="reply-list"></div>
-                <div class="reply-form" style="display: none;">
-                    <textarea rows="3" placeholder="대댓글을 작성해주세요"></textarea>
-                    <button class="reply-button" onclick="addReply(this, ${questionId}, ${comment.id})">Post Reply</button>
-                </div>
-            `;
-    if (comment.replies) {
+        <p>${comment.content}</p>
+        <div class="comment-actions">
+            <button class="edit-btn" onclick="editComment(${questionId}, ${comment.id})">Edit</button>
+            <button class="delete-btn" onclick="deleteComment(${questionId}, ${comment.id})">Delete</button>
+            <button class="reply-button" onclick="showReplyForm(this, ${questionId}, ${comment.id})">Reply</button>
+        </div>
+        <div class="reply-list"></div>
+        <div class="reply-form" style="display: none;">
+            <textarea rows="3" placeholder="대댓글을 작성해주세요"></textarea>
+            <button class="reply-button" onclick="addReply(this, ${questionId}, ${comment.id})">Post Reply</button>
+        </div>
+    `;
+    if (comment.replies && comment.replies.length > 0) {
         const replyList = commentElement.querySelector('.reply-list');
         comment.replies.forEach(reply => {
             const replyElement = document.createElement('div');
             replyElement.className = 'reply';
             replyElement.innerHTML = `
-                        <p>${reply.content}</p>
-                        <div class="reply-actions">
-                            <button class="edit-btn" onclick="editReply(${questionId}, ${comment.id}, ${reply.id})">Edit</button>
-                            <button class="delete-btn" onclick="deleteReply(${questionId}, ${comment.id}, ${reply.id})">Delete</button>
-                        </div>
-                    `;
+                <p>${reply.content}</p>
+                <div class="reply-actions">
+                    <button class="edit-btn" onclick="editReply(${questionId}, ${comment.id}, ${reply.id})">Edit</button>
+                    <button class="delete-btn" onclick="deleteReply(${questionId}, ${comment.id}, ${reply.id})">Delete</button>
+                </div>
+            `;
             replyList.appendChild(replyElement);
         });
     }
     return commentElement;
-}
-
-function addComment() {
-    const commentContent = document.getElementById('newComment').value;
-    if (commentContent.trim() === '') return;
-    if (!comments[currentQuestionId]) comments[currentQuestionId] = [];
-    const newComment = {
-        id: Date.now(),
-        content: commentContent,
-        replies: [],
-        timestamp: Date.now()
-    };
-    comments[currentQuestionId].push(newComment);
-    document.getElementById('newComment').value = '';
-    displayComments(currentQuestionId);
 }
 
 function showReplyForm(button, questionId, commentId) {
@@ -311,51 +342,177 @@ function showReplyForm(button, questionId, commentId) {
     replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
 }
 
-function addReply(button, questionId, commentId) {
+async function addComment() {
+    const commentContent = document.getElementById('newComment').value;
+    if (commentContent.trim() === '') return;
+
+    try {
+        const response = await fetch(`/api/questions/${currentQuestionId}/answers`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            },
+            body: JSON.stringify({ content: commentContent })
+        });
+
+        if (!response.ok) throw new Error('답변 작성에 실패했습니다.');
+
+        const result = await response.json();
+        const newComment = {
+            id: result.data.id,
+            content: result.data.content,
+            replies: [],
+            timestamp: new Date(result.data.createdAt).getTime()
+        };
+
+        if (!comments[currentQuestionId]) comments[currentQuestionId] = [];
+        comments[currentQuestionId].push(newComment);
+
+        document.getElementById('newComment').value = '';
+        displayComments(currentQuestionId);
+    } catch (error) {
+        handleError('답변 추가 중 오류 발생', error);
+    }
+}
+
+async function addReply(button, questionId, commentId) {
     const replyContent = button.previousElementSibling.value;
     if (replyContent.trim() === '') return;
-    const comment = comments[questionId].find(c => c.id === commentId);
-    if (!comment.replies) comment.replies = [];
-    const newReply = {
-        id: Date.now(),
-        content: replyContent,
-        timestamp: Date.now()
-    };
-    comment.replies.push(newReply);
-    displayComments(questionId);
+
+    try {
+        const response = await fetch(`/api/questions/${questionId}/answers/${commentId}/comments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            },
+            body: JSON.stringify({ content: replyContent })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            const newReply = {
+                id: data.data.commentId,
+                content: data.data.content
+            };
+
+            const comment = comments[questionId].find(c => c.id === commentId);
+            if (!comment.replies) comment.replies = [];
+            comment.replies.push(newReply);
+
+            displayComments(questionId);
+            button.previousElementSibling.value = '';
+        } else {
+            handleError('댓글 생성을 실패했습니다.', await response.json());
+        }
+    } catch (error) {
+        handleError('댓글 추가 중 오류 발생', error);
+    }
 }
 
 function editComment(questionId, commentId) {
     const comment = comments[questionId].find(c => c.id === commentId);
-    const newContent = prompt("Edit your comment:", comment.content);
+    const newContent = prompt("답변을 수정해주세요:", comment.content);
     if (newContent !== null && newContent.trim() !== '') {
-        comment.content = newContent;
-        displayComments(questionId);
+        fetch(`/api/questions/${questionId}/answers/${commentId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            },
+            body: JSON.stringify({ content: newContent })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.statuscode === "200") {
+                    comment.content = newContent;
+                    displayComments(questionId);
+                } else {
+                    handleError("답변 업데이트에 실패했습니다.", data);
+                }
+            })
+            .catch(error => handleError('답변 업데이트에 실패했습니다.', error));
     }
 }
 
 function deleteComment(questionId, commentId) {
-    if (confirm("Are you sure you want to delete this comment?")) {
-        comments[questionId] = comments[questionId].filter(c => c.id !== commentId);
-        displayComments(questionId);
+    if (confirm("답변을 정말로 삭제하시겠습니까?")) {
+        fetch(`/api/questions/${questionId}/answers/${commentId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    comments[questionId] = comments[questionId].filter(c => c.id !== commentId);
+                    displayComments(questionId);
+                    showAlert("답변 삭제 성공", "답변이 삭제되었습니다.", "success");
+                } else {
+                    return response.json().then(data => {
+                        handleError("답변 삭제에 실패했습니다.", data);
+                    });
+                }
+            })
+            .catch(error => handleError('답변 삭제 중 오류 발생', error));
     }
 }
 
-function editReply(questionId, commentId, replyId) {
-    const comment = comments[questionId].find(c => c.id === commentId);
-    const reply = comment.replies.find(r => r.id === replyId);
+function editReply(questionId, answerId, replyId) {
+    const answer = comments[questionId].find(c => c.id === answerId);
+    const reply = answer.replies.find(r => r.id === replyId);
     const newContent = prompt("Edit your reply:", reply.content);
     if (newContent !== null && newContent.trim() !== '') {
-        reply.content = newContent;
-        displayComments(questionId);
+        fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${replyId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            },
+            body: JSON.stringify({ content: newContent })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.statuscode === "200") {
+                reply.content = newContent;
+                displayComments(questionId);
+            } else {
+                handleError("댓글 업데이트에 실패했습니다.", data);
+            }
+        })
+        .catch(error => handleError('댓글 업데이트 중 오류 발생', error));
     }
 }
 
-function deleteReply(questionId, commentId, replyId) {
-    if (confirm("Are you sure you want to delete this reply?")) {
-        const comment = comments[questionId].find(c => c.id === commentId);
-        comment.replies = comment.replies.filter(r => r.id !== replyId);
-        displayComments(questionId);
+function deleteReply(questionId, answerId, replyId) {
+    if (confirm("댓글을 정말로 삭제하시겠습니까?")){
+        if (!replyId) {
+            console.error("댓글 ID가 정의되지 않았습니다.");
+            showAlert('오류', '댓글ID가 누락되었습니다.', 'error');
+            return;
+        }
+        fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${replyId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                const answer = comments[questionId].find(a => a.id === answerId);
+                if (answer) {
+                    answer.replies = answer.replies.filter(r => r.id !== replyId);
+                }
+                displayComments(questionId);
+                showAlert("댓글 삭제 성공", "댓글이 삭제되었습니다.", "success");
+            } else {
+                return response.json().then(data => {
+                    handleError("댓글 삭제에 실패했습니다.", data);
+                });
+            }
+        })
+        .catch(error => handleError('댓글 삭제 중 오류 발생', error));
     }
 }
 
@@ -379,40 +536,102 @@ function showMainPage() {
     document.getElementById('questionDetailPage').style.display = 'none';
 }
 
-function editQuestion() {
-    const question = questions.find(r => r.id === currentQuestionId);
-    document.getElementById('questionTitle').value = question.title;
-    document.getElementById('selectedCategory').value = question.category;
-    document.getElementById('questionContent').value = question.content;
+async function editQuestion() {
+    const questionId = currentQuestionId;
+    const question = questions.find(q => q.id === questionId);
 
-    document.querySelectorAll('.category-option').forEach(option => {
-        option.classList.toggle('active', option.dataset.category === question.category);
-    });
+    if (question) {
+        openModal(document.getElementById("questionModal"), question);
+    }
 
-    const questionModal = document.getElementById("questionModal");
-    questionModal.style.display = "block";
-
-    document.getElementById('questionForm').onsubmit = function(e) {
+    document.getElementById('questionForm').onsubmit = async function(e) {
         e.preventDefault();
-        question.title = document.getElementById('questionTitle').value;
-        question.category = document.getElementById('selectedCategory').value;
-        question.content = document.getElementById('questionContent').value;
-        question.date = new Date().toISOString().split('T')[0];
-        showQuestionDetail(currentQuestionId);
-        questionModal.style.display = "none";
+        const updatedQuestion = {
+            title: document.getElementById('questionTitle').value,
+            category: document.getElementById('selectedCategory').value,
+            content: document.getElementById('questionContent').value
+        };
+
+        try {
+            const response = await fetch(`/api/questions/${questionId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                },
+                body: JSON.stringify(updatedQuestion)
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                const updatedQuestionData = result.data;
+                const index = questions.findIndex(q => q.id === questionId);
+                if (index > -1) {
+                    questions[index] = updatedQuestionData;
+                }
+                showQuestionDetail(questionId);
+                closeModals();
+                showAlert('질문 수정 성공', '질문이 성공적으로 업데이트되었습니다.', 'success');
+                loadQuestions(currentPage);
+            } else {
+                const errorData = await response.json();
+                showAlert('오류', errorData.error || '질문 업데이트에 실패했습니다.', 'error');
+            }
+        } catch (error) {
+            handleError('질문 수정 중 오류 발생', error);
+        }
     };
 }
 
-function deleteQuestion() {
-    if (confirm("Are you sure you want to delete this question?")) {
-        const index = questions.findIndex(r => r.id === currentQuestionId);
-        if (index > -1) {
-            questions.splice(index, 1);
-            delete comments[currentQuestionId];
-            showMainPage();
-            displayQuestions(currentPage);
+async function deleteQuestion() {
+    const questionId = currentQuestionId;
+
+    if (confirm("질문을 정말로 삭제하시겠습니까?")) {
+        if (!questionId) {
+            console.error("질문 ID가 정의되지 않았습니다.");
+            showAlert('오류', '질문 ID가 누락되었습니다.', 'error');
+            return;
         }
+        fetch(`/api/questions/${questionId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                const index = questions.findIndex(q => q.id === questionId);
+                if (index > -1) {
+                    questions.splice(index, 1);
+                }
+                showMainPage();
+                loadQuestions(currentPage);
+                showAlert('질문 삭제 성공', '질문이 삭제되었습니다.', 'success');
+            } else {
+                return response.json().then(data => {
+                    handleError("질문 삭제에 실패했습니다.", data);
+                });
+            }
+        })
+        .catch(error => handleError('질문 삭제 중 오류 발생', error));
     }
+}
+
+
+function showAlert(title, text, icon, callback = null) {
+    Swal.fire({
+        title,
+        text,
+        icon,
+        confirmButtonText: 'OK'
+    }).then(() => {
+        if (callback) callback();
+    });
+}
+
+function handleError(message, error) {
+    console.error(message, error);
+    showAlert('Error!', message, 'error');
 }
 
 const categoryButtons = document.querySelectorAll('.category-btn');
@@ -430,18 +649,9 @@ categoryButtons.forEach(button => {
             });
         }
         currentPage = 1;
-        displayQuestions(currentPage);
+        loadQuestions(currentPage);
     });
 });
 
-const categoryOptions = document.querySelectorAll('.category-option');
-categoryOptions.forEach(option => {
-    option.addEventListener('click', function() {
-        categoryOptions.forEach(opt => opt.classList.remove('active'));
-        this.classList.add('active');
-        document.getElementById('selectedCategory').value = this.dataset.category;
-    });
-});
-
-displayQuestions(currentPage);
+loadQuestions(currentPage);
 document.querySelector('.back-btn').style.display = 'none';

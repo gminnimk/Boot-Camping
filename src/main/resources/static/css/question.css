@@ -4,7 +4,7 @@
     --color: #000;
     --hover-bg: #e0e0e0;
     --edit-bg: #FFD700;
-    --comment-bg: #87CEEB;
+    --comment-bg: #7FC8F8;
     --delete-bg: #FF6347;
     --modal-bg: #ffffff;
     --modal-shadow: rgba(0, 0, 0, 0.25);
@@ -95,7 +95,7 @@ h1, h2 {
 }
 
 .start-question-btn:hover, .back-btn:hover, .submit-question-btn:hover, .reply-button:hover, .edit-btn:hover, .delete-btn:hover {
-    background-color: #5CACEE;
+    background-color: #7FC8F8;
 }
 
 .edit-btn {
@@ -125,7 +125,7 @@ h1, h2 {
 }
 
 .category-btn {
-    background-color: var(--body-bg);
+    background-color: white;
     border: 1px solid #ddd;
     color: var(--color);
     padding: 8px 15px;
@@ -266,7 +266,7 @@ h1, h2 {
 }
 
 .comment-form button:hover {
-    background-color: #5CACEE;
+    background-color: #7FC8F8;
 }
 
 .reply-form {
@@ -322,7 +322,7 @@ label {
 }
 
 .category-option:hover, .category-option.active {
-    background-color: #87CEEB;
+    background-color: #7FC8F8;
     color: white;
 }
 
