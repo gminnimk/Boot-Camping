@@ -2,9 +2,12 @@ package com.sparta.studytrek.domain.recruitment.entity;
 
 import com.sparta.studytrek.common.Timestamped;
 import com.sparta.studytrek.domain.auth.entity.User;
+import com.sparta.studytrek.domain.rank.entity.Rank;
 import com.sparta.studytrek.domain.recruitment.dto.RecruitmentRequestDto;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -58,6 +61,9 @@ public class Recruitment extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;  // 유저 정보
+
+    @OneToMany(mappedBy = "recruitment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rank> rank = new ArrayList<>();
 
     public Recruitment(RecruitmentRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
