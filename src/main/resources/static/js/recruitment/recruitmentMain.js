@@ -63,6 +63,7 @@ function createCourseCard(course) {
     `;
 }
 
+
 function goToCourseDetail(courseId) {
     const url = new URL(`/camp/${courseId}`, window.location.origin);
     window.location.href = url.href;
@@ -237,30 +238,14 @@ function updateResultsForCurrentPage() {
     const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, allResults.length);
 
     for (let i = startIndex; i < endIndex; i++) {
-        const rank = allResults[i];
-        const recruitment = rank.recruitment;
-        const track = recruitment.track;
-        const environment = recruitment.place;
-        const cost = recruitment.cost;
-        const name = recruitment.name;
+        const course = allResults[i].recruitment;
+        course.id = allResults[i].id; // course 객체에 id 추가
+        course.likes = allResults[i].likes; // course 객체에 likes 추가
 
+        const courseCardHTML = createCourseCard(course);
         const resultItem = document.createElement('div');
         resultItem.classList.add('ranking-item');
-        resultItem.setAttribute('data-track', track);
-        resultItem.setAttribute('data-environment', environment);
-        resultItem.setAttribute('data-cost', cost);
-
-        resultItem.innerHTML = `
-      <button class="like-button">❤</button>
-      <h3>${name}</h3>
-      <div class="rating">Ranking: ${rank.ranking}</div>
-      <div class="review-preview">
-       "${recruitment.process}"
-      </div>
-      <div class="review-meta">
-        작성자: John D. | 날짜: 2023-05-15
-      </div>
-    `;
+        resultItem.innerHTML = courseCardHTML;
 
         resultsContainer.appendChild(resultItem);
     }
@@ -274,11 +259,26 @@ function updateResultsForCurrentPage() {
 
 // 결과를 업데이트하여 화면에 표시합니다.
 function updateResults(data) {
-    allResults = data; // 전체 결과를 저장합니다.
-    totalPages = Math.ceil(allResults.length / ITEMS_PER_PAGE); // 총 페이지 수 계산
-    currentPage = 1; // 페이지 초기화
-    updateResultsForCurrentPage(); // 현재 페이지의 결과만 업데이트
+    const container = document.getElementById('courses-container');
+    container.innerHTML = '';
+
+    if (data.length === 0) {
+        container.innerHTML = '<p>결과가 없습니다.</p>';
+        return;
+    }
+
+    data.forEach(courseData => {
+        const course = courseData.recruitment;
+        course.id = courseData.id;
+        course.likes = courseData.likes;
+        const courseCardHTML = createCourseCard(course);
+        container.innerHTML += courseCardHTML;
+    });
+
+    addHeartButtonListeners();
+    renderPage(); // 페이지네이션 업데이트
 }
+
 
 // DOMContentLoaded 이벤트가 발생하면 필터링된 결과를 업데이트합니다.
 document.addEventListener('DOMContentLoaded', () => {
