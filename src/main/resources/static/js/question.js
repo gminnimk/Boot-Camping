@@ -168,8 +168,7 @@ async function loadQuestions(page) {
         const response = await fetch(`/api/questions?page=${page - 1}&size=${questionsPerPage}`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                'Content-Type': 'application/json'
             }
         });
 
