@@ -456,7 +456,7 @@ function deleteComment(questionId, commentId) {
                     });
                 }
             })
-            .catch(error => handleError('다변 삭제 중 오류 발생', error));
+            .catch(error => handleError('답변 삭제 중 오류 발생', error));
     }
 }
 
@@ -487,32 +487,34 @@ function editReply(questionId, answerId, replyId) {
 }
 
 function deleteReply(questionId, answerId, replyId) {
-    if (!replyId) {
-        console.error("댓글 ID가 정의되지 않았습니다.");
-        showAlert('오류', '댓글ID가 누락되었습니다.', 'error');
-        return;
-    }
-    fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${replyId}`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+    if (confirm("댓글을 정말로 삭제하시겠습니까?")){
+        if (!replyId) {
+            console.error("댓글 ID가 정의되지 않았습니다.");
+            showAlert('오류', '댓글ID가 누락되었습니다.', 'error');
+            return;
         }
-    })
-    .then(response => {
-        if (response.ok) {
-            const answer = comments[questionId].find(a => a.id === answerId);
-            if (answer) {
-                answer.replies = answer.replies.filter(r => r.id !== replyId);
+        fetch(`/api/questions/${questionId}/answers/${answerId}/comments/${replyId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
             }
-            displayComments(questionId);
-            showAlert("답글 삭제 성공", "답글이 삭제되었습니다.", "success");
-        } else {
-            return response.json().then(data => {
-                handleError("댓글 삭제에 실패했습니다.", data);
-            });
-        }
-    })
-    .catch(error => handleError('댓글 삭제 중 오류 발생', error));
+        })
+        .then(response => {
+            if (response.ok) {
+                const answer = comments[questionId].find(a => a.id === answerId);
+                if (answer) {
+                    answer.replies = answer.replies.filter(r => r.id !== replyId);
+                }
+                displayComments(questionId);
+                showAlert("답글 삭제 성공", "답글이 삭제되었습니다.", "success");
+            } else {
+                return response.json().then(data => {
+                    handleError("댓글 삭제에 실패했습니다.", data);
+                });
+            }
+        })
+        .catch(error => handleError('댓글 삭제 중 오류 발생', error));
+    }
 }
 
 function updateCommentCount(questionId) {
@@ -585,26 +587,19 @@ async function editQuestion() {
 async function deleteQuestion() {
     const questionId = currentQuestionId;
 
-    const result = await Swal.fire({
-        title: '정말로 삭제하시겠습니까?',
-        text: "삭제하면 되돌릴 수 없습니다.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: '확인',
-        cancelButtonText: '취소'
-    });
-
-    if (result.isConfirmed) {
-        try {
-            const response = await fetch(`/api/questions/${questionId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-                }
-            });
-
+    if (confirm("질문을 정말로 삭제하시겠습니까?")) {
+        if (!questionId) {
+            console.error("질문 ID가 정의되지 않았습니다.");
+            showAlert('오류', '질문 ID가 누락되었습니다.', 'error');
+            return;
+        }
+        fetch(`/api/questions/${questionId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+        .then(response => {
             if (response.ok) {
                 const index = questions.findIndex(q => q.id === questionId);
                 if (index > -1) {
@@ -614,14 +609,15 @@ async function deleteQuestion() {
                 loadQuestions(currentPage);
                 showAlert('삭제 성공', '질문이 삭제되었습니다.', 'success');
             } else {
-                const errorData = await response.json();
-                showAlert('오류', errorData.error || '질문 삭제에 실패했습니다.', 'error');
+                return response.json().then(data => {
+                    handleError("질문 삭제에 실패했습니다.", data);
+                });
             }
-        } catch (error) {
-            handleError('질문 삭제 중 오류 발생', error);
-        }
+        })
+        .catch(error => handleError('질문 삭제 중 오류 발생', error));
     }
 }
+
 
 function showAlert(title, text, icon, callback = null) {
     Swal.fire({
