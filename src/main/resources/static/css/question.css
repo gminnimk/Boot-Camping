@@ -125,7 +125,7 @@ h1, h2 {
 }
 
 .category-btn {
-    background-color: var(--body-bg);
+    background-color: white;
     border: 1px solid #ddd;
     color: var(--color);
     padding: 8px 15px;
