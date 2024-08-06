@@ -69,7 +69,7 @@ public class AnswerCommentService {
      * @param commentId     댓글 ID
      * @param user  요청한 유저의 정보
      */
-    public void deleteAnswer(Long questionId, Long answerId, Long commentId, User user) {
+    public void deleteAnswerComment(Long questionId, Long answerId, Long commentId, User user) {
         Question question = findById(questionId);
         Answer answer = findByAnswerId(answerId);
         AnswerComment answerComment = findByAnswerCommentId(commentId);
