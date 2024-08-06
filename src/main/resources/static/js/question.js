@@ -506,7 +506,7 @@ function deleteReply(questionId, answerId, replyId) {
                     answer.replies = answer.replies.filter(r => r.id !== replyId);
                 }
                 displayComments(questionId);
-                showAlert("답글 삭제 성공", "답글이 삭제되었습니다.", "success");
+                showAlert("댓글 삭제 성공", "댓글이 삭제되었습니다.", "success");
             } else {
                 return response.json().then(data => {
                     handleError("댓글 삭제에 실패했습니다.", data);
