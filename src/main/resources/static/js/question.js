@@ -607,7 +607,7 @@ async function deleteQuestion() {
                 }
                 showMainPage();
                 loadQuestions(currentPage);
-                showAlert('삭제 성공', '질문이 삭제되었습니다.', 'success');
+                showAlert('질문 삭제 성공', '질문이 삭제되었습니다.', 'success');
             } else {
                 return response.json().then(data => {
                     handleError("질문 삭제에 실패했습니다.", data);
