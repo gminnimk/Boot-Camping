@@ -85,16 +85,6 @@ function renderPage() {
     });
 }
 
-// // 페이지 렌더링 함수
-// function renderPage() {
-//     fetchCourses().then(courses => {
-//         updateResultsForCurrentPage(); // 현재 페이지에 맞는 결과만 업데이트
-//         updatePaginationButtons();
-//         renderPageNumbers();
-//     });
-// }
-
-
 // 페이지 변경 함수
 function changePage(direction) {
     currentPage += direction;
@@ -270,9 +260,17 @@ function updateResultsForCurrentPage() {
 
 
 // 결과를 업데이트하여 화면에 표시합니다.
-function updateResults(data) {
+function updateResults(responseData) {
     const container = document.getElementById('courses-container');
     container.innerHTML = '';
+
+    // API 응답에서 실제 데이터 추출
+    const data = responseData.data;
+
+    if (!Array.isArray(data)) {
+        console.warn('응답 데이터가 배열이 아닙니다:', data);
+        return;
+    }
 
     if (data.length === 0) {
         container.innerHTML = '<p>결과가 없습니다.</p>';
@@ -280,15 +278,34 @@ function updateResults(data) {
     }
 
     data.forEach(courseData => {
-        const course = courseData.recruitment;
-        course.id = courseData.id;
-        course.likes = courseData.likes;
-        const courseCardHTML = createCourseCard(course);
-        container.innerHTML += courseCardHTML;
+        // 데이터 구조 확인
+        console.log('courseData:', courseData);
+
+        // courseData가 올바른 형식을 가지고 있는지 확인
+        if (courseData) {
+            const course = {
+                id: courseData.id,
+                title: courseData.title,
+                imageUrl: courseData.imageUrl || 'https://example.com/default-image.jpg', // imageUrl이 없을 경우 기본 이미지
+                trek: courseData.trek,
+                cost: courseData.cost,
+                campName: courseData.campName,
+                recruitStart: courseData.recruitStart,
+                recruitEnd: courseData.recruitEnd,
+                campStart: courseData.campStart,
+                campEnd: courseData.campEnd,
+                likes: courseData.likes || 0
+            };
+
+            const courseCardHTML = createCourseCard(course);
+            container.innerHTML += courseCardHTML;
+        } else {
+            console.warn('유효하지 않은 courseData 객체:', courseData);
+        }
     });
 
     addHeartButtonListeners();
-    renderPageNumbers(); // 페이지네이션 업데이트
+    renderPageNumbers();
 }
 
 

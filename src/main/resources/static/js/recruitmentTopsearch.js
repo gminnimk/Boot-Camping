@@ -1,13 +1,3 @@
-// 검색 폼 제출 시 호출되는 함수
-function performSearch(event) {
-  event.preventDefault();
-  const searchType = document.getElementById('searchType').value;
-  const searchQuery = document.getElementById('searchQuery').value;
-
-  console.log(`검색 유형: ${searchType}, 검색어: ${searchQuery}`);
-  alert(`검색 유형: ${searchType}\n검색어: ${searchQuery}`);
-}
-
 // 필터 버튼 클릭 시 필터 메뉴 토글
 function toggleFilter(element) {
   if (element) {
@@ -39,7 +29,7 @@ function applyFilters() {
       '&'))
   .join('&');
 
-  fetch(`/ranks/filter?${queryString}`, {
+  fetch(`/api/camps/filter?${queryString}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -61,11 +51,11 @@ function getFilterRequest() {
   const activeFilters = document.querySelectorAll('.filter-option.active');
 
   const filterRequest = {
-    track: Array.from(activeFilters)
+    trek: Array.from(activeFilters)
     .filter(el => ['프론트엔드', '백엔드', '풀스택', 'Android', 'iOS', '게임', 'AI', '데이터',
       'UI/UX'].includes(el.textContent.trim()))
     .map(el => el.textContent.trim()), // 트랙 필터 요청을 배열로 설정
-    environment: Array.from(activeFilters)
+    place: Array.from(activeFilters)
     .filter(el => ['온라인', '오프라인', '혼합'].includes(el.textContent.trim()))
     .map(el => el.textContent.trim()), // 환경 필터 요청을 배열로 설정
     cost: Array.from(activeFilters)
