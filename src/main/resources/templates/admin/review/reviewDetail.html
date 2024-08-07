@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홈</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/review/reviewDetail.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/js/scripts.js}" defer></script>
+    <script th:src="@{/js/review/reviewDetail.js}" defer></script>
+</head>
+<body th:classappend="${isDarkMode} ? 'dark' : ''">
+<div th:replace="~{'fragments/topbar' :: topbar}"></div>
+<div class="main-container">
+    <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
+    <div class="content">
+        <div class="container">
+            <div id="viewMode">
+                <!-- 상세 보기용 -->
+                <div class="review-header">
+                    <div>
+                        <h2 class="review-title"></h2>
+                        <p class="review-subtitle" id="subtitleDisplay"></p>
+                    </div>
+                    <div class="reviews heart-icon heart-button"><i class="far fa-heart"></i></div>
+                </div>
+
+                <div class="meta-info">
+                    <div>
+                        <span class="category">Forest</span>
+                        <span class="category">Fullstack</span>
+                    </div>
+                    <span class="date"></span>
+                </div>
+                <div class="rating">★★★★★</div>
+                <div class="detail-content">
+                </div>
+                <div class="author">- 익명</div>
+                <div class="actions">
+                    <a th:href="@{/review}" class="btn">목록으로 가기</a>
+                    <div>
+                        <button class="btn btn-del" onclick="reviewDel()">삭제</button>
+                        <button class="btn btn-edit" onclick="showEditForm()">수정</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 상세 수정용 -->
+            <div id="editMode" class="edit-form" style="display:none;">
+                <h2>리뷰 수정</h2>
+                <form onsubmit="return saveEdit()">
+                    <div class="form-group">
+                        <label for="editTitle">제목</label>
+                        <div class="form-description">제목을 입력하세요.</div>
+                        <input class="form-group-title" type="text" id="editTitle" value="Pine Valley Campground에서의 친절한 직원들" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSubtitle">부트캠프</label>
+                        <div class="form-description">리뷰할 부트캠프를 선택하세요</div>
+                        <select class="form-group-camp" id="editSubtitle" name="editSubtitle" required>
+                            <option value="" disabled>부트캠프 선택</option>
+                            <option value="스파르타" selected>스파르타</option>
+                            <option value="소제목2">소제목2</option>
+                            <option value="소제목3">소제목3</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editCategory">카테고리</label>
+                        <div class="form-description">리뷰와 관련된 카테고리를 선택하세요.</div>
+                        <select class="form-group-category" id="editCategory" required>
+                            <option value="Forest" selected>Forest</option>
+                            <option value="Mountain">Mountain</option>
+                            <option value="Lake">Lake</option>
+                            <option value="Beach">Beach</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDevCategory">트랙</label>
+                        <div class="form-description">리뷰와 관련된 트랙을 선택하세요.</div>
+                        <select class="form-group-track" id="editDevCategory" required>
+                            <option value="Frontend">Frontend</option>
+                            <option value="Backend">Backend</option>
+                            <option value="Fullstack" selected>Fullstack</option>
+                            <option value="DevOps">DevOps</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editRating">평점</label>
+                        <div class="form-description">리뷰의 평점을 선택하세요.</div>
+                        <select class="form-group-star" id="editRating" required>
+                            <option value="5" selected>★★★★★</option>
+                            <option value="4">★★★★☆</option>
+                            <option value="3">★★★☆☆</option>
+                            <option value="2">★★☆☆☆</option>
+                            <option value="1">★☆☆☆☆</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editContent">내용</label>
+                        <div class="form-description">리뷰의 내용을 입력하세요.</div>
+                        <textarea id="editContent" required></textarea>
+                    </div>
+                    <div class="edit-form-buttons">
+                        <button type="button" class="editMode-cancel" onclick="cancelEdit()">취소</button>
+                        <button type="button" class="editMode-submit" onclick="saveEdit()">저장</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 댓글 영역 -->
+            <div class="add-comment">
+                <input type="text" placeholder="댓글을 입력하세요..." id="commentInput">
+                <button onclick="addComment()">댓글 등록</button>
+            </div>
+            <div class="comments-section">
+                <!-- 댓글이 여기에 삽입됩니다 -->
+            </div>
+        </div>
+    </div>
+</div>
+<button class="open-sidebar-button hidden" th:onclick="|javascript:toggleSidebar()|">
+    <img th:src="@{/images/icon-show-sidebar.svg}" alt="사이드바 아이콘 보이기" />
+</button>
+</body>
+</html>
