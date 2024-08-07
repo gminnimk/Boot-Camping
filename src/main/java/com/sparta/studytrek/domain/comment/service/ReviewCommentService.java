@@ -92,19 +92,7 @@ public class ReviewCommentService {
      * @return 리뷰 댓글의 정보
      */
     public CommentResponseDto getReviewComment(Long reviewId, Long commentId) {
-        ReviewComment reviewComment = reviewCommentRepository.findByReviewIdAndId(reviewId, commentId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW_COMMENT));
+        ReviewComment reviewComment = reviewCommentRepository.findByReviewIdAndCommentId(reviewId, commentId);
         return new CommentResponseDto(reviewComment);
     }
-
-//    /**
-//     * 댓글 찾기
-//     *
-//     * @param id 댓글 ID
-//     * @return 해당 댓글의 정보
-//     */
-//    public ReviewComment findByReviewCommentId(Long id) {
-//        return reviewCommentRepository.findById(id)
-//            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW_COMMENT));
-//    }
 }

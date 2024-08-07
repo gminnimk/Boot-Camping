@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
-    private final UserService userService;
 
     /**
      * 질문 작성

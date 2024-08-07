@@ -85,17 +85,6 @@ public class RecruitmentService {
         return new RecruitmentResponseDto(recruitment);
     }
 
-//    /**
-//     * 모집글 찾기
-//     *
-//     * @param id 모집글 ID
-//     * @return 해당 모집글의 정보
-//     */
-//    public Recruitment findByRecruitmentId(Long id) {
-//        return recruitmentRepository.findById(id)
-//            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_RECRUITMENT));
-//    }
-
     /**
      * 모집글을 작성한 유저와 해당 기능을 요청한 유저가 동일한지
      *

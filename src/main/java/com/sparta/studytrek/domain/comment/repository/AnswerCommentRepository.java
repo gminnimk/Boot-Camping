@@ -18,4 +18,8 @@ public interface AnswerCommentRepository extends JpaRepository<AnswerComment, Lo
     default AnswerComment findByAnswerCommentId(Long commentId){
         return findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER_COMMENT));
     }
+
+    default AnswerComment findByAnswerIdAndCommentId(Long answerId, Long commentId){
+        return findByAnswerIdAndId(answerId, commentId).orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER_COMMENT));
+    }
 }

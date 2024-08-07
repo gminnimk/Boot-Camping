@@ -52,6 +52,7 @@ public class RecruitmentLikeService {
     public int recruitUnlike(Long recruitmentId, User user) {
         Recruitment recruitment = recruitmentRepository.findByRecruitmentId(recruitmentId);
 
+        // 비즈니스 로직과 관련된 Exception -> Service Layer 에서 처리
         RecruitmentLike recruitmentLike = recruitmentLikeRepository.findByRecruitmentIdAndUserId(recruitmentId, user.getId())
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_LIKE));
 

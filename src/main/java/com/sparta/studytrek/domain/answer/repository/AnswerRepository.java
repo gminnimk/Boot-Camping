@@ -18,4 +18,8 @@ public interface AnswerRepository extends JpaRepository<Answer, Long>{
     default Answer findByAnswerId(Long answerId){
         return findById(answerId).orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER));
     }
+
+    default Answer findByQuestionIdAndAnswerId(Long questionId, Long answerId){
+        return findByQuestionIdAndId(questionId, answerId).orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER));
+    }
 }

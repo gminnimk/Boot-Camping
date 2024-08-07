@@ -34,8 +34,7 @@ public class StudyCommentService {
     @Transactional
     public StudyCommentResponseDto createComment(Long studyId, StudyCommentRequestDto requestDto,
         User user) {
-        Study study = studyRepository.findById(studyId)
-            .orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
+        Study study = studyRepository.findByStudyId(studyId);
 
         StudyComment studyComment = new StudyComment(study, user, requestDto.getContent());
         StudyComment savedComment = studyCommentRepository.save(studyComment);

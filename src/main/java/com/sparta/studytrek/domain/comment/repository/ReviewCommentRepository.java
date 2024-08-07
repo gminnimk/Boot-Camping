@@ -16,4 +16,8 @@ public interface ReviewCommentRepository extends JpaRepository<ReviewComment, Lo
     default ReviewComment findByReviewCommentId(Long commentId){
         return findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW_COMMENT));
     }
+
+    default ReviewComment findByReviewIdAndCommentId(Long reviewId, Long commentId){
+        return findByReviewIdAndId(reviewId, commentId).orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW_COMMENT));
+    }
 }

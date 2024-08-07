@@ -61,8 +61,7 @@ public class StudyService {
      */
     @Transactional(readOnly = true)
     public StudyResponseDto getStudy(Long id) {
-        Study study = studyRepository.findById(id)
-            .orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
+        Study study = studyRepository.findByStudyId(id);
         return buildStudyResponseDto(study);
     }
 
@@ -76,8 +75,7 @@ public class StudyService {
      */
     @Transactional
     public StudyResponseDto updateStudy(Long id, StudyRequestDto request, User user) {
-        Study study = studyRepository.findById(id)
-            .orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
+        Study study = studyRepository.findByStudyId(id);
 
         if (!study.getUser().getId().equals(user.getId())) {
             throw new CustomException(ErrorCode.STUDY_UPDATE_NOT_AUTHORIZED);
@@ -102,8 +100,7 @@ public class StudyService {
      */
     @Transactional
     public void deleteStudy(Long id, User user) {
-        Study study = studyRepository.findById(id)
-            .orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
+        Study study = studyRepository.findByStudyId(id);
 
         if (!study.getUser().getId().equals(user.getId())) {
             throw new CustomException(ErrorCode.STUDY_DELETE_NOT_AUTHORIZED);

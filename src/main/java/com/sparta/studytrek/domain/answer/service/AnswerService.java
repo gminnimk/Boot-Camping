@@ -90,8 +90,7 @@ public class AnswerService {
      * @return  해당 답변의 응답 데이터
      */
     public AnswerResponseDto getAnswer(Long questionId, Long answerId) {
-        Answer answer = answerRepository.findByQuestionIdAndId(questionId, answerId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER));
+        Answer answer = answerRepository.findByQuestionIdAndAnswerId(questionId, answerId);
         return new AnswerResponseDto(answer);
     }
 }

@@ -104,14 +104,4 @@ public class ReviewReplyService {
         return new ReplyResponseDto(reviewReply);
     }
 
-//    /**
-//     * 대댓글 찾기
-//     *
-//     * @param id 대댓글 ID
-//     * @return 해당 대댓글의 정보
-//     */
-//    public ReviewReply findByReviewReplyId(Long id) {
-//        return replyRepository.findById(id)
-//            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW_REPLY));
-//    }
 }

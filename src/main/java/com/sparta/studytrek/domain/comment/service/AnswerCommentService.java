@@ -95,41 +95,8 @@ public class AnswerCommentService {
      * @return  댓글 단건 조회 목록
      */
     public AnswerCommentResponseDto getAnswerComment(Long answerId, Long commentId) {
-        AnswerComment answerComment = answerCommentRepository.findByAnswerIdAndId(answerId, commentId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER_COMMENT));
+        AnswerComment answerComment = answerCommentRepository.findByAnswerIdAndCommentId(answerId, commentId);
         return new AnswerCommentResponseDto(answerComment);
     }
 
-//    /**
-//     * 질문 찾기
-//     *
-//     * @param questionId    질문 ID
-//     * @return  해당 질문의 정보
-//     */
-//    private Question findById(Long questionId) {
-//        return questionRepository.findById(questionId)
-//            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_QUESTION));
-//    }
-//
-//    /**
-//     * 답변 찾기
-//     *
-//     * @param answerId  답변 ID
-//     * @return  해당 답변의 정보
-//     */
-//    private Answer findByAnswerId(Long answerId) {
-//        return answerRepository.findById(answerId)
-//            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER));
-//    }
-//
-//    /**
-//     * 댓글 찾기
-//     *
-//     * @param commentId 댓글 ID
-//     * @return  해당 댓글의 정보
-//     */
-//    private AnswerComment findByAnswerCommentId(Long commentId) {
-//        return answerCommentRepository.findById(commentId)
-//            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER_COMMENT));
-//    }
 }

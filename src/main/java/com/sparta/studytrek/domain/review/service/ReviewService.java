@@ -116,17 +116,6 @@ public class ReviewService {
         return new ReviewResponseDto(review);
     }
 
-//    /**
-//     * 리뷰 찾기
-//     *
-//     * @param id 리뷰 ID
-//     * @return 해당 리뷰의 정보
-//     */
-//    public Review findByReviewId(Long id) {
-//        return reviewRepository.findById(id)
-//            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW));
-//    }
-
     /**
      * 리뷰를 작성한 유저와 해당 기능을 요청한 유저가 동일한지
      *
