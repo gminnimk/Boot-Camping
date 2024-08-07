@@ -4,6 +4,7 @@ let totalCourses = 0;
 let totalPages = 0;
 const accessToken = localStorage.getItem('accessToken');
 const ITEMS_PER_PAGE = 9;
+let allResults = []; // 추가: 전체 결과를 저장할 변수
 
 // API에서 코스 데이터를 가져오는 함수
 function fetchCourses() {
@@ -13,7 +14,8 @@ function fetchCourses() {
         if (data.statuscode === "200") {
             totalCourses = data.data.totalElements;
             totalPages = data.data.totalPages;
-            return data.data.content;
+            allResults = data.data.content; // 전체 결과 저장
+            return allResults;
         } else {
             console.error('에러:', data.msg);
             return [];
@@ -82,6 +84,16 @@ function renderPage() {
         addHeartButtonListeners();
     });
 }
+
+// // 페이지 렌더링 함수
+// function renderPage() {
+//     fetchCourses().then(courses => {
+//         updateResultsForCurrentPage(); // 현재 페이지에 맞는 결과만 업데이트
+//         updatePaginationButtons();
+//         renderPageNumbers();
+//     });
+// }
+
 
 // 페이지 변경 함수
 function changePage(direction) {
@@ -251,7 +263,7 @@ function updateResultsForCurrentPage() {
     }
 
     addHeartButtonListeners();
-    renderPage(); // 페이지네이션 업데이트
+    renderPageNumbers(); // 페이지네이션 업데이트
 }
 
 
@@ -276,7 +288,7 @@ function updateResults(data) {
     });
 
     addHeartButtonListeners();
-    renderPage(); // 페이지네이션 업데이트
+    renderPageNumbers(); // 페이지네이션 업데이트
 }
 
 
@@ -285,9 +297,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const filteredResults = JSON.parse(localStorage.getItem('filteredResults'));
 
     if (filteredResults) {
-        updateResults(filteredResults); // 필터링된 결과를 화면에 업데이트합니다.
+        allResults = filteredResults; // 전체 결과 업데이트
+        //updateResultsForCurrentPage(); // 현재 페이지에 맞는 결과만 업데이트
+         updateResults(filteredResults); // 필터링된 결과를 화면에 업데이트합니다.
         localStorage.removeItem('filteredResults'); // 필터링된 결과를 로컬 스토리지에서 제거합니다.
     } else {
+        // renderPage(); // 필터링된 결과가 없을 경우 초기 페이지 렌더링
         applyFilters(); // 필터링된 결과가 없을 경우 초기 필터 적용
     }
 });
@@ -297,7 +312,8 @@ const rankingSortSelect = document.querySelector('.ranking-sort select');
 if (rankingSortSelect) {
     rankingSortSelect.addEventListener('change', function () {
         console.log('정렬 방식 변경:', this.value);
-        applyFilters(); // 정렬 변경 시 필터를 재적용합니다.
+        // applyFilters(); // 정렬 변경 시 필터를 재적용합니다.
+        updateResultsForCurrentPage(); // 정렬 변경 시 현재 페이지 결과 업데이트
     });
 }
 
