@@ -8,6 +8,7 @@ import com.sparta.studytrek.domain.comment.dto.CommentResponseDto;
 import com.sparta.studytrek.domain.comment.entity.ReviewComment;
 import com.sparta.studytrek.domain.comment.repository.ReviewCommentRepository;
 import com.sparta.studytrek.domain.review.entity.Review;
+import com.sparta.studytrek.domain.review.repository.ReviewRepository;
 import com.sparta.studytrek.domain.review.service.ReviewService;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class ReviewCommentService {
 
     private final ReviewCommentRepository reviewCommentRepository;
-    private final ReviewService reviewService;
+    private final ReviewRepository reviewRepository;
 
     /**
      * 리뷰의 댓글 작성
@@ -32,7 +33,7 @@ public class ReviewCommentService {
     @Transactional
     public CommentResponseDto createReviewComment(Long reviewId, CommentRequestDto requestDto,
         User user) {
-        Review review = reviewService.findByReviewId(reviewId);
+        Review review = reviewRepository.findByReviewId(reviewId);
 
         ReviewComment reviewComment = new ReviewComment(review, user, requestDto.getContent());
         ReviewComment saveComment = reviewCommentRepository.save(reviewComment);
@@ -51,9 +52,9 @@ public class ReviewCommentService {
     @Transactional
     public CommentResponseDto updateReviewComment(Long reviewId, Long commentId,
         CommentRequestDto requestDto, User user) {
-        reviewService.findByReviewId(reviewId);
+        reviewRepository.findByReviewId(reviewId);
 
-        ReviewComment reviewComment = findByReviewCommentId(commentId);
+        ReviewComment reviewComment = reviewCommentRepository.findByReviewCommentId(commentId);
         reviewComment.updateComment(requestDto.getContent());
         return new CommentResponseDto(reviewComment);
     }
@@ -66,9 +67,9 @@ public class ReviewCommentService {
      * @param user      유저 정보
      */
     public void deleteReviewComment(Long reviewId, Long commentId, User user) {
-        reviewService.findByReviewId(reviewId);
+        reviewRepository.findByReviewId(reviewId);
 
-        ReviewComment reviewComment = findByReviewCommentId(commentId);
+        ReviewComment reviewComment = reviewCommentRepository.findByReviewCommentId(commentId);
         reviewCommentRepository.delete(reviewComment);
     }
 
@@ -96,14 +97,14 @@ public class ReviewCommentService {
         return new CommentResponseDto(reviewComment);
     }
 
-    /**
-     * 댓글 찾기
-     *
-     * @param id 댓글 ID
-     * @return 해당 댓글의 정보
-     */
-    public ReviewComment findByReviewCommentId(Long id) {
-        return reviewCommentRepository.findById(id)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW_COMMENT));
-    }
+//    /**
+//     * 댓글 찾기
+//     *
+//     * @param id 댓글 ID
+//     * @return 해당 댓글의 정보
+//     */
+//    public ReviewComment findByReviewCommentId(Long id) {
+//        return reviewCommentRepository.findById(id)
+//            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW_COMMENT));
+//    }
 }

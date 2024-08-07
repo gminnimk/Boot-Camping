@@ -4,11 +4,13 @@ import com.sparta.studytrek.common.exception.CustomException;
 import com.sparta.studytrek.common.exception.ErrorCode;
 import com.sparta.studytrek.domain.auth.entity.User;
 import com.sparta.studytrek.domain.comment.entity.ReviewComment;
+import com.sparta.studytrek.domain.comment.repository.ReviewCommentRepository;
 import com.sparta.studytrek.domain.comment.service.ReviewCommentService;
 import com.sparta.studytrek.domain.reply.dto.ReplyRequestDto;
 import com.sparta.studytrek.domain.reply.dto.ReplyResponseDto;
 import com.sparta.studytrek.domain.reply.entity.ReviewReply;
 import com.sparta.studytrek.domain.reply.repository.ReviewReplyRepository;
+import com.sparta.studytrek.domain.review.repository.ReviewRepository;
 import com.sparta.studytrek.domain.review.service.ReviewService;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -20,8 +22,8 @@ import org.springframework.stereotype.Service;
 public class ReviewReplyService {
 
     private final ReviewReplyRepository replyRepository;
-    private final ReviewService reviewService;
-    private final ReviewCommentService reviewCommentService;
+    private final ReviewRepository reviewRepository;
+    private final ReviewCommentRepository reviewCommentRepository;
 
     /**
      * 리뷰 댓글의 대댓글 작성
@@ -34,9 +36,9 @@ public class ReviewReplyService {
      */
     public ReplyResponseDto createReviewReply(Long reviewId, Long commentId,
         ReplyRequestDto requestDto, User user) {
-        reviewService.findByReviewId(reviewId);
+        reviewRepository.findByReviewId(reviewId);
 
-        ReviewComment comment = reviewCommentService.findByReviewCommentId(commentId);
+        ReviewComment comment = reviewCommentRepository.findByReviewCommentId(commentId);
         ReviewReply reply = new ReviewReply(comment, user, requestDto);
         ReviewReply saveReply = replyRepository.save(reply);
         return new ReplyResponseDto(saveReply);
@@ -55,10 +57,10 @@ public class ReviewReplyService {
     @Transactional
     public ReplyResponseDto updateReviewReply(Long reviewId, Long commentId, Long replyId,
         ReplyRequestDto requestDto, User user) {
-        reviewService.findByReviewId(reviewId);
-        reviewCommentService.findByReviewCommentId(commentId);
+        reviewRepository.findByReviewId(reviewId);
+        reviewCommentRepository.findByReviewCommentId(commentId);
 
-        ReviewReply reply = findByReviewReplyId(replyId);
+        ReviewReply reply = replyRepository.findByReviewReplyId(replyId);
         reply.updateReply(requestDto.getContent());
         return new ReplyResponseDto(reply);
     }
@@ -72,10 +74,10 @@ public class ReviewReplyService {
      * @param user      유저 정보
      */
     public void deleteReviewReply(Long reviewId, Long commentId, Long replyId, User user) {
-        reviewService.findByReviewId(reviewId);
-        reviewCommentService.findByReviewCommentId(commentId);
+        reviewRepository.findByReviewId(reviewId);
+        reviewCommentRepository.findByReviewCommentId(commentId);
 
-        ReviewReply reply = findByReviewReplyId(replyId);
+        ReviewReply reply = replyRepository.findByReviewReplyId(replyId);
         replyRepository.delete(reply);
     }
 
@@ -98,19 +100,18 @@ public class ReviewReplyService {
      * @return 리뷰 댓글의 대댓글 정보
      */
     public ReplyResponseDto getReviewReply(Long commentId, Long replyId) {
-        ReviewReply reviewReply = replyRepository.findByReviewCommentIdAndId(commentId, replyId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW_REPLY));
+        ReviewReply reviewReply = replyRepository.findByReviewCommentIdAndReplyId(commentId, replyId);
         return new ReplyResponseDto(reviewReply);
     }
 
-    /**
-     * 대댓글 찾기
-     *
-     * @param id 대댓글 ID
-     * @return 해당 대댓글의 정보
-     */
-    public ReviewReply findByReviewReplyId(Long id) {
-        return replyRepository.findById(id)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW_REPLY));
-    }
+//    /**
+//     * 대댓글 찾기
+//     *
+//     * @param id 대댓글 ID
+//     * @return 해당 대댓글의 정보
+//     */
+//    public ReviewReply findByReviewReplyId(Long id) {
+//        return replyRepository.findById(id)
+//            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW_REPLY));
+//    }
 }

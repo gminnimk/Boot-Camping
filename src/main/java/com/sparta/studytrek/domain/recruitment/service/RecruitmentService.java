@@ -44,7 +44,7 @@ public class RecruitmentService {
     @Transactional
     public RecruitmentResponseDto updateRecruitment(Long id, RecruitmentRequestDto requestDto,
         User user) {
-        Recruitment recruitment = findByRecruitmentId(id);
+        Recruitment recruitment = recruitmentRepository.findByRecruitmentId(id);
         reqUserCheck(recruitment.getUser().getId(), user.getId());
 
         recruitment.updateRecruitment(requestDto);
@@ -58,7 +58,7 @@ public class RecruitmentService {
      * @param user 요청한 유저의 정보
      */
     public void deleteRecruitment(Long id, User user) {
-        Recruitment recruitment = findByRecruitmentId(id);
+        Recruitment recruitment = recruitmentRepository.findByRecruitmentId(id);
         reqUserCheck(recruitment.getUser().getId(), user.getId());
         recruitmentRepository.delete(recruitment);
     }
@@ -81,20 +81,20 @@ public class RecruitmentService {
      * @return 해당 모집글의 응답 데이터
      */
     public RecruitmentResponseDto getRecruitment(Long id) {
-        Recruitment recruitment = findByRecruitmentId(id);
+        Recruitment recruitment = recruitmentRepository.findByRecruitmentId(id);
         return new RecruitmentResponseDto(recruitment);
     }
 
-    /**
-     * 모집글 찾기
-     *
-     * @param id 모집글 ID
-     * @return 해당 모집글의 정보
-     */
-    public Recruitment findByRecruitmentId(Long id) {
-        return recruitmentRepository.findById(id)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_RECRUITMENT));
-    }
+//    /**
+//     * 모집글 찾기
+//     *
+//     * @param id 모집글 ID
+//     * @return 해당 모집글의 정보
+//     */
+//    public Recruitment findByRecruitmentId(Long id) {
+//        return recruitmentRepository.findById(id)
+//            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_RECRUITMENT));
+//    }
 
     /**
      * 모집글을 작성한 유저와 해당 기능을 요청한 유저가 동일한지

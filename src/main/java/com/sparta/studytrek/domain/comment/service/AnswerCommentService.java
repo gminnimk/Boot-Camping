@@ -35,8 +35,8 @@ public class AnswerCommentService {
      */
     public AnswerCommentResponseDto createAnswerComment(Long questionId, Long answerId,
         AnswerCommentRequestDto requestDto, User user) {
-        Question question = findById(questionId);
-        Answer answer = findByAnswerId(answerId);
+        Question question = questionRepository.findByQuestionId(questionId);
+        Answer answer = answerRepository.findByAnswerId(answerId);
 
         AnswerComment answerComment = new AnswerComment(answer, user, requestDto);
         AnswerComment saveComment = answerCommentRepository.save(answerComment);
@@ -54,9 +54,9 @@ public class AnswerCommentService {
      * @return  댓글 응답 데이터
      */
     public AnswerCommentResponseDto updateAnswerComment(Long questionId, Long answerId, Long commentId, AnswerCommentRequestDto requestDto, User user) {
-        Question question = findById(questionId);
-        Answer answer = findByAnswerId(answerId);
-        AnswerComment answerComment = findByAnswerCommentId(commentId);
+        Question question = questionRepository.findByQuestionId(questionId);
+        Answer answer = answerRepository.findByAnswerId(answerId);
+        AnswerComment answerComment = answerCommentRepository.findByAnswerCommentId(commentId);
         answerComment.update(requestDto);
         return new AnswerCommentResponseDto(answerComment);
     }
@@ -70,9 +70,9 @@ public class AnswerCommentService {
      * @param user  요청한 유저의 정보
      */
     public void deleteAnswerComment(Long questionId, Long answerId, Long commentId, User user) {
-        Question question = findById(questionId);
-        Answer answer = findByAnswerId(answerId);
-        AnswerComment answerComment = findByAnswerCommentId(commentId);
+        Question question = questionRepository.findByQuestionId(questionId);
+        Answer answer = answerRepository.findByAnswerId(answerId);
+        AnswerComment answerComment = answerCommentRepository.findByAnswerCommentId(commentId);
         answerCommentRepository.delete(answerComment);
     }
 
@@ -100,36 +100,36 @@ public class AnswerCommentService {
         return new AnswerCommentResponseDto(answerComment);
     }
 
-    /**
-     * 질문 찾기
-     *
-     * @param questionId    질문 ID
-     * @return  해당 질문의 정보
-     */
-    private Question findById(Long questionId) {
-        return questionRepository.findById(questionId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_QUESTION));
-    }
-
-    /**
-     * 답변 찾기
-     *
-     * @param answerId  답변 ID
-     * @return  해당 답변의 정보
-     */
-    private Answer findByAnswerId(Long answerId) {
-        return answerRepository.findById(answerId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER));
-    }
-
-    /**
-     * 댓글 찾기
-     *
-     * @param commentId 댓글 ID
-     * @return  해당 댓글의 정보
-     */
-    private AnswerComment findByAnswerCommentId(Long commentId) {
-        return answerCommentRepository.findById(commentId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER_COMMENT));
-    }
+//    /**
+//     * 질문 찾기
+//     *
+//     * @param questionId    질문 ID
+//     * @return  해당 질문의 정보
+//     */
+//    private Question findById(Long questionId) {
+//        return questionRepository.findById(questionId)
+//            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_QUESTION));
+//    }
+//
+//    /**
+//     * 답변 찾기
+//     *
+//     * @param answerId  답변 ID
+//     * @return  해당 답변의 정보
+//     */
+//    private Answer findByAnswerId(Long answerId) {
+//        return answerRepository.findById(answerId)
+//            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER));
+//    }
+//
+//    /**
+//     * 댓글 찾기
+//     *
+//     * @param commentId 댓글 ID
+//     * @return  해당 댓글의 정보
+//     */
+//    private AnswerComment findByAnswerCommentId(Long commentId) {
+//        return answerCommentRepository.findById(commentId)
+//            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER_COMMENT));
+//    }
 }

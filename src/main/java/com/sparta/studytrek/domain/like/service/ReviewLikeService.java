@@ -28,8 +28,7 @@ public class ReviewLikeService {
      */
     @Transactional
     public int reviewLike(Long reviewId, User user) {
-        Review review = reviewRepository.findById(reviewId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW));
+        Review review = reviewRepository.findByReviewId(reviewId);
 
         Optional<ReviewLike> existingLike = reviewLikeRepository.findByReviewIdAndUserId(reviewId, user.getId());
 
@@ -51,8 +50,7 @@ public class ReviewLikeService {
      */
     @Transactional
     public int reviewUnlike(Long reviewId, User user) {
-        Review review = reviewRepository.findById(reviewId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW));
+        Review review = reviewRepository.findByReviewId(reviewId);
 
         ReviewLike reviewLike = reviewLikeRepository.findByReviewIdAndUserId(reviewId, user.getId())
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_LIKE));

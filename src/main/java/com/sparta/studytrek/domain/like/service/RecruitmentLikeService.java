@@ -28,8 +28,7 @@ public class RecruitmentLikeService {
      */
     @Transactional
     public int recruitLike(Long recruitmentId, User user) {
-        Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_RECRUITMENT));
+        Recruitment recruitment = recruitmentRepository.findByRecruitmentId(recruitmentId);
 
         Optional<RecruitmentLike> existingLike = recruitmentLikeRepository.findByRecruitmentIdAndUserId(recruitmentId, user.getId());
 
@@ -51,8 +50,7 @@ public class RecruitmentLikeService {
      */
     @Transactional
     public int recruitUnlike(Long recruitmentId, User user) {
-        Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_RECRUITMENT));
+        Recruitment recruitment = recruitmentRepository.findByRecruitmentId(recruitmentId);
 
         RecruitmentLike recruitmentLike = recruitmentLikeRepository.findByRecruitmentIdAndUserId(recruitmentId, user.getId())
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_LIKE));

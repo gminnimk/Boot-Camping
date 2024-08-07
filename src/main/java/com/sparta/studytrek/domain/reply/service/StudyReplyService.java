@@ -37,11 +37,9 @@ public class StudyReplyService {
     @Transactional
     public StudyReplyResponseDto createReply(Long studyId, Long commentId,
         StudyReplyRequestDto requestDto, User user) {
-        Study study = studyRepository.findById(studyId)
-            .orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
+        Study study = studyRepository.findByStudyId(studyId);
 
-        StudyComment studyComment = studyCommentRepository.findById(commentId)
-            .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+        StudyComment studyComment = studyCommentRepository.findByCommentId(commentId);
 
         StudyReply studyReply = new StudyReply(study, studyComment, user, requestDto.getContent());
         StudyReply savedReply = studyReplyRepository.save(studyReply);
@@ -73,8 +71,7 @@ public class StudyReplyService {
      */
     @Transactional(readOnly = true)
     public StudyReplyResponseDto getReply(Long commentId, Long replyId) {
-        StudyReply studyReply = studyReplyRepository.findByIdAndStudyCommentId(replyId, commentId)
-            .orElseThrow(() -> new CustomException(ErrorCode.REPLY_NOT_FOUND));
+        StudyReply studyReply = studyReplyRepository.findByReplyIdAndStudyCommentId(replyId, commentId);
         return buildStudyReplyResponseDto(studyReply);
     }
 
@@ -90,8 +87,7 @@ public class StudyReplyService {
     @Transactional
     public StudyReplyResponseDto updateReply(Long commentId, Long replyId,
         StudyReplyRequestDto requestDto, User user) {
-        StudyReply studyReply = studyReplyRepository.findByIdAndStudyCommentId(replyId, commentId)
-            .orElseThrow(() -> new CustomException(ErrorCode.REPLY_NOT_FOUND));
+        StudyReply studyReply = studyReplyRepository.findByReplyIdAndStudyCommentId(replyId, commentId);
 
         if (!studyReply.getUser().getId().equals(user.getId())) {
             throw new CustomException(ErrorCode.REPLY_UPDATE_NOT_AUTHORIZED);
@@ -110,8 +106,7 @@ public class StudyReplyService {
      */
     @Transactional
     public void deleteReply(Long commentId, Long replyId, User user) {
-        StudyReply studyReply = studyReplyRepository.findByIdAndStudyCommentId(replyId, commentId)
-            .orElseThrow(() -> new CustomException(ErrorCode.REPLY_NOT_FOUND));
+        StudyReply studyReply = studyReplyRepository.findByReplyIdAndStudyCommentId(replyId, commentId);
 
         if (!studyReply.getUser().getId().equals(user.getId())) {
             throw new CustomException(ErrorCode.REPLY_DELETE_NOT_AUTHORIZED);
