@@ -94,7 +94,7 @@ public class AnswerCommentController {
         @PathVariable Long answerId, @PathVariable Long commentId,
         @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
-        answerCommentService.deleteAnswer(questionId, answerId, commentId, userDetails.getUser());
+        answerCommentService.deleteAnswerComment(questionId, answerId, commentId, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
             .msg(ResponseText.COMMENT_DELETE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
