@@ -25,10 +25,18 @@ public class UserRoleAop {
         "execution(* com.sparta.studytrek.domain.recruitment.controller.RecruitmentController.deleteRecruitment(..))")
     public void recruitmentRoleCheck() {}
 
+    @Pointcut("execution(* com.sparta.studytrek.domain.admin.controller.AdminController.adminDelete(..)) || " +
+        "execution(* com.sparta.studytrek.domain.admin.controller.AdminController.approveProfile(..)) || " +
+        "execution(* com.sparta.studytrek.domain.admin.controller.AdminController.rejectProfile(..)) || " +
+        "execution(* com.sparta.studytrek.domain.admin.controller.AdminController.getAllProfiles(..)) || " +
+        "execution(* com.sparta.studytrek.domain.admin.controller.AdminController.getProfileByStatus(..)) || " +
+        "execution(* com.sparta.studytrek.domain.admin.controller.AdminController.getProfileById(..)) || " +
+        "execution(* com.sparta.studytrek.domain.admin.controller.AdminController.createCamp(..))")
+    public void adminRoleCheck() {}
 
 
     @Before("recruitmentRoleCheck()")
-    public void restrictedUserCheck() {
+    public void recruitmentUserCheck() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String token = jwtUtil.getJwtFromHeader(request);
         String userRole = jwtUtil.getUserRoleFromToken(token);
@@ -37,4 +45,16 @@ public class UserRoleAop {
             throw new CustomException(ErrorCode.NOT_AUTHENTICATED_USER);
         }
     }
+
+    @Before("adminRoleCheck()")
+    public void adminUserCheck() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String token = jwtUtil.getJwtFromHeader(request);
+        String userRole = jwtUtil.getUserRoleFromToken(token);
+
+        if (!UserRoleEnum.ADMIN.name().equals(userRole)) {
+            throw new CustomException(ErrorCode.NOT_AUTHENTICATED_ADMIN);
+        }
+    }
+
 }

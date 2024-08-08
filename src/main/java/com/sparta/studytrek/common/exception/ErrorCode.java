@@ -35,7 +35,10 @@ public enum ErrorCode {
     USER_NOT_AUTHENTICATED(HttpStatus.UNAUTHORIZED, "인증되지 않은 사용자입니다. 로그인해주세요."),
     STATUS_NOT_FOUND(HttpStatus.BAD_REQUEST, "상태를 찾을 수 없습니다."),
     NOT_AUTHENTICATED_LOGIN(HttpStatus.FORBIDDEN, "권한에 맞지 않는 로그인입니다."),
+
+    // AOP
     NOT_AUTHENTICATED_USER(HttpStatus.FORBIDDEN, "부트캠프 관리자만 접근 가능합니다."),
+    NOT_AUTHENTICATED_ADMIN(HttpStatus.FORBIDDEN, "접근 불가능한 권한입니다."),
 
     // Review
     NOTFOUND_REVIEW(HttpStatus.BAD_REQUEST, "해당 리뷰는 존재하지 않습니다."),
