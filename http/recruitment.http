@@ -77,9 +77,6 @@ Content-Type: application/json
 GET {{apiUrl}}/calendar/participate
 Content-Type: application/json
 
-
-### 상세 필터 기능
-
 ### 트랙만 조회
 GET {{apiUrl}}/camps/filter?trek=프론트엔드
 
@@ -96,4 +93,4 @@ GET {{apiUrl}}/camps/filter?cost=사비
 GET {{apiUrl}}/camps/filter?trek=백엔드&place=온라인
 
 ###트랙과 수업환경 & 비용 포함 조회
-GET {{apiUrl}}/camps/filter?trek=프론트엔드&place=오프라인&cost=사비
+GET {{apiUrl}}/camps/filter?trek=백엔드&place=오프라인&cost=무료
