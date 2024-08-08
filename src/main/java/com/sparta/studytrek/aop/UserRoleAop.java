@@ -45,12 +45,15 @@ public class UserRoleAop {
     public void studyRoleCheck() {}
 
 
-    @Before("recruitmentRoleCheck()")
-    public void recruitmentUserCheck() {
+    public String getUserRole() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String token = jwtUtil.getJwtFromHeader(request);
-        String userRole = jwtUtil.getUserRoleFromToken(token);
+        return jwtUtil.getUserRoleFromToken(token);
+    }
 
+    @Before("recruitmentRoleCheck()")
+    public void recruitmentUserCheck() {
+        String userRole = getUserRole();
         if (!UserRoleEnum.BOOTCAMP.name().equals(userRole) && !UserRoleEnum.ADMIN.name().equals(userRole)) {
             throw new CustomException(ErrorCode.NOT_AUTHENTICATED_USER);
         }
@@ -58,10 +61,7 @@ public class UserRoleAop {
 
     @Before("adminRoleCheck()")
     public void adminUserCheck() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String token = jwtUtil.getJwtFromHeader(request);
-        String userRole = jwtUtil.getUserRoleFromToken(token);
-
+        String userRole = getUserRole();
         if (!UserRoleEnum.ADMIN.name().equals(userRole)) {
             throw new CustomException(ErrorCode.NOT_AUTHENTICATED_ADMIN);
         }
@@ -69,13 +69,9 @@ public class UserRoleAop {
 
     @Before("reviewRoleCheck() || studyRoleCheck()")
     public void reviewAndStudyUserCheck() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String token = jwtUtil.getJwtFromHeader(request);
-        String userRole = jwtUtil.getUserRoleFromToken(token);
-
+        String userRole = getUserRole();
         if (!UserRoleEnum.USER.name().equals(userRole) && !UserRoleEnum.ADMIN.name().equals(userRole)) {
             throw new CustomException(ErrorCode.NOT_AUTHENTICATED_BOOTCAMP);
         }
     }
-
 }
