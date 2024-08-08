@@ -31,8 +31,8 @@ public class CampService {
         campRepository.findByName(requestDto.name()).ifPresent(
             camp -> {throw new CustomException(ErrorCode.DUPLICATE_CAMP_NAME);}
         );
-        Camp camp = new Camp(requestDto.name(), requestDto.description());
+        Camp camp = new Camp(requestDto.name(), requestDto.description(), requestDto.imageUrl());
         Camp savedCamp = campRepository.save(camp);
-        return new CampResponseDto(savedCamp.getId(), savedCamp.getName(), savedCamp.getDescription());
+        return new CampResponseDto(savedCamp.getId(), savedCamp.getName(), savedCamp.getDescription(), savedCamp.getImageUrl());
     }
 }

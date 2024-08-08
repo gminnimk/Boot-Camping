@@ -32,6 +32,10 @@ public class Camp {
     @Column(nullable = false, length = 255)
     private String description;
 
+    @Getter
+    @Column(length = 255) // 이미지 URL을 저장하기 위한 필드
+    private String imageUrl;
+
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CampUser> campUsers = new ArrayList<>();
 
@@ -44,5 +48,11 @@ public class Camp {
     public Camp(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public Camp(String name, String description, String imageUrl) {
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
     }
 }

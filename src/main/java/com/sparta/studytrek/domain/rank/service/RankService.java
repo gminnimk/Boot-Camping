@@ -39,7 +39,7 @@ public class RankService {
         Rank rank = new Rank(camp, ranking);
         Rank savedRank = rankRepository.save(rank);
         return new RankResponseDto(savedRank.getId(), savedRank.getCamp().getId(),
-            savedRank.getCamp().getName(), savedRank.getRanking());
+            savedRank.getCamp().getName(), savedRank.getRanking(), savedRank.getCamp().getImageUrl());
     }
 
     /**
@@ -64,7 +64,7 @@ public class RankService {
         Page<Rank> rankPage = rankRepository.findAllOrderByRankingAsc(pageable);
         List<RankResponseDto> rankList = rankPage.getContent().stream()
             .map(rank -> new RankResponseDto(rank.getId(), rank.getCamp().getId(),
-                rank.getCamp().getName(), rank.getRanking()))
+                rank.getCamp().getName(), rank.getRanking(), rank.getCamp().getImageUrl()))
             .toList();
         return new RankListResponseDto(rankList, rankPage.getTotalPages(), rankPage.getTotalElements());
     }
