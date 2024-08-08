@@ -35,7 +35,7 @@ public class AnswerService {
      */
     public AnswerResponseDto createAnswer(Long questionId, AnswerRequestDto requestDto, User user) {
 
-        Question question = findById(questionId);
+        Question question = questionRepository.findByQuestionId(questionId);
         Answer answer = new Answer(requestDto, question, user);
         Answer savedAnswer = answerRepository.save(answer);
         return new AnswerResponseDto(savedAnswer);
@@ -52,8 +52,8 @@ public class AnswerService {
      */
     @Transactional
     public AnswerResponseDto updateAnswer(Long questionId, Long answerId, AnswerRequestDto requestDto, User user) {
-        Question question = findById(questionId);
-        Answer answer = findByAnswerId(answerId);
+        Question question = questionRepository.findByQuestionId(questionId);
+        Answer answer = answerRepository.findByAnswerId(answerId);
         answer.update(requestDto);
         return new AnswerResponseDto(answer);
     }
@@ -66,8 +66,8 @@ public class AnswerService {
      * @param user  요청한 유저의 정보
      */
     public void deleteAnswer(Long questionId, Long answerId, User user) {
-        Question question = findById(questionId);
-        Answer answer = findByAnswerId(answerId);
+        Question question = questionRepository.findByQuestionId(questionId);
+        Answer answer = answerRepository.findByAnswerId(answerId);
         answerRepository.delete(answer);
     }
 
@@ -90,31 +90,7 @@ public class AnswerService {
      * @return  해당 답변의 응답 데이터
      */
     public AnswerResponseDto getAnswer(Long questionId, Long answerId) {
-        Answer answer = answerRepository.findByQuestionIdAndId(questionId, answerId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER));
+        Answer answer = answerRepository.findByQuestionIdAndAnswerId(questionId, answerId);
         return new AnswerResponseDto(answer);
     }
-
-    /**
-     * 질문 찾기
-     *
-     * @param questionId    질문 ID
-     * @return  해당 질문의 정보
-     */
-    private Question findById(Long questionId) {
-        return questionRepository.findById(questionId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_QUESTION));
-    }
-
-    /**
-     * 답변 찾기
-     *
-     * @param answerId  답변 ID
-     * @return  해당 답변의 정보
-     */
-    private Answer findByAnswerId(Long answerId) {
-        return answerRepository.findById(answerId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_ANSWER));
-    }
-
 }

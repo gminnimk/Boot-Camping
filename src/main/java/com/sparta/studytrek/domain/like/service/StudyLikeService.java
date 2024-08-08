@@ -28,8 +28,7 @@ public class StudyLikeService {
      */
     @Transactional
     public int studyLike(Long studyId, User user) {
-        Study study = studyRepository.findById(studyId)
-            .orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
+        Study study = studyRepository.findByStudyId(studyId);
 
         Optional<StudyLike> existingLike = studyLikeRepository.findByStudyIdAndUserId(studyId, user.getId());
 
@@ -52,8 +51,7 @@ public class StudyLikeService {
      */
     @Transactional
     public int studyUnlike(Long studyId, User user) {
-        Study study = studyRepository.findById(studyId)
-            .orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
+        Study study = studyRepository.findByStudyId(studyId);
 
         StudyLike studyLike = studyLikeRepository.findByStudyIdAndUserId(studyId, user.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_LIKE));

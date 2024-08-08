@@ -34,8 +34,7 @@ public class StudyCommentService {
     @Transactional
     public StudyCommentResponseDto createComment(Long studyId, StudyCommentRequestDto requestDto,
         User user) {
-        Study study = studyRepository.findById(studyId)
-            .orElseThrow(() -> new CustomException(ErrorCode.STUDY_NOT_FOUND));
+        Study study = studyRepository.findByStudyId(studyId);
 
         StudyComment studyComment = new StudyComment(study, user, requestDto.getContent());
         StudyComment savedComment = studyCommentRepository.save(studyComment);
@@ -64,8 +63,7 @@ public class StudyCommentService {
      */
     @Transactional(readOnly = true)
     public StudyCommentResponseDto getComment(Long studyId, Long commentId) {
-        StudyComment studyComment = studyCommentRepository.findByIdAndStudyId(commentId, studyId)
-            .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+        StudyComment studyComment = studyCommentRepository.findByCommentIdAndStudyId(commentId, studyId);
         return buildStudyCommentResponseDto(studyComment);
     }
 
@@ -81,8 +79,7 @@ public class StudyCommentService {
     @Transactional
     public StudyCommentResponseDto updateComment(Long studyId, Long commentId,
         StudyCommentRequestDto requestDto, User user) {
-        StudyComment studyComment = studyCommentRepository.findByIdAndStudyId(commentId, studyId)
-            .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+        StudyComment studyComment = studyCommentRepository.findByCommentIdAndStudyId(commentId, studyId);
 
         if (!studyComment.getUser().getId().equals(user.getId())) {
             throw new CustomException(ErrorCode.COMMENT_UPDATE_NOT_AUTHORIZED);
@@ -101,8 +98,7 @@ public class StudyCommentService {
      */
     @Transactional
     public void deleteComment(Long studyId, Long commentId, User user) {
-        StudyComment studyComment = studyCommentRepository.findByIdAndStudyId(commentId, studyId)
-            .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+        StudyComment studyComment = studyCommentRepository.findByCommentIdAndStudyId(commentId, studyId);
 
         if (!studyComment.getUser().getId().equals(user.getId())) {
             throw new CustomException(ErrorCode.COMMENT_DELETE_NOT_AUTHORIZED);
