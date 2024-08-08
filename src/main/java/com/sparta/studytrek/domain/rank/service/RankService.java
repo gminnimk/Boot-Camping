@@ -66,6 +66,6 @@ public class RankService {
             .map(rank -> new RankResponseDto(rank.getId(), rank.getCamp().getId(),
                 rank.getCamp().getName(), rank.getRanking()))
             .toList();
-        return new RankListResponseDto(rankList);
+        return new RankListResponseDto(rankList, rankPage.getTotalPages(), rankPage.getTotalElements());
     }
 }
