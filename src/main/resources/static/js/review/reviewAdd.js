@@ -41,12 +41,6 @@ document.getElementById('reviewForm').addEventListener('submit', function(e) {
         },
         body: JSON.stringify(reviewData)
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
     .then(data => {
         if (data.statuscode === "201") {
             Swal.fire({
