@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
-    private final UserService userService;
 
     /**
      * 질문 작성
@@ -45,7 +44,7 @@ public class QuestionService {
      */
     @Transactional
     public QuestionResponseDto updateQuestion(Long id, QuestionRequestDto requestDto, User user) {
-        Question question = findByQuestionId(id);
+        Question question = questionRepository.findByQuestionId(id);
         question.update(requestDto);
         return new QuestionResponseDto(question);
     }
@@ -57,7 +56,7 @@ public class QuestionService {
      * @param user 요청한 유저의 정보
      */
     public void deleteQuestion(Long id, User user) {
-        Question question = findByQuestionId(id);
+        Question question = questionRepository.findByQuestionId(id);
         questionRepository.delete(question);
     }
 
@@ -79,23 +78,7 @@ public class QuestionService {
      * @return 해당 질문의 응답 데이터
      */
     public QuestionResponseDto getQuestion(Long id) {
-        Question question = findByQuestionId(id);
+        Question question = questionRepository.findByQuestionId(id);
         return new QuestionResponseDto(question);
-    }
-
-    /**
-     * 질문 찾기
-     *
-     * @param id 질문 ID
-     * @return 해당 질문 정보
-     */
-    private Question findByQuestionId(Long id) {
-        return questionRepository.findById(id)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_QUESTION));
-    }
-
-    public Question findById(Long questionId) {
-        return questionRepository.findById(questionId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_QUESTION));
     }
 }

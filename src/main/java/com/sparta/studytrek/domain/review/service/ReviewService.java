@@ -62,7 +62,7 @@ public class ReviewService {
      */
     @Transactional
     public ReviewResponseDto updateReview(Long id, ReviewRequestDto requestDto, User user) {
-        Review review = findByReviewId(id);
+        Review review = reviewRepository.findByReviewId(id);
         reqUserCheck(review.getUser().getId(), user.getId());
 
         List<String> userCampNames = userService.getUserCampNames(user.getId());
@@ -88,7 +88,7 @@ public class ReviewService {
      * @param user 요청한 유저의 정보
      */
     public void deleteReview(Long id, User user) {
-        Review review = findByReviewId(id);
+        Review review = reviewRepository.findByReviewId(id);
         reqUserCheck(review.getUser().getId(), user.getId());
 
         reviewRepository.delete(review);
@@ -112,19 +112,8 @@ public class ReviewService {
      * @return 해당 리뷰의 응답 데이터
      */
     public ReviewResponseDto getReview(Long id) {
-        Review review = findByReviewId(id);
+        Review review = reviewRepository.findByReviewId(id);
         return new ReviewResponseDto(review);
-    }
-
-    /**
-     * 리뷰 찾기
-     *
-     * @param id 리뷰 ID
-     * @return 해당 리뷰의 정보
-     */
-    public Review findByReviewId(Long id) {
-        return reviewRepository.findById(id)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_REVIEW));
     }
 
     /**
