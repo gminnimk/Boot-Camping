@@ -39,6 +39,7 @@ public enum ErrorCode {
     // AOP
     NOT_AUTHENTICATED_USER(HttpStatus.FORBIDDEN, "부트캠프 관리자만 접근 가능합니다."),
     NOT_AUTHENTICATED_ADMIN(HttpStatus.FORBIDDEN, "접근 불가능한 권한입니다."),
+    NOT_AUTHENTICATED_BOOTCAMP(HttpStatus.FORBIDDEN, "수강생만 작성이 가능합니다."),
 
     // Review
     NOTFOUND_REVIEW(HttpStatus.BAD_REQUEST, "해당 리뷰는 존재하지 않습니다."),

@@ -34,6 +34,16 @@ public class UserRoleAop {
         "execution(* com.sparta.studytrek.domain.admin.controller.AdminController.createCamp(..))")
     public void adminRoleCheck() {}
 
+    @Pointcut("execution(* com.sparta.studytrek.domain.review.controller.ReviewController.createReview(..)) || " +
+        "execution(* com.sparta.studytrek.domain.review.controller.ReviewController.updateReview(..)) || " +
+        "execution(* com.sparta.studytrek.domain.review.controller.ReviewController.deleteReview(..))")
+    public void reviewRoleCheck() {}
+
+    @Pointcut("execution(* com.sparta.studytrek.domain.study.controller.StudyController.createStudy(..)) || " +
+        "execution(* com.sparta.studytrek.domain.study.controller.StudyController.updateStudy(..)) || " +
+        "execution(* com.sparta.studytrek.domain.study.controller.StudyController.deleteStudy(..))")
+    public void studyRoleCheck() {}
+
 
     @Before("recruitmentRoleCheck()")
     public void recruitmentUserCheck() {
@@ -54,6 +64,17 @@ public class UserRoleAop {
 
         if (!UserRoleEnum.ADMIN.name().equals(userRole)) {
             throw new CustomException(ErrorCode.NOT_AUTHENTICATED_ADMIN);
+        }
+    }
+
+    @Before("reviewRoleCheck() || studyRoleCheck()")
+    public void reviewAndStudyUserCheck() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String token = jwtUtil.getJwtFromHeader(request);
+        String userRole = jwtUtil.getUserRoleFromToken(token);
+
+        if (!UserRoleEnum.USER.name().equals(userRole) && !UserRoleEnum.ADMIN.name().equals(userRole)) {
+            throw new CustomException(ErrorCode.NOT_AUTHENTICATED_BOOTCAMP);
         }
     }
 
