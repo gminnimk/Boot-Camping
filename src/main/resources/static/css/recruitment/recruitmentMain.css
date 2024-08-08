@@ -5,11 +5,15 @@ body {
 }
 
 :root {
-    --sidebar-bg: #fff;
-    --body-bg: #f0f0f0;
-    --color: #000;
-    --hover-bg: #e0e0e0;
+    --bg: #fff;
+    --text: #382B22;
+    --light-pink: #f0faff;
+    --pink: #e9f9ff;
+    --dark-pink: #c4f5f9;
+    --pink-border: #afd9eb;
+    --pink-shadow: #e2f7ff;
 }
+
 
 body.dark {
     --sidebar-bg: #20212C;
