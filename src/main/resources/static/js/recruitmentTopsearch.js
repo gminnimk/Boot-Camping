@@ -1,3 +1,13 @@
+// 검색 폼 제출 시 호출되는 함수
+function performSearch(event) {
+  event.preventDefault();
+  const searchType = document.getElementById('searchType').value;
+  const searchQuery = document.getElementById('searchQuery').value;
+
+  console.log(`검색 유형: ${searchType}, 검색어: ${searchQuery}`);
+  alert(`검색 유형: ${searchType}\n검색어: ${searchQuery}`);
+}
+
 // 필터 버튼 클릭 시 필터 메뉴 토글
 function toggleFilter(element) {
   if (element) {
