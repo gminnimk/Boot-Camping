@@ -19,12 +19,12 @@ public class CampService {
 
     public Camp findByName(String campName) {
         return campRepository.findByName(campName)
-                .orElseThrow(() -> new IllegalArgumentException("Camp not found"));
+            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_CAMP));
     }
 
     public Camp findById(Long id) {
         return campRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Camp not found"));
+            .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_CAMP));
     }
 
     public CampResponseDto createCamp(CampRequestDto requestDto) {
