@@ -51,18 +51,18 @@ function displayRanks(data) {
   data.forEach(rank => {
     const camp = rank.camp;
     const name = rank.campName;
+    const imageUrl = rank.campImage; // 이미지 URL
     const ranking = rank.ranking;
 
-    // 이모지 선택
+
     let emoji = '';
     if (ranking === 1) {
-      emoji = '🥇'; // Gold Medal Emoji
+      emoji = '🥇';
     } else if (ranking === 2) {
-      emoji = '🥈'; // Silver Medal Emoji
+      emoji = '🥈';
     } else if (ranking === 3) {
-      emoji = '🥉'; // Bronze Medal Emoji
+      emoji = '🥉';
     }
-
 
     const resultItem = document.createElement('div');
     resultItem.classList.add('ranking-item');
@@ -71,6 +71,7 @@ function displayRanks(data) {
       <button class="like-button">❤</button>
       <div class="emoji">${emoji}</div>
       <h3>${name}</h3>
+      <img src="${imageUrl}" alt="${name} Image" class="camp-image">
       <div class="rating">${ranking}등</div>
     `;
 
@@ -82,11 +83,10 @@ function displayRanks(data) {
   updatePagination(); // 페이지네이션 업데이트
 }
 
-
-
 // API를 호출하여 순위 데이터를 가져옵니다.
 function fetchAndDisplayRanks() {
-  fetch(`${apiUrl}?page=${currentPage - 1}&size=${ITEMS_PER_PAGE}&sort=ranking,asc`)
+  fetch(`${apiUrl}?page=${currentPage
+  - 1}&size=${ITEMS_PER_PAGE}&sort=ranking,asc`)
   .then(response => response.json())
   .then(data => {
     console.log('Fetched data:', data);
