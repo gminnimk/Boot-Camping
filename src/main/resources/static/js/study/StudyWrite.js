@@ -73,7 +73,7 @@ document.getElementById('studyForm').addEventListener('submit', function (e) {
     } else {
       Swal.fire({
         title: '스터디 작성 실패',
-        text: data.msg || '스터디 작성 중 오류가 발생했습니다.',
+        text: data.message || '스터디 작성 중 오류가 발생했습니다.',
         icon: 'error',
         confirmButtonText: '확인'
       });
