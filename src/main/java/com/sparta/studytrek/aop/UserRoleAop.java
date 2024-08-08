@@ -23,9 +23,11 @@ public class UserRoleAop {
     @Pointcut("execution(* com.sparta.studytrek.domain.recruitment.controller.RecruitmentController.createRecruitment(..)) || " +
         "execution(* com.sparta.studytrek.domain.recruitment.controller.RecruitmentController.updateRecruitment(..)) || " +
         "execution(* com.sparta.studytrek.domain.recruitment.controller.RecruitmentController.deleteRecruitment(..))")
-    public void restrictedRoleCheck() {}
+    public void recruitmentRoleCheck() {}
 
-    @Before("restrictedRoleCheck()")
+
+
+    @Before("recruitmentRoleCheck()")
     public void restrictedUserCheck() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String token = jwtUtil.getJwtFromHeader(request);
