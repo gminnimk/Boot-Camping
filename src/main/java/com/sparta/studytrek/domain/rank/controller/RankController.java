@@ -49,7 +49,6 @@ public class RankController {
         RankListResponseDto responseDto = rankService.getAllRanks(pageable);
         ApiResponse<RankListResponseDto> response = ApiResponse.<RankListResponseDto>builder()
             .msg(ResponseText.RANK_GET_LIST_SUCCESS.getMsg())
-            .msg("Rank list retrieved successfully")
             .statuscode(String.valueOf(HttpStatus.OK.value()))
             .data(responseDto)
             .build();
