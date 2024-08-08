@@ -4,6 +4,12 @@ body {
     background-color: #f0f0f0;
 }
 
+.emoji {
+    font-size: 2rem; /* 이모지 크기 조정 */
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
 .container {
     max-width: 1500px;
     margin: 0 auto;

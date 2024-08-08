@@ -49,16 +49,29 @@ function displayRanks(data) {
   }
 
   data.forEach(rank => {
+    const camp = rank.camp;
     const name = rank.campName;
     const ranking = rank.ranking;
+
+    // 이모지 선택
+    let emoji = '';
+    if (ranking === 1) {
+      emoji = '🥇'; // Gold Medal Emoji
+    } else if (ranking === 2) {
+      emoji = '🥈'; // Silver Medal Emoji
+    } else if (ranking === 3) {
+      emoji = '🥉'; // Bronze Medal Emoji
+    }
+
 
     const resultItem = document.createElement('div');
     resultItem.classList.add('ranking-item');
 
     resultItem.innerHTML = `
       <button class="like-button">❤</button>
+      <div class="emoji">${emoji}</div>
       <h3>${name}</h3>
-      <div class="rating">Ranking: ${ranking}</div>
+      <div class="rating">${ranking}등</div>
     `;
 
     resultsContainer.appendChild(resultItem);
