@@ -34,11 +34,11 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### 프로필 삭제
-DELETE {{apiUrl}}/profiles/1
+DELETE {{apiUrl}}/profiles/2
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 ### 프로필 신청
-POST {{apiUrl}}/profiles/7/apply
+POST {{apiUrl}}/profiles/2/apply
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}

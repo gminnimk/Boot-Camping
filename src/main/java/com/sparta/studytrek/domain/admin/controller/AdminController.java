@@ -133,7 +133,7 @@ public class AdminController {
     @GetMapping("/profiles/role/{role}")
     public ResponseEntity<ApiResponse> getAllProfiles(@PathVariable("role") UserRoleEnum role)
     {
-        List<ProfileResponseDto> responseDtos = profileService.getProfilesByRole(role).getBody();
+        List<ProfileResponseDto> responseDtos = profileService.getProfilesByRole(role);
         ApiResponse response = ApiResponse.builder()
             .msg(ResponseText.ADMIN_GET_ALL_PROFILE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
@@ -153,7 +153,7 @@ public class AdminController {
         @PathVariable("status") ProfileStatus status)
     {
         List<ProfileResponseDto> responseDtos = profileService.getProfilesByRoleAndStatus(role,
-            status).getBody();
+            status);
         ApiResponse response = ApiResponse.builder()
             .msg(ResponseText.ADMIN_GET_ROLE_STATUS_SUCCESS.format(role, status))
             .statuscode(String.valueOf(HttpStatus.OK.value()))
@@ -170,7 +170,7 @@ public class AdminController {
      */
     @GetMapping("/profiles/{profileId}")
     public ResponseEntity<ApiResponse> getProfileById(@PathVariable Long profileId) {
-        ProfileResponseDto profileResponseDto = profileService.getProfileById(profileId).getBody();
+        ProfileResponseDto profileResponseDto = profileService.getProfileById(profileId);
         ApiResponse response = ApiResponse.builder()
             .msg(ResponseText.PROFILE_DETAIL_GET_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))

@@ -1,5 +1,5 @@
 ### 질문 답변의 댓글 작성
-POST {{apiUrl}}/questions/2/answers/4/comments
+POST {{apiUrl}}/questions/13/answers/19/comments
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
