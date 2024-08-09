@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CampService {
 
+    private static final int DEFAULT_RANK_INCREMENT = 1;
     private final CampRepository campRepository;
     private final RankRepository rankRepository;
 
@@ -36,7 +37,7 @@ public class CampService {
         Camp savedCamp = campRepository.save(camp);
 
         Integer maxRanking = rankRepository.findMaxRanking().orElse(0);
-        Integer newRanking = maxRanking + 1;
+        Integer newRanking = maxRanking + DEFAULT_RANK_INCREMENT;
         Rank rank = new Rank(savedCamp, newRanking);
         rankRepository.save(rank);
         return new CampResponseDto(savedCamp.getId(), savedCamp.getName(), savedCamp.getDescription(), savedCamp.getImageUrl());
