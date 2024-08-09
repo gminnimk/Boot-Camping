@@ -12,14 +12,25 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface ProfileService {
-	ResponseEntity<ProfileResponseDto> createProfile(String username, ProfileRequestDto requestDto);
-	ResponseEntity<List<ProfileResponseDto>> getProfileByUserId(String username);
-	ResponseEntity<ProfileResponseDto> updateProfile(Long profileId, ProfileRequestDto requestDto, UserDetails userDetails);
-	ResponseEntity<Void> deleteProfile(Long profileId, UserDetails userDetails);
-	ResponseEntity<Void> approveProfile(Long profileId);
-	ResponseEntity<Void> rejectProfile(Long profileId);
-	ResponseEntity<List<ProfileResponseDto>> getProfilesByRole(UserRoleEnum role);
-	ResponseEntity<List<ProfileResponseDto>> getProfilesByRoleAndStatus(UserRoleEnum roleEnum, ProfileStatus status);
-	ResponseEntity<ProfileResponseDto> getProfileById(Long profileId);
-	ResponseEntity<Void> applyForProfile(Long profileId, UserDetails userDetails);
+
+	ProfileResponseDto createProfile(String username, ProfileRequestDto requestDto);
+
+	List<ProfileResponseDto> getProfileByUserId(String username);
+
+	ProfileResponseDto updateProfile(Long profileId, ProfileRequestDto requestDto,
+		UserDetails userDetails);
+
+	void deleteProfile(Long profileId, UserDetails userDetails);
+
+	void approveProfile(Long profileId);
+
+	void rejectProfile(Long profileId);
+
+	List<ProfileResponseDto> getProfilesByRole(UserRoleEnum roleEnum);
+
+	List<ProfileResponseDto> getProfilesByRoleAndStatus(UserRoleEnum roleEnum, ProfileStatus status);
+
+	ProfileResponseDto getProfileById(Long profileId);
+
+	void applyForProfile(Long profileId, UserDetails userDetails);
 }

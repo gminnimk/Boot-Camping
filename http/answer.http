@@ -1,5 +1,5 @@
 ### 답변 작성
-POST {{apiUrl}}/questions/2/answers
+POST {{apiUrl}}/questions/13/answers
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 

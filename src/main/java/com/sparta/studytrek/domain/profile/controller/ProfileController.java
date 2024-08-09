@@ -39,7 +39,7 @@ public class ProfileController {
         @AuthenticationPrincipal UserDetails userDetails)
     {
         ProfileResponseDto responseDto = profileService.createProfile(userDetails.getUsername(),
-            requestDto).getBody();
+            requestDto);
         ApiResponse response = ApiResponse.builder()
             .msg(ResponseText.PROFILE_CREATE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.CREATED.value()))
@@ -59,7 +59,7 @@ public class ProfileController {
         @AuthenticationPrincipal UserDetails userDetails)
     {
         List<ProfileResponseDto> responseDto = profileService.getProfileByUserId(
-            userDetails.getUsername()).getBody();
+            userDetails.getUsername());
         ApiResponse response = ApiResponse.builder()
             .msg(ResponseText.PROFILE_GET_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
@@ -82,7 +82,7 @@ public class ProfileController {
         @AuthenticationPrincipal UserDetails userDetails)
     {
         ProfileResponseDto responseDto = profileService.updateProfile(profileId, requestDto,
-            userDetails).getBody();
+            userDetails);
         ApiResponse response = ApiResponse.builder()
             .msg(ResponseText.PROFILE_UPDATE_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
