@@ -35,9 +35,9 @@ public class CampService {
         Camp camp = new Camp(requestDto.name(), requestDto.description(), requestDto.imageUrl());
         Camp savedCamp = campRepository.save(camp);
 
-        // 새로운 랭킹 설정
-        int nextRanking = (int) (rankRepository.count() + 1);
-        Rank rank = new Rank(savedCamp, nextRanking);
+        Integer maxRanking = rankRepository.findMaxRanking().orElse(0);
+        Integer newRanking = maxRanking + 1;
+        Rank rank = new Rank(savedCamp, newRanking);
         rankRepository.save(rank);
         return new CampResponseDto(savedCamp.getId(), savedCamp.getName(), savedCamp.getDescription(), savedCamp.getImageUrl());
     }
