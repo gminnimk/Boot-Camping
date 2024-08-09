@@ -275,13 +275,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btnRegister').addEventListener('click', async () => {
         const bootcampName = document.getElementById('bootcampName').value;
         const description = document.getElementById('description').value;
-
+        const imageFile = document.getElementById('imageFile').files[0];
         // 입력값 검증
-        if (!bootcampName || !description) {
+        if (!bootcampName || !description || !imageFile) {
             Swal.fire({
                 icon: 'warning',
                 title: '필수 입력 사항',
-                text: '부트캠프 이름과 설명을 입력해주세요.'
+                text: '부트캠프 이름, 설명, 그리고 이미지를 모두 입력해주세요.'
             });
             return;
         }
@@ -289,7 +289,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // 요청 데이터 생성
         const requestData = {
             name: bootcampName,
-            description: description
+            description: description,
+            imageFile: imageFile
         };
 
         try {
