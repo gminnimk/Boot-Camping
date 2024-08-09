@@ -1,13 +1,13 @@
 package com.sparta.studytrek.domain.camp.service;
 
-import static com.sparta.studytrek.domain.camp.entity.QCamp.*;
-
 import com.sparta.studytrek.common.exception.CustomException;
 import com.sparta.studytrek.common.exception.ErrorCode;
 import com.sparta.studytrek.domain.camp.dto.CampRequestDto;
 import com.sparta.studytrek.domain.camp.dto.CampResponseDto;
 import com.sparta.studytrek.domain.camp.entity.Camp;
 import com.sparta.studytrek.domain.camp.repository.CampRepository;
+import com.sparta.studytrek.domain.rank.entity.Rank;
+import com.sparta.studytrek.domain.rank.repository.RankRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class CampService {
 
     private final CampRepository campRepository;
+    private final RankRepository rankRepository;
 
     public Camp findByName(String campName) {
         return campRepository.findByName(campName)
@@ -33,6 +34,11 @@ public class CampService {
         );
         Camp camp = new Camp(requestDto.name(), requestDto.description(), requestDto.imageUrl());
         Camp savedCamp = campRepository.save(camp);
+
+        // 새로운 랭킹 설정
+        int nextRanking = (int) (rankRepository.count() + 1);
+        Rank rank = new Rank(savedCamp, nextRanking);
+        rankRepository.save(rank);
         return new CampResponseDto(savedCamp.getId(), savedCamp.getName(), savedCamp.getDescription(), savedCamp.getImageUrl());
     }
 }
