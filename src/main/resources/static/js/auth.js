@@ -32,3 +32,35 @@ export function setAuthHeader(config) {
     }
     return config;
 }
+
+const socket = new WebSocket('ws://localhost:8080/ws/notifications');
+
+socket.onmessage = function(event) {
+    const message = event.data;
+    console.log('서버로부터 메시지가 도착했습니다:', message);
+
+    Swal.fire({
+        toast: true,
+        position: 'center',
+        icon: 'info',
+        title: message,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+        },
+        customClass: {
+            title: 'black-text'
+        }
+    });
+};
+
+socket.onclose = function(event) {
+    console.log('WebSocket 연결이 닫혔습니다:', event);
+};
+
+socket.onerror = function(error) {
+    console.error('WebSocket 오류가 발생했습니다:', error);
+};
