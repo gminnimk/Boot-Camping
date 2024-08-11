@@ -32,12 +32,12 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 ### 프로필 승인 (관리자용)
-POST {{apiUrl}}/admin/profiles/1/approve
+POST {{apiUrl}}/admin/profiles/6/approve
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 ### 프로필 거절 (관리자용)
-POST {{apiUrl}}/admin/profiles/1/reject
+POST {{apiUrl}}/admin/profiles/6/reject
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
