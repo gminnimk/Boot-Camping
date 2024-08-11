@@ -1,5 +1,6 @@
 package com.sparta.studytrek.domain.admin.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -96,7 +97,7 @@ public class AdminController {
      * @return 승인 성공 응답 데이터
      */
     @PostMapping("/profiles/{profileId}/approve")
-    public ResponseEntity<ApiResponse> approveProfile(@PathVariable Long profileId)
+    public ResponseEntity<ApiResponse> approveProfile(@PathVariable Long profileId) throws IOException
     {
         profileService.approveProfile(profileId);
         ApiResponse response = ApiResponse.builder()
@@ -113,7 +114,7 @@ public class AdminController {
      * @return 거절 성공 응답 데이터
      */
     @PostMapping("/profiles/{profileId}/reject")
-    public ResponseEntity<ApiResponse> rejectProfile(@PathVariable Long profileId)
+    public ResponseEntity<ApiResponse> rejectProfile(@PathVariable Long profileId) throws IOException
     {
         profileService.rejectProfile(profileId);
         ApiResponse response = ApiResponse.builder()
