@@ -31,6 +31,11 @@ public class ViewController {
         return "profile";
     }
 
+    @GetMapping("/chat")
+    public String showChatPage() {
+        return "chat";
+    }
+
     @GetMapping("/review")
     public String showReview() { return "review/reviewMain"; }
 
