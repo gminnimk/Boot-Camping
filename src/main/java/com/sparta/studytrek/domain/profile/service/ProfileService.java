@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface ProfileService {
@@ -22,9 +23,9 @@ public interface ProfileService {
 
 	void deleteProfile(Long profileId, UserDetails userDetails);
 
-	void approveProfile(Long profileId);
+	void approveProfile(Long profileId) throws IOException;
 
-	void rejectProfile(Long profileId);
+	void rejectProfile(Long profileId) throws IOException;
 
 	List<ProfileResponseDto> getProfilesByRole(UserRoleEnum roleEnum);
 

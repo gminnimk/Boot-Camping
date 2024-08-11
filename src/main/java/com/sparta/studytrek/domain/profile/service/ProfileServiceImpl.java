@@ -1,5 +1,6 @@
 package com.sparta.studytrek.domain.profile.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.common.exception.CustomException;
 import com.sparta.studytrek.common.exception.ErrorCode;
 import com.sparta.studytrek.domain.auth.entity.Role;
@@ -18,6 +20,7 @@ import com.sparta.studytrek.domain.profile.dto.ProfileResponseDto;
 import com.sparta.studytrek.domain.profile.entity.Profile;
 import com.sparta.studytrek.domain.profile.entity.ProfileStatus;
 import com.sparta.studytrek.domain.profile.repository.ProfileRepository;
+import com.sparta.studytrek.websocket.service.NotificationService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +30,7 @@ public class ProfileServiceImpl implements ProfileService {
 
 	private final ProfileRepository profileRepository;
 	private final UserService userService;
+	private final NotificationService notificationService;
 
 	@Override
 	@Transactional
@@ -78,18 +82,28 @@ public class ProfileServiceImpl implements ProfileService {
 
 	@Override
 	@Transactional
-	public void approveProfile(Long profileId) {
+	public void approveProfile(Long profileId) throws IOException{
 		Profile profile = findProfileById(profileId);
 		profile.approveProfile();
 		profileRepository.save(profile);
+
+		notificationService.sendNotificationToUser(
+			profile.getUser().getId(),
+			ResponseText.NOTIFICATION_PROFILE_APPROVED.getMsg()
+		);
 	}
 
 	@Override
 	@Transactional
-	public void rejectProfile(Long profileId) {
+	public void rejectProfile(Long profileId) throws IOException {
 		Profile profile = findProfileById(profileId);
 		profile.rejectProfile();
 		profileRepository.save(profile);
+
+		notificationService.sendNotificationToUser(
+			profile.getUser().getId(),
+			ResponseText.NOTIFICATION_PROFILE_REJECTED.getMsg()
+		);
 	}
 
 	@Override

@@ -3,7 +3,7 @@ POST {{apiUrl}}/admin/auth/signup
 Content-Type: application/json
 
 {
-  "username": "adminuser1",
+  "username": "adminuser2",
   "password": "Password1!",
   "name" : "관리자1"
 }
@@ -13,7 +13,7 @@ POST {{apiUrl}}/admin/auth/login
 Content-Type: application/json
 
 {
-  "username": "adminuser1",
+  "username": "adminuser2",
   "password": "Password1!"
 }
 
@@ -32,12 +32,12 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 ### 프로필 승인 (관리자용)
-POST {{apiUrl}}/admin/profiles/4/approve
+POST {{apiUrl}}/admin/profiles/1/approve
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 ### 프로필 거절 (관리자용)
-POST {{apiUrl}}/admin/profiles/6/reject
+POST {{apiUrl}}/admin/profiles/1/reject
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 

@@ -10,8 +10,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script th:src="@{/js/scripts.js}" defer></script>
-    <script th:src="@{/js/profile.js}" defer></script>
+    <script type="module" th:src="@{/js/auth.js}" defer></script>
+    <script type="module" th:src="@{/js/profile.js}" defer></script>
 </head>
 <body th:classappend="${isDarkMode} ? 'dark' : ''">
 <div th:replace="~{'fragments/topbar' :: topbar}"></div>
