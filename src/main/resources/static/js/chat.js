@@ -1,40 +1,35 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const socket = new WebSocket("ws://localhost:8080/chat");
+import { getTokenFromLocalStorage } from './auth.js';
+
+document.addEventListener("DOMContentLoaded", function() {
+    const token = getTokenFromLocalStorage();
+    let username = null;
+
+    if (token) {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        username = payload.sub;
+    }
+
+    if (!username) {
+        console.error("username이 정의되지 않았습니다.");
+        return;
+    }
 
     const messageArea = document.getElementById('messageArea');
     const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
 
     socket.onmessage = function(event) {
         const newMessage = document.createElement('div');
         newMessage.textContent = event.data;
         messageArea.appendChild(newMessage);
-        messageArea.scrollTop = messageArea.scrollHeight; // 자동 스크롤
+        messageArea.scrollTop = messageArea.scrollHeight;
     };
 
-    document.querySelector('button').addEventListener('click', function () {
+    sendButton.addEventListener('click', function() {
         const message = messageInput.value;
         if (message) {
-            socket.send(message);
+            socket.send(JSON.stringify({ message: message, username: username }));
             messageInput.value = '';
         }
     });
-
-    // SweetAlert 예시
-    document.querySelector('button').addEventListener('click', function () {
-        Swal.fire({
-            title: '메시지 전송',
-            text: '메시지가 성공적으로 전송되었습니다.',
-            icon: 'success',
-            confirmButtonText: '확인'
-        });
-    });
-
-    // 사이드바 토글 기능
-    window.toggleSidebar = function() {
-        const sidebar = document.querySelector('.sidebar');
-        sidebar.classList.toggle('closed');
-
-        const openButton = document.querySelector('.open-sidebar-button');
-        openButton.classList.toggle('hidden');
-    };
 });

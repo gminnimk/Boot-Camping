@@ -1,7 +1,12 @@
 package com.sparta.studytrek.domain.chat.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,5 +42,37 @@ public class ChatController {
 			.data(responseDto)
 			.build();
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	}
+
+	/**
+	 * 모든 채팅 메세지 조회 API
+	 *
+	 * @return 모든 채팅 메세지 응답
+	 */
+	@GetMapping
+	public ResponseEntity<ApiResponse> getAllChats() {
+		List<ChatMessageResponseDto> responseDto = chatService.getAllMessages();
+		ApiResponse response = ApiResponse.builder()
+			.msg(ResponseText.CHAT_GET_SUCCESS.getMsg())
+			.statuscode(String.valueOf(HttpStatus.OK.value()))
+			.data(responseDto)
+			.build();
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+	/**
+	 * 특정 채팅 메세지 삭제
+	 *
+	 * @param chatId 삭제할 채팅 메세지 ID
+	 * @return 채팅 삭제 응답 데이터
+	 */
+	@DeleteMapping("/{chatId}")
+	public ResponseEntity<ApiResponse> deleteChat(@PathVariable("chatId") Long chatId) {
+		chatService.deleteMessage(chatId);
+		ApiResponse response = ApiResponse.builder()
+			.msg(ResponseText.CHAT_DELETE_SUCCESS.getMsg())
+			.statuscode(String.valueOf(HttpStatus.NO_CONTENT.value()))
+			.build();
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
 	}
 }

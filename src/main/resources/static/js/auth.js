@@ -40,11 +40,11 @@ if (token) {
     const payload = JSON.parse(atob(token.split('.')[1]));
     console.log('디코딩된 사용자 정보:', payload);
 
-    username = payload.sub; // JWT의 'sub' 필드에서 username 가져오기
+    username = payload.sub;
     console.log('로그인한 사용자 username:', username);
 }
 
-const socket = new WebSocket(`ws://localhost:8080/ws/notifications?username=${username}`);
+window.socket = new WebSocket(`ws://localhost:8080/ws/notifications?username=${username}`);
 
 socket.onopen = function() {
     console.log('WebSocket 연결이 설정되었습니다');
@@ -59,13 +59,7 @@ socket.onmessage = function(event) {
         position: 'center',
         icon: 'info',
         title: message,
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer);
-            toast.addEventListener('mouseleave', Swal.resumeTimer);
-        },
+        showConfirmButton: true,
         customClass: {
             title: 'black-text'
         }
