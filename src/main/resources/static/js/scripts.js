@@ -91,7 +91,16 @@ function onLogoutSuccess() {
 }
 
 function openAlarmPopup() {
-    window.open('/alarm', 'Alarm Popup', 'width=400,height=600');
+    const width = 400;
+    const height = 600;
+
+    const screenWidth = window.screen.width;
+    const screenHeight = window.screen.height;
+
+    const left = (screenWidth - width) / 2;
+    const top = (screenHeight - height) / 2;
+
+    window.open('/alarm', 'Alarm Popup', `width=${width},height=${height},top=${top},left=${left}`);
 }
 
 document.addEventListener('DOMContentLoaded', function() {

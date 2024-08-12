@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -22,6 +25,9 @@ public class NotificationService {
 	private final List<WebSocketSession> sessions = new ArrayList<>();
 	private final Map<String, List<String>> userNotifications = new HashMap<>();
 	private final NotificationRepository notificationRepository;
+
+	private static final int DEFAULT_PAGE = 0;
+	private static final int DEFAULT_SIZE = 10;
 
 	public void addSession(WebSocketSession session) {
 		sessions.add(session);
@@ -59,8 +65,12 @@ public class NotificationService {
 		}
 	}
 
-	public List<Notification> getNotificationsForUser(String username) {
-		return notificationRepository.findByUsername(username);
+	public Page<Notification> getNotificationsForUser(String username, Integer page, Integer size) {
+		int actualPage = (page == null) ? DEFAULT_PAGE : page;
+		int actualSize = (size == null) ? DEFAULT_SIZE : size;
+
+		Pageable pageable = PageRequest.of(actualPage, actualSize);
+		return notificationRepository.findByUsername(username, pageable);
 	}
 
 	public void markNotificationAsRead(Long notificationId) {
@@ -77,5 +87,9 @@ public class NotificationService {
 	public void deleteAllNotificationsForUser(String username) {
 		notificationRepository.deleteByUsername(username);
 		userNotifications.remove(username);
+	}
+
+	public long countUnreadNotificationsForUser(String username) {
+		return notificationRepository.countByUsernameAndIsReadFalse(username);
 	}
 }

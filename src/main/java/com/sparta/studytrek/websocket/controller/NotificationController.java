@@ -2,6 +2,7 @@ package com.sparta.studytrek.websocket.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,14 +28,19 @@ public class NotificationController {
 	private final NotificationService notificationService;
 
 	@GetMapping
-	public ResponseEntity<?> getNotifications(@AuthenticationPrincipal UserDetails userDetails) {
+	public ResponseEntity<?> getNotifications(
+		@AuthenticationPrincipal UserDetails userDetails,
+		@RequestParam(defaultValue = "0") Integer page,
+		@RequestParam(defaultValue = "10") Integer size
+	)
+	{
 		if (userDetails == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
 		}
 		try {
 			String username = userDetails.getUsername();
-			List<Notification> notifications = notificationService.getNotificationsForUser(username);
-			return ResponseEntity.ok(notifications);
+			Page<Notification> notificationsPage = notificationService.getNotificationsForUser(username, page, size);
+			return ResponseEntity.ok(notificationsPage);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching notifications: " + e.getMessage());
@@ -48,10 +54,27 @@ public class NotificationController {
 	}
 
 	@GetMapping("/list")
-	public String listNotifications(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+	public String listNotifications(Model model, @AuthenticationPrincipal UserDetails userDetails,
+		@RequestParam(defaultValue = "0") Integer page,
+		@RequestParam(defaultValue = "10") Integer size)
+	{
 		String username = userDetails.getUsername();
-		List<Notification> notifications = notificationService.getNotificationsForUser(username);
-		model.addAttribute("notifications", notifications);
+		Page<Notification> notificationsPage = notificationService.getNotificationsForUser(username, page, size);
+
+		model.addAttribute("notifications", notificationsPage.getContent());
+		model.addAttribute("currentPage", page);
+		model.addAttribute("totalPages", notificationsPage.getTotalPages());
+
 		return "alarm";
+	}
+
+	@GetMapping("/unread-count")
+	public ResponseEntity<Long> getUnreadNotificationCount(@AuthenticationPrincipal UserDetails userDetails) {
+		if (userDetails == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(0L);
+		}
+		String username = userDetails.getUsername();
+		long unreadCount = notificationService.countUnreadNotificationsForUser(username);
+		return ResponseEntity.ok(unreadCount);
 	}
 }
