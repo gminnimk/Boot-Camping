@@ -5,7 +5,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (window.socket) {
         window.socket.onmessage = function(event) {
-            const messageData = JSON.parse(event.data);
+            let messageData;
+
+            try {
+                messageData = JSON.parse(event.data);
+            } catch (e) {
+                messageData = { message: event.data };
+            }
+
             console.log('서버로부터 메시지가 도착했습니다:', messageData);
 
             Swal.fire({
@@ -93,10 +100,10 @@ function updateNotificationList(notification) {
     if (notificationList) {
         const newNotification = document.createElement('li');
         newNotification.classList.add(notification.read ? 'read' : 'unread');
-        newNotification.setAttribute('data-id', notification.id);
+        newNotification.setAttribute('data-id', notification.id || '');
         newNotification.innerHTML = `
             <span>${notification.message}</span>
-            <button onclick="markAsRead(${notification.id})">읽음 처리</button>
+            ${notification.id ? `<button onclick="markAsRead(${notification.id})">읽음 처리</button>` : ''}
         `;
         notificationList.prepend(newNotification);
     }
