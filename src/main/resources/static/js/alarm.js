@@ -125,7 +125,7 @@ function updateNotificationList(notification) {
             <span>${notification.message}</span>
             ${notification.id ? `<button onclick="markAsRead(${notification.id})">${notification.read ? '읽음' : '확인'}</button>` : ''}
         `;
-        notificationList.prepend(newNotification);
+        notificationList.appendChild(newNotification);
     }
 }
 

@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -69,7 +70,7 @@ public class NotificationService {
 		int actualPage = (page == null) ? DEFAULT_PAGE : page;
 		int actualSize = (size == null) ? DEFAULT_SIZE : size;
 
-		Pageable pageable = PageRequest.of(actualPage, actualSize);
+		Pageable pageable = PageRequest.of(actualPage, actualSize, Sort.by(Sort.Direction.DESC, "createdAt"));
 		return notificationRepository.findByUsername(username, pageable);
 	}
 
