@@ -90,6 +90,10 @@ function onLogoutSuccess() {
     });
 }
 
+function openAlarmPopup() {
+    window.open('/alarm', 'Alarm Popup', 'width=400,height=600');
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const logoLink = document.getElementById('logoLink');
 
