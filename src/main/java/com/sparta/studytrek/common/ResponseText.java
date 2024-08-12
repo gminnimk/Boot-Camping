@@ -88,7 +88,10 @@ public enum ResponseText {
 
     // notification
     NOTIFICATION_PROFILE_APPROVED("프로필이 승인되었습니다."),
-    NOTIFICATION_PROFILE_REJECTED("프로필이 거절되었습니다.");
+    NOTIFICATION_PROFILE_REJECTED("프로필이 거절되었습니다."),
+
+    // Message
+    CHAT_CREATE_SUCCESS("채팅생성 성공.");
 
     private String msg;
 
