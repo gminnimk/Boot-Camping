@@ -32,8 +32,7 @@ public class NotificationController {
 		@AuthenticationPrincipal UserDetails userDetails,
 		@RequestParam(defaultValue = "0") Integer page,
 		@RequestParam(defaultValue = "10") Integer size
-	)
-	{
+	) {
 		if (userDetails == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
 		}
@@ -43,7 +42,8 @@ public class NotificationController {
 			return ResponseEntity.ok(notificationsPage);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching notifications: " + e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+				.body("Error fetching notifications: " + e.getMessage());
 		}
 	}
 
@@ -56,8 +56,7 @@ public class NotificationController {
 	@GetMapping("/list")
 	public String listNotifications(Model model, @AuthenticationPrincipal UserDetails userDetails,
 		@RequestParam(defaultValue = "0") Integer page,
-		@RequestParam(defaultValue = "10") Integer size)
-	{
+		@RequestParam(defaultValue = "10") Integer size) {
 		String username = userDetails.getUsername();
 		Page<Notification> notificationsPage = notificationService.getNotificationsForUser(username, page, size);
 
@@ -68,13 +67,15 @@ public class NotificationController {
 		return "alarm";
 	}
 
-	@GetMapping("/unread-count")
-	public ResponseEntity<Long> getUnreadNotificationCount(@AuthenticationPrincipal UserDetails userDetails) {
+	@GetMapping("/unread-count/{username}")
+	public ResponseEntity<Long> getUnreadNotificationCount(@AuthenticationPrincipal UserDetails userDetails,
+		@PathVariable String username) {
 		if (userDetails == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(0L);
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
-		String username = userDetails.getUsername();
+
 		long unreadCount = notificationService.countUnreadNotificationsForUser(username);
+
 		return ResponseEntity.ok(unreadCount);
 	}
 }
