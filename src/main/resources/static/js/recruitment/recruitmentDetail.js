@@ -9,6 +9,7 @@ const classTypeSelect = document.getElementById('classTypeSelect');
 const costTypeSelect = document.getElementById('costTypeSelect');
 const fieldTypeSelect = document.getElementById('fieldTypeSelect');
 const selectedCategories = document.getElementById('selectedCategories');
+const imageUpload = document.getElementById('imageUpload');
 
 let originalContent = {};
 let selectedCategoryList = {
@@ -16,6 +17,21 @@ let selectedCategoryList = {
   costType: '',
   fieldType: ''
 };
+
+document.addEventListener('DOMContentLoaded', function() {
+  const imageUpload = document.querySelector('#imageUpload'); // 통일된 ID 사용
+
+  if (imageUpload) {
+    imageUpload.addEventListener('change', function() {
+      const file = imageUpload.files[0];
+      if (file) {
+        console.log('Image selected: ', file.name);
+      }
+    });
+  } else {
+    console.error('imageUpload 요소를 찾을 수 없습니다.');
+  }
+});
 
 // Flatpickr 초기화
 flatpickr(".date-range", {
@@ -102,10 +118,14 @@ editButton.addEventListener('click', function() {
 
 // 저장 버튼 클릭 시
 saveButton.addEventListener('click', function() {
+  // 캠프와 모집 기간을 각각 시작일과 종료일로 분리
   const [campStart, campEnd] = document.querySelector('.course-sidebar .editable.date-range').value.split(' to ');
   const [recruitStart, recruitEnd] = document.querySelector('.course-sidebar .editable.recruit').value.split(' to ');
 
-  const recruitmentData = {
+  // FormData 객체 생성
+  const recruitmentData = new FormData();
+  // JSON 데이터를 FormData에 추가
+  recruitmentData.append('data', new Blob([JSON.stringify({
     title: document.querySelector('.course-title.editable').value,
     campName: document.querySelector('.course-institution.editable').value,
     process: document.querySelector('.course-intro.editable').value,
@@ -119,18 +139,28 @@ saveButton.addEventListener('click', function() {
     campEnd: campEnd,
     recruitStart: recruitStart,
     recruitEnd: recruitEnd
-  };
+  })], { type: 'application/json' }));
+
+  // 이미지 파일이 선택되었으면 FormData에 추가
+  if (imageUpload.files[0]) {
+    recruitmentData.append('imageFile', imageUpload.files[0]);
+  }
 
   // API 호출
   fetch(`/api/camps/${recruitmentId}`, {
     method: 'PUT',
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${localStorage.getItem('accessToken')}` // Access Token 추가
+      'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
     },
-    body: JSON.stringify(recruitmentData)
+    body: recruitmentData
   })
-  .then(response => response.json())
+  .then(response => {
+    // HTTP 응답 상태 확인
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
   .then(data => {
     if (data.statuscode === '200') {
       Swal.fire({
@@ -139,13 +169,17 @@ saveButton.addEventListener('click', function() {
         icon: 'success',
         confirmButtonText: '확인'
       }).then(() => {
+        // 이미지 갱신 코드 추가
+        if (data.data.newImageUrl) {
+          const imageElement = document.getElementById('imageElementId'); // 실제 이미지 요소의 ID로 교체
+          imageElement.src = data.data.newImageUrl; // 새로운 이미지 URL로 갱신
+        }
         window.location.href = `/camp/${recruitmentId}`;
       });
     } else {
-      console.error('에러:', data.msg);
       Swal.fire({
         title: '수정 실패',
-        text: '모집글 수정 중 오류가 발생했습니다.',
+        text: `오류 발생: ${data.msg}`||'모집글 수정 중 오류가 발생했습니다.',
         icon: 'error',
         confirmButtonText: '확인'
       });
