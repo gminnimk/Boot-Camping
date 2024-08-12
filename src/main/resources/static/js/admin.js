@@ -287,21 +287,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // 요청 데이터 생성
-        const requestData = {
-            name: bootcampName,
-            description: description,
-            imageFile: imageFile
-        };
+        const formData = new FormData();
+        formData.append('name', bootcampName);
+        formData.append('description', description);
+        formData.append('imageFile', imageFile);
 
         try {
-            // 부트캠프 생성 API 호출
             const response = await fetch('/api/admin/camps', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
                 },
-                body: JSON.stringify(requestData)
+                body: formData
             });
 
             if (response.ok) {
