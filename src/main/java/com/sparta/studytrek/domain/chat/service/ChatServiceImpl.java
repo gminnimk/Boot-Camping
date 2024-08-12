@@ -51,6 +51,11 @@ public class ChatServiceImpl implements ChatService{
 			.collect(Collectors.toList());
 	}
 
+	/**
+	 *  특정 채팅 메세지 삭제
+	 *
+	 * @param chatId
+	 */
 	@Override
 	@Transactional
 	public void deleteMessage(Long chatId) {

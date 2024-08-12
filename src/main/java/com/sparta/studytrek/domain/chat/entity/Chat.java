@@ -1,17 +1,23 @@
 package com.sparta.studytrek.domain.chat.entity;
 
+
+
 import com.sparta.studytrek.common.Timestamped;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Chat extends Timestamped {
 
 	@Id
@@ -22,8 +28,4 @@ public class Chat extends Timestamped {
 
 	private String username;
 
-	public Chat(String message, String username) {
-		this.message = message;
-		this.username = username;
-	}
 }

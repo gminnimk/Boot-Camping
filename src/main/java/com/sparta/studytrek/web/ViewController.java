@@ -26,6 +26,11 @@ public class ViewController {
         return "admin";
     }
 
+    @GetMapping("/alarm")
+    public String showAlarmPage() {
+        return "alarm";
+    }
+
     @GetMapping("/profile")
     public String showProfilePage() {
         return "profile";
