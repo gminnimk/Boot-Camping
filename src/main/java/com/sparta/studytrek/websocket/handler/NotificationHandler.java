@@ -1,5 +1,9 @@
 package com.sparta.studytrek.websocket.handler;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
@@ -15,11 +19,14 @@ public class NotificationHandler extends TextWebSocketHandler {
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-		Long userId = getUserIdFromSession(session);
-		session.getAttributes().put("userId", userId);
-
+		String username = getUsernameFromQuery(session);
+		if (username != null) {
+			session.getAttributes().put("username", username);
+			System.out.println("WebSocket 연결 설정: username = " + username);
+		} else {
+			throw new IllegalStateException("세션에 username이 설정되지 않았습니다.");
+		}
 		notificationService.addSession(session);
-		System.out.println("WebSocket 연결이 설정되었습니다: " + session.getId());
 	}
 
 	@Override
@@ -28,7 +35,15 @@ public class NotificationHandler extends TextWebSocketHandler {
 		System.out.println("WebSocket 연결이 종료되었습니다: " + session.getId());
 	}
 
-	private Long getUserIdFromSession(WebSocketSession session) {
-		return 1L;
+	private String getUsernameFromQuery(WebSocketSession session) {
+		String query = session.getUri().getQuery();
+		if (query != null && query.contains("username=")) {
+			for (String param : query.split("&")) {
+				if (param.startsWith("username=")) {
+					return param.split("=")[1];
+				}
+			}
+		}
+		return null;
 	}
 }

@@ -22,10 +22,14 @@ public class NotificationService {
 		sessions.remove(session);
 	}
 
-	public void sendNotificationToUser(Long userId, String message) throws IOException {
+	public void sendNotificationToUser(String username, String message) throws IOException {
 		for (WebSocketSession session : sessions) {
-			if (session.getAttributes().get("userId").equals(userId)) {
+			String sessionUsername = (String) session.getAttributes().get("username");
+			System.out.println("세션에 저장된 username: " + sessionUsername);
+			System.out.println("발송 대상 username: " + username);
+			if (sessionUsername != null && sessionUsername.equals(username)) {
 				session.sendMessage(new TextMessage(message));
+				System.out.println("메시지를 전송했습니다: " + message + " to " + username);
 				break;
 			}
 		}

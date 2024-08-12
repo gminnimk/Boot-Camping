@@ -33,7 +33,22 @@ export function setAuthHeader(config) {
     return config;
 }
 
-const socket = new WebSocket('ws://localhost:8080/ws/notifications');
+const token = getTokenFromLocalStorage();
+let username = null;
+
+if (token) {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    console.log('디코딩된 사용자 정보:', payload);
+
+    username = payload.sub; // JWT의 'sub' 필드에서 username 가져오기
+    console.log('로그인한 사용자 username:', username);
+}
+
+const socket = new WebSocket(`ws://localhost:8080/ws/notifications?username=${username}`);
+
+socket.onopen = function() {
+    console.log('WebSocket 연결이 설정되었습니다');
+};
 
 socket.onmessage = function(event) {
     const message = event.data;
