@@ -2,14 +2,17 @@ package com.sparta.studytrek.domain.camp.service;
 
 import com.sparta.studytrek.common.exception.CustomException;
 import com.sparta.studytrek.common.exception.ErrorCode;
+import com.sparta.studytrek.config.aws.S3Uploader;
 import com.sparta.studytrek.domain.camp.dto.CampRequestDto;
 import com.sparta.studytrek.domain.camp.dto.CampResponseDto;
 import com.sparta.studytrek.domain.camp.entity.Camp;
 import com.sparta.studytrek.domain.camp.repository.CampRepository;
 import com.sparta.studytrek.domain.rank.entity.Rank;
 import com.sparta.studytrek.domain.rank.repository.RankRepository;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +21,7 @@ public class CampService {
     private static final int DEFAULT_RANK_INCREMENT = 1;
     private final CampRepository campRepository;
     private final RankRepository rankRepository;
+    private final S3Uploader s3Uploader;
 
     public Camp findByName(String campName) {
         return campRepository.findByName(campName)
@@ -29,10 +33,31 @@ public class CampService {
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_CAMP));
     }
 
-    public CampResponseDto createCamp(CampRequestDto requestDto) {
-        campRepository.findByName(requestDto.name()).ifPresent(
-            camp -> {throw new CustomException(ErrorCode.DUPLICATE_CAMP_NAME);}
+    /**
+     * 부트캠프를 생성하고 저장하는 메서드
+     *
+     * @param name        부트캠프의 이름
+     * @param description 부트캠프의 상세 내용
+     * @param imageFile   부트캠프에 사용할 이미지 파일 (MultipartFile 형식)
+     * @return 생성된 부트캠프에 대한 응답 DTO
+     * @throws IOException              이미지 파일 처리 중 발생할 수 있는 예외
+     * @throws CustomException          부트캠프 이름이 이미 존재할 경우 발생하는 예외
+     * @throws IllegalArgumentException 이미지 파일이 없거나 비어있을 경우 발생하는 예외
+     */
+    public CampResponseDto createCamp(String name, String description, MultipartFile imageFile)
+        throws IOException {
+        campRepository.findByName(name).ifPresent(
+            camp -> {
+                throw new CustomException(ErrorCode.DUPLICATE_CAMP_NAME);
+            }
         );
+
+        if (imageFile == null || imageFile.isEmpty()) {
+            throw new IllegalArgumentException("이미지 파일이 필요합니다.");
+        }
+        String imageUrl = s3Uploader.upload(imageFile, "camp-images");
+
+        CampRequestDto requestDto = new CampRequestDto(name, description, imageUrl);
         Camp camp = new Camp(requestDto.name(), requestDto.description(), requestDto.imageUrl());
         Camp savedCamp = campRepository.save(camp);
 
@@ -40,6 +65,7 @@ public class CampService {
         Integer newRanking = maxRanking + DEFAULT_RANK_INCREMENT;
         Rank rank = new Rank(savedCamp, newRanking);
         rankRepository.save(rank);
-        return new CampResponseDto(savedCamp.getId(), savedCamp.getName(), savedCamp.getDescription(), savedCamp.getImageUrl());
+        return new CampResponseDto(savedCamp.getId(), savedCamp.getName(),
+            savedCamp.getDescription(), savedCamp.getImageUrl());
     }
 }
