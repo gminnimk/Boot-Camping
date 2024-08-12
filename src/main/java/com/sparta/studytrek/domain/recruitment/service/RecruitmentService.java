@@ -98,6 +98,7 @@ public class RecruitmentService {
     public void deleteRecruitment(Long id, User user) {
         Recruitment recruitment = recruitmentRepository.findByRecruitmentId(id);
         reqUserCheck(recruitment.getUser().getId(), user.getId());
+        s3Uploader.delete(recruitment.getImageUrl());
         recruitmentRepository.delete(recruitment);
     }
 
