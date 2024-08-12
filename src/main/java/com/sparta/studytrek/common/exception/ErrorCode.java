@@ -83,10 +83,10 @@ public enum ErrorCode {
     // Like
     ALREADY_LIKE(HttpStatus.BAD_REQUEST,"이미 좋아요를 눌렀습니다."),
     NOTFOUND_LIKE(HttpStatus.BAD_REQUEST,"좋아요를 누르지 않았습니다."),
-
     //Answer_Comment
     NOTFOUND_ANSWER_COMMENT(HttpStatus.BAD_REQUEST, "해당 댓글은 존재하지 않습니다."),
-
+    // Message
+    MESSAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "메세지를 찾을 수 없습니다."),
     // S3
     FILE_SIZE_EXCEED(HttpStatus.BAD_REQUEST, "이미지 크기가 초과되었습니다."),
     FILE_TYPE_REQUIRED(HttpStatus.BAD_REQUEST, "이미지 파일이 필요합니다.");
