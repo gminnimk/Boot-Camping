@@ -6,6 +6,9 @@ ul#notificationList {
 ul#notificationList li {
     padding: 10px;
     border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 ul#notificationList li.unread {
@@ -14,4 +17,57 @@ ul#notificationList li.unread {
 
 ul#notificationList li.read {
     color: #888;
+}
+
+ul#notificationList li button {
+    background-color: #5aa9e6;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+ul#notificationList li button:hover {
+    background-color: #4a91c3;
+    transform: translateY(-2px);
+}
+
+ul#notificationList li button:active {
+    background-color: #357ab8;
+    transform: translateY(0);
+}
+
+#pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#pagination button {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#pagination button:hover {
+    background-color: #e0e0e0;
+}
+
+#pagination button.active {
+    background-color: #5aa9e6;
+    color: white;
+    border-color: #5aa9e6;
+}
+
+#pagination button:disabled {
+    background-color: #ddd;
+    color: #aaa;
+    cursor: not-allowed;
 }

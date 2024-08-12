@@ -18,9 +18,10 @@
         <ul id="notificationList">
             <li th:each="notification : ${notifications}" th:classappend="${notification.read} ? 'read' : 'unread'">
                 <span th:text="${notification.message}"></span>
-                <button th:onclick="|markAsRead(${notification.id})|">읽음 처리</button>
+                <button th:onclick="|markAsRead(${notification.id})|">확인</button>
             </li>
         </ul>
+        <div id="pagination"></div>
     </div>
 </div>
 </body>
