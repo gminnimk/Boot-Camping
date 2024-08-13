@@ -32,7 +32,7 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 ### 프로필 승인 (관리자용)
-POST {{apiUrl}}/admin/profiles/4/approve
+POST {{apiUrl}}/admin/profiles/1/approve
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 

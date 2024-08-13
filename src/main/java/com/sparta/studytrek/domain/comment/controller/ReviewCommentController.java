@@ -7,6 +7,8 @@ import com.sparta.studytrek.domain.comment.dto.CommentResponseDto;
 import com.sparta.studytrek.domain.comment.entity.ReviewComment;
 import com.sparta.studytrek.domain.comment.service.ReviewCommentService;
 import com.sparta.studytrek.security.UserDetailsImpl;
+
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,8 +41,7 @@ public class ReviewCommentController {
     @PostMapping
     public ResponseEntity<ApiResponse> createReviewComment(@PathVariable Long reviewId,
         @RequestBody CommentRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails)
-    {
+        @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         CommentResponseDto responseDto = reviewCommentService.createReviewComment(reviewId,
             requestDto, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()

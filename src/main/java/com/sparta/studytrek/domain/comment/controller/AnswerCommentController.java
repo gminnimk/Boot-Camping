@@ -6,6 +6,8 @@ import com.sparta.studytrek.domain.comment.dto.AnswerCommentRequestDto;
 import com.sparta.studytrek.domain.comment.dto.AnswerCommentResponseDto;
 import com.sparta.studytrek.domain.comment.service.AnswerCommentService;
 import com.sparta.studytrek.security.UserDetailsImpl;
+
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,8 +43,7 @@ public class AnswerCommentController {
     public ResponseEntity<ApiResponse> createAnswerComment(
         @PathVariable Long questionId, @PathVariable Long answerId,
         @RequestBody AnswerCommentRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails)
-    {
+        @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         AnswerCommentResponseDto responseDto = answerCommentService.createAnswerComment(questionId,
             answerId, requestDto, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()

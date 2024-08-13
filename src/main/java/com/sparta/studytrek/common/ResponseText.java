@@ -90,13 +90,20 @@ public enum ResponseText {
     LIKE_CALL_OFF_SUCCESS("해당 게시글에 좋아요 취소 : %d"),
 
     // notification
-    NOTIFICATION_PROFILE_APPROVED("프로필이 승인되었습니다."),
-    NOTIFICATION_PROFILE_REJECTED("프로필이 거절되었습니다."),
+    NOTIFICATION_PROFILE_APPROVED("프로필이 승인 되었습니다."),
+    NOTIFICATION_PROFILE_REJECTED("프로필이 거절 되었습니다."),
+    NOTIFICATION_STUDY_COMMENT_CREATED("스터디 모집글에 댓글이 작성 되었습니다."),
+    NOTIFICATION_REVIEW_COMMENT_CREATED("리뷰에 댓글이 작성 되었습니다."),
+    NOTIFICATION_ANSWER_COMMENT_CREATED("답변에 댓글이 작성 되었습니다."),
+    NOTIFICATION_ANSWER_CREATED("질문에 답변이 작성 되었습니다."),
+    NOTIFICATION_STUDY_REPLY_CREATED("스터디 모집글의 댓글에 대댓글이 작성되었습니다."),
+    NOTIFICATION_REVIEW_REPLY_CREATED("리뷰의 댓글에 대댓글이 작성되었습니다."),
 
     // Message
     CHAT_CREATE_SUCCESS("채팅 생성 성공."),
     CHAT_GET_SUCCESS("채팅 조회 성공"),
     CHAT_DELETE_SUCCESS("채팅 삭제 성공");
+
 
     private String msg;
 

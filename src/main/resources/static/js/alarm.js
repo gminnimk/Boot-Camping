@@ -140,11 +140,17 @@ function updateNotificationList(notification) {
     const notificationList = document.getElementById('notificationList');
     if (notificationList) {
         const newNotification = document.createElement('li');
+        newNotification.classList.add('notification-item');
         newNotification.classList.add(notification.read ? 'read' : 'unread');
         newNotification.setAttribute('data-id', notification.id || '');
 
+        const formattedDate = new Date(notification.createdAt).toLocaleString();
+
         newNotification.innerHTML = `
-            <span>${notification.message}</span>
+            <div class="notification-text">
+                <span class="notification-message">${notification.message}</span>
+                <span class="notification-date">${formattedDate}</span>
+            </div>
             <div class="button-group">
                 ${notification.id ? `
                     <button onclick="markAsRead(${notification.id})" class="mark-read-btn">
@@ -160,6 +166,8 @@ function updateNotificationList(notification) {
         notificationList.appendChild(newNotification);
     }
 }
+
+
 
 function setupPagination(container, currentPage, totalPages) {
     if (!container) {

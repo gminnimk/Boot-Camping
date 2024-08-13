@@ -1,5 +1,6 @@
 package com.sparta.studytrek.domain.comment.service;
 
+import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.common.exception.CustomException;
 import com.sparta.studytrek.common.exception.ErrorCode;
 import com.sparta.studytrek.domain.answer.dto.AnswerRequestDto;
@@ -12,6 +13,9 @@ import com.sparta.studytrek.domain.comment.entity.AnswerComment;
 import com.sparta.studytrek.domain.comment.repository.AnswerCommentRepository;
 import com.sparta.studytrek.domain.question.entity.Question;
 import com.sparta.studytrek.domain.question.repository.QuestionRepository;
+import com.sparta.studytrek.websocket.service.NotificationService;
+
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +27,7 @@ public class AnswerCommentService {
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
     private final AnswerCommentRepository answerCommentRepository;
+    private final NotificationService notificationService;
 
     /**
      * 질문에 대한 답변의 댓글 작성
@@ -34,12 +39,18 @@ public class AnswerCommentService {
      * @return  질문에 대한 답변의 댓글 응답 데이터
      */
     public AnswerCommentResponseDto createAnswerComment(Long questionId, Long answerId,
-        AnswerCommentRequestDto requestDto, User user) {
+        AnswerCommentRequestDto requestDto, User user) throws IOException {
         Question question = questionRepository.findByQuestionId(questionId);
         Answer answer = answerRepository.findByAnswerId(answerId);
 
         AnswerComment answerComment = new AnswerComment(answer, user, requestDto);
         AnswerComment saveComment = answerCommentRepository.save(answerComment);
+
+        notificationService.sendNotificationToUser(
+            answer.getUser().getUsername(),
+            ResponseText.NOTIFICATION_ANSWER_COMMENT_CREATED.getMsg()
+        );
+
         return new AnswerCommentResponseDto(saveComment);
     }
 

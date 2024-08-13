@@ -76,3 +76,37 @@ ul#notificationList li button:active {
     margin-left: 10px;
 }
 
+.notification-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.notification-text {
+    display: flex;
+    flex-grow: 1;
+    margin-right: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-message {
+    flex-grow: 1;
+    margin-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.notification-date {
+    white-space: nowrap;
+    margin-left: 20px;
+    flex-shrink: 0;
+}
+
+.button-group {
+    display: flex;
+    gap: 5px;
+}

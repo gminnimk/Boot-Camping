@@ -91,7 +91,7 @@ function onLogoutSuccess() {
 }
 
 function openAlarmPopup() {
-    const width = 400;
+    const width = 630;
     const height = 600;
 
     const screenWidth = window.screen.width;

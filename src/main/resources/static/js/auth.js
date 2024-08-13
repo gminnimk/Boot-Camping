@@ -63,6 +63,10 @@ socket.onmessage = function(event) {
         customClass: {
             title: 'black-text'
         }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            location.reload();
+        }
     });
 };
 
