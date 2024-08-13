@@ -85,7 +85,9 @@ public enum ErrorCode {
     //Answer_Comment
     NOTFOUND_ANSWER_COMMENT(HttpStatus.BAD_REQUEST, "해당 댓글은 존재하지 않습니다."),
     // Message
-    MESSAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "메세지를 찾을 수 없습니다.");
+    MESSAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "메세지를 찾을 수 없습니다."),
+    // Notification
+    NOTIFICATION_NOT_FOUND(HttpStatus.BAD_REQUEST,"알림을 찾을 수 없습니다.");
 
 
     private HttpStatus httpStatus;
