@@ -71,3 +71,8 @@ ul#notificationList li button:active {
     color: #aaa;
     cursor: not-allowed;
 }
+
+.delete-btn {
+    margin-left: 10px;
+}
+

@@ -52,15 +52,36 @@ window.markAsRead = function(notificationId) {
                     liElement.classList.remove('unread');
                     liElement.classList.add('read');
 
-                    const button = liElement.querySelector('button');
-                    if (button) {
-                        button.textContent = '읽음';
-                        button.disabled = true;
+                    const markReadButton = liElement.querySelector('.mark-read-btn');
+                    if (markReadButton) {
+                        markReadButton.textContent = '읽음';
+                        markReadButton.disabled = true;
                     }
                 }
             })
             .catch(err => console.error('알림 읽음 처리 중 오류 발생:', err));
     }
+};
+
+window.deleteNotification = function(notificationId) {
+    const token = getTokenFromLocalStorage();
+    if (!token) {
+        console.error('토큰을 가져올 수 없습니다. 사용자가 로그인되어 있는지 확인하세요.');
+        return;
+    }
+
+    axios.delete(`/api/notifications/${notificationId}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+        .then(() => {
+            const liElement = document.querySelector(`li[data-id='${notificationId}']`);
+            if (liElement) {
+                liElement.remove();
+            }
+        })
+        .catch(err => console.error('알림 삭제 중 오류 발생:', err));
 };
 
 function loadNotifications(page = 0, size = 10) {
@@ -121,10 +142,21 @@ function updateNotificationList(notification) {
         const newNotification = document.createElement('li');
         newNotification.classList.add(notification.read ? 'read' : 'unread');
         newNotification.setAttribute('data-id', notification.id || '');
+
         newNotification.innerHTML = `
             <span>${notification.message}</span>
-            ${notification.id ? `<button onclick="markAsRead(${notification.id})">${notification.read ? '읽음' : '확인'}</button>` : ''}
+            <div class="button-group">
+                ${notification.id ? `
+                    <button onclick="markAsRead(${notification.id})" class="mark-read-btn">
+                        ${notification.read ? '읽음' : '확인'}
+                    </button>
+                    <button onclick="deleteNotification(${notification.id})" class="delete-btn">
+                        <i class="fas fa-trash"></i>
+                    </button>`
+            : ''}
+            </div>
         `;
+
         notificationList.appendChild(newNotification);
     }
 }

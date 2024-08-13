@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -73,9 +74,27 @@ public class NotificationController {
 		if (userDetails == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
-
 		long unreadCount = notificationService.countUnreadNotificationsForUser(username);
-
 		return ResponseEntity.ok(unreadCount);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteNotification(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
+		if (userDetails == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+
+		try {
+			Notification notification = notificationService.getNotificationById(id);
+			if (!notification.getUsername().equals(userDetails.getUsername())) {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+			}
+
+			notificationService.deleteNotification(id);
+			return ResponseEntity.noContent().build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+				.body(null);
+		}
 	}
 }

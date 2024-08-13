@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import com.sparta.studytrek.common.exception.CustomException;
+import com.sparta.studytrek.common.exception.ErrorCode;
 import com.sparta.studytrek.websocket.entity.Notification;
 import com.sparta.studytrek.websocket.repository.NotificationRepository;
 
@@ -75,8 +77,9 @@ public class NotificationService {
 	}
 
 	public void markNotificationAsRead(Long notificationId) {
-		Notification notification = notificationRepository.findById(notificationId)
-			.orElseThrow(() -> new RuntimeException("Notification not found"));
+		Notification notification = notificationRepository.findById(notificationId).orElseThrow(
+			() -> new CustomException(ErrorCode.NOTIFICATION_NOT_FOUND)
+		);
 		notification.markAsRead();
 		notificationRepository.save(notification);
 	}
@@ -92,5 +95,11 @@ public class NotificationService {
 
 	public long countUnreadNotificationsForUser(String username) {
 		return notificationRepository.countByUsernameAndIsReadFalse(username);
+	}
+
+	public Notification getNotificationById(Long id) {
+		return notificationRepository.findById(id).orElseThrow(
+			() -> new CustomException(ErrorCode.NOTIFICATION_NOT_FOUND)
+		);
 	}
 }
