@@ -48,15 +48,9 @@ function displayRanks(data) {
   }
 
   data.forEach(rank => {
-    const camp = rank.camp;
-
-    if (!camp || !camp.id || !camp.name || !camp.imageUrl) {
-      console.error('Invalid camp data:', camp);
-      return;
-    }
-
-    const name = camp.name;
-    const imageUrl = camp.imageUrl;
+    const campId = rank.campId;
+    const campName = rank.campName;
+    const campImage = rank.campImage;
     const ranking = rank.ranking;
     const likesCount = rank.likesCount || 0;
 
@@ -73,12 +67,12 @@ function displayRanks(data) {
     resultItem.classList.add('ranking-item');
 
     resultItem.innerHTML = `
-            <button class="like-button" data-camp-id="${camp.id}" data-likes-count="${likesCount}">❤ ${likesCount}</button>
-            <div class="emoji">${emoji}</div>
-            <h3>${name}</h3>
-            <img src="${imageUrl}" alt="${name} Image" class="camp-image">
-            <div class="rating">${ranking}등</div>
-        `;
+        <button class="like-button" data-camp-id="${campId}" data-likes-count="${likesCount}">❤ ${likesCount}</button>
+        <div class="emoji">${emoji}</div>
+        <h3>${campName}</h3>
+        <img src="${campImage}" alt="${campName} Image" class="camp-image">
+        <div class="rating">${ranking}등</div>
+    `;
 
     resultsContainer.appendChild(resultItem);
   });
