@@ -10,6 +10,7 @@ import com.sparta.studytrek.domain.review.dto.ReviewRequestDto;
 import com.sparta.studytrek.domain.review.dto.ReviewResponseDto;
 import com.sparta.studytrek.domain.review.entity.Review;
 import com.sparta.studytrek.domain.review.repository.ReviewRepository;
+import com.sparta.studytrek.summary.service.SummaryService;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final CampService campService;
     private final UserService userService;
+    private final SummaryService summaryService;
 
     /**
      * 리뷰 작성
@@ -45,8 +47,10 @@ public class ReviewService {
         }
 
         Camp camp = campService.findByName(requestDto.getCampName());
+        String summary = summaryService.summarizeText(requestDto.getContent())
+            .orElse("요약을 생성할 수 없습니다.");
 
-        Review review = new Review(requestDto, user, camp);
+        Review review = new Review(requestDto, user, camp, summary);
         Review creatReview = reviewRepository.save(review);
 
         return new ReviewResponseDto(creatReview);
@@ -75,8 +79,10 @@ public class ReviewService {
         }
 
         Camp camp = campService.findByName(requestDto.getCampName());
+        String summary = summaryService.summarizeText(requestDto.getContent())
+            .orElse("요약을 생성할 수 없습니다.");
 
-        review.updateReview(requestDto, camp);
+        review.updateReview(requestDto, camp, summary);
 
         return new ReviewResponseDto(review);
     }

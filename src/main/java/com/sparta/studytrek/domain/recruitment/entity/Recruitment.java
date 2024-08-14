@@ -3,8 +3,11 @@ package com.sparta.studytrek.domain.recruitment.entity;
 import com.sparta.studytrek.common.Timestamped;
 import com.sparta.studytrek.domain.auth.entity.User;
 import com.sparta.studytrek.domain.recruitment.dto.RecruitmentRequestDto;
+import com.sparta.studytrek.domain.review.entity.Review;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
