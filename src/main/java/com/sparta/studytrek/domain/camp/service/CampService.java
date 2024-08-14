@@ -29,8 +29,9 @@ public class CampService {
     private final CampRepository campRepository;
     private final RankRepository rankRepository;
     private final UserRepository userRepository;
-    private final S3Uploader s3Uploader;
     private final CampLikeRepository campLikeRepository;
+    private final S3Uploader s3Uploader;
+
 
     public Camp findByName(String campName) {
         return campRepository.findByName(campName)
