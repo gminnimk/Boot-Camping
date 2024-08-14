@@ -2,6 +2,7 @@ package com.sparta.studytrek.domain.recruitment.dto;
 
 import java.time.LocalDate;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class RecruitmentRequestDto {
@@ -18,4 +19,6 @@ public class RecruitmentRequestDto {
     private LocalDate recruitStart;
     private LocalDate recruitEnd;
     private String campName;
+    @Setter
+    private String imageUrl;
 }

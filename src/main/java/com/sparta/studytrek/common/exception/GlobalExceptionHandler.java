@@ -7,6 +7,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -30,5 +31,12 @@ public class GlobalExceptionHandler {
         String errorMessage = fieldError != null ? fieldError.getDefaultMessage() : "Validation Error";
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
             .body(new ExceptionResponse(HttpStatus.FORBIDDEN.value(), errorMessage));
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    protected ResponseEntity<ExceptionResponse> handleMaxUploadSizeExceededException(
+        MaxUploadSizeExceededException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(new ExceptionResponse(false, ErrorCode.FILE_SIZE_EXCEED.getMsg()));
     }
 }

@@ -46,6 +46,7 @@ public enum ErrorCode {
     REVIEW_NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "해당 리뷰를 작성한 사용자가 아닙니다."),
 
     // Camp
+    NOTFOUND_CAMP(HttpStatus.BAD_REQUEST, "캠프를 찾을 수 없습니다."),
     NOTFOUND_CAMP_USER(HttpStatus.BAD_REQUEST, "해당 캠프에 참가한 이력이 존재하지 않습니다."),
     DUPLICATE_CAMP_NAME(HttpStatus.BAD_REQUEST, "이미 존재하는 캠프 이름입니다."),
 
@@ -87,8 +88,13 @@ public enum ErrorCode {
     // Like
     ALREADY_LIKE(HttpStatus.BAD_REQUEST,"이미 좋아요를 눌렀습니다."),
     NOTFOUND_LIKE(HttpStatus.BAD_REQUEST,"좋아요를 누르지 않았습니다."),
+
     //Answer_Comment
-    NOTFOUND_ANSWER_COMMENT(HttpStatus.BAD_REQUEST, "해당 댓글은 존재하지 않습니다.");
+    NOTFOUND_ANSWER_COMMENT(HttpStatus.BAD_REQUEST, "해당 댓글은 존재하지 않습니다."),
+
+    // S3
+    FILE_SIZE_EXCEED(HttpStatus.BAD_REQUEST, "이미지 크기가 초과되었습니다."),
+    FILE_TYPE_REQUIRED(HttpStatus.BAD_REQUEST, "이미지 파일이 필요합니다.");
 
     private HttpStatus httpStatus;
     private String msg;
