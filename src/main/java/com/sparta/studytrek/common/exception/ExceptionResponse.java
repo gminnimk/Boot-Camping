@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @Getter
 public class ExceptionResponse {
-    private boolean success;
+    private int success;
     private String msg;
 
-    public ExceptionResponse(boolean success, String msg) {
+    public ExceptionResponse(int success, String msg) {
         this.success = success;
         this.msg = msg;
     }
