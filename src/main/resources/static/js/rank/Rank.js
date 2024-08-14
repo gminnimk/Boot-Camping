@@ -43,17 +43,22 @@ function displayRanks(data) {
   resultsContainer.innerHTML = ''; // 기존 결과를 지웁니다.
 
   if (!Array.isArray(data) || data.length === 0) {
-    // 데이터가 비어있거나 유효하지 않을 경우 처리
     resultsContainer.innerHTML = '<p>No results found.</p>';
     return;
   }
 
   data.forEach(rank => {
     const camp = rank.camp;
-    const name = rank.campName;
-    const imageUrl = rank.campImage; // 이미지 URL
-    const ranking = rank.ranking;
 
+    if (!camp || !camp.id || !camp.name || !camp.imageUrl) {
+      console.error('Invalid camp data:', camp);
+      return;
+    }
+
+    const name = camp.name;
+    const imageUrl = camp.imageUrl;
+    const ranking = rank.ranking;
+    const likesCount = rank.likesCount || 0;
 
     let emoji = '';
     if (ranking === 1) {
@@ -68,12 +73,12 @@ function displayRanks(data) {
     resultItem.classList.add('ranking-item');
 
     resultItem.innerHTML = `
-      <button class="like-button">❤</button>
-      <div class="emoji">${emoji}</div>
-      <h3>${name}</h3>
-      <img src="${imageUrl}" alt="${name} Image" class="camp-image">
-      <div class="rating">${ranking}등</div>
-    `;
+            <button class="like-button" data-camp-id="${camp.id}" data-likes-count="${likesCount}">❤ ${likesCount}</button>
+            <div class="emoji">${emoji}</div>
+            <h3>${name}</h3>
+            <img src="${imageUrl}" alt="${name} Image" class="camp-image">
+            <div class="rating">${ranking}등</div>
+        `;
 
     resultsContainer.appendChild(resultItem);
   });
@@ -142,7 +147,28 @@ function applyLikeButtonListeners() {
     likeButtons.forEach(button => {
       button.addEventListener('click', function (e) {
         e.stopPropagation();
-        this.classList.toggle('liked');
+        const campId = this.getAttribute('data-camp-id');
+        const currentLikesCount = parseInt(this.getAttribute('data-likes-count'), 10);
+        const newLikesCount = this.classList.contains('liked') ? currentLikesCount - 1 : currentLikesCount + 1;
+
+        const method = this.classList.contains('liked') ? 'DELETE' : 'POST';
+
+        // 서버에 좋아요 추가/취소 요청을 보냅니다.
+        fetch(`/api/camps/${campId}/like`, { method: method })
+        .then(response => response.json())
+        .then(data => {
+          if (response.ok) {
+            // 성공적으로 업데이트된 경우, UI에서 좋아요 수를 업데이트합니다.
+            this.setAttribute('data-likes-count', newLikesCount);
+            this.textContent = `❤ ${newLikesCount}`;
+            this.classList.toggle('liked'); // 좋아요 상태 토글
+          } else {
+            console.error('Failed to update likes');
+          }
+        })
+        .catch(error => {
+          console.error('Error updating likes:', error);
+        });
       });
     });
   }
