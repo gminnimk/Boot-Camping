@@ -146,19 +146,27 @@ function applyLikeButtonListeners() {
         const newLikesCount = this.classList.contains('liked') ? currentLikesCount - 1 : currentLikesCount + 1;
 
         const method = this.classList.contains('liked') ? 'DELETE' : 'POST';
+        const accessToken = localStorage.getItem('accessToken'); // 토큰 가져오기
 
         // 서버에 좋아요 추가/취소 요청을 보냅니다.
-        fetch(`/api/camps/${campId}/like`, { method: method })
-        .then(response => response.json())
-        .then(data => {
-          if (response.ok) {
-            // 성공적으로 업데이트된 경우, UI에서 좋아요 수를 업데이트합니다.
-            this.setAttribute('data-likes-count', newLikesCount);
-            this.textContent = `❤ ${newLikesCount}`;
-            this.classList.toggle('liked'); // 좋아요 상태 토글
-          } else {
-            console.error('Failed to update likes');
+        fetch(`/api/camps/${campId}/like`, {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}` // 토큰 포함
           }
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to update likes'); // 오류 발생 시 예외 처리
+          }
+          return response.json();
+        })
+        .then(data => {
+          // 성공적으로 업데이트된 경우, UI에서 좋아요 수를 업데이트합니다.
+          this.setAttribute('data-likes-count', newLikesCount);
+          this.textContent = `❤ ${newLikesCount}`;
+          this.classList.toggle('liked'); // 좋아요 상태 토글
         })
         .catch(error => {
           console.error('Error updating likes:', error);
@@ -167,6 +175,7 @@ function applyLikeButtonListeners() {
     });
   }
 }
+
 
 // 페이지 이동 함수
 function changePage(direction) {
