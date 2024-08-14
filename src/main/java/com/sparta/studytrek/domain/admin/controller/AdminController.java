@@ -1,5 +1,7 @@
 package com.sparta.studytrek.domain.admin.controller;
 
+import com.sparta.studytrek.aop.AdminRoleCheck;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import com.sparta.studytrek.common.ApiResponse;
 import com.sparta.studytrek.common.ResponseText;
@@ -18,7 +21,6 @@ import com.sparta.studytrek.domain.admin.dto.AdminResponseDto;
 import com.sparta.studytrek.domain.admin.service.AdminService;
 import com.sparta.studytrek.domain.auth.dto.TokenResponseDto;
 import com.sparta.studytrek.domain.auth.entity.UserRoleEnum;
-import com.sparta.studytrek.domain.camp.dto.CampRequestDto;
 import com.sparta.studytrek.domain.camp.dto.CampResponseDto;
 import com.sparta.studytrek.domain.camp.service.CampService;
 import com.sparta.studytrek.domain.profile.dto.ProfileResponseDto;
@@ -26,6 +28,7 @@ import com.sparta.studytrek.domain.profile.entity.ProfileStatus;
 import com.sparta.studytrek.domain.profile.service.ProfileService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -79,6 +82,7 @@ public class AdminController {
      * @return 회원탈퇴 성공 응답 데이터
      */
     @DeleteMapping("/users/{userId}")
+    @AdminRoleCheck
     public ResponseEntity<ApiResponse> adminDelete(@PathVariable Long userId)
     {
         adminService.adminDelete(userId);
@@ -96,6 +100,7 @@ public class AdminController {
      * @return 승인 성공 응답 데이터
      */
     @PostMapping("/profiles/{profileId}/approve")
+    @AdminRoleCheck
     public ResponseEntity<ApiResponse> approveProfile(@PathVariable Long profileId)
     {
         profileService.approveProfile(profileId);
@@ -113,6 +118,7 @@ public class AdminController {
      * @return 거절 성공 응답 데이터
      */
     @PostMapping("/profiles/{profileId}/reject")
+    @AdminRoleCheck
     public ResponseEntity<ApiResponse> rejectProfile(@PathVariable Long profileId)
     {
         profileService.rejectProfile(profileId);
@@ -129,6 +135,7 @@ public class AdminController {
      * @return 조회 성공 응답 데이터
      */
     @GetMapping("/profiles/role/{role}")
+    @AdminRoleCheck
     public ResponseEntity<ApiResponse> getAllProfiles(@PathVariable("role") UserRoleEnum role)
     {
         List<ProfileResponseDto> responseDtos = profileService.getProfilesByRole(role).getBody();
@@ -147,6 +154,7 @@ public class AdminController {
      * @return 조회 성공 응답 데이터
      */
     @GetMapping("/profiles/role/{role}/status/{status}")
+    @AdminRoleCheck
     public ResponseEntity<ApiResponse> getProfileByStatus(@PathVariable("role") UserRoleEnum role,
         @PathVariable("status") ProfileStatus status)
     {
@@ -167,6 +175,7 @@ public class AdminController {
      * @return 상세 조회 성공 응답 데이터
      */
     @GetMapping("/profiles/{profileId}")
+    @AdminRoleCheck
     public ResponseEntity<ApiResponse> getProfileById(@PathVariable Long profileId) {
         ProfileResponseDto profileResponseDto = profileService.getProfileById(profileId).getBody();
         ApiResponse response = ApiResponse.builder()
@@ -180,18 +189,32 @@ public class AdminController {
     /**
      * 부트캠프 등록(관리자용)
      *
-     * @param campRequestDto 등록할 부트캠프 이름, 상세내용
-     * @return 부트캠프 등록 성공 데이터
+     * @param name        부트캠프의 이름
+     * @param description 부트캠프의 상세 내용
+     * @param imageFile   부트캠프에 사용할 이미지 파일 (MultipartFile 형식)
+     * @return 부트캠프 등록 성공 시 응답 데이터 (HTTP 201 Created)
+     * @throws IOException 이미지 파일 처리 중 발생할 수 있는 예외
      */
     @PostMapping("/camps")
-    public ResponseEntity<ApiResponse> createCamp(@RequestBody CampRequestDto campRequestDto)
+    @AdminRoleCheck
+    public ResponseEntity<ApiResponse> createCamp(
+        @RequestPart("name") String name,
+        @RequestPart("description") String description,
+        @RequestPart("imageFile") MultipartFile imageFile) throws IOException
     {
-        CampResponseDto campResponseDto = campService.createCamp(campRequestDto);
-        ApiResponse response = ApiResponse.builder()
-            .msg(ResponseText.ADMIN_CREATE_CAMP_SUCCESS.getMsg())
-            .statuscode(String.valueOf(HttpStatus.CREATED.value()))
-            .data(campResponseDto)
-            .build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        try {
+            CampResponseDto campResponseDto = campService.createCamp(name, description, imageFile);
+            ApiResponse response = ApiResponse.builder()
+                .msg(ResponseText.ADMIN_CREATE_CAMP_SUCCESS.getMsg())
+                .statuscode(String.valueOf(HttpStatus.CREATED.value()))
+                .data(campResponseDto)
+                .build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(ApiResponse.builder()
+                .msg(e.getMessage())
+                .statuscode(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+                .build());
+        }
     }
 }

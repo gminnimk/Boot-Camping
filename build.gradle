@@ -54,6 +54,9 @@ dependencies {
 
     // JSON 처리
     implementation 'org.json:json:20210307'
+
+    // AWS S3
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.303'
 }
 
 tasks.named('test') {
