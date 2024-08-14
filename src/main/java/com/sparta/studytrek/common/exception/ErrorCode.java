@@ -87,6 +87,9 @@ public enum ErrorCode {
     //Answer_Comment
     NOTFOUND_ANSWER_COMMENT(HttpStatus.BAD_REQUEST, "해당 댓글은 존재하지 않습니다."),
 
+    // Rank
+    RANKING_MUST_NOT_BE_NULL(HttpStatus.BAD_REQUEST, "랭킹은 null일 수 없습니다."),
+
     // S3
     FILE_SIZE_EXCEED(HttpStatus.BAD_REQUEST, "이미지 크기가 초과되었습니다."),
     FILE_TYPE_REQUIRED(HttpStatus.BAD_REQUEST, "이미지 파일이 필요합니다.");
