@@ -55,10 +55,14 @@ public class Recruitment extends Timestamped {
 
     private String campName; // 캠프 이름
 
+    @Getter
+    @Column(length = 255)
+    private String imageUrl; // 이미지 url
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;  // 유저 정보
-    
+
     public Recruitment(RecruitmentRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.process = requestDto.getProcess();
@@ -74,9 +78,10 @@ public class Recruitment extends Timestamped {
         this.recruitEnd = requestDto.getRecruitEnd();
         this.user = user;
         this.campName = requestDto.getCampName();
+        this.imageUrl = requestDto.getImageUrl();
     }
 
-    public void updateRecruitment(RecruitmentRequestDto requestDto) {
+    public void updateRecruitmentWithoutImgurl(RecruitmentRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.process = requestDto.getProcess();
         this.content = requestDto.getContent();
@@ -90,5 +95,9 @@ public class Recruitment extends Timestamped {
         this.recruitStart = requestDto.getRecruitStart();
         this.recruitEnd = requestDto.getRecruitEnd();
         this.campName = requestDto.getCampName();
+    }
+
+    public void updateImage(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

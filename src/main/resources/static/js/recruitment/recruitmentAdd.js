@@ -172,13 +172,16 @@ courseForm.addEventListener('submit', function(e) {
         const coursePeriod = document.getElementById('coursePeriod').value; // 날짜 범위 선택기에서 문자열로 반환됨
         const courseRecruitment = document.getElementById('courseRecruitment').value;
         const courseTime = document.getElementById('courseTime').value;
+        const imageFile = document.getElementById('imageFile').files[0];
 
         // 날짜 범위 나누기
         const [periodDate, periodToDate] = coursePeriod.split(' to ');
         const [recruitDate, recruitToDate] = courseRecruitment.split(' to ');
 
         // 서버로 전송할 데이터 준비
-        const formData = {
+        const formData = new FormData();
+        // RecruitmentRequestDto 객체를 data라는 이름으로 추가
+        formData.append('data', new Blob([JSON.stringify({
             place: selectedClassType,
             cost: selectedCostType,
             trek: selectedFieldType,
@@ -192,16 +195,19 @@ courseForm.addEventListener('submit', function(e) {
             classTime: courseTime,
             recruitStart: recruitDate,
             recruitEnd: recruitToDate
-        };
+        })], { type: 'application/json' }));
 
-        // 서버로 데이터 전송
+        if (imageFile) {
+            formData.append('imageFile', imageFile);
+        }
+
+// 서버로 데이터 전송
         fetch('/api/camps', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
             },
-            body: JSON.stringify(formData) // JSON 문자열로 변환하여 전송
+            body: formData // FormData 객체를 전송
         })
         .then(response => response.json())
         .then(data => {
