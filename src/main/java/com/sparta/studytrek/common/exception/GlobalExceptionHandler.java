@@ -18,7 +18,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 
-
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ExceptionResponse> handleCustomException(CustomException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -37,6 +36,6 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ExceptionResponse> handleMaxUploadSizeExceededException(
         MaxUploadSizeExceededException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(new ExceptionResponse(false, ErrorCode.FILE_SIZE_EXCEED.getMsg()));
+            .body(new ExceptionResponse(ErrorCode.FILE_SIZE_EXCEED.getHttpStatus().value(), ErrorCode.FILE_SIZE_EXCEED.getMsg()));
     }
 }
