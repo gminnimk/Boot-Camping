@@ -2,9 +2,7 @@ package com.sparta.studytrek.domain.recruitment.service;
 
 import com.sparta.studytrek.domain.recruitment.dto.ParticipatePeriodResponseDto;
 import com.sparta.studytrek.domain.recruitment.dto.RecruitPeriodResponseDto;
-import com.sparta.studytrek.domain.recruitment.entity.Recruitment;
 import com.sparta.studytrek.domain.recruitment.repository.RecruitmentRepository;
-import java.util.HashSet;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

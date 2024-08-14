@@ -23,6 +23,7 @@ public class RecruitmentResponseDto {
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
     private String campName;
+    private String imageUrl;
 
     public RecruitmentResponseDto(Recruitment createRecruitment) {
         this.id = createRecruitment.getId();
@@ -41,5 +42,6 @@ public class RecruitmentResponseDto {
         this.createAt = createRecruitment.getCreatedAt();
         this.updateAt = createRecruitment.getUpdatedAt();
         this.campName = createRecruitment.getCampName();
+        this.imageUrl = createRecruitment.getImageUrl();
     }
 }
