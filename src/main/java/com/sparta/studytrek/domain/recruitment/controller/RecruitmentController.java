@@ -1,5 +1,6 @@
 package com.sparta.studytrek.domain.recruitment.controller;
 
+import com.sparta.studytrek.aop.RecruitmentRoleCheck;
 import com.sparta.studytrek.common.ApiResponse;
 import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.domain.recruitment.dto.RecruitmentRequestDto;
@@ -43,6 +44,7 @@ public class RecruitmentController {
      * @throws IllegalArgumentException 잘못된 입력 데이터가 주어진 경우 발생하는 예외
      */
     @PostMapping
+    @RecruitmentRoleCheck
     public ResponseEntity<ApiResponse> createRecruitment(
         @RequestPart("data") RecruitmentRequestDto requestDto,
         @RequestPart("imageFile") MultipartFile imageFile,
@@ -76,6 +78,7 @@ public class RecruitmentController {
      * @throws IllegalArgumentException 잘못된 입력 데이터가 주어진 경우 발생하는 예외
      */
     @PutMapping("/{id}")
+    @RecruitmentRoleCheck
     public ResponseEntity<ApiResponse> updateRecruitment(
         @PathVariable Long id,
         @RequestPart("data") RecruitmentRequestDto requestDto,
@@ -105,6 +108,7 @@ public class RecruitmentController {
      * @param userDetails 요청한 유저의 정보
      */
     @DeleteMapping("/{id}")
+    @RecruitmentRoleCheck
     public ResponseEntity<ApiResponse> deleteRecruitment(@PathVariable Long id,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         recruitmentService.deleteRecruitment(id, userDetails.getUser());
