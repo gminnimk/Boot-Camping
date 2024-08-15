@@ -7,6 +7,7 @@ import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.studytrek.domain.auth.repository.UserRepository;
 import com.sparta.studytrek.domain.chat.service.ChatService;
 import com.sparta.studytrek.websocket.handler.ChatHandler;
 import com.sparta.studytrek.websocket.handler.NotificationHandler;
@@ -22,6 +23,7 @@ public class WebSocketconfig implements WebSocketConfigurer {
 	private final NotificationService notificationService;
 	private final ChatService chatService;
 	private final ObjectMapper objectMapper;
+	private final UserRepository userRepository;
 
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
@@ -40,6 +42,6 @@ public class WebSocketconfig implements WebSocketConfigurer {
 
 	@Bean
 	public ChatHandler chatHandler() {
-		return new ChatHandler(chatService, objectMapper);
+		return new ChatHandler(chatService, objectMapper, userRepository);
 	}
 }

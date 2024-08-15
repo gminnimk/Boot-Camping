@@ -28,4 +28,12 @@ public class Chat extends Timestamped {
 
 	private String username;
 
+	private String name;
+
+
+	public Chat(String message, String username, String name) {
+		this.message = message;
+		this.username = username;
+		this.name = name;
+	}
 }

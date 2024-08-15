@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             const messages = result.data;
             messages.forEach((message) => {
                 const newMessage = document.createElement('div');
-                newMessage.textContent = `${message.username}: ${message.message}`;
+                newMessage.textContent = `${message.name}: ${message.message}`;
                 messageArea.appendChild(newMessage);
             });
             messageArea.scrollTop = messageArea.scrollHeight;
@@ -39,12 +39,11 @@ document.addEventListener("DOMContentLoaded", async function() {
         console.log('서버로부터 실시간 메시지가 도착했습니다:', event.data); // 추가된 로그
         const data = JSON.parse(event.data);
         const newMessage = document.createElement('div');
-        newMessage.textContent = `${data.username}: ${data.message}`;
+        newMessage.textContent = `${data.name}: ${data.message}`;
         messageArea.appendChild(newMessage);
         messageArea.scrollTop = messageArea.scrollHeight;
     };
 
-    // 메시지 전송
     sendButton.addEventListener('click', function() {
         const message = messageInput.value;
         if (message) {

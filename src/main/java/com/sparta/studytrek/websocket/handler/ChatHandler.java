@@ -9,7 +9,10 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.studytrek.domain.auth.entity.User;
+import com.sparta.studytrek.domain.auth.repository.UserRepository;
 import com.sparta.studytrek.domain.chat.dto.ChatMessageRequestDto;
+import com.sparta.studytrek.domain.chat.dto.ChatMessageResponseDto;
 import com.sparta.studytrek.domain.chat.service.ChatService;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,7 @@ public class ChatHandler extends TextWebSocketHandler {
 
 	private final ChatService chatService;
 	private final ObjectMapper objectMapper;
+	private final UserRepository userRepository;
 	private final List<WebSocketSession> sessions = new ArrayList<>();
 
 	@Override
@@ -28,12 +32,12 @@ public class ChatHandler extends TextWebSocketHandler {
 		String username = getUsernameFromQuery(session);
 		if (username != null) {
 			session.getAttributes().put("username", username);
-			sessions.add(session);
-			log.info("WebSocket 연결 설정: username = " + username);
 		} else {
 			throw new IllegalStateException("세션에 username이 설정되지 않았습니다.");
 		}
+		sessions.add(session);
 	}
+
 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
@@ -46,12 +50,23 @@ public class ChatHandler extends TextWebSocketHandler {
 		String payload = message.getPayload();
 		log.info("Received chat message: {}", payload);
 
-		ChatMessageRequestDto chatMessage = objectMapper.readValue(payload, ChatMessageRequestDto.class);
+		ChatMessageRequestDto chatMessageRequest = objectMapper.readValue(payload, ChatMessageRequestDto.class);
 
-		chatService.saveMessage(chatMessage);
+		User user = userRepository.findByUsername(chatMessageRequest.getUsername())
+			.orElseThrow(() -> new IllegalStateException("사용자를 찾을 수 없습니다: " + chatMessageRequest.getUsername()));
+
+		ChatMessageResponseDto chatMessageResponse = chatService.saveMessage(chatMessageRequest);
+
+		String responseMessage = objectMapper.writeValueAsString(new ChatMessageResponseDto(
+			chatMessageResponse.getId(),
+			chatMessageResponse.getMessage(),
+			chatMessageResponse.getUsername(),
+			chatMessageResponse.getCreatedAt(),
+			user.getName()
+		));
 
 		for (WebSocketSession webSocketSession : sessions) {
-			webSocketSession.sendMessage(new TextMessage(payload));
+			webSocketSession.sendMessage(new TextMessage(responseMessage));
 		}
 	}
 

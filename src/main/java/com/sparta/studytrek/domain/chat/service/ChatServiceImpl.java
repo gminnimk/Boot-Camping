@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sparta.studytrek.common.exception.CustomException;
 import com.sparta.studytrek.common.exception.ErrorCode;
+import com.sparta.studytrek.domain.auth.entity.User;
+import com.sparta.studytrek.domain.auth.repository.UserRepository;
 import com.sparta.studytrek.domain.chat.dto.ChatMessageRequestDto;
 import com.sparta.studytrek.domain.chat.dto.ChatMessageResponseDto;
 import com.sparta.studytrek.domain.chat.entity.Chat;
@@ -22,6 +24,7 @@ public class ChatServiceImpl implements ChatService{
 
 	private final ChatRepository chatRepository;
 	private final ChatMapper chatMapper;
+	private final UserRepository userRepository;
 
 	/**
 	 * 채팅 메세지 저장
@@ -32,8 +35,17 @@ public class ChatServiceImpl implements ChatService{
 	@Override
 	@Transactional
 	public ChatMessageResponseDto saveMessage(ChatMessageRequestDto requestDto) {
-		Chat chat = chatMapper.toChat(requestDto);
+		User user = userRepository.findByUsername(requestDto.getUsername())
+			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+		Chat chat = Chat.builder()
+			.message(requestDto.getMessage())
+			.username(requestDto.getUsername())
+			.name(user.getName())
+			.build();
+
 		Chat savedChat = chatRepository.save(chat);
+
 		return chatMapper.toChatMessageResponseDto(savedChat);
 	}
 
