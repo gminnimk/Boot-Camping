@@ -281,32 +281,6 @@ button.learn-more:active::before {
   color: rgb(104, 165, 255);
 }
 
-.sort-buttons {
-  display: flex;
-  justify-content: flex-end;
-  color: var(--color);
-  width: 1200px;
-  margin: auto;
-}
-
-.sort-button {
-  background-color: var(--sidebar-bg);
-  color: var(--color);
-  border: none;
-  font-weight: bold;
-  padding: 8px 12px;
-  margin-left: 10px;
-  margin-bottom: 30px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.sort-button:hover, .sort-button.active {
-  background-color: #5AA9E6;
-  color: var(--color);
-}
-
 .heart-icon {
   cursor: pointer;
   font-size: 1.2em;
