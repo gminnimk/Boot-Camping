@@ -33,8 +33,10 @@ export function setAuthHeader(config) {
     return config;
 }
 
-const token = getTokenFromLocalStorage();
-let username = null;
+export const token = getTokenFromLocalStorage();
+export let username = null;
+export let notificationSocket = null;
+export let chatSocket = null;
 
 if (token) {
     const payload = JSON.parse(atob(token.split('.')[1]));
@@ -42,38 +44,60 @@ if (token) {
 
     username = payload.sub;
     console.log('로그인한 사용자 username:', username);
+
+    notificationSocket = new WebSocket(`ws://localhost:8080/ws/notifications?username=${username}`);
+
+    notificationSocket.onopen = function() {
+        console.log('Notification WebSocket 연결이 설정되었습니다');
+    };
+
+    notificationSocket.onmessage = function(event) {
+        const message = event.data;
+        console.log('서버로부터 알림 메시지가 도착했습니다:', message);
+
+        Swal.fire({
+            toast: true,
+            position: 'center',
+            icon: 'info',
+            title: message,
+            showConfirmButton: true,
+            customClass: {
+                title: 'black-text'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                location.reload();
+            }
+        });
+    };
+
+    notificationSocket.onclose = function(event) {
+        console.log('Notification WebSocket 연결이 닫혔습니다:', event);
+    };
+
+    notificationSocket.onerror = function(error) {
+        console.error('Notification WebSocket 오류가 발생했습니다:', error);
+    };
+
+    chatSocket = new WebSocket(`ws://localhost:8080/ws/chat?username=${username}`);
+
+    chatSocket.onopen = function() {
+        console.log('Chat WebSocket 연결이 설정되었습니다');
+    };
+
+    chatSocket.onmessage = function(event) {
+        console.log('서버로부터 채팅 메시지가 도착했습니다:', event.data);
+    };
+
+    chatSocket.onclose = function(event) {
+        console.log('Chat WebSocket 연결이 닫혔습니다:', event);
+    };
+
+    chatSocket.onerror = function(error) {
+        console.error('Chat WebSocket 오류가 발생했습니다:', error);
+    };
 }
 
-window.socket = new WebSocket(`ws://localhost:8080/ws/notifications?username=${username}`);
-
-socket.onopen = function() {
-    console.log('WebSocket 연결이 설정되었습니다');
-};
-
-socket.onmessage = function(event) {
-    const message = event.data;
-    console.log('서버로부터 메시지가 도착했습니다:', message);
-
-    Swal.fire({
-        toast: true,
-        position: 'center',
-        icon: 'info',
-        title: message,
-        showConfirmButton: true,
-        customClass: {
-            title: 'black-text'
-        }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            location.reload();
-        }
-    });
-};
-
-socket.onclose = function(event) {
-    console.log('WebSocket 연결이 닫혔습니다:', event);
-};
-
-socket.onerror = function(error) {
-    console.error('WebSocket 오류가 발생했습니다:', error);
-};
+window.username = username;
+window.notificationSocket = notificationSocket;
+window.chatSocket = chatSocket;
