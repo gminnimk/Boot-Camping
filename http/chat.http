@@ -22,5 +22,6 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
- "message": "Hello World!!"
+ "message": "Hello World!!",
+  "username": "asdasd2"
 }

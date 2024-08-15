@@ -25,6 +25,12 @@ document.addEventListener("DOMContentLoaded", async function() {
             messages.forEach((message) => {
                 const newMessage = document.createElement('div');
                 newMessage.textContent = `${message.name}: ${message.message}`;
+                newMessage.classList.add('message');
+                if (message.username === username) {
+                    newMessage.classList.add('sent');
+                } else {
+                    newMessage.classList.add('received');
+                }
                 messageArea.appendChild(newMessage);
             });
             messageArea.scrollTop = messageArea.scrollHeight;
@@ -36,19 +42,36 @@ document.addEventListener("DOMContentLoaded", async function() {
     }
 
     socket.onmessage = function(event) {
-        console.log('서버로부터 실시간 메시지가 도착했습니다:', event.data); // 추가된 로그
+        console.log('서버로부터 실시간 메시지가 도착했습니다:', event.data);
         const data = JSON.parse(event.data);
         const newMessage = document.createElement('div');
         newMessage.textContent = `${data.name}: ${data.message}`;
+        newMessage.classList.add('message');
+        if (data.username === username) {
+            newMessage.classList.add('sent');
+        } else {
+            newMessage.classList.add('received');
+        }
         messageArea.appendChild(newMessage);
         messageArea.scrollTop = messageArea.scrollHeight;
     };
 
-    sendButton.addEventListener('click', function() {
+    function sendMessage() {
         const message = messageInput.value;
         if (message) {
             socket.send(JSON.stringify({ message: message, username: username }));
             messageInput.value = '';
+        }
+    }
+
+    sendButton.addEventListener('click', function() {
+        sendMessage();
+    });
+
+    messageInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+            event.preventDefault();
         }
     });
 
