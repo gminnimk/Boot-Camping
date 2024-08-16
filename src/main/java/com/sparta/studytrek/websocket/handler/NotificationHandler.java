@@ -18,7 +18,6 @@ public class NotificationHandler extends TextWebSocketHandler {
 		String username = getUsernameFromQuery(session);
 		if (username != null) {
 			session.getAttributes().put("username", username);
-			System.out.println("WebSocket 연결 설정: username = " + username);
 		} else {
 			throw new IllegalStateException("세션에 username이 설정되지 않았습니다.");
 		}
@@ -28,7 +27,6 @@ public class NotificationHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		notificationService.removeSession(session);
-		System.out.println("WebSocket 연결이 종료되었습니다: " + session.getId());
 	}
 
 	private String getUsernameFromQuery(WebSocketSession session) {
