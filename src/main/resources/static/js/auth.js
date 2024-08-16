@@ -45,7 +45,7 @@ if (token) {
     username = payload.sub;
     console.log('로그인한 사용자 username:', username);
 
-    notificationSocket = new WebSocket(`ws://localhost:8080/ws/notifications?username=${username}`);
+    notificationSocket = new WebSocket(`wss://bootcamping.org/ws/notifications?username=${username}`);
 
     notificationSocket.onopen = function() {
         console.log('Notification WebSocket 연결이 설정되었습니다');
