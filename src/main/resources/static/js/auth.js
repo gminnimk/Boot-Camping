@@ -79,7 +79,7 @@ if (token) {
         console.error('Notification WebSocket 오류가 발생했습니다:', error);
     };
 
-    chatSocket = new WebSocket(`ws://localhost:8080/ws/chat?username=${username}`);
+    chatSocket = new WebSocket(`wss://bootcamping.org/ws/notifications?username=${username}`);
 
     chatSocket.onopen = function() {
         console.log('Chat WebSocket 연결이 설정되었습니다');
