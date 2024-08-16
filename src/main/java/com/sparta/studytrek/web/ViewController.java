@@ -26,9 +26,19 @@ public class ViewController {
         return "admin";
     }
 
+    @GetMapping("/alarm")
+    public String showAlarmPage() {
+        return "alarm";
+    }
+
     @GetMapping("/profile")
     public String showProfilePage() {
         return "profile";
+    }
+
+    @GetMapping("/chat")
+    public String showChatPage() {
+        return "chat";
     }
 
     @GetMapping("/review")

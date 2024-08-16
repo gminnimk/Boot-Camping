@@ -16,6 +16,11 @@
             <a class="topbar-link" href="#" onclick="refreshPage()"><span>Study Trek</span></a>
         </nav>
         <button class="add-task-button" id="adminButton" onclick="location.href='/admin'" style="display: none;">ADMIN</button>
+        <button class="add-task-button alarm-badge" id="alarmButton" onclick="openAlarmPopup()">
+            알림
+            <span class="badge" id="unreadCountBadge"></span>
+        </button>
+
         <button class="add-task-button" id="loginButton" onclick="location.href='/auth'">Login</button>
     </div>
 </div>

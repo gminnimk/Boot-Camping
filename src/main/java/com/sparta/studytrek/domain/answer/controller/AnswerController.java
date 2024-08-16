@@ -6,6 +6,8 @@ import com.sparta.studytrek.domain.answer.dto.AnswerRequestDto;
 import com.sparta.studytrek.domain.answer.dto.AnswerResponseDto;
 import com.sparta.studytrek.domain.answer.service.AnswerService;
 import com.sparta.studytrek.security.UserDetailsImpl;
+
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,8 +41,7 @@ public class AnswerController {
     @PostMapping
     public ResponseEntity<ApiResponse> createAnswer(@PathVariable Long questionId,
         @RequestBody AnswerRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails)
-    {
+        @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         AnswerResponseDto responseDto = answerService.createAnswer(questionId, requestDto,
             userDetails.getUser());
         ApiResponse response = ApiResponse.builder()

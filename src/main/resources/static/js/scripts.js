@@ -90,6 +90,19 @@ function onLogoutSuccess() {
     });
 }
 
+function openAlarmPopup() {
+    const width = 630;
+    const height = 600;
+
+    const screenWidth = window.screen.width;
+    const screenHeight = window.screen.height;
+
+    const left = (screenWidth - width) / 2;
+    const top = (screenHeight - height) / 2;
+
+    window.open('/alarm', 'Alarm Popup', `width=${width},height=${height},top=${top},left=${left}`);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const logoLink = document.getElementById('logoLink');
 
@@ -124,10 +137,51 @@ async function onLogout() {
     }
 }
 
+async function updateUnreadNotificationCount() {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+        console.error('로그인 토큰을 찾을 수 없습니다.');
+        return;
+    }
+
+    const payloadBase64 = token.split('.')[1];
+    const decodedPayload = atob(payloadBase64);
+    const payload = JSON.parse(decodedPayload);
+    const username = payload.sub;
+
+    try {
+        const response = await fetch(`/api/notifications/unread-count/${username}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const unreadCount = await response.json();
+            console.log('Unread count:', unreadCount);
+            const alarmButton = document.getElementById('alarmButton');
+            const unreadCountBadge = document.getElementById('unreadCountBadge');
+
+            if (unreadCount > 0) {
+                unreadCountBadge.textContent = unreadCount;
+                unreadCountBadge.style.display = 'inline-block';
+            } else {
+                unreadCountBadge.style.display = 'none';
+            }
+        } else {
+            console.error('알림 개수를 가져오는 데 실패했습니다.');
+        }
+    } catch (error) {
+        console.error('알림 개수를 가져오는 중 오류가 발생했습니다:', error);
+    }
+}
+
 // DOMContentLoaded 이벤트 리스너에 로그인 상태 체크 함수 추가
 document.addEventListener('DOMContentLoaded', (event) => {
     toggleSidebar();
     checkLoginStatus(); // 로그인 상태를 체크하는 함수 호출
+    updateUnreadNotificationCount();
 });
 
 function refreshPage() {
