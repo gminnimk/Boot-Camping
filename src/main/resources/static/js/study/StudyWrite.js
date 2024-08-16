@@ -55,8 +55,14 @@ document.getElementById('studyForm').addEventListener('submit', function (e) {
     },
     body: JSON.stringify(studyData)
   })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('스터디 작성 중 오류가 발생했습니다.');
+    }
+    return response.json();
+  })
   .then(data => {
-    if (data.statuscode === "201") {
+    if (data.statuscode === "201" && data.data && data.data.id) {
       Swal.fire({
         title: '스터디 작성 성공',
         text: '스터디가 성공적으로 제출되었습니다!',
@@ -64,8 +70,7 @@ document.getElementById('studyForm').addEventListener('submit', function (e) {
         confirmButtonText: '확인'
       }).then(() => {
         if (data.data && data.data.id) {
-          const studyId = data.data.id;
-          window.location.href = `/study/detail/${studyId}`;
+          window.location.href = `/study/detail/${data.data.id}`;
         } else {
           console.error('스터디 ID가 반환되지 않았습니다.');
         }

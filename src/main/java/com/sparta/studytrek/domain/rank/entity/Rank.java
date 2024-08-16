@@ -4,6 +4,7 @@ import com.sparta.studytrek.domain.camp.entity.Camp;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "rankings")
@@ -19,6 +20,7 @@ public class Rank {
     @JoinColumn(name = "camp_id", nullable = false)
     private Camp camp;
 
+    @Setter
     @Column(nullable = false)
     private Integer ranking;
 

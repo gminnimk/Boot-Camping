@@ -7,3 +7,13 @@ Authorization: Bearer {{accessToken}}
 DELETE  {{apiUrl}}/recruiments/1/likes
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
+
+### 캠프 좋아요 추가
+POST {{apiUrl}}/camps/1/like
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### 캠프 좋아요 취소
+DELETE  {{apiUrl}}/camps/1/like
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}

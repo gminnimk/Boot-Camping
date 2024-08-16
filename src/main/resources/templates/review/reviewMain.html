@@ -39,14 +39,6 @@
             </div>
         </div>
 
-        <!-- 조회 정렬 -->
-        <div class="sort-buttons">
-            <button class="sort-button" data-sort="views">조회순</button>
-            <button class="sort-button" data-sort="latest">최신순</button>
-            <button class="sort-button" data-sort="likes">좋아요순</button>
-            <button class="sort-button" data-sort="deadline">마감임박</button>
-        </div>
-
         <!-- 리뷰 목록 -->
         <div class="content-wrapper">
             <div class="review-container" id="reviewContainer">
@@ -65,7 +57,7 @@
     <button class="open-sidebar-button hidden" th:onclick="|javascript:toggleSidebar()|">
         <img th:src="@{/images/icon-show-sidebar.svg}" alt="사이드바 아이콘 보이기" />
     </button>
-    </div>
+</div>
 </body>
 <script>
     window.addEventListener('load', function() {
