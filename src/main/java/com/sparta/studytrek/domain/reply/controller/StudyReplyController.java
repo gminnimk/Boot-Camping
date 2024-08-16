@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -35,8 +36,7 @@ public class StudyReplyController {
     public ResponseEntity<ApiResponse<StudyReplyResponseDto>> createReply(
         @PathVariable Long studyId, @PathVariable Long commentId,
         @Valid @RequestBody StudyReplyRequestDto request,
-        @AuthenticationPrincipal UserDetailsImpl userDetails)
-    {
+        @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         StudyReplyResponseDto responseDto = studyReplyService.createReply(studyId, commentId,
             request, userDetails.getUser());
         ApiResponse<StudyReplyResponseDto> apiResponse = ApiResponse.<StudyReplyResponseDto>builder()

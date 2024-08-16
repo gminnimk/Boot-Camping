@@ -10,8 +10,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script th:src="@{/js/scripts.js}" defer></script>
     <script th:src="@{/js/profile.js}" defer></script>
+    <script type="module" th:src="@{/js/auth.js}" defer></script>
 </head>
 <body th:classappend="${isDarkMode} ? 'dark' : ''">
 <div th:replace="~{'fragments/topbar' :: topbar}"></div>
@@ -93,6 +96,7 @@
                             <option value="멋쟁이사자처럼">멋쟁이사자처럼</option>
                             <option value="네이버 부스트캠프">네이버 부스트캠프</option>
                             <option value="우아한테크코스">우아한테크코스</option>
+                            <option value="스파르타">스파르타</option>
                         </select>
                     </div>
                     <div class="form-group">

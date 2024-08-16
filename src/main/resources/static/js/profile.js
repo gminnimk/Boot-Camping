@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", function() {
+    if (!accessToken) {
+        alert('로그인이 필요합니다.');
+        window.location.href = '/auth';
+        return;  // 로그인이 필요하면 아래 코드를 실행하지 않음
+    }
+
     fetchProfiles();
 
     const profileStatus = localStorage.getItem('profileStatus');
@@ -283,8 +289,6 @@ function fetchProfiles() {
     })
         .then(response => response.json())
         .then(data => {
-            console.log("프로필 데이터:", data);
-
             if (Array.isArray(data.data)) {
                 data.data.forEach(profile => {
                     addCardToDOM(profile);

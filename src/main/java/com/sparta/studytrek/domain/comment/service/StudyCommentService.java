@@ -1,5 +1,6 @@
 package com.sparta.studytrek.domain.comment.service;
 
+import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.common.exception.CustomException;
 import com.sparta.studytrek.common.exception.ErrorCode;
 import com.sparta.studytrek.domain.auth.entity.User;
@@ -9,10 +10,13 @@ import com.sparta.studytrek.domain.comment.entity.StudyComment;
 import com.sparta.studytrek.domain.comment.repository.StudyCommentRepository;
 import com.sparta.studytrek.domain.study.entity.Study;
 import com.sparta.studytrek.domain.study.repository.StudyRepository;
+import com.sparta.studytrek.websocket.service.NotificationService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +26,7 @@ public class StudyCommentService {
 
     private final StudyCommentRepository studyCommentRepository;
     private final StudyRepository studyRepository;
+    private final NotificationService notificationService;
 
     /**
      * 댓글을 생성합니다.
@@ -33,11 +38,17 @@ public class StudyCommentService {
      */
     @Transactional
     public StudyCommentResponseDto createComment(Long studyId, StudyCommentRequestDto requestDto,
-        User user) {
+        User user) throws IOException {
         Study study = studyRepository.findByStudyId(studyId);
 
         StudyComment studyComment = new StudyComment(study, user, requestDto.getContent());
         StudyComment savedComment = studyCommentRepository.save(studyComment);
+
+        notificationService.sendNotificationToUser(
+            study.getUser().getUsername(),
+            ResponseText.NOTIFICATION_STUDY_COMMENT_CREATED.getMsg()
+        );
+
         return buildStudyCommentResponseDto(savedComment);
     }
 

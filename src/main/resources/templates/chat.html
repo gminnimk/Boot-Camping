@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHAT</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/chat.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script th:src="@{/js/scripts.js}" defer></script>
+    <script type="module" th:src="@{/js/auth.js}" defer></script>
+    <script th:src="@{/js/chat.js}" defer></script>
+</head>
+<body th:classappend="${isDarkMode} ? 'dark' : ''">
+<div th:replace="~{'fragments/topbar' :: topbar}"></div>
+<div class="main-container">
+    <div th:replace="~{'fragments/sidebar' :: sidebar(isSidebarOpen=${isSidebarOpen}, isDarkMode=${isDarkMode})}"></div>
+    <div class="content">
+        <div class="chat-container">
+            <div class="messages" id="messageArea">
+            </div>
+            <div class="input-container">
+                <input type="text" id="messageInput" placeholder="Enter your message..." />
+                <button id="sendButton">
+                    <img src="/images/paper-plane-icon.svg" alt="보내기 아이콘" class="send-icon" />
+                </button>
+            </div>
+        </div>
+    </div>
+    <button class="open-sidebar-button hidden" th:onclick="|javascript:toggleSidebar()|">
+        <img th:src="@{/images/icon-show-sidebar.svg}" alt="사이드바 아이콘 보이기" />
+    </button>
+</div>
+</body>
+</html>

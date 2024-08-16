@@ -6,6 +6,8 @@ import com.sparta.studytrek.domain.reply.dto.ReplyRequestDto;
 import com.sparta.studytrek.domain.reply.dto.ReplyResponseDto;
 import com.sparta.studytrek.domain.reply.service.ReviewReplyService;
 import com.sparta.studytrek.security.UserDetailsImpl;
+
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,8 +41,7 @@ public class ReviewReplyController {
     @PostMapping
     public ResponseEntity<ApiResponse> createReviewReply(@PathVariable Long reviewId,
         @PathVariable Long commentId, @RequestBody ReplyRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails)
-    {
+        @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         ReplyResponseDto responseDto = reviewReplyService.createReviewReply(reviewId, commentId,
             requestDto, userDetails.getUser());
         ApiResponse response = ApiResponse.builder()
