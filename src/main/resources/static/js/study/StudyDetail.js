@@ -121,9 +121,6 @@ function fetchComments(studyId) {
     if (data.statuscode === "200") {
       displayComments(data.data);
     } else {
-      ㄷ
-    }
-    {
       console.error('댓글 조회 에러:', data.msg);
     }
   })
