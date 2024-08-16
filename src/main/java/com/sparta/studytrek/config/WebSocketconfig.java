@@ -27,11 +27,11 @@ public class WebSocketconfig implements WebSocketConfigurer {
 
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-		registry.addHandler(notificationHandler(), "/ws/notifications")
-			.setAllowedOrigins("https://bootcamping.org");
+		registry.addHandler(notificationHandler(), "/notifications")
+			.setAllowedOrigins("*");
 
-		registry.addHandler(chatHandler(), "/ws/chat")
-			.setAllowedOrigins("https://bootcamping.org");
+		registry.addHandler(chatHandler(), "/chat")
+			.setAllowedOrigins("*");
 	}
 
 	@Bean
