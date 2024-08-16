@@ -45,7 +45,7 @@ if (token) {
     username = payload.sub;
     console.log('로그인한 사용자 username:', username);
 
-    notificationSocket = new WebSocket(`wss://bootcamping.org/ws/notifications?username=${username}`);
+    notificationSocket = new WebSocket(`wss://bootcamping.org/notifications?username=${username}`);
 
     notificationSocket.onopen = function() {
         console.log('Notification WebSocket 연결이 설정되었습니다');
@@ -79,7 +79,7 @@ if (token) {
         console.error('Notification WebSocket 오류가 발생했습니다:', error);
     };
 
-    chatSocket = new WebSocket(`wss://bootcamping.org/ws/notifications?username=${username}`);
+    chatSocket = new WebSocket(`wss://bootcamping.org/chat?username=${username}`);
 
     chatSocket.onopen = function() {
         console.log('Chat WebSocket 연결이 설정되었습니다');
