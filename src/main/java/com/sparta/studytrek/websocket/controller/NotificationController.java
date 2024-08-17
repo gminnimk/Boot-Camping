@@ -33,7 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api/notifications")
 @RequiredArgsConstructor
-@Slf4j
 public class NotificationController {
 
 	private final NotificationService notificationService;
@@ -41,22 +40,18 @@ public class NotificationController {
 
 	@GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public SseEmitter streamNotifications(@RequestParam String username, @RequestParam String token) {
-		log.info("SSE 연결 시도: username={}", username);
 
 		if (!jwtUtil.validateToken(token)) {
-			log.error("Invalid token for user: {}", username);
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
 		}
 
 		try {
 			SseEmitter emitter = notificationService.createEmitter(username);
-			log.info("SSE Emitter created for user: {}", username);
 
 			emitter.send(SseEmitter.event().name("connect").data("SSE 연결 성공"));
 
 			return emitter;
 		} catch (Exception e) {
-			log.error("SSE 스트림 생성 중 오류 발생: ", e);
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "SSE 연결 중 오류 발생");
 		}
 	}

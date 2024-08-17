@@ -58,13 +58,11 @@ if (token) {
         eventSource.onmessage = function(event) {
             console.log('서버로부터 메시지가 도착했습니다:', event.data);
 
-            console.log(event.data);
-
             let messageData;
             try {
                 messageData = JSON.parse(event.data);
+                console.log('파싱된 알림 데이터:', messageData);
             } catch (e) {
-                console.error("JSON 파싱 에러:", e);
                 messageData = { message: event.data };
             }
 
@@ -76,6 +74,10 @@ if (token) {
                 showConfirmButton: true,
                 customClass: {
                     title: 'black-text'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.reload();
                 }
             });
         };

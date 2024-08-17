@@ -87,7 +87,7 @@ function loadNotifications(page = 0, size = 10) {
         return;
     }
 
-    axios.get('/api/notifications/list', { // 경로를 '/list'로 수정
+    axios.get('/api/notifications/list', {
         headers: {
             'Authorization': `Bearer ${token}`
         },

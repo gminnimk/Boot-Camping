@@ -2,15 +2,14 @@ package com.sparta.studytrek.websocket.service;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.sparta.studytrek.common.exception.CustomException;
@@ -32,6 +31,7 @@ public class NotificationService {
 	private static final int DEFAULT_PAGE = 0;
 	private static final int DEFAULT_SIZE = 10;
 
+	@Transactional
 	public SseEmitter createEmitter(String username) {
 		SseEmitter emitter = new SseEmitter(300000L);
 		emitters.put(username, emitter);
@@ -46,6 +46,15 @@ public class NotificationService {
 		return emitter;
 	}
 
+	@Transactional
+	public void createAndSendNotification(String username, String message) throws IOException {
+		Notification notification = new Notification(username, message);
+
+		notificationRepository.save(notification);
+
+		sendNotificationToUser(username, message);
+	}
+
 
 	public void sendNotificationToUser(String username, String message) throws IOException {
 		SseEmitter emitter = emitters.get(username);
@@ -53,7 +62,6 @@ public class NotificationService {
 			emitter.send(SseEmitter.event()
 				.name("message")
 				.data(message));
-			log.info("알림 전송 성공: {}", message);
 		} else {
 			log.warn("사용자 {}에 대한 Emitter를 찾을 수 없습니다", username);
 		}
