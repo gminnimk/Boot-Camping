@@ -50,7 +50,7 @@ public class StudyReplyService {
         StudyReply studyReply = new StudyReply(study, studyComment, user, requestDto.getContent());
         StudyReply savedReply = studyReplyRepository.save(studyReply);
 
-        notificationService.sendNotificationToUser(
+        notificationService.createAndSendNotification(
             studyComment.getUser().getUsername(),
             ResponseText.NOTIFICATION_STUDY_REPLY_CREATED.getMsg()
         );

@@ -44,7 +44,7 @@ public class ReviewCommentService {
         ReviewComment reviewComment = new ReviewComment(review, user, requestDto.getContent());
         ReviewComment saveComment = reviewCommentRepository.save(reviewComment);
 
-        notificationService.sendNotificationToUser(
+        notificationService.createAndSendNotification(
             review.getUser().getUsername(),
             ResponseText.NOTIFICATION_REVIEW_COMMENT_CREATED.getMsg()
         );

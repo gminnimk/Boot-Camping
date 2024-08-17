@@ -48,7 +48,7 @@ public class ReviewReplyService {
         ReviewReply reply = new ReviewReply(comment, user, requestDto);
         ReviewReply saveReply = replyRepository.save(reply);
 
-        notificationService.sendNotificationToUser(
+        notificationService.createAndSendNotification(
             comment.getUser().getUsername(),
             ResponseText.NOTIFICATION_REVIEW_REPLY_CREATED.getMsg()
         );
