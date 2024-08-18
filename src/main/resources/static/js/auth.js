@@ -34,15 +34,17 @@ export function setAuthHeader(config) {
 }
 
 export const token = getTokenFromLocalStorage();
-export let username = null;
-export let eventSource = null;
+export let username = sessionStorage.getItem('username') || null;
+export let eventSource = window.eventSource || sessionStorage.getItem('eventSource') || null;
 
-if (token) {
+if (token && !eventSource) {
+    console.log('기존 eventSource가 없으므로 새로 설정합니다.');
     try {
         const payload = JSON.parse(atob(token.split('.')[1]));
         console.log('디코딩된 사용자 정보:', payload);
 
         username = payload.sub;
+        sessionStorage.setItem('username', username);
         console.log('로그인한 사용자 username:', username);
 
         const encodedToken = encodeURIComponent(token);
@@ -50,6 +52,8 @@ if (token) {
         console.log('SSE 연결 URL:', sseUrl);
 
         eventSource = new EventSource(sseUrl);
+        window.eventSource = eventSource;
+        sessionStorage.setItem('eventSource', sseUrl);
 
         eventSource.onopen = function(event) {
             console.log('SSE 연결이 성공적으로 열렸습니다.');
@@ -90,6 +94,8 @@ if (token) {
                     console.log('SSE 재연결 시도 중...');
                     eventSource.close();
                     eventSource = new EventSource(sseUrl);
+                    window.eventSource = eventSource;
+                    sessionStorage.setItem('eventSource', sseUrl);
                 }, 5000);
             }
         };
@@ -97,9 +103,13 @@ if (token) {
     } catch (error) {
         console.error('토큰 디코딩 중 오류 발생:', error);
     }
-} else {
+} else if (!token) {
     console.error('사용자 인증 토큰을 찾을 수 없습니다.');
+} else {
+    console.log('기존 eventSource가 이미 설정되어 있습니다.');
 }
+
+console.log('최종 eventSource:', eventSource);
 
 window.username = username;
 window.eventSource = eventSource;
