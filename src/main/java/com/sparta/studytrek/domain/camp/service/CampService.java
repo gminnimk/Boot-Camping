@@ -68,4 +68,9 @@ public class CampService {
         return new CampResponseDto(savedCamp.getId(), savedCamp.getName(),
             savedCamp.getDescription(), savedCamp.getImageUrl());
     }
+
+    public String getSummary(Long id) {
+        Camp camp = findById(id);
+        return camp.getRecruitment().getSummary();
+    }
 }
