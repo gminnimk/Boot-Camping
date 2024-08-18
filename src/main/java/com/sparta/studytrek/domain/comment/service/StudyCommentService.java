@@ -44,7 +44,7 @@ public class StudyCommentService {
         StudyComment studyComment = new StudyComment(study, user, requestDto.getContent());
         StudyComment savedComment = studyCommentRepository.save(studyComment);
 
-        notificationService.sendNotificationToUser(
+        notificationService.createAndSendNotification(
             study.getUser().getUsername(),
             ResponseText.NOTIFICATION_STUDY_COMMENT_CREATED.getMsg()
         );

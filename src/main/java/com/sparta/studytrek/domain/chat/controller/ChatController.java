@@ -1,8 +1,8 @@
 package com.sparta.studytrek.domain.chat.controller;
 
 import java.util.List;
-
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.sparta.studytrek.common.ApiResponse;
 import com.sparta.studytrek.common.ResponseText;
@@ -58,6 +60,17 @@ public class ChatController {
 			.data(responseDto)
 			.build();
 		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+	/**
+	 * SSE를 통해 실시간 채팅 메시지를 스트리밍하는 엔드포인트
+	 *
+	 * @param username 사용자 이름
+	 * @return SseEmitter 객체
+	 */
+	@GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	public SseEmitter streamChat(@RequestParam String username) {
+		return chatService.createEmitter(username);
 	}
 
 	/**

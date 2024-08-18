@@ -2,12 +2,15 @@ package com.sparta.studytrek.websocket.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,36 +18,41 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import com.sparta.studytrek.jwt.JwtUtil;
 import com.sparta.studytrek.websocket.entity.Notification;
 import com.sparta.studytrek.websocket.service.NotificationService;
 
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/notifications")
 @RequiredArgsConstructor
 public class NotificationController {
 
 	private final NotificationService notificationService;
+	private final JwtUtil jwtUtil;
 
-	@GetMapping
-	public ResponseEntity<?> getNotifications(
-		@AuthenticationPrincipal UserDetails userDetails,
-		@RequestParam(defaultValue = "0") Integer page,
-		@RequestParam(defaultValue = "10") Integer size
-	) {
-		if (userDetails == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
+	@GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	public SseEmitter streamNotifications(@RequestParam String username, @RequestParam String token) {
+
+		if (!jwtUtil.validateToken(token)) {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
 		}
+
 		try {
-			String username = userDetails.getUsername();
-			Page<Notification> notificationsPage = notificationService.getNotificationsForUser(username, page, size);
-			return ResponseEntity.ok(notificationsPage);
+			SseEmitter emitter = notificationService.createEmitter(username);
+
+			emitter.send(SseEmitter.event().name("connect").data("SSE 연결 성공"));
+
+			return emitter;
 		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-				.body("Error fetching notifications: " + e.getMessage());
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "SSE 연결 중 오류 발생");
 		}
 	}
 
@@ -55,17 +63,19 @@ public class NotificationController {
 	}
 
 	@GetMapping("/list")
-	public String listNotifications(Model model, @AuthenticationPrincipal UserDetails userDetails,
+	public ResponseEntity<Page<Notification>> listNotifications(
+		@AuthenticationPrincipal UserDetails userDetails,
 		@RequestParam(defaultValue = "0") Integer page,
 		@RequestParam(defaultValue = "10") Integer size) {
+
+		if (userDetails == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+
 		String username = userDetails.getUsername();
 		Page<Notification> notificationsPage = notificationService.getNotificationsForUser(username, page, size);
 
-		model.addAttribute("notifications", notificationsPage.getContent());
-		model.addAttribute("currentPage", page);
-		model.addAttribute("totalPages", notificationsPage.getTotalPages());
-
-		return "alarm";
+		return ResponseEntity.ok(notificationsPage);
 	}
 
 	@GetMapping("/unread-count/{username}")

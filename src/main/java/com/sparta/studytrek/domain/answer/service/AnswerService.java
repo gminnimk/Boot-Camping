@@ -44,7 +44,7 @@ public class AnswerService {
         Answer answer = new Answer(requestDto, question, user);
         Answer savedAnswer = answerRepository.save(answer);
 
-        notificationService.sendNotificationToUser(
+        notificationService.createAndSendNotification(
             question.getUser().getUsername(),
             ResponseText.NOTIFICATION_ANSWER_CREATED.getMsg()
         );

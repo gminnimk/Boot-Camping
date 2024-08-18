@@ -35,69 +35,71 @@ export function setAuthHeader(config) {
 
 export const token = getTokenFromLocalStorage();
 export let username = null;
-export let notificationSocket = null;
-export let chatSocket = null;
+export let eventSource = null;
 
 if (token) {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    console.log('디코딩된 사용자 정보:', payload);
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        console.log('디코딩된 사용자 정보:', payload);
 
-    username = payload.sub;
-    console.log('로그인한 사용자 username:', username);
+        username = payload.sub;
+        console.log('로그인한 사용자 username:', username);
 
-    notificationSocket = new WebSocket(`wss://bootcamping.org/notifications?username=${username}`);
+        const encodedToken = encodeURIComponent(token);
+        const sseUrl = `/api/notifications/stream?username=${encodeURIComponent(username)}&token=${encodedToken}`;
+        console.log('SSE 연결 URL:', sseUrl);
 
-    notificationSocket.onopen = function() {
-        console.log('Notification WebSocket 연결이 설정되었습니다');
-    };
+        eventSource = new EventSource(sseUrl);
 
-    notificationSocket.onmessage = function(event) {
-        const message = event.data;
-        console.log('서버로부터 알림 메시지가 도착했습니다:', message);
+        eventSource.onopen = function(event) {
+            console.log('SSE 연결이 성공적으로 열렸습니다.');
+        };
 
-        Swal.fire({
-            toast: true,
-            position: 'center',
-            icon: 'info',
-            title: message,
-            showConfirmButton: true,
-            customClass: {
-                title: 'black-text'
+        eventSource.onmessage = function(event) {
+            console.log('서버로부터 메시지가 도착했습니다:', event.data);
+
+            let messageData;
+            try {
+                messageData = JSON.parse(event.data);
+                console.log('파싱된 알림 데이터:', messageData);
+            } catch (e) {
+                messageData = { message: event.data };
             }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                location.reload();
+
+            Swal.fire({
+                toast: true,
+                position: 'center',
+                icon: 'info',
+                title: messageData.message || event.data,
+                showConfirmButton: true,
+                customClass: {
+                    title: 'black-text'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.reload();
+                }
+            });
+        };
+
+        eventSource.onerror = function(error) {
+            console.error('SSE 연결 오류:', error);
+            if (eventSource.readyState === EventSource.CLOSED) {
+                console.log('SSE 연결이 닫혔습니다. 재연결을 시도합니다.');
+                setTimeout(() => {
+                    console.log('SSE 재연결 시도 중...');
+                    eventSource.close();
+                    eventSource = new EventSource(sseUrl);
+                }, 5000);
             }
-        });
-    };
+        };
 
-    notificationSocket.onclose = function(event) {
-        console.log('Notification WebSocket 연결이 닫혔습니다:', event);
-    };
-
-    notificationSocket.onerror = function(error) {
-        console.error('Notification WebSocket 오류가 발생했습니다:', error);
-    };
-
-    chatSocket = new WebSocket(`wss://bootcamping.org/chat?username=${username}`);
-
-    chatSocket.onopen = function() {
-        console.log('Chat WebSocket 연결이 설정되었습니다');
-    };
-
-    chatSocket.onmessage = function(event) {
-        console.log('서버로부터 채팅 메시지가 도착했습니다:', event.data);
-    };
-
-    chatSocket.onclose = function(event) {
-        console.log('Chat WebSocket 연결이 닫혔습니다:', event);
-    };
-
-    chatSocket.onerror = function(error) {
-        console.error('Chat WebSocket 오류가 발생했습니다:', error);
-    };
+    } catch (error) {
+        console.error('토큰 디코딩 중 오류 발생:', error);
+    }
+} else {
+    console.error('사용자 인증 토큰을 찾을 수 없습니다.');
 }
 
 window.username = username;
-window.notificationSocket = notificationSocket;
-window.chatSocket = chatSocket;
+window.eventSource = eventSource;

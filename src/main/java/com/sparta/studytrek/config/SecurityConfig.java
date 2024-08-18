@@ -65,7 +65,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/admin/auth/signup").permitAll()
                         .requestMatchers("/api/admin/auth/login").permitAll()
-                        .requestMatchers("/notifications/**", "/chat/**").permitAll()
                         // 특정 엔드포인트에 대해 승인된 사용자만 접근할 수 있도록 설정
                         .requestMatchers("/api/approved/**").hasAuthority("ROLE_APPROVER")
                         .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")

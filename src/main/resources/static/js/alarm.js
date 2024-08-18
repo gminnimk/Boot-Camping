@@ -5,17 +5,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const size = 10;
     loadNotifications(page, size);
 
-    if (window.socket) {
-        window.socket.onmessage = function(event) {
-            let messageData;
 
+    if (window.eventSource) {
+        window.eventSource.onmessage = function(event) {
+            console.log('서버로부터 알림 메시지가 도착했습니다:', event.data);
+
+            let messageData;
             try {
                 messageData = JSON.parse(event.data);
             } catch (e) {
                 messageData = { message: event.data };
             }
-
-            console.log('서버로부터 메시지가 도착했습니다:', messageData);
 
             Swal.fire({
                 toast: true,
@@ -31,15 +31,11 @@ document.addEventListener('DOMContentLoaded', function() {
             updateNotificationList(messageData);
         };
 
-        window.socket.onclose = function(event) {
-            console.log('WebSocket 연결이 닫혔습니다:', event);
-        };
-
-        window.socket.onerror = function(error) {
-            console.error('WebSocket 오류가 발생했습니다:', error);
+        window.eventSource.onerror = function(error) {
+            console.error('SSE 연결 오류:', error);
         };
     } else {
-        console.error('WebSocket이 설정되지 않았습니다.');
+        console.error('SSE가 설정되지 않았습니다.');
     }
 });
 
@@ -91,7 +87,7 @@ function loadNotifications(page = 0, size = 10) {
         return;
     }
 
-    axios.get('/api/notifications', {
+    axios.get('/api/notifications/list', {
         headers: {
             'Authorization': `Bearer ${token}`
         },
@@ -132,6 +128,12 @@ function loadNotifications(page = 0, size = 10) {
                     title: '인증 오류',
                     text: '로그인이 만료되었거나 유효하지 않은 인증 정보입니다. 다시 로그인해 주세요.'
                 });
+            } else if (err.response && err.response.status === 404) {
+                Swal.fire({
+                    icon: 'error',
+                    title: '알림 로드 오류',
+                    text: '알림 데이터를 찾을 수 없습니다. 서버 설정을 확인하세요.'
+                });
             }
         });
 }
@@ -162,12 +164,11 @@ function updateNotificationList(notification) {
             : ''}
             </div>
         `;
-
         notificationList.appendChild(newNotification);
+    } else {
+        console.error('notificationList 요소를 찾을 수 없습니다.');
     }
 }
-
-
 
 function setupPagination(container, currentPage, totalPages) {
     if (!container) {

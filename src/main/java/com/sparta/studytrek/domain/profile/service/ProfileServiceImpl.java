@@ -87,7 +87,7 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.approveProfile();
 		profileRepository.save(profile);
 
-		notificationService.sendNotificationToUser(
+		notificationService.createAndSendNotification(
 			profile.getUser().getUsername(),
 			ResponseText.NOTIFICATION_PROFILE_APPROVED.getMsg()
 		);
@@ -100,7 +100,7 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.rejectProfile();
 		profileRepository.save(profile);
 
-		notificationService.sendNotificationToUser(
+		notificationService.createAndSendNotification(
 			profile.getUser().getUsername(),
 			ResponseText.NOTIFICATION_PROFILE_REJECTED.getMsg()
 		);

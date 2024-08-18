@@ -1,9 +1,7 @@
 package com.sparta.studytrek.websocket.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
@@ -11,8 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.sparta.studytrek.common.exception.CustomException;
 import com.sparta.studytrek.common.exception.ErrorCode;
@@ -20,51 +18,60 @@ import com.sparta.studytrek.websocket.entity.Notification;
 import com.sparta.studytrek.websocket.repository.NotificationRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class NotificationService {
 
-	private final List<WebSocketSession> sessions = new ArrayList<>();
-	private final Map<String, List<String>> userNotifications = new HashMap<>();
+	private final Map<String, SseEmitter> emitters = new HashMap<>();
 	private final NotificationRepository notificationRepository;
 
 	private static final int DEFAULT_PAGE = 0;
 	private static final int DEFAULT_SIZE = 10;
 
-	public void addSession(WebSocketSession session) {
-		sessions.add(session);
+	@Transactional
+	public SseEmitter createEmitter(String username) {
+		SseEmitter emitter = new SseEmitter(300000L);
+		emitters.put(username, emitter);
+
+		emitter.onCompletion(() -> emitters.remove(username));
+		emitter.onTimeout(() -> {
+			emitters.remove(username);
+			emitter.complete();
+		});
+		emitter.onError(e -> emitters.remove(username));
+
+		return emitter;
 	}
 
-	public void removeSession(WebSocketSession session) {
-		sessions.remove(session);
-	}
-
-	public void sendNotificationToUser(String username, String message) throws IOException {
+	@Transactional
+	public void createAndSendNotification(String username, String message) throws IOException {
 		Notification notification = new Notification(username, message);
+
 		notificationRepository.save(notification);
 
-		userNotifications.computeIfAbsent(username, k -> new ArrayList<>()).add(message);
+		sendNotificationToUser(username, message);
+	}
 
-		for (WebSocketSession session : sessions) {
-			String sessionUsername = (String) session.getAttributes().get("username");
-			if (sessionUsername != null && sessionUsername.equals(username)) {
-				session.sendMessage(new TextMessage(message));
-				break;
-			}
+
+	public void sendNotificationToUser(String username, String message) throws IOException {
+		SseEmitter emitter = emitters.get(username);
+		if (emitter != null) {
+			emitter.send(SseEmitter.event()
+				.name("message")
+				.data(message));
+		} else {
+			log.warn("사용자 {}에 대한 Emitter를 찾을 수 없습니다", username);
 		}
 	}
 
+
+
 	public void sendNotificationToAll(String message) throws IOException {
-		TextMessage textMessage = new TextMessage(message);
-		for (WebSocketSession session : sessions) {
-			String username = (String) session.getAttributes().get("username");
-			if (username != null) {
-				Notification notification = new Notification(username, message);
-				notificationRepository.save(notification);
-				userNotifications.computeIfAbsent(username, k -> new ArrayList<>()).add(message);
-			}
-			session.sendMessage(textMessage);
+		for (String username : emitters.keySet()) {
+			sendNotificationToUser(username, message);
 		}
 	}
 
@@ -90,7 +97,6 @@ public class NotificationService {
 
 	public void deleteAllNotificationsForUser(String username) {
 		notificationRepository.deleteByUsername(username);
-		userNotifications.remove(username);
 	}
 
 	public long countUnreadNotificationsForUser(String username) {

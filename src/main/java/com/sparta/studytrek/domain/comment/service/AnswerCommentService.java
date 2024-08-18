@@ -46,7 +46,7 @@ public class AnswerCommentService {
         AnswerComment answerComment = new AnswerComment(answer, user, requestDto);
         AnswerComment saveComment = answerCommentRepository.save(answerComment);
 
-        notificationService.sendNotificationToUser(
+        notificationService.createAndSendNotification(
             answer.getUser().getUsername(),
             ResponseText.NOTIFICATION_ANSWER_COMMENT_CREATED.getMsg()
         );
