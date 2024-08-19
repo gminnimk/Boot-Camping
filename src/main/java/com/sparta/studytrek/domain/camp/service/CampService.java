@@ -45,7 +45,7 @@ public class CampService {
 
     public String getSummary(Long id) {
         Camp camp = findById(id);
-        return camp.getRecruitment().getSummary();
+        return camp.getSummary();
     }
 
     /**

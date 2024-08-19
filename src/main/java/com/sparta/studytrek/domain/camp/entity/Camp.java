@@ -64,21 +64,11 @@ public class Camp {
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
-    @OneToOne
-    @JoinColumn(name = "recruitment_id")
-    private Recruitment recruitment;
-
-    public Camp(String name, String description, String summary, Recruitment recruitment) {
-        this.name = name;
-        this.description = description;
-        this.summary = summary;
-        this.recruitment = recruitment;
-    }
-
     public Camp(String name, String description, String imageUrl) {
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
+        this.summary = "리뷰글이 10개 미만입니다.";
     }
 
     public void updateSummary(String summary) {

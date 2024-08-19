@@ -4,11 +4,9 @@ import com.sparta.studytrek.common.exception.CustomException;
 import com.sparta.studytrek.common.exception.ErrorCode;
 import com.sparta.studytrek.domain.auth.entity.User;
 import com.sparta.studytrek.domain.auth.service.UserService;
-import com.sparta.studytrek.domain.camp.dto.CampResponseDto;
 import com.sparta.studytrek.domain.camp.entity.Camp;
 import com.sparta.studytrek.domain.camp.repository.CampRepository;
 import com.sparta.studytrek.domain.camp.service.CampService;
-import com.sparta.studytrek.domain.recruitment.service.RecruitmentService;
 import com.sparta.studytrek.domain.review.dto.ReviewRequestDto;
 import com.sparta.studytrek.domain.review.dto.ReviewResponseDto;
 import com.sparta.studytrek.domain.review.entity.Review;
@@ -27,7 +25,6 @@ import org.springframework.stereotype.Service;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final CampRepository campRepository;
     private final CampService campService;
     private final UserService userService;
     private final SummaryService summaryService;
@@ -142,9 +139,6 @@ public class ReviewService {
 
     public String updateCampSummary(Long campId) {
         List<Review> reviews = reviewRepository.findTop10ByCampIdOrderByCreatedAtDesc(campId);
-        if (reviews.isEmpty()) {
-            return "아직 리뷰가 없습니다.";
-        }
 
         List<String> contents = reviews.stream()
             .map(Review::getContent)

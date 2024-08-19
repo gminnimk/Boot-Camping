@@ -1,7 +1,5 @@
 package com.sparta.studytrek.summary.service;
 
-import jakarta.persistence.Cacheable;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import okhttp3.MediaType;
@@ -19,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class SummaryService {
 
     private static final Logger logger = LoggerFactory.getLogger(SummaryService.class);
-    public static final int DEFAULT_SUMMARY_COUNT = 3;
+    public static final int DEFAULT_SUMMARY_COUNT = 2;
     public static final String DEFAULT_LANGAUGE = "ko";
 
     @Value("${NAVER_CLOVA_CLIENT_ID}")
@@ -31,11 +29,6 @@ public class SummaryService {
     private final String apiURL = "https://naveropenapi.apigw.ntruss.com/text-summary/v1/summarize";
     private final OkHttpClient client = new OkHttpClient();
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-
-//    @Cacheable(value = "summary", key = "#text")
-//    public Optional<String> summarizeText(String text) {
-//        return summarizeText(text, "ko", 3);
-//    }
 
     public Optional<String> summarizeText(List<String> texts) {
         return summarizeText(texts, DEFAULT_LANGAUGE, DEFAULT_SUMMARY_COUNT);
@@ -64,7 +57,7 @@ public class SummaryService {
 
             String responseBody = response.body().string();
             JSONObject jsonResponse = new JSONObject(responseBody);
-            String summary = jsonResponse.getJSONObject("summary").getString("content");
+            String summary = jsonResponse.getString("summary");
             logger.info("Summary generated successfully for texts: {}", texts);
             return Optional.of(summary);
         } catch (Exception e) {
@@ -72,8 +65,4 @@ public class SummaryService {
             return Optional.empty();
         }
     }
-
-//    public CompletableFuture<Optional<String>> summarizeTextAsync(String text) {
-//        return CompletableFuture.supplyAsync(() -> summarizeText(text));
-//    }
 }
