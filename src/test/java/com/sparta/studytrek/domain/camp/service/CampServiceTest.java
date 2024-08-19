@@ -8,9 +8,11 @@ import com.sparta.studytrek.domain.camp.entity.Camp;
 import com.sparta.studytrek.domain.camp.repository.CampRepository;
 import com.sparta.studytrek.domain.rank.entity.Rank;
 import com.sparta.studytrek.domain.rank.repository.RankRepository;
+import java.util.Comparator;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -71,7 +73,7 @@ class CampServiceTest {
         assertEquals(description, response.description());
         assertEquals(imageUrl, response.imageUrl());
 
-        verify(campRepository, times(1)).findByName(campName);
+        verify(campRepository, times(1)).findByName(eq(campName));
         verify(s3Uploader, times(1)).upload(imageFile, "camp-images");
         verify(campRepository, times(1)).save(any(Camp.class));
         verify(rankRepository, times(1)).save(any(Rank.class));
@@ -109,13 +111,15 @@ class CampServiceTest {
         String description = "Camp Description";
         MultipartFile imageFile = null;
 
+        when(campRepository.findByName(campName)).thenReturn(Optional.empty());
+
         // When
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomException exception = assertThrows(CustomException.class, () -> {
             campService.createCamp(campName, description, imageFile);
         });
 
         // Then
-        assertEquals("이미지 파일이 필요합니다.", exception.getMessage());
+        assertEquals(ErrorCode.FILE_TYPE_REQUIRED, exception.getErrorCode());
 
         verify(campRepository, times(1)).findByName(campName);
         verify(s3Uploader, times(0)).upload(any(), anyString());
@@ -148,14 +152,33 @@ class CampServiceTest {
         campService.updateCampRankingsBasedOnLikes();
 
         // Then
-        verify(rankRepository, times(1)).save(argThat(rank ->
-            rank.getCamp().equals(camp3) && rank.getRanking() == 1
-        ));
-        verify(rankRepository, times(1)).save(argThat(rank ->
-            rank.getCamp().equals(camp1) && rank.getRanking() == 2
-        ));
-        verify(rankRepository, times(1)).save(argThat(rank ->
-            rank.getCamp().equals(camp2) && rank.getRanking() == 3
-        ));
+        // 각 Rank가 저장되었는지 확인합니다.
+        ArgumentCaptor<Rank> rankCaptor = ArgumentCaptor.forClass(Rank.class);
+        verify(rankRepository, times(3)).save(rankCaptor.capture());
+
+        List<Rank> savedRanks = rankCaptor.getAllValues();
+
+        assertEquals(3, savedRanks.size());
+
+        // Rank를 순서대로 정렬
+        savedRanks.sort(Comparator.comparingInt(Rank::getRanking));
+
+        // 순위 검증
+        assertEquals(camp3, savedRanks.get(0).getCamp());
+        assertEquals(1, savedRanks.get(0).getRanking());
+
+        assertEquals(camp1, savedRanks.get(1).getCamp());
+        assertEquals(2, savedRanks.get(1).getRanking());
+
+        assertEquals(camp2, savedRanks.get(2).getCamp());
+        assertEquals(3, savedRanks.get(2).getRanking());
+
+        when(rankRepository.findAll()).thenReturn(savedRanks);
+        List<Rank> allRanks = rankRepository.findAll();
+        assertEquals(3, allRanks.size());
+
+        allRanks.sort(Comparator.comparingInt(Rank::getRanking));
+        System.out.println("All Ranks:");
+        allRanks.forEach(rank -> System.out.println("Camp: " + rank.getCamp().getName() + ", Ranking: " + rank.getRanking()));
     }
 }
