@@ -43,6 +43,11 @@ public class CampService {
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_CAMP));
     }
 
+    public String getSummary(Long id) {
+        Camp camp = findById(id);
+        return camp.getRecruitment().getSummary();
+    }
+
     /**
      * 부트캠프를 생성하고 저장하는 메서드
      *
@@ -77,11 +82,6 @@ public class CampService {
         rankRepository.save(rank);
         return new CampResponseDto(savedCamp.getId(), savedCamp.getName(),
             savedCamp.getDescription(), savedCamp.getImageUrl());
-    }
-
-    public String getSummary(Long id) {
-        Camp camp = findById(id);
-        return camp.getRecruitment().getSummary();
     }
 
     public int likeCamp(Long campId, User userId) {

@@ -35,7 +35,7 @@ public class Camp {
     @Column(nullable = false, length = 255)
     private String description;
 
-    private String summary;
+    private String summary = "";
 
     @Getter
     @Column(length = 255) // 이미지 URL을 저장하기 위한 필드
@@ -79,5 +79,9 @@ public class Camp {
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
+    }
+
+    public void updateSummary(String summary) {
+        this.summary = summary;
     }
 }
