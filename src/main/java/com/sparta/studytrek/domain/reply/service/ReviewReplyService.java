@@ -1,19 +1,15 @@
 package com.sparta.studytrek.domain.reply.service;
 
 import com.sparta.studytrek.common.ResponseText;
-import com.sparta.studytrek.common.exception.CustomException;
-import com.sparta.studytrek.common.exception.ErrorCode;
 import com.sparta.studytrek.domain.auth.entity.User;
 import com.sparta.studytrek.domain.comment.entity.ReviewComment;
 import com.sparta.studytrek.domain.comment.repository.ReviewCommentRepository;
-import com.sparta.studytrek.domain.comment.service.ReviewCommentService;
 import com.sparta.studytrek.domain.reply.dto.ReplyRequestDto;
 import com.sparta.studytrek.domain.reply.dto.ReplyResponseDto;
 import com.sparta.studytrek.domain.reply.entity.ReviewReply;
 import com.sparta.studytrek.domain.reply.repository.ReviewReplyRepository;
 import com.sparta.studytrek.domain.review.repository.ReviewRepository;
-import com.sparta.studytrek.domain.review.service.ReviewService;
-import com.sparta.studytrek.websocket.service.NotificationService;
+import com.sparta.studytrek.notification.service.NotificationService;
 
 import jakarta.transaction.Transactional;
 

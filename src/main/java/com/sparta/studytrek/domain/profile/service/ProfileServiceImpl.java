@@ -20,7 +20,7 @@ import com.sparta.studytrek.domain.profile.dto.ProfileResponseDto;
 import com.sparta.studytrek.domain.profile.entity.Profile;
 import com.sparta.studytrek.domain.profile.entity.ProfileStatus;
 import com.sparta.studytrek.domain.profile.repository.ProfileRepository;
-import com.sparta.studytrek.websocket.service.NotificationService;
+import com.sparta.studytrek.notification.service.NotificationService;
 
 import lombok.RequiredArgsConstructor;
 

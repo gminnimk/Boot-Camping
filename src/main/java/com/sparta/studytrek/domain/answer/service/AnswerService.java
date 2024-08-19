@@ -1,24 +1,19 @@
 package com.sparta.studytrek.domain.answer.service;
 
 import com.sparta.studytrek.common.ResponseText;
-import com.sparta.studytrek.common.exception.CustomException;
-import com.sparta.studytrek.common.exception.ErrorCode;
 import com.sparta.studytrek.domain.answer.dto.AnswerRequestDto;
 import com.sparta.studytrek.domain.answer.dto.AnswerResponseDto;
 import com.sparta.studytrek.domain.answer.entity.Answer;
 import com.sparta.studytrek.domain.answer.repository.AnswerRepository;
 import com.sparta.studytrek.domain.auth.entity.User;
-import com.sparta.studytrek.domain.question.dto.QuestionResponseDto;
 import com.sparta.studytrek.domain.question.entity.Question;
 import com.sparta.studytrek.domain.question.repository.QuestionRepository;
-import com.sparta.studytrek.domain.question.service.QuestionService;
-import com.sparta.studytrek.websocket.service.NotificationService;
+import com.sparta.studytrek.notification.service.NotificationService;
 
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

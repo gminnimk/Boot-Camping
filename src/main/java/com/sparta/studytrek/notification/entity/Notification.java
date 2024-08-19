@@ -1,4 +1,4 @@
-package com.sparta.studytrek.websocket.entity;
+package com.sparta.studytrek.notification.entity;
 
 import com.sparta.studytrek.common.Timestamped;
 

@@ -10,7 +10,7 @@ import com.sparta.studytrek.domain.comment.entity.StudyComment;
 import com.sparta.studytrek.domain.comment.repository.StudyCommentRepository;
 import com.sparta.studytrek.domain.study.entity.Study;
 import com.sparta.studytrek.domain.study.repository.StudyRepository;
-import com.sparta.studytrek.websocket.service.NotificationService;
+import com.sparta.studytrek.notification.service.NotificationService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

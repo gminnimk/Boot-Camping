@@ -1,15 +1,11 @@
-package com.sparta.studytrek.websocket.controller;
+package com.sparta.studytrek.notification.controller;
 
-import java.util.List;
-
-import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,12 +18,10 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.sparta.studytrek.jwt.JwtUtil;
-import com.sparta.studytrek.websocket.entity.Notification;
-import com.sparta.studytrek.websocket.service.NotificationService;
+import com.sparta.studytrek.notification.entity.Notification;
+import com.sparta.studytrek.notification.service.NotificationService;
 
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController

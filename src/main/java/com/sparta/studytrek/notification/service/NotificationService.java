@@ -1,4 +1,4 @@
-package com.sparta.studytrek.websocket.service;
+package com.sparta.studytrek.notification.service;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,8 +14,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.sparta.studytrek.common.exception.CustomException;
 import com.sparta.studytrek.common.exception.ErrorCode;
-import com.sparta.studytrek.websocket.entity.Notification;
-import com.sparta.studytrek.websocket.repository.NotificationRepository;
+import com.sparta.studytrek.notification.entity.Notification;
+import com.sparta.studytrek.notification.repository.NotificationRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

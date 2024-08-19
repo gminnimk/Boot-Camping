@@ -1,9 +1,6 @@
 package com.sparta.studytrek.domain.comment.service;
 
 import com.sparta.studytrek.common.ResponseText;
-import com.sparta.studytrek.common.exception.CustomException;
-import com.sparta.studytrek.common.exception.ErrorCode;
-import com.sparta.studytrek.domain.answer.dto.AnswerRequestDto;
 import com.sparta.studytrek.domain.answer.entity.Answer;
 import com.sparta.studytrek.domain.answer.repository.AnswerRepository;
 import com.sparta.studytrek.domain.auth.entity.User;
@@ -13,7 +10,7 @@ import com.sparta.studytrek.domain.comment.entity.AnswerComment;
 import com.sparta.studytrek.domain.comment.repository.AnswerCommentRepository;
 import com.sparta.studytrek.domain.question.entity.Question;
 import com.sparta.studytrek.domain.question.repository.QuestionRepository;
-import com.sparta.studytrek.websocket.service.NotificationService;
+import com.sparta.studytrek.notification.service.NotificationService;
 
 import java.io.IOException;
 import java.util.List;

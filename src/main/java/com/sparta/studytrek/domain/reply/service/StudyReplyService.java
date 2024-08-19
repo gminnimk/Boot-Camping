@@ -12,13 +12,13 @@ import com.sparta.studytrek.domain.reply.entity.StudyReply;
 import com.sparta.studytrek.domain.reply.repository.StudyReplyRepository;
 import com.sparta.studytrek.domain.study.entity.Study;
 import com.sparta.studytrek.domain.study.repository.StudyRepository;
-import com.sparta.studytrek.websocket.service.NotificationService;
+import com.sparta.studytrek.notification.service.NotificationService;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
