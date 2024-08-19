@@ -64,7 +64,7 @@ public class CampService {
         );
 
         if (imageFile == null || imageFile.isEmpty()) {
-            throw new IllegalArgumentException("이미지 파일이 필요합니다.");
+            throw new CustomException(ErrorCode.FILE_TYPE_REQUIRED);
         }
         String imageUrl = s3Uploader.upload(imageFile, "camp-images");
 
