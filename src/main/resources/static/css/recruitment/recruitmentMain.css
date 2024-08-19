@@ -173,30 +173,6 @@ body.dark {
     justify-content: center;
 }
 
-.sort-buttons {
-    display: flex;
-    justify-content: flex-end;
-    color: var(--color);
-    width: 1200px;
-    margin: auto;
-}
-
-.sort-button {
-    background-color: var(--sidebar-bg);
-    color: var(--color);
-    border: none;
-    font-weight: bold;
-    padding: 8px 12px;
-    margin-left: 10px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-}
-.sort-button:hover, .sort-button.active {
-    background-color: #5AA9E6;
-    color: var(--color);
-}
-
 .courses {
     display: flex;
     flex-wrap: wrap;

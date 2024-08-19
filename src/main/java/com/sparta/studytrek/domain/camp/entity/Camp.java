@@ -41,6 +41,20 @@ public class Camp {
     @Column(length = 255) // 이미지 URL을 저장하기 위한 필드
     private String imageUrl;
 
+    @Getter
+    @Column(nullable = false)
+    private int likesCount = 0;
+    
+    public void incrementLikes() {
+        this.likesCount++;
+    }
+
+    public void decrementLikes() {
+        if (this.likesCount > 0) {
+            this.likesCount--;
+        }
+    }
+
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CampUser> campUsers = new ArrayList<>();
 

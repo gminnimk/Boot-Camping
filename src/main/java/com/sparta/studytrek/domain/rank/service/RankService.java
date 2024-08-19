@@ -35,11 +35,17 @@ public class RankService {
         Camp camp = campRepository.findById(requestDto.campId())
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_CAMP));
 
-        Integer ranking = getNextAvailableRanking(); // 자동 순위 생성 로직
+        Integer ranking = getNextAvailableRanking();
         Rank rank = new Rank(camp, ranking);
         Rank savedRank = rankRepository.save(rank);
-        return new RankResponseDto(savedRank.getId(), savedRank.getCamp().getId(),
-            savedRank.getCamp().getName(), savedRank.getRanking(), savedRank.getCamp().getImageUrl());
+        return new RankResponseDto(
+            savedRank.getId(),
+            savedRank.getCamp().getId(),
+            savedRank.getCamp().getName(),
+            savedRank.getRanking(),
+            savedRank.getCamp().getImageUrl(),
+            savedRank.getCamp().getLikesCount()
+        );
     }
 
     /**
@@ -63,8 +69,14 @@ public class RankService {
     public RankListResponseDto getAllRanks(Pageable pageable) {
         Page<Rank> rankPage = rankRepository.findAllOrderByRankingAsc(pageable);
         List<RankResponseDto> rankList = rankPage.getContent().stream()
-            .map(rank -> new RankResponseDto(rank.getId(), rank.getCamp().getId(),
-                rank.getCamp().getName(), rank.getRanking(), rank.getCamp().getImageUrl()))
+            .map(rank -> new RankResponseDto(
+                rank.getId(),
+                rank.getCamp().getId(),
+                rank.getCamp().getName(),
+                rank.getRanking(),
+                rank.getCamp().getImageUrl(),
+                rank.getCamp().getLikesCount()
+            ))
             .toList();
         return new RankListResponseDto(rankList, rankPage.getTotalPages(), rankPage.getTotalElements());
     }

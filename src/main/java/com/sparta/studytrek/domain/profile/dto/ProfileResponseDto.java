@@ -24,6 +24,7 @@ public class ProfileResponseDto {
 	private final String name;
 	private final Role role;
 	private final LocalDateTime requestedAt;
+	private final Long userId;
 
 	public ProfileResponseDto(Profile profile) {
 		this.id = profile.getId();
@@ -38,5 +39,6 @@ public class ProfileResponseDto {
 		this.name = profile.getUser().getName();
 		this.role = profile.getUser().getRole();
 		this.requestedAt = profile.getRequestedAt();
+		this.userId = profile.getUser().getId();
 	}
 }

@@ -1,5 +1,6 @@
 package com.sparta.studytrek.domain.answer.service;
 
+import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.common.exception.CustomException;
 import com.sparta.studytrek.common.exception.ErrorCode;
 import com.sparta.studytrek.domain.answer.dto.AnswerRequestDto;
@@ -11,6 +12,9 @@ import com.sparta.studytrek.domain.question.dto.QuestionResponseDto;
 import com.sparta.studytrek.domain.question.entity.Question;
 import com.sparta.studytrek.domain.question.repository.QuestionRepository;
 import com.sparta.studytrek.domain.question.service.QuestionService;
+import com.sparta.studytrek.websocket.service.NotificationService;
+
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +28,7 @@ public class AnswerService {
 
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
+    private final NotificationService notificationService;
 
     /**
      * 답변 작성
@@ -33,11 +38,17 @@ public class AnswerService {
      * @param user          요청한 유저의 정보
      * @return  답변 응답 데이터
      */
-    public AnswerResponseDto createAnswer(Long questionId, AnswerRequestDto requestDto, User user) {
+    public AnswerResponseDto createAnswer(Long questionId, AnswerRequestDto requestDto, User user) throws IOException {
 
         Question question = questionRepository.findByQuestionId(questionId);
         Answer answer = new Answer(requestDto, question, user);
         Answer savedAnswer = answerRepository.save(answer);
+
+        notificationService.createAndSendNotification(
+            question.getUser().getUsername(),
+            ResponseText.NOTIFICATION_ANSWER_CREATED.getMsg()
+        );
+
         return new AnswerResponseDto(savedAnswer);
     }
 

@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
   <!-- SweetAlert2 JS -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module" th:src="@{/js/auth.js}" defer></script>
   <script th:src="@{/js/scripts.js}" defer></script>
   <script th:src="@{/js/recruitmentTopsearch.js}" defer></script>
   <script th:src="@{/js/recruitment/recruitmentMain.js}" defer></script>
@@ -42,14 +43,6 @@
           </div>
         </div>
       </div>
-
-<!--      &lt;!&ndash; 조회 정렬 &ndash;&gt;-->
-<!--      <div class="sort-buttons">-->
-<!--        <button class="sort-button" data-sort="views">조회순</button>-->
-<!--        <button class="sort-button" data-sort="latest">최신순</button>-->
-<!--        <button class="sort-button" data-sort="likes">좋아요순</button>-->
-<!--        <button class="sort-button" data-sort="deadline">마감임박</button>-->
-<!--      </div>-->
 
       <!-- 모집 글 목록 -->
       <div class="filter-section" id="resultsContainer">

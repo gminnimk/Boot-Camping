@@ -1,5 +1,6 @@
 package com.sparta.studytrek.domain.comment.service;
 
+import com.sparta.studytrek.common.ResponseText;
 import com.sparta.studytrek.common.exception.CustomException;
 import com.sparta.studytrek.common.exception.ErrorCode;
 import com.sparta.studytrek.domain.auth.entity.User;
@@ -10,7 +11,11 @@ import com.sparta.studytrek.domain.comment.repository.ReviewCommentRepository;
 import com.sparta.studytrek.domain.review.entity.Review;
 import com.sparta.studytrek.domain.review.repository.ReviewRepository;
 import com.sparta.studytrek.domain.review.service.ReviewService;
+import com.sparta.studytrek.websocket.service.NotificationService;
+
 import jakarta.transaction.Transactional;
+
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +26,7 @@ public class ReviewCommentService {
 
     private final ReviewCommentRepository reviewCommentRepository;
     private final ReviewRepository reviewRepository;
+    private final NotificationService notificationService;
 
     /**
      * 리뷰의 댓글 작성
@@ -32,11 +38,17 @@ public class ReviewCommentService {
      */
     @Transactional
     public CommentResponseDto createReviewComment(Long reviewId, CommentRequestDto requestDto,
-        User user) {
+        User user) throws IOException {
         Review review = reviewRepository.findByReviewId(reviewId);
 
         ReviewComment reviewComment = new ReviewComment(review, user, requestDto.getContent());
         ReviewComment saveComment = reviewCommentRepository.save(reviewComment);
+
+        notificationService.createAndSendNotification(
+            review.getUser().getUsername(),
+            ResponseText.NOTIFICATION_REVIEW_COMMENT_CREATED.getMsg()
+        );
+
         return new CommentResponseDto(saveComment);
     }
 

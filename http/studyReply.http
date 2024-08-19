@@ -16,7 +16,7 @@ Content-Type: application/json
 %}
 
 ### 스터디의 대댓글 작성
-POST {{apiUrl}}/studies/17/comments/5/replies
+POST {{apiUrl}}/studies/3/comments/13/replies
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 

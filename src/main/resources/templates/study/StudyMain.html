@@ -9,6 +9,7 @@
   <link rel="stylesheet" th:href="@{/css/studyMaintopsearch.css}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module" th:src="@{/js/auth.js}" defer></script>
   <script th:src="@{/js/scripts.js}" defer></script>
   <script th:src="@{/js/studyMaintopsearch.js}" defer></script>
   <script th:src="@{/js/study/StudyMain.js}" defer></script>
@@ -35,14 +36,6 @@
             </button>
           </div>
         </div>
-      </div>
-
-      <!-- 조회 정렬 -->
-      <div class="sort-buttons">
-        <button class="sort-button" data-sort="views">조회순</button>
-        <button class="sort-button" data-sort="latest">최신순</button>
-        <button class="sort-button" data-sort="likes">좋아요순</button>
-        <button class="sort-button" data-sort="deadline">마감임박</button>
       </div>
 
       <div class="grid" id="study-card-container">

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALARM</title>
+    <link rel="stylesheet" th:href="@{/css/alarm.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module" th:src="@{/js/auth.js}" defer></script>
+    <script type="module" th:src="@{/js/alarm.js}" defer></script>
+</head>
+<body th:classappend="${isDarkMode} ? 'dark' : ''">
+<div class="main-container">
+    <div class="content">
+        <h2>알림 목록</h2>
+        <ul id="notificationList">
+            <li th:each="notification : ${notifications}" th:classappend="${notification.read} ? 'read' : 'unread'">
+                <span th:text="${notification.message}"></span>
+                <button th:onclick="|markAsRead(${notification.id})|">확인</button>
+            </li>
+        </ul>
+        <div id="pagination"></div>
+    </div>
+</div>
+</body>
+</html>
