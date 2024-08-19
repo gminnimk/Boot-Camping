@@ -15,6 +15,7 @@ import com.sparta.studytrek.domain.rank.entity.Rank;
 import com.sparta.studytrek.domain.rank.repository.RankRepository;
 import java.io.IOException;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -115,7 +116,7 @@ public class CampService {
      */
     @Transactional
     public void updateCampRankingsBasedOnLikes() {
-        List<Camp> camps = campRepository.findAll();
+        List<Camp> camps = new ArrayList<>(campRepository.findAll());
 
         // 좋아요 수에 따라 캠프를 정렬
         camps.sort(Comparator.comparingInt(Camp::getLikesCount).reversed());
