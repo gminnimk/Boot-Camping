@@ -27,7 +27,15 @@ import com.sparta.studytrek.domain.chat.mapper.ChatMapper;
 import com.sparta.studytrek.domain.chat.repository.ChatRepository;
 
 @SpringBootTest
-class ChatServiceImplTest {
+class ChatServiceTest {
+
+	private static final String USERNAME = "asdasd1";
+	private static final String PASSWORD = "Password1!";
+	private static final String NAME = "일반사용자";
+	private static final String ADDRESS = "대한민국 어딘가";
+	private static final String MESSAGE = "Hello";
+	private static final Long CHAT_ID = 1L;
+	private static final LocalDateTime TIMESTAMP = LocalDateTime.now();
 
 	@Mock
 	private ChatRepository chatRepository;
@@ -41,45 +49,45 @@ class ChatServiceImplTest {
 	@InjectMocks
 	private ChatServiceImpl chatService;
 
-	private ChatMessageRequestDto requestDto;
-	private User user;
-	private Chat chat;
-	private ChatMessageResponseDto responseDto;
-
-	@BeforeEach
-	void setUp() {
-		requestDto = new ChatMessageRequestDto("Hello", "asdasd1");
-		user = new User("asdasd1","Password1!","일반사용자", "대한민국 어딘가", UserType.NORMAL, new Role(UserRoleEnum.USER));
-		chat = new Chat("Hello", "asdasd1", "일반사용자");
-		responseDto = new ChatMessageResponseDto(1L, "Hello", "asdasd1", LocalDateTime.now(), "일반사용자");
+	@Test
+	void saveMessage() {
+		// Given
+		ChatMessageRequestDto requestDto = new ChatMessageRequestDto(MESSAGE, USERNAME);
+		User user = new User(USERNAME, PASSWORD, NAME, ADDRESS, UserType.NORMAL, new Role(UserRoleEnum.USER));
+		Chat chat = new Chat(MESSAGE, USERNAME, NAME);
+		ChatMessageResponseDto responseDto = new ChatMessageResponseDto(CHAT_ID, MESSAGE, USERNAME, LocalDateTime.now(), NAME);
 
 		when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
 		when(chatRepository.save(any(Chat.class))).thenReturn(chat);
 		when(chatMapper.toChatMessageResponseDto(any(Chat.class))).thenReturn(responseDto);
-	}
 
-	@Test
-	void saveMessage() {
+		// When
 		ChatMessageResponseDto result = chatService.saveMessage(requestDto);
 
+		// Then
 		verify(userRepository, times(1)).findByUsername(anyString());
 		verify(chatRepository, times(1)).save(any(Chat.class));
 		verify(chatMapper, times(1)).toChatMessageResponseDto(any(Chat.class));
 
-		assertEquals("asdasd1", result.getUsername());
-		assertEquals("일반사용자", result.getName());
-		assertEquals("Hello", result.getMessage());
+		assertEquals(USERNAME, result.getUsername());
+		assertEquals(NAME, result.getName());
+		assertEquals(MESSAGE, result.getMessage());
 	}
 
 	@Test
 	void saveMessageUserNotFound() {
+		// Given
+		ChatMessageRequestDto requestDto = new ChatMessageRequestDto(MESSAGE, USERNAME);
+
 		when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
 
+		// When
 		CustomException exception = assertThrows(CustomException.class,
 			() -> {
 			chatService.saveMessage(requestDto);
 			});
 
+		// Then
 		assertEquals(ErrorCode.USER_NOT_FOUND, exception.getErrorCode());
 	}
 }
