@@ -144,6 +144,6 @@ public class ReviewService {
             .map(Review::getContent)
             .collect(Collectors.toList());
 
-        return summaryService.summarizeText(contents).orElse("");
+        return summaryService.summarizeText(contents, campId).orElse("");
     }
 }

@@ -1,6 +1,6 @@
 package com.sparta.studytrek.summary.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -23,10 +23,11 @@ class SummaryServiceTest {
             "프로젝트가 실제 업무와 유사하여 많은 도움이 되었습니다. 프로젝트를 통해 실무에서의 문제 해결 능력을 키울 수 있었고, 팀원들과 협업하는 과정에서 소통 능력도 향상되었습니다. 실제 프로젝트와 유사한 경험을 제공해 주셔서 감사합니다.",
             "프로젝트의 퀄리티가 높아서 매우 만족스러웠습니다. 실무에서 바로 적용 가능한 기술을 사용한 프로젝트였으며, 팀원들과의 협업을 통해 많은 것을 배울 수 있었습니다. 이 프로젝트를 통해 실전 경험을 쌓을 수 있었습니다.");
         var language = "ko";
-        var summaryCount = 3;
+        var summaryCount = 2;
+        var campId = 1L;
 
         // when - 요약 API 호출
-        var summarizedText = summaryService.summarizeText(text, language, summaryCount);
+        var summarizedText = summaryService.summarizeText(text, language, summaryCount, campId);
 
         // then - 요약 결과 응답
         System.out.println(summarizedText);

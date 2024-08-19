@@ -4,9 +4,7 @@ import com.sparta.studytrek.common.exception.CustomException;
 import com.sparta.studytrek.common.exception.ErrorCode;
 import com.sparta.studytrek.config.aws.S3Uploader;
 import com.sparta.studytrek.domain.auth.entity.User;
-import com.sparta.studytrek.domain.camp.dto.CampResponseDto;
 import com.sparta.studytrek.domain.camp.entity.Camp;
-import com.sparta.studytrek.domain.camp.repository.CampRepository;
 import com.sparta.studytrek.domain.camp.service.CampService;
 import com.sparta.studytrek.domain.recruitment.dto.RecruitmentRequestDto;
 import com.sparta.studytrek.domain.recruitment.dto.RecruitmentResponseDto;
@@ -16,7 +14,6 @@ import com.sparta.studytrek.domain.review.service.ReviewService;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -130,15 +127,17 @@ public class RecruitmentService {
      * @param id 모집글 ID
      * @return 해당 모집글의 응답 데이터
      */
-    public RecruitmentResponseDto getRecruitmentWithSummary(Long id) {
+    @Transactional
+    public RecruitmentResponseDto getRecruitment(Long id) {
         Recruitment recruitment = recruitmentRepository.findByRecruitmentId(id);
-        if (recruitment.getSummary().isEmpty()) {
-            String summary = reviewService.updateCampSummary(recruitment.getCamp().getId());
-            recruitment.updateSummary(summary);
-            recruitmentRepository.save(recruitment);
-        }
+
+        Camp camp = recruitment.getCamp();
+        recruitment.updateSummary(camp.getSummary());
+        recruitmentRepository.save(recruitment);
+
         return new RecruitmentResponseDto(recruitment);
     }
+
 
     /**
      * 모집글을 작성한 유저와 해당 기능을 요청한 유저가 동일한지

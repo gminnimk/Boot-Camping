@@ -2,7 +2,6 @@ package com.sparta.studytrek.domain.camp.entity;
 
 import com.sparta.studytrek.domain.auth.entity.match.CampUser;
 import com.sparta.studytrek.domain.rank.entity.Rank;
-import com.sparta.studytrek.domain.recruitment.entity.Recruitment;
 import com.sparta.studytrek.domain.review.entity.Review;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -10,9 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +22,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Camp {
 
+    public static final String REVIEW_LIMIT_GUIDE = "리뷰글이 10개 미만입니다.";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,7 +34,7 @@ public class Camp {
     @Column(nullable = false, length = 255)
     private String description;
 
-    private String summary = "";
+    private String summary;
 
     @Getter
     @Column(length = 255) // 이미지 URL을 저장하기 위한 필드
@@ -68,7 +67,7 @@ public class Camp {
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
-        this.summary = "리뷰글이 10개 미만입니다.";
+        this.summary = REVIEW_LIMIT_GUIDE;
     }
 
     public void updateSummary(String summary) {

@@ -3,8 +3,9 @@ POST {{apiUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "username": "boot12",
-  "password": "Password123!"
+  "username": "boot11",
+  "password": "Password123!",
+  "role": "BOOTCAMP"
 }
 
 > {%
@@ -66,7 +67,7 @@ GET {{apiUrl}}/camps
 Content-Type: application/json
 
 ### 모집글 단건 조회
-GET {{apiUrl}}/camps/3
+GET {{apiUrl}}/camps/1
 Content-Type: application/json
 
 ### 모집기간 조회

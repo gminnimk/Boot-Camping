@@ -3,8 +3,8 @@ POST {{apiUrl}}/auth/signup
 Content-Type: application/json
 
 {
-  "username": "asdasd1",
-  "password": "Password1!",
+  "username": "test11",
+  "password": "Password123!",
   "name": "일반사용자",
   "userAddr" : "대한민국 어딘가",
   "userRole" : "USER"
@@ -15,11 +15,11 @@ POST {{apiUrl}}/auth/signup
 Content-Type: application/json
 
 {
-  "username": "boot99",
+  "username": "boot11",
   "password": "Password123!",
   "name": "부트캠프사용자",
   "userAddr" : "대한민국 어딘가",
-  "campName" : "스파르타",
+  "campName" : "내일배움캠프",
   "userRole" : "BOOTCAMP"
 }
 

@@ -3,8 +3,6 @@ package com.sparta.studytrek.domain.recruitment.controller;
 import com.sparta.studytrek.aop.RecruitmentRoleCheck;
 import com.sparta.studytrek.common.ApiResponse;
 import com.sparta.studytrek.common.ResponseText;
-import com.sparta.studytrek.domain.camp.entity.Camp;
-import com.sparta.studytrek.domain.camp.service.CampService;
 import com.sparta.studytrek.domain.recruitment.dto.RecruitmentRequestDto;
 import com.sparta.studytrek.domain.recruitment.dto.RecruitmentResponseDto;
 import com.sparta.studytrek.domain.recruitment.service.RecruitmentService;
@@ -146,7 +144,7 @@ public class RecruitmentController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getRecruitment(@PathVariable Long id) {
-        RecruitmentResponseDto responseDto = recruitmentService.getRecruitmentWithSummary(id);
+        RecruitmentResponseDto responseDto = recruitmentService.getRecruitment(id);
         ApiResponse response = ApiResponse.builder()
             .msg(ResponseText.RECRUITMENT_GET_SUCCESS.getMsg())
             .statuscode(String.valueOf(HttpStatus.OK.value()))
