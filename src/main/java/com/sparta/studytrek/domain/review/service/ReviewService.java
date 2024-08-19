@@ -146,10 +146,10 @@ public class ReviewService {
             return "아직 리뷰가 없습니다.";
         }
 
-        String content = reviews.stream()
+        List<String> contents = reviews.stream()
             .map(Review::getContent)
-            .collect(Collectors.joining(" "));
+            .collect(Collectors.toList());
 
-        return summaryService.getSummary(content);
+        return summaryService.summarizeText(contents).orElse("");
     }
 }
