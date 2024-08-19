@@ -4,13 +4,19 @@ import com.sparta.studytrek.common.exception.CustomException;
 import com.sparta.studytrek.common.exception.ErrorCode;
 import com.sparta.studytrek.config.aws.S3Uploader;
 import com.sparta.studytrek.domain.auth.entity.User;
+import com.sparta.studytrek.domain.camp.dto.CampResponseDto;
+import com.sparta.studytrek.domain.camp.entity.Camp;
+import com.sparta.studytrek.domain.camp.repository.CampRepository;
+import com.sparta.studytrek.domain.camp.service.CampService;
 import com.sparta.studytrek.domain.recruitment.dto.RecruitmentRequestDto;
 import com.sparta.studytrek.domain.recruitment.dto.RecruitmentResponseDto;
 import com.sparta.studytrek.domain.recruitment.entity.Recruitment;
 import com.sparta.studytrek.domain.recruitment.repository.RecruitmentRepository;
+import com.sparta.studytrek.domain.review.service.ReviewService;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,6 +31,8 @@ public class RecruitmentService {
 
     private final RecruitmentRepository recruitmentRepository;
     private final S3Uploader s3Uploader;
+    private final CampService campService;
+    private final ReviewService reviewService;
 
     /**
      * 모집글 작성
@@ -42,7 +50,9 @@ public class RecruitmentService {
         String imageUrl = validateAndUploadImage(imageFile);
         requestDto.setImageUrl(imageUrl);
 
-        Recruitment recruitment = new Recruitment(requestDto, user);
+        Camp camp = campService.findByName(requestDto.getCampName());
+
+        Recruitment recruitment = new Recruitment(requestDto, user, camp);
         Recruitment createRecruitment = recruitmentRepository.save(recruitment);
         return new RecruitmentResponseDto(createRecruitment);
     }
@@ -120,8 +130,13 @@ public class RecruitmentService {
      * @param id 모집글 ID
      * @return 해당 모집글의 응답 데이터
      */
-    public RecruitmentResponseDto getRecruitment(Long id) {
+    public RecruitmentResponseDto getRecruitmentWithSummary(Long id) {
         Recruitment recruitment = recruitmentRepository.findByRecruitmentId(id);
+        if (recruitment.getSummary().isEmpty()) {
+            String summary = reviewService.updateCampSummary(recruitment.getCamp().getId());
+            recruitment.updateSummary(summary);
+            recruitmentRepository.save(recruitment);
+        }
         return new RecruitmentResponseDto(recruitment);
     }
 

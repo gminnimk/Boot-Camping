@@ -40,9 +40,6 @@ public class Review extends Timestamped {
     @Column(nullable = false)
     private String content;  // 리뷰 내용
 
-    @Column
-    private String summary;
-
     @Column(nullable = false)
     private int scope;  // 리뷰 별점
 
@@ -62,7 +59,7 @@ public class Review extends Timestamped {
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewComment> comments = new ArrayList<>();
 
-    public Review(ReviewRequestDto requestDto, User user, Camp camp, String summary) {
+    public Review(ReviewRequestDto requestDto, User user, Camp camp) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.scope = requestDto.getScope();
@@ -70,25 +67,22 @@ public class Review extends Timestamped {
         this.trek = requestDto.getTrek();
         this.user = user;
         this.camp = camp;
-        this.summary = summary;
     }
 
-    public void updateReview(ReviewRequestDto requestDto, Camp camp, String summary) {
+    public void updateReview(ReviewRequestDto requestDto, Camp camp) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.scope = requestDto.getScope();
         this.category = requestDto.getCategory();
         this.trek = requestDto.getTrek();
         this.camp = camp;
-        this.summary = summary;
     }
 
-    public Review(User user, String title, String content, String summary,int scope, String trek,
+    public Review(User user, String title, String content, int scope, String trek,
         String category) {
         this.user = user;
         this.title = title;
         this.content = content;
-        this.summary = summary;
         this.scope = scope;
         this.trek = trek;
         this.category = category;

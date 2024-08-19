@@ -3,6 +3,7 @@ package com.sparta.studytrek.domain.recruitment.dto;
 import com.sparta.studytrek.domain.recruitment.entity.Recruitment;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Map;
 import lombok.Getter;
 
 @Getter
@@ -24,6 +25,7 @@ public class RecruitmentResponseDto {
     private LocalDateTime updateAt;
     private String campName;
     private String imageUrl;
+    private String summary;
 
     public RecruitmentResponseDto(Recruitment createRecruitment) {
         this.id = createRecruitment.getId();
@@ -43,5 +45,6 @@ public class RecruitmentResponseDto {
         this.updateAt = createRecruitment.getUpdatedAt();
         this.campName = createRecruitment.getCampName();
         this.imageUrl = createRecruitment.getImageUrl();
+        this.summary = createRecruitment.getSummary();
     }
 }

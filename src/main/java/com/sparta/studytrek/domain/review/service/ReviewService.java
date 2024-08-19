@@ -4,8 +4,11 @@ import com.sparta.studytrek.common.exception.CustomException;
 import com.sparta.studytrek.common.exception.ErrorCode;
 import com.sparta.studytrek.domain.auth.entity.User;
 import com.sparta.studytrek.domain.auth.service.UserService;
+import com.sparta.studytrek.domain.camp.dto.CampResponseDto;
 import com.sparta.studytrek.domain.camp.entity.Camp;
+import com.sparta.studytrek.domain.camp.repository.CampRepository;
 import com.sparta.studytrek.domain.camp.service.CampService;
+import com.sparta.studytrek.domain.recruitment.service.RecruitmentService;
 import com.sparta.studytrek.domain.review.dto.ReviewRequestDto;
 import com.sparta.studytrek.domain.review.dto.ReviewResponseDto;
 import com.sparta.studytrek.domain.review.entity.Review;
@@ -13,6 +16,7 @@ import com.sparta.studytrek.domain.review.repository.ReviewRepository;
 import com.sparta.studytrek.summary.service.SummaryService;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +27,7 @@ import org.springframework.stereotype.Service;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final CampRepository campRepository;
     private final CampService campService;
     private final UserService userService;
     private final SummaryService summaryService;
@@ -47,11 +52,14 @@ public class ReviewService {
         }
 
         Camp camp = campService.findByName(requestDto.getCampName());
-        String summary = summaryService.summarizeText(requestDto.getContent())
-            .orElse("요약을 생성할 수 없습니다.");
 
-        Review review = new Review(requestDto, user, camp, summary);
+        Review review = new Review(requestDto, user, camp);
         Review creatReview = reviewRepository.save(review);
+
+        long reviewCount = reviewRepository.countByCampId(camp.getId());
+        if (reviewCount % 10 == 0) {
+            updateCampSummary(camp.getId());
+        }
 
         return new ReviewResponseDto(creatReview);
     }
@@ -79,10 +87,8 @@ public class ReviewService {
         }
 
         Camp camp = campService.findByName(requestDto.getCampName());
-        String summary = summaryService.summarizeText(requestDto.getContent())
-            .orElse("요약을 생성할 수 없습니다.");
 
-        review.updateReview(requestDto, camp, summary);
+        review.updateReview(requestDto, camp);
 
         return new ReviewResponseDto(review);
     }
@@ -132,5 +138,18 @@ public class ReviewService {
         if (!reviewUserId.equals(userId)) {
             throw new CustomException(ErrorCode.REVIEW_NOT_AUTHORIZED);
         }
+    }
+
+    public String updateCampSummary(Long campId) {
+        List<Review> reviews = reviewRepository.findTop10ByCampIdOrderByCreatedAtDesc(campId);
+        if (reviews.isEmpty()) {
+            return "아직 리뷰가 없습니다.";
+        }
+
+        String content = reviews.stream()
+            .map(Review::getContent)
+            .collect(Collectors.joining(" "));
+
+        return summaryService.getSummary(content);
     }
 }

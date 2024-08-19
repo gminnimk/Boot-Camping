@@ -87,7 +87,10 @@ public enum ResponseText {
 
     // like
     LIKE_RECRUIT_SUCCESS("해당 게시글에 좋아요 성공 : %d"),
-    LIKE_CALL_OFF_SUCCESS("해당 게시글에 좋아요 취소 : %d");
+    LIKE_CALL_OFF_SUCCESS("해당 게시글에 좋아요 취소 : %d"),
+
+    // SUMMARY
+    SUMMARY_CREATE_SUCCESS("요약 성공");
 
 
     private String msg;

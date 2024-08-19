@@ -9,7 +9,6 @@ public class ReviewResponseDto {
     private Long id;
     private String title;
     private String content;
-    private String summary;
     private String campName;
     private int scope;
     private String category;
@@ -20,7 +19,6 @@ public class ReviewResponseDto {
         this.id = creatReview.getId();
         this.title = creatReview.getTitle();
         this.content = creatReview.getContent();
-        this.summary = creatReview.getSummary();
         this.scope = creatReview.getScope();
         this.category = creatReview.getCategory();
         this.trek = creatReview.getTrek();
