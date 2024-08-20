@@ -54,13 +54,26 @@ function checkLoginStatus() {
     const accessToken = localStorage.getItem('accessToken');
 
     if (accessToken) {
+        const payloadBase64 = accessToken.split('.')[1];
+        const decodedPayload = atob(payloadBase64);
+        const payload = JSON.parse(decodedPayload);
+
+        console.log('디코딩된 사용자 정보:', payload);
+
+        const userRole = payload.auth;
+
+        console.log('User role:', userRole);
+
+        if (userRole && userRole.trim().toUpperCase() === 'ADMIN') {
+            adminButton.style.display = 'inline-block';
+        }
+
         loginButton.textContent = 'Logout';
         loginButton.onclick = onLogout;
-        adminButton.style.display = 'inline-block'; // 로그인 상태일 때 ADMIN 버튼 표시
     } else {
         loginButton.textContent = 'Login';
         loginButton.onclick = () => location.href = '/auth';
-        adminButton.style.display = 'none'; // 로그아웃 상태일 때 ADMIN 버튼 숨기기
+        adminButton.style.display = 'none';
     }
 }
 
