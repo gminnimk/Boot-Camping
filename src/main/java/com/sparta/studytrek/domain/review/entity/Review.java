@@ -5,6 +5,7 @@ import com.sparta.studytrek.domain.auth.entity.User;
 import com.sparta.studytrek.domain.camp.entity.Camp;
 import com.sparta.studytrek.domain.comment.entity.ReviewComment;
 import com.sparta.studytrek.domain.like.entity.ReviewLike;
+import com.sparta.studytrek.domain.recruitment.entity.Recruitment;
 import com.sparta.studytrek.domain.review.dto.ReviewRequestDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

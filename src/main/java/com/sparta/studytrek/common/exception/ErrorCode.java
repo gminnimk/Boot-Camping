@@ -96,7 +96,10 @@ public enum ErrorCode {
     NOTIFICATION_NOT_FOUND(HttpStatus.BAD_REQUEST,"알림을 찾을 수 없습니다."),
     // S3
     FILE_SIZE_EXCEED(HttpStatus.BAD_REQUEST, "이미지 크기가 초과되었습니다."),
-    FILE_TYPE_REQUIRED(HttpStatus.BAD_REQUEST, "이미지 파일이 필요합니다.");
+    FILE_TYPE_REQUIRED(HttpStatus.BAD_REQUEST, "이미지 파일이 필요합니다."),
+
+    // Summary
+    SUMMARY_GENERATION_FAILED(HttpStatus.BAD_REQUEST, "요약을 실패했습니다");
 
     private HttpStatus httpStatus;
     private String msg;

@@ -3,6 +3,7 @@ package com.sparta.studytrek.domain.review.controller;
 import com.sparta.studytrek.aop.ReviewRoleCheck;
 import com.sparta.studytrek.common.ApiResponse;
 import com.sparta.studytrek.common.ResponseText;
+import com.sparta.studytrek.domain.recruitment.service.RecruitmentService;
 import com.sparta.studytrek.domain.review.dto.ReviewRequestDto;
 import com.sparta.studytrek.domain.review.dto.ReviewResponseDto;
 import com.sparta.studytrek.domain.review.service.ReviewService;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReviewController {
 
     private final ReviewService reviewService;
+    private final RecruitmentService recruitmentService;
 
     /**
      * 리뷰 작성 API

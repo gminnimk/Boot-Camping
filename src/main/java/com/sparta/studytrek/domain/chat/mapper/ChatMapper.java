@@ -10,13 +10,6 @@ import com.sparta.studytrek.domain.chat.entity.Chat;
 
 @Mapper(componentModel = "spring")
 public interface ChatMapper {
-
-	@Mappings({
-		@Mapping(source = "message", target = "message"),
-		@Mapping(source = "username", target = "username")
-	})
-	Chat toChat(ChatMessageRequestDto requestDto);
-
 	@Mappings({
 		@Mapping(source = "id", target = "id"),
 		@Mapping(source = "message", target = "message"),

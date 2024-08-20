@@ -1,10 +1,12 @@
 package com.sparta.studytrek.domain.recruitment.dto;
 
 import java.time.LocalDate;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
+@Builder
 public class RecruitmentRequestDto {
     private String title;
     private String process;

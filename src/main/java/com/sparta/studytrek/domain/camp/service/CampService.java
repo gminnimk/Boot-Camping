@@ -44,6 +44,11 @@ public class CampService {
             .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_CAMP));
     }
 
+    public String getSummary(Long id) {
+        Camp camp = findById(id);
+        return camp.getSummary();
+    }
+
     /**
      * 부트캠프를 생성하고 저장하는 메서드
      *

@@ -89,6 +89,9 @@ public enum ResponseText {
     LIKE_RECRUIT_SUCCESS("해당 게시글에 좋아요 성공 : %d"),
     LIKE_CALL_OFF_SUCCESS("해당 게시글에 좋아요 취소 : %d"),
 
+    // SUMMARY
+    SUMMARY_CREATE_SUCCESS("요약 성공"),
+
     // notification
     NOTIFICATION_PROFILE_APPROVED("프로필이 승인 되었습니다."),
     NOTIFICATION_PROFILE_REJECTED("프로필이 거절 되었습니다."),

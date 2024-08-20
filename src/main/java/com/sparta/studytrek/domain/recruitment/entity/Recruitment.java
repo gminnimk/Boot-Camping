@@ -2,6 +2,7 @@ package com.sparta.studytrek.domain.recruitment.entity;
 
 import com.sparta.studytrek.common.Timestamped;
 import com.sparta.studytrek.domain.auth.entity.User;
+import com.sparta.studytrek.domain.camp.entity.Camp;
 import com.sparta.studytrek.domain.recruitment.dto.RecruitmentRequestDto;
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -55,6 +56,8 @@ public class Recruitment extends Timestamped {
 
     private String campName; // 캠프 이름
 
+    private String summary;  // 리뷰 요약 데이터
+
     @Getter
     @Column(length = 255)
     private String imageUrl; // 이미지 url
@@ -63,7 +66,11 @@ public class Recruitment extends Timestamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;  // 유저 정보
 
-    public Recruitment(RecruitmentRequestDto requestDto, User user) {
+    @ManyToOne
+    @JoinColumn(name = "camp_id", nullable = false)
+    private Camp camp;  // 캠프 정보
+
+    public Recruitment(RecruitmentRequestDto requestDto, User user, Camp camp) {
         this.title = requestDto.getTitle();
         this.process = requestDto.getProcess();
         this.content = requestDto.getContent();
@@ -77,8 +84,10 @@ public class Recruitment extends Timestamped {
         this.recruitStart = requestDto.getRecruitStart();
         this.recruitEnd = requestDto.getRecruitEnd();
         this.user = user;
+        this.camp = camp;
         this.campName = requestDto.getCampName();
         this.imageUrl = requestDto.getImageUrl();
+        this.summary = camp.getSummary();
     }
 
     public void updateRecruitmentWithoutImgurl(RecruitmentRequestDto requestDto) {
@@ -100,4 +109,9 @@ public class Recruitment extends Timestamped {
     public void updateImage(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public void updateSummary(String summary) {
+        this.summary = summary;
+    }
+
 }

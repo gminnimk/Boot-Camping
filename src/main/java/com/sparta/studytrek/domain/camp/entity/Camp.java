@@ -22,6 +22,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Camp {
 
+    public static final String REVIEW_LIMIT_GUIDE = "리뷰글이 10개 미만입니다.";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,6 +33,8 @@ public class Camp {
 
     @Column(nullable = false, length = 255)
     private String description;
+
+    private String summary;
 
     @Getter
     @Column(length = 255) // 이미지 URL을 저장하기 위한 필드
@@ -59,14 +63,14 @@ public class Camp {
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
-    public Camp(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
-
     public Camp(String name, String description, String imageUrl) {
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
+        this.summary = REVIEW_LIMIT_GUIDE;
+    }
+
+    public void updateSummary(String summary) {
+        this.summary = summary;
     }
 }
