@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 로그인/회원가입</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/adminLogin.css}">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.0/dark.css">
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/js/scripts.js}" defer></script>
+    <script th:src="@{/js/adminLogin.js}" defer></script>
+</head>
+<body>
+<div class="container" id="container">
+    <a th:href="@{/home}" id="logoLink">
+        <img class="logo-img" th:src="@{/images/logo.png}"/>
+    </a>
+    <!-- 회원가입 폼 -->
+    <div class="form-container sign-up-container">
+        <form id="signupForm">
+            <h1 id="signUpTitle">관리자 계정 생성</h1>
+            <div class="social-container">
+                <a href="https://facebook.com" class="social"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://google.com" class="social"><i class="fab fa-google-plus-g"></i></a>
+                <a href="https://linkedin.com" class="social"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <span id="signUpSpan">또는 아이디로 등록</span>
+            <input type="text" id="signupId" placeholder="Id" required />
+            <div class="error-message" id="signupIdError"></div>
+            <input type="text" id="signupName" placeholder="Name" required />
+            <div class="error-message" id="signupNameError"></div>
+<!--            <input type="text" id="userAddress" placeholder="address" style="display: block;" />-->
+<!--            <div class="error-message" id="userAddressError"></div>-->
+            <input type="password" id="signupPassword" placeholder="Password" required />
+            <div class="error-message" id="signupPasswordError"></div>
+            <button type="button" id="signUpButton">가입하기</button>
+        </form>
+    </div>
+
+    <!-- 로그인 폼 -->
+    <div class="form-container sign-in-container">
+        <form id="loginForm">
+            <h1 id="signInTitle">로그인</h1>
+            <div class="social-container">
+                <a href="https://facebook.com" class="social"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://google.com" class="social"><i class="fab fa-google-plus-g"></i></a>
+                <a href="https://linkedin.com" class="social"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <span id="signInSpan">또는 계정으로 로그인</span>
+            <input type="text" id="loginId" placeholder="Id" required />
+            <div class="error-message" id="loginIdError"></div>
+            <input type="password" id="loginPassword" placeholder="Password" required />
+            <div class="error-message" id="loginPasswordError"></div>
+            <a href="https://example.com/forgot-password" id="forgotPassword">비밀번호를 잊으셨나요?</a>
+            <button type="button" id="signInButton">로그인</button>
+        </form>
+    </div>
+
+    <!-- 오버레이 -->
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <h1 id="welcomeBackTitle">환영합니다!</h1>
+                <p id="welcomeBackText">관리자 정보를 입력해주세요</p>
+                <button class="ghost" id="signIn">Sign In</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h1 id="helloTitle">어서오세요!</h1>
+                <p id="helloText">관리자용 로그인 페이지입니다</p>
+                <button class="ghost" id="signUp">Sign Up</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="theme-toggle">
+    <img th:src="@{/images/icon-light-theme.svg}" alt="Light Theme Icon" />
+    <div class="toggle-container" th:onclick="|javascript:toggleTheme()|">
+        <div class="toggle-circle" th:classappend="${isDarkMode} ? 'dark' : ''"></div>
+    </div>
+    <img th:src="@{/images/icon-dark-theme.svg}" alt="Dark Theme Icon" />
+</div>
+</body>
+</html>
