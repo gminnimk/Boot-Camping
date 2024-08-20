@@ -80,7 +80,7 @@ public class NotificationService {
 		int actualSize = (size == null) ? DEFAULT_SIZE : size;
 
 		Pageable pageable = PageRequest.of(actualPage, actualSize, Sort.by(Sort.Direction.DESC, "createdAt"));
-		return notificationRepository.findByUsername(username, pageable);
+		return notificationRepository.findByUsernameWithQueryDSL(username, pageable);
 	}
 
 	public void markNotificationAsRead(Long notificationId) {

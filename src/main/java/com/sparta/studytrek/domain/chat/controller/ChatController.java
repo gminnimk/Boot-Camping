@@ -52,8 +52,8 @@ public class ChatController {
 	 * @return 모든 채팅 메세지 응답
 	 */
 	@GetMapping
-	public ResponseEntity<ApiResponse> getAllChats() {
-		List<ChatMessageResponseDto> responseDto = chatService.getAllMessages();
+	public ResponseEntity<ApiResponse> getAllChats(@RequestParam(required = false) Long cursor, @RequestParam(defaultValue = "20") int size) {
+		List<ChatMessageResponseDto> responseDto = chatService.getAllMessages(cursor, size);
 		ApiResponse response = ApiResponse.builder()
 			.msg(ResponseText.CHAT_GET_SUCCESS.getMsg())
 			.statuscode(String.valueOf(HttpStatus.OK.value()))
