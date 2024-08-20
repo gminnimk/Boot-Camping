@@ -58,9 +58,13 @@ function checkLoginStatus() {
         const decodedPayload = atob(payloadBase64);
         const payload = JSON.parse(decodedPayload);
 
-        const userRole = payload.role;
+        console.log('디코딩된 사용자 정보:', payload);
 
-        if (userRole === 'ADMIN') {
+        const userRole = payload.auth;
+
+        console.log('User role:', userRole);
+
+        if (userRole && userRole.trim().toUpperCase() === 'ADMIN') {
             adminButton.style.display = 'inline-block';
         }
 
@@ -72,6 +76,7 @@ function checkLoginStatus() {
         adminButton.style.display = 'none';
     }
 }
+
 // 로그아웃 성공 시 호출되는 함수
 function onLogoutSuccess() {
     const loginButton = document.querySelector('#loginButton');
