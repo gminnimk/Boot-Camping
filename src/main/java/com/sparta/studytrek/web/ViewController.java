@@ -88,4 +88,7 @@ public class ViewController {
     @GetMapping("/camp/{campId}")
     public String showCampDetail() { return "recruitment/recruitmentDetail"; }
 
+    @GetMapping("/admin/login")
+    public String showAdminLogin() { return "adminLogin"; }
+
 }
