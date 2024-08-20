@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.sparta.studytrek.notification.entity.Notification;
 
 @Repository
-public interface NotificationRepository extends JpaRepository<Notification, Long> {
-	Page<Notification> findByUsername(String username, Pageable pageable);
+public interface NotificationRepository extends JpaRepository<Notification, Long>, NotificationRepositoryCustom {
 	void deleteByUsername(String username);
 	long countByUsernameAndIsReadFalse(String username);
 }
