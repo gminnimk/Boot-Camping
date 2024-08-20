@@ -63,10 +63,13 @@ public class ChatServiceImpl implements ChatService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public List<ChatMessageResponseDto> getAllMessages() {
-		List<Chat> chats = chatRepository.findAll();
+	public List<ChatMessageResponseDto> getAllMessages(Long cursor, int size) {
+		List<Chat> chats = chatRepository.findAllWithCursor(cursor, size);
+
+		Long nextCursor = chats.isEmpty() ? null : chats.get(chats.size() - 1).getId();
+
 		return chats.stream()
-			.map(chatMapper::toChatMessageResponseDto)
+			.map(chat -> new ChatMessageResponseDto(chat.getId(), chat.getMessage(), chat.getUsername(), chat.getCreatedAt(), chat.getName(), nextCursor))
 			.collect(Collectors.toList());
 	}
 
