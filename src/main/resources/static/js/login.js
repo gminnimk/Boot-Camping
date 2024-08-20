@@ -145,7 +145,7 @@ function updateContent(userType) {
     setTimeout(() => {
         if (userType === 'admin') {
             signUpTitle.textContent = '부트캠프 계정 생성';
-            signUpSpan.textContent = '또는 이메일로 등록';
+            signUpSpan.textContent = '또는 아이디로 등록';
             signUpButton.textContent = '부트캠프 계정 등록';
             signInTitle.textContent = '부트캠프 로그인';
             signInSpan.textContent = '또는 계정으로 로그인';
@@ -169,7 +169,7 @@ function updateContent(userType) {
             adminNameContainer.style.display = 'block';
         } else {
             signUpTitle.textContent = '계정 생성';
-            signUpSpan.textContent = '또는 이메일로 등록';
+            signUpSpan.textContent = '또는 아이디로 등록';
             signUpButton.textContent = '가입하기';
             signInTitle.textContent = '로그인';
             signInSpan.textContent = '또는 계정으로 로그인';
