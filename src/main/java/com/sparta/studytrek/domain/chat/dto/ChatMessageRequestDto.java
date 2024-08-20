@@ -8,9 +8,11 @@ import lombok.NoArgsConstructor;
 public class ChatMessageRequestDto {
 	private String message;
 	private String username;
+	private Long cursor;
 
-	public ChatMessageRequestDto(String message, String username) {
+	public ChatMessageRequestDto(String message, String username, Long cursor) {
 		this.message = message;
 		this.username = username;
+		this.cursor = cursor;
 	}
 }
