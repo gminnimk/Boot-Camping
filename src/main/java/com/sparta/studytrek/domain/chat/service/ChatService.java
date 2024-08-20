@@ -13,7 +13,7 @@ public interface ChatService {
 	ChatMessageResponseDto saveMessage(ChatMessageRequestDto requestDto);
 
 	@Transactional(readOnly = true)
-	List<ChatMessageResponseDto> getAllMessages();
+	List<ChatMessageResponseDto> getAllMessages(Long cursor, int size);
 
 	SseEmitter createEmitter(String username);
 
