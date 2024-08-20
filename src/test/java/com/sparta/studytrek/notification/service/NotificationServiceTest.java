@@ -24,8 +24,6 @@ import com.sparta.studytrek.notification.repository.NotificationRepository;
 class NotificationServiceTest {
 
 	private static final String USERNAME = "asdasd1";
-	private static final String MESSAGE1 = "test Message1";
-	private static final String MESSAGE2 = "test Message2";
 	private static final int PAGE = 0;
 	private static final int SIZE = 10;
 	private static final Sort SORT = Sort.by(Sort.Direction.DESC, "createdAt");
@@ -39,9 +37,13 @@ class NotificationServiceTest {
 	@Test
 	void getNotificationsForUser() {
 		// Given
-		Notification notification1 = new Notification(USERNAME, MESSAGE1);
-		Notification notification2 = new Notification(USERNAME, MESSAGE2);
-		List<Notification> notifications = List.of(notification1, notification2);
+		Notification notification1 = new Notification(USERNAME, "test Message1");
+		Notification notification2 = new Notification(USERNAME, "test Message2");
+		Notification notification3 = new Notification(USERNAME, "test Message3");
+		Notification notification4 = new Notification(USERNAME, "test Message4");
+		Notification notification5 = new Notification(USERNAME, "test Message5");
+
+		List<Notification> notifications = List.of(notification1, notification2, notification3, notification4, notification5);
 		Pageable pageable = PageRequest.of(PAGE, SIZE, SORT);
 		Page<Notification> notificationPage = new PageImpl<>(notifications, pageable, notifications.size());
 
@@ -53,17 +55,24 @@ class NotificationServiceTest {
 		// Then
 		verify(notificationRepository, times(1)).findByUsername(eq(USERNAME), any(Pageable.class));
 		assertNotNull(page);
-		assertEquals(2, page.getTotalElements());
+		assertEquals(5, page.getTotalElements());
 		assertEquals(notification1, page.getContent().get(0));
 		assertEquals(notification2, page.getContent().get(1));
+		assertEquals(notification3, page.getContent().get(2));
+		assertEquals(notification4, page.getContent().get(3));
+		assertEquals(notification5, page.getContent().get(4));
 	}
 
 	@Test
 	void getNotificationsForUserWithNullPageAndSize() {
 		// Given
-		Notification notification1 = new Notification(USERNAME, MESSAGE1);
-		Notification notification2 = new Notification(USERNAME, MESSAGE2);
-		List<Notification> notifications = List.of(notification1, notification2);
+		Notification notification1 = new Notification(USERNAME, "test Message1");
+		Notification notification2 = new Notification(USERNAME, "test Message2");
+		Notification notification3 = new Notification(USERNAME, "test Message3");
+		Notification notification4 = new Notification(USERNAME, "test Message4");
+		Notification notification5 = new Notification(USERNAME, "test Message5");
+
+		List<Notification> notifications = List.of(notification1, notification2, notification3, notification4, notification5);
 
 		int defaultPage = 0;
 		int defaultSize = 10;
@@ -79,6 +88,6 @@ class NotificationServiceTest {
 		// Then
 		verify(notificationRepository, times(1)).findByUsername(eq(USERNAME), eq(defaultPageable));
 		assertNotNull(page);
-		assertEquals(2, page.getTotalElements());
+		assertEquals(5, page.getTotalElements());
 	}
 }
