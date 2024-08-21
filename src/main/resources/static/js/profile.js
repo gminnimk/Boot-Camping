@@ -5,6 +5,21 @@ document.addEventListener("DOMContentLoaded", function() {
         return;  // 로그인이 필요하면 아래 코드를 실행하지 않음
     }
 
+    fetch("/api/reviews/likes/count", {
+        method: "GET",
+        headers: {
+            "Authorization": "Bearer " + accessToken
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.data !== undefined) {
+                const likeCountElement = document.querySelector('.activity-card[data-activity="liked-reviews"] .activity-count');
+                likeCountElement.textContent = data.data;
+            }
+        })
+        .catch(error => console.error("에러:", error));
+
     fetch("/api/studies/likes/count", {
         method: "GET",
         headers: {
@@ -462,6 +477,7 @@ activityCards.forEach(card => {
                 modalTitle = "좋아요한 부트캠프";
                 break;
             case "liked-reviews":
+                fetchUrl = "/api/reviews/likes/list";
                 modalTitle = "좋아요한 리뷰";
                 break;
             case "written-reviews":
@@ -511,15 +527,6 @@ activityCards.forEach(card => {
             let activityData = [];
 
             switch (activityType) {
-                case "liked-reviews":
-                    activityData = [
-                        "코드스테이츠 프론트엔드 과정 리뷰",
-                        "패스트캠퍼스 백엔드 과정 리뷰",
-                        "멋쟁이사자처럼 AI 과정 리뷰",
-                        "네이버 부스트캠프 웹 풀스택 과정 리뷰",
-                        "우아한테크코스 안드로이드 과정 리뷰"
-                    ];
-                    break;
                 case "written-reviews":
                     activityData = [
                         "코드스테이츠 프론트엔드 과정 후기",
