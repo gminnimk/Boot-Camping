@@ -5,6 +5,36 @@ document.addEventListener("DOMContentLoaded", function() {
         return;  // 로그인이 필요하면 아래 코드를 실행하지 않음
     }
 
+    fetch("/api/studies/likes/count", {
+        method: "GET",
+        headers: {
+            "Authorization": "Bearer " + accessToken
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.data !== undefined) {
+                const likeCountElement = document.querySelector('.activity-card[data-activity="liked-studies"] .activity-count');
+                likeCountElement.textContent = data.data;
+            }
+        })
+        .catch(error => console.error("에러:", error));
+
+    fetch("/api/camps/like/count", {
+        method: "GET",
+        headers: {
+            "Authorization": "Bearer " + accessToken
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.data) {
+                const likeCountElement = document.querySelector('.activity-card[data-activity="liked-bootcamps"] .activity-count');
+                likeCountElement.textContent = data.data;
+            }
+        })
+        .catch(error => console.error("에러:", error));
+
     fetchProfiles();
 
     const profileStatus = localStorage.getItem('profileStatus');
@@ -418,73 +448,117 @@ function removeCardFromDOM(profileId) {
 activityCards.forEach(card => {
     card.addEventListener("click", function() {
         const activityType = this.dataset.activity;
-        let activityData = [];
 
-        switch(activityType) {
+        let fetchUrl = "";
+        let modalTitle = "";
+
+        switch (activityType) {
+            case "liked-studies":
+                fetchUrl = "/api/studies/likes/list";
+                modalTitle = "좋아요한 스터디";
+                break;
             case "liked-bootcamps":
-                activityModalTitle.textContent = "좋아요한 부트캠프";
-                activityData = ["코드스테이츠", "패스트캠퍼스", "멋쟁이사자처럼", "네이버 부스트캠프", "우아한테크코스"];
+                fetchUrl = "/api/camps/like/list";
+                modalTitle = "좋아요한 부트캠프";
                 break;
             case "liked-reviews":
-                activityModalTitle.textContent = "좋아요한 리뷰";
-                activityData = [
-                    "코드스테이츠 프론트엔드 과정 리뷰",
-                    "패스트캠퍼스 백엔드 과정 리뷰",
-                    "멋쟁이사자처럼 AI 과정 리뷰",
-                    "네이버 부스트캠프 웹 풀스택 과정 리뷰",
-                    "우아한테크코스 안드로이드 과정 리뷰"
-                ];
-                break;
-            case "liked-studies":
-                activityModalTitle.textContent = "좋아요한 스터디";
-                activityData = [
-                    "알고리즘 스터디",
-                    "React 심화 스터디",
-                    "Spring Boot 실전 프로젝트 스터디"
-                ];
+                modalTitle = "좋아요한 리뷰";
                 break;
             case "written-reviews":
-                activityModalTitle.textContent = "작성한 리뷰";
-                activityData = [
-                    "코드스테이츠 프론트엔드 과정 후기",
-                    "패스트캠퍼스 백엔드 과정 경험담",
-                    "네이버 부스트캠프를 통해 배운 점"
-                ];
+                modalTitle = "작성한 리뷰";
                 break;
             case "written-questions":
-                activityModalTitle.textContent = "작성한 질문";
-                activityData = [
-                    "React Hooks 사용 시 주의할 점",
-                    "Spring Security 설정 방법",
-                    "Docker 컨테이너 네트워킹 문제",
-                    "MongoDB 인덱싱 최적화 방법"
-                ];
+                modalTitle = "작성한 질문";
                 break;
             case "written-answers":
-                activityModalTitle.textContent = "작성한 답변";
-                activityData = [
-                    "JavaScript 비동기 처리 방법 설명",
-                    "REST API 설계 원칙 안내",
-                    "Git 브랜치 전략 추천",
-                    "CSS Flexbox vs Grid 사용 시기"
-                ];
+                modalTitle = "작성한 답변";
                 break;
             case "written-studies":
-                activityModalTitle.textContent = "작성한 스터디";
-                activityData = [
-                    "JavaScript 딥다이브 스터디",
-                    "알고리즘 문제 풀이 스터디"
-                ];
+                modalTitle = "작성한 스터디";
                 break;
+            default:
+                console.error("알 수 없는 activityType:", activityType);
+                return;
         }
 
-        activityList.innerHTML = "";
-        activityData.forEach(item => {
-            const li = document.createElement("li");
-            li.textContent = item;
-            activityList.appendChild(li);
-        });
+        // 모달 제목 설정
+        activityModalTitle.textContent = modalTitle;
 
-        activityModal.style.display = "block";
+        if (fetchUrl) {
+            // API 요청을 통해 데이터를 가져옴
+            fetch(fetchUrl, {
+                method: "GET",
+                headers: {
+                    "Authorization": "Bearer " + accessToken
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.data) {
+                        const activityData = data.data;
+                        activityList.innerHTML = "";
+                        activityData.forEach(item => {
+                            const li = document.createElement("li");
+                            li.textContent = item;
+                            activityList.appendChild(li);
+                        });
+                        activityModal.style.display = "block";
+                    }
+                })
+                .catch(error => console.error("에러:", error));
+        } else {
+            // 정적 데이터의 경우
+            let activityData = [];
+
+            switch (activityType) {
+                case "liked-reviews":
+                    activityData = [
+                        "코드스테이츠 프론트엔드 과정 리뷰",
+                        "패스트캠퍼스 백엔드 과정 리뷰",
+                        "멋쟁이사자처럼 AI 과정 리뷰",
+                        "네이버 부스트캠프 웹 풀스택 과정 리뷰",
+                        "우아한테크코스 안드로이드 과정 리뷰"
+                    ];
+                    break;
+                case "written-reviews":
+                    activityData = [
+                        "코드스테이츠 프론트엔드 과정 후기",
+                        "패스트캠퍼스 백엔드 과정 경험담",
+                        "네이버 부스트캠프를 통해 배운 점"
+                    ];
+                    break;
+                case "written-questions":
+                    activityData = [
+                        "React Hooks 사용 시 주의할 점",
+                        "Spring Security 설정 방법",
+                        "Docker 컨테이너 네트워킹 문제",
+                        "MongoDB 인덱싱 최적화 방법"
+                    ];
+                    break;
+                case "written-answers":
+                    activityData = [
+                        "JavaScript 비동기 처리 방법 설명",
+                        "REST API 설계 원칙 안내",
+                        "Git 브랜치 전략 추천",
+                        "CSS Flexbox vs Grid 사용 시기"
+                    ];
+                    break;
+                case "written-studies":
+                    activityData = [
+                        "JavaScript 딥다이브 스터디",
+                        "알고리즘 문제 풀이 스터디"
+                    ];
+                    break;
+            }
+
+            activityList.innerHTML = "";
+            activityData.forEach(item => {
+                const li = document.createElement("li");
+                li.textContent = item;
+                activityList.appendChild(li);
+            });
+
+            activityModal.style.display = "block";
+        }
     });
 });
