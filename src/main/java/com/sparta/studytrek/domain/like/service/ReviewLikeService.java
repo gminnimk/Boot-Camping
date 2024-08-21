@@ -64,9 +64,16 @@ public class ReviewLikeService {
         return reviewLikeRepository.countLikeByReviewId(reviewId);
     }
 
-    // @Transactional(readOnly = true)
-    // public List<String> getLikedReviews(User user) {
-    //     return reviewLikeRepository.findAllByUserId(user.getId())
-    //         .stream()
-    // }
+    @Transactional(readOnly = true)
+    public List<String> getLikedReviews(User user) {
+        return reviewLikeRepository.findAllByUserId(user.getId())
+            .stream()
+            .map(reviewLike -> reviewLike.getReview().getTitle())
+            .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public int getLikedReviewCount(User user) {
+        return reviewLikeRepository.countByUserId(user.getId());
+    }
 }

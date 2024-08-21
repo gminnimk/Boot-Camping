@@ -92,6 +92,8 @@ public enum ResponseText {
     GET_LIKE_CAMP_COUNT("좋아요한 캠프의 개수를 불러왔습니다."),
     GET_LIKE_STUDY_LIST("좋아요한 스터디 리스트를 불러왔습니다."),
     GET_LIKE_STUDY_COUNT("좋아요한 스터디 개수를 불러왔습니다."),
+    GET_LIKE_REVIEW_LIST("좋아요한 리뷰 리스트를 불러왔습니다."),
+    GET_LIKE_REVIEW_COUNT("좋아요한 리뷰 개수를 불러왔습니다."),
 
     // SUMMARY
     SUMMARY_CREATE_SUCCESS("요약 성공"),
