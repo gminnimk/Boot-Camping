@@ -12,6 +12,7 @@ import com.sparta.studytrek.domain.auth.entity.User;
 import com.sparta.studytrek.domain.auth.entity.UserRoleEnum;
 import com.sparta.studytrek.domain.auth.entity.UserStatusEnum;
 import com.sparta.studytrek.domain.auth.entity.UserType;
+import com.sparta.studytrek.domain.auth.repository.CampUserRepository;
 import com.sparta.studytrek.domain.auth.repository.RoleRepository;
 import com.sparta.studytrek.domain.auth.repository.StatusRepository;
 import com.sparta.studytrek.domain.auth.repository.UserRepository;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final CampUserRepository campUserRepository;
     private final RoleRepository roleRepository;
     private final StatusRepository statusRepository;
     private final PasswordEncoder passwordEncoder;
@@ -179,8 +181,6 @@ public class UserService {
      */
     @Transactional
     public List<String> getUserCampNames(Long userId) {
-        return userRepository.findCampNamesById(userId);
+        return campUserRepository.findCampNamesById(userId);
     }
-
-
 }
