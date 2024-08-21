@@ -88,6 +88,10 @@ public enum ResponseText {
     // like
     LIKE_RECRUIT_SUCCESS("해당 게시글에 좋아요 성공 : %d"),
     LIKE_CALL_OFF_SUCCESS("해당 게시글에 좋아요 취소 : %d"),
+    GET_LIKE_CAMP_LIST("좋아요한 캠프 리스트를 불러왔습니다."),
+    GET_LIKE_CAMP_COUNT("좋아요한 캠프의 개수를 불러왔습니다."),
+    GET_LIKE_STUDY_LIST("좋아요한 스터디 리스트를 불러왔습니다."),
+    GET_LIKE_STUDY_COUNT("좋아요한 스터디 개수를 불러왔습니다."),
 
     // SUMMARY
     SUMMARY_CREATE_SUCCESS("요약 성공"),
