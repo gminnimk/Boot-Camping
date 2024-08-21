@@ -5,6 +5,21 @@ document.addEventListener("DOMContentLoaded", function() {
         return;  // 로그인이 필요하면 아래 코드를 실행하지 않음
     }
 
+    fetch("/api/studies/user/count", {
+        method: "GET",
+        headers: {
+            "Authorization": "Bearer " + accessToken
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.data !== undefined) {
+                const studyCountElement = document.querySelector('.activity-card[data-activity="written-studies"] .activity-count');
+                studyCountElement.textContent = data.data;
+            }
+        })
+        .catch(error => console.error("에러:", error));
+
     fetch("/api/questions/{questionId}/answers/user/count", {
         method: "GET",
         headers: {
@@ -538,6 +553,7 @@ activityCards.forEach(card => {
                 modalTitle = "작성한 답변";
                 break;
             case "written-studies":
+                fetchUrl = "/api/studies/user/list";
                 modalTitle = "작성한 스터디";
                 break;
             default:
@@ -575,12 +591,6 @@ activityCards.forEach(card => {
             let activityData = [];
 
             switch (activityType) {
-                case "written-studies":
-                    activityData = [
-                        "JavaScript 딥다이브 스터디",
-                        "알고리즘 문제 풀이 스터디"
-                    ];
-                    break;
             }
 
             activityList.innerHTML = "";

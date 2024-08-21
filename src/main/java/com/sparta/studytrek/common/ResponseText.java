@@ -62,6 +62,8 @@ public enum ResponseText {
     STUDY_DELETE_SUCCESS("스터디 모집글 삭제 성공"),
     STUDY_GET_ALL_SUCCESS("스터디 전체 조회 성공"),
     STUDY_GET_SUCCESS("스터디 단건 조회 성공"),
+    STUDY_GET_COUNT("스터디 개수 조회 성공"),
+    STUDY_GET_LIST("스터디 리스트 조회 성공"),
 
     // rank
     RANK_CREATE_SUCCESS("순위 생성 성공"),
