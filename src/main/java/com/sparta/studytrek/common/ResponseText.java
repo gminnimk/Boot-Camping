@@ -35,6 +35,8 @@ public enum ResponseText {
     QUESTION_DELETE_SUCCESS("질문 삭제 성공"),
     QUESTION_GET_ALL_SUCCESS("질문 전체 조회 성공"),
     QUESTION_GET_SUCCESS("질문 단건 조회 성공"),
+    QUESTION_GET_COUNT("질문 개수 조회 성공"),
+    QUESTION_GET_LIST("질문 리스트 조회 성공"),
 
     // recruitment
     RECRUITMENT_CREATE_SUCCESS("모집글 작성 성공"),
@@ -51,6 +53,8 @@ public enum ResponseText {
     REVIEW_DELETE_SUCCESS("리뷰 삭제 성공"),
     REVIEW_GET_ALL_SUCCESS("리뷰 전체 조회 성공"),
     REVIEW_GET_SUCCESS("리뷰 단건 조회 성공"),
+    REVIEW_GET_COUNT("리뷰 개수 조회 성공"),
+    REVIEW_GET_LIST("리뷰 리스트 조회 성공"),
 
     // study
     STUDY_CREATE_SUCCESS("스터디 모집글 작성 성공"),
@@ -77,6 +81,8 @@ public enum ResponseText {
     ANSWER_DELETE_SUCCESS("답변 삭제 성공"),
     ANSWER_GET_ALL_SUCCESS("답변 전체 조회 성공"),
     ANSWER_GET_SUCCESS("답변 단건 조회 성공"),
+    ANSWER_GET_COUNT("답변 개수 조회 성공"),
+    ANSWER_GET_LIST("답변 리스트 조회 성공"),
 
     // reply
     REPLY_CREATE_SUCCESS("대댓글 작성 성공"),
