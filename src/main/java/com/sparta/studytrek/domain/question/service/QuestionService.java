@@ -46,6 +46,9 @@ public class QuestionService {
     public QuestionResponseDto updateQuestion(Long id, QuestionRequestDto requestDto, User user) {
         Question question = questionRepository.findByQuestionId(id);
         question.update(requestDto);
+        if (!question.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.QUESTION_UPDATE_NOT_AUTHORIZED);
+        }
         return new QuestionResponseDto(question);
     }
 
@@ -57,6 +60,9 @@ public class QuestionService {
      */
     public void deleteQuestion(Long id, User user) {
         Question question = questionRepository.findByQuestionId(id);
+        if (!question.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.QUESTION_DELETE_NOT_AUTHORIZED);
+        }
         questionRepository.delete(question);
     }
 

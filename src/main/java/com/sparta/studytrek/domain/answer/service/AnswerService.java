@@ -1,6 +1,8 @@
 package com.sparta.studytrek.domain.answer.service;
 
 import com.sparta.studytrek.common.ResponseText;
+import com.sparta.studytrek.common.exception.CustomException;
+import com.sparta.studytrek.common.exception.ErrorCode;
 import com.sparta.studytrek.domain.answer.dto.AnswerRequestDto;
 import com.sparta.studytrek.domain.answer.dto.AnswerResponseDto;
 import com.sparta.studytrek.domain.answer.entity.Answer;
@@ -62,6 +64,9 @@ public class AnswerService {
     public AnswerResponseDto updateAnswer(Long questionId, Long answerId, AnswerRequestDto requestDto, User user) {
         Question question = questionRepository.findByQuestionId(questionId);
         Answer answer = answerRepository.findByAnswerId(answerId);
+        if (!answer.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.ANSWER_UPDATE_NOT_AUTHORIZED);
+        }
         answer.update(requestDto);
         return new AnswerResponseDto(answer);
     }
@@ -76,6 +81,9 @@ public class AnswerService {
     public void deleteAnswer(Long questionId, Long answerId, User user) {
         Question question = questionRepository.findByQuestionId(questionId);
         Answer answer = answerRepository.findByAnswerId(answerId);
+        if (!answer.getUser().getId().equals(user.getId())) {
+            throw new CustomException(ErrorCode.ANSWER_DELETE_NOT_AUTHORIZED);
+        }
         answerRepository.delete(answer);
     }
 
