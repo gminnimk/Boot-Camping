@@ -12,6 +12,8 @@ import com.sparta.studytrek.notification.service.NotificationService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -98,5 +100,16 @@ public class AnswerService {
     public AnswerResponseDto getAnswer(Long questionId, Long answerId) {
         Answer answer = answerRepository.findByQuestionIdAndAnswerId(questionId, answerId);
         return new AnswerResponseDto(answer);
+    }
+
+    public List<String> listUserAnswers(User user) {
+        List<Answer> answers = answerRepository.findAllByUserOrderByCreatedAtDesc(user);
+        return answers.stream()
+            .map(Answer::getContent)
+            .collect(Collectors.toList());
+    }
+
+    public int countUserAnswers(User user) {
+        return answerRepository.countByUser(user);
     }
 }
