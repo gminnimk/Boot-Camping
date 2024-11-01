@@ -118,6 +118,10 @@
 
 </details>
 
+# 📄 시스템 아키텍처
+
+![image](https://github.com/user-attachments/assets/1356ef4b-63cf-40ec-a451-9c48210fb25a)
+
 
 # ⚖️ Github Rules
 <details>
