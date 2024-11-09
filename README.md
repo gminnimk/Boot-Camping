@@ -20,7 +20,7 @@
 
 ## 💁‍♂️ 프로젝트 팀원
 
-|팀장|부팀장|팀원|팀원|
+|리더|부리더|팀원|팀원|
 |:---:|:---:|:---:|:---:|
 |![file (3)](https://github.com/user-attachments/assets/9aa49165-c134-4690-ae10-e03016ad6c7d)|![file (2)](https://github.com/user-attachments/assets/4d1fe5a2-611f-4e64-87d2-853673326fe8)|![file](https://github.com/user-attachments/assets/ee9604ee-9f3a-4075-a047-5f7857ebc60b)|![file (1)](https://github.com/user-attachments/assets/cde64f28-aff1-4fa5-be81-d9347443c7a4)|
 |[박민영]((https://github.com/hgi4657))|[조성훈](https://github.com/Mua2)|[김경민]((https://github.com/gminnimk))|[최지연]((https://github.com/dlalwn))|
