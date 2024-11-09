@@ -122,6 +122,12 @@
 
 ![image](https://github.com/user-attachments/assets/1356ef4b-63cf-40ec-a451-9c48210fb25a)
 
+# 🖥 ERD
+![image](https://github.com/user-attachments/assets/345d5753-64cb-4c91-be28-ee7889f3e328)
+
+# API 명세서
+[https://teamsparta.notion.site/6e2b298f51f94871b8f6ed2e52c6b8c4?v=bb91ab033424472eabb34eed72c6062f&pvs=4](https://teamsparta.notion.site/6e2b298f51f94871b8f6ed2e52c6b8c4?v=bb91ab033424472eabb34eed72c6062f&pvs=4)
+
 
 # ⚖️ Github Rules
 <details>
@@ -179,8 +185,6 @@ PR 작성 규칙
   
 </details>
 
-# 🖼️ 와이어 프레임
-
 
 
 # 📑 API 명세서
@@ -213,17 +217,4 @@ API 명세서
 </details>
 
 
-# ✍️ 회고
-
-<details>
-<summary>
-좋았던 점 🎶
-</summary>
-
-</details>
-
-<details>
-<summary>
-아쉬운 점 🩹
-</summary>
-</details>
+# 📜 발표 영상
