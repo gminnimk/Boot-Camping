@@ -20,27 +20,84 @@
 
 ## 💁‍♂️ 프로젝트 팀원
 
-|역할|팀장|부팀장|팀원|팀원|
-|:---:|:---:|:---:|:---:|:---:|
-|  |  | ![](https://github.com/SeongHo-C.png?size=120) | ![](https://github.com/SeongHo-C.png?size=120) |![](https://github.com/SeongHo-C.png?size=120) |
-|성함|[박민영](https://github.com/yewon-Noh)|[조성훈](https://github.com/SeongHo-C)|[김경민](https://github.com/SeongHo-C)|[최지연](https://github.com/SeongHo-C)|
-|담당 기능|Fullcalander API|부팀장|팀원|팀원|
+|팀장|부팀장|팀원|팀원|
+|:---:|:---:|:---:|:---:|
+|![file (3)](https://github.com/user-attachments/assets/9aa49165-c134-4690-ae10-e03016ad6c7d)|![file (2)](https://github.com/user-attachments/assets/4d1fe5a2-611f-4e64-87d2-853673326fe8)|![file](https://github.com/user-attachments/assets/ee9604ee-9f3a-4075-a047-5f7857ebc60b)|![file (1)](https://github.com/user-attachments/assets/cde64f28-aff1-4fa5-be81-d9347443c7a4)|
+|[박민영]((https://github.com/hgi4657))|[조성훈](https://github.com/Mua2)|[김경민]((https://github.com/gminnimk))|[최지연]((https://github.com/dlalwn))|
 
 <br />
 
+## 🧑‍💻 팀 역할
+| 역할            | 리더 박민영                     | 부리더 조성훈                                 | 팀원 김경민                                | 팀원 최지연           |
+|-----------------|----------------------------------|----------------------------------------------|--------------------------------------------|----------------------|
+| 담당 기능       | ▶ 모집글 & 리뷰 게시글 <br> ▶ 댓글 & 대댓글 <br>  ▶ 캘린더 API <br> ▶ AOP <br> ▶ 배포 | ▶ 어드민 관리자 기능 <br> ▶ 프로필 <br> ▶ 알림 기능 <br> ▶ 실시간 채팅 <br> | ▶ 스터디 게시글 <br> ▶ 댓글 & 대댓글 <br> ▶ 랭킹 <br> ▶ AWS S3  | ▶ 질문 게시글 <br> ▶ 댓글 & 대댓글 <br> ▶ 좋아요 기능 <br> ▶ 요약 API  |
+
+
+- ### 👥 공통 구현 
+
+  - 인증/인가
+  - 사용자 관련 기능
+  - 프론트 UI 개발 & 연동
+
+<br>
+
+
+# 📜 원페이지 노션
+
+
+https://deep-neem-90e.notion.site/BootCamping-71b0e1e7ae4a4a88aefd7d368f5a994c?pvs=4
+<br>
+
+**✅ 해당 페이지에서 프로젝트의 전반적이고 세부적인 내용을 한 눈에 보실 수 있습니다.**
+
+
+<details>
+  <summary>원페이지 노션 내용</summary>
+
+1. 프로젝트 소개
+   - 서비스 기획
+   - 기술 스택
+   - 협업 툴
+   - 아키텍처
+   - API 명세서
+   - ERD
+   - Wireframe
+   - User Flow
+
+2. 팀소개
+   - 팀원 소개
+   - Ground Rules & Goals
+   - Github Rules & Code Convention
+
+3. 일정표
+
+4. 기능소개
+
+5. MVP 영상
+
+6. 트러블 슈팅
+
+7. KPT 회고
+
+</details>
+
+
+
+
+
+<br>
 
 ## 🗂️ APIs
-- 작성한 API는 아래에서 확인할 수 있습니다.
-
-👉🏻 [https://teamsparta.notion.site/6e2b298f51f94871b8f6ed2e52c6b8c4?v=bb91ab033424472eabb34eed72c6062f&pvs=4](https://teamsparta.notion.site/6e2b298f51f94871b8f6ed2e52c6b8c4?v=bb91ab033424472eabb34eed72c6062f&pvs=4)
+[https://teamsparta.notion.site/6e2b298f51f94871b8f6ed2e52c6b8c4?v=bb91ab033424472eabb34eed72c6062f&pvs=4](https://teamsparta.notion.site/6e2b298f51f94871b8f6ed2e52c6b8c4?v=bb91ab033424472eabb34eed72c6062f&pvs=4)
 
 <br />
 
-# 🖥 ERD 다이어그램
+## 🖥 ERD 다이어그램
 ![image](https://github.com/user-attachments/assets/345d5753-64cb-4c91-be28-ee7889f3e328)
 
+<br>
 
-# 🛠️ Tech Stacks
+## 🛠️ Tech Stacks
 
 ### ■ Back-end
 
@@ -58,7 +115,6 @@
 - ### Versions
   - **Java 17**
   - **Springboot 3.3.2**
-  - **Spring Security**
   - **MySQL 8.0.37**
 
 <br>
@@ -111,6 +167,8 @@
 ![image](https://github.com/user-attachments/assets/5f4c7387-c849-4e89-b803-6fd26c87e40f)
 <br />
 
+<br>
+
 ## 🗣️기술적 의사결정
 
 <details>
@@ -155,6 +213,7 @@ Thymeleaf는 Spring 과의 궁합이 좋으며 빠른 생산성으로 백엔드 
 
 </details>
 
+<br>
 
 ## 🤔 Trouble Shoothing
 
@@ -267,12 +326,7 @@ null 또는 빈 리스트가 반환될 때 이를 적절히 처리하지 못한 
 </details>
 <br />
 
-  
-
-# 📜 원페이지 노션
-https://deep-neem-90e.notion.site/BootCamping-71b0e1e7ae4a4a88aefd7d368f5a994c?pvs=4
-
 <br>
 
-# 📜 발표 영상
+## 📜 발표 영상
 https://youtu.be/FYl8BPeCoJY?si=K_GdogAuvm_UmnvC
